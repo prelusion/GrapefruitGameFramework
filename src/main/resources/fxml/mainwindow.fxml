@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Pane id="main-window" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="832.0" prefWidth="1259.0">
+         <children>
+            <ScrollPane id="game-scroll-pane" fitToHeight="true" hbarPolicy="NEVER" prefHeight="832.0" prefWidth="274.0" style="-fx-background-color: lightgrey;">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="831.0" prefWidth="274.0" />
+              </content>
+            </ScrollPane>
+            <TilePane id="select-game-menu" layoutX="272.0" prefHeight="832.0" prefWidth="986.0" />
+         </children>
+      </Pane>
+   </children>
+</VBox>

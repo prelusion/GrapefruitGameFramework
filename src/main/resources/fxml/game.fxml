@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="188.0" prefWidth="343.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane prefHeight="188.0" prefWidth="35.0" />
+      <ImageView id="game-image-icon" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" />
+      <Pane prefHeight="188.0" prefWidth="61.0" />
+      <Text id="game-text-name" strokeType="OUTSIDE" strokeWidth="0.0" text="Game" wrappingWidth="143.0">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Text>
+   </children>
+</HBox>

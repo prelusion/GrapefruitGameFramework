@@ -1,20 +1,15 @@
 package com.grapefruit.gamework.view;
 
+import com.grapefruit.gamework.controller.ControllerMainWindow;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
+import javafx.util.Callback;
 
-import javax.imageio.ImageIO;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import static javafx.application.ConditionalFeature.FXML;
 
 public class ResourceLoader {
 
-    private static FXMLLoader LOADER = new FXMLLoader();
     private static String FXML_LOCATION = "/fxml/";
     private static String IMAGE_LOCATION = "/images/";
 
@@ -26,9 +21,26 @@ public class ResourceLoader {
 
     public Parent loadFXML(String fxmlName){
         Parent resource = null;
+        FXMLLoader loader = new FXMLLoader();
+        loader.setControllerFactory(new Callback<Class<?>, Object>() {
+            @Override
+            public Object call(Class<?> controllerClass) {
+                if (controllerClass == ControllerMainWindow.class) {
+                    ControllerMainWindow controller = new ControllerMainWindow();
+                    return controller ;
+                } else {
+                    try {
+                        return controllerClass.newInstance();
+                    } catch (Exception exc) {
+                        throw new RuntimeException(exc); // just bail
+                    }
+                }
+            }
+        });
+
         try {
-            LOADER.setLocation(getClass().getResource(FXML_LOCATION + fxmlName));
-            resource = LOADER.load();
+            loader.setLocation(getClass().getResource(FXML_LOCATION + fxmlName));
+            resource = loader.load();
         }
         catch (IOException e){
             System.out.println(e.getMessage());

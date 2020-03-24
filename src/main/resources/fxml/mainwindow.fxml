@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
 
-
-<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grapefruit.gamework.controller.ControllerMainWindow">
    <children>
       <MenuBar>
         <menus>
@@ -26,15 +31,19 @@
           </Menu>
         </menus>
       </MenuBar>
-      <Pane id="main-window" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="832.0" prefWidth="1259.0">
-         <children>
-            <ScrollPane id="game-scroll-pane" fitToHeight="true" hbarPolicy="NEVER" prefHeight="832.0" prefWidth="274.0" style="-fx-background-color: lightgrey;">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="831.0" prefWidth="274.0" />
-              </content>
-            </ScrollPane>
-            <TilePane id="select-game-menu" layoutX="272.0" prefHeight="832.0" prefWidth="986.0" />
-         </children>
-      </Pane>
+      <SplitPane dividerPositions="0.5" prefHeight="200.0" prefWidth="200.0">
+         <items>
+            <TilePane id="select-game-menu" prefHeight="832.0" prefWidth="986.0" />
+            <Pane id="main-window" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="832.0" prefWidth="1259.0">
+               <children>
+                  <ScrollPane id="game-scroll-pane" fitToHeight="true" hbarPolicy="NEVER" prefHeight="832.0" prefWidth="274.0" style="-fx-background-color: lightgrey;">
+                     <content>
+                        <FlowPane id="scroll-flow-pane" fx:id="gamesFlowPane" prefHeight="830.0" prefWidth="271.0" />
+                     </content>
+                  </ScrollPane>
+               </children>
+            </Pane>
+         </items>
+      </SplitPane>
    </children>
 </VBox>

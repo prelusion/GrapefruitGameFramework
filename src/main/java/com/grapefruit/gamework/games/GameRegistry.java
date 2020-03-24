@@ -9,6 +9,10 @@ public class GameRegistry {
 
     public static Game[] games = {
             new GameOthello(),
+            new GameTicTacToe(),
+            new GameOthello(),
+            new GameTicTacToe(),
+            new GameOthello(),
             new GameTicTacToe()
         };
 

@@ -1,49 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.effect.Bloom?>
+<?import javafx.scene.effect.GaussianBlur?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grapefruit.gamework.controller.ControllerMainWindow">
-   <children>
-      <MenuBar>
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-      <SplitPane dividerPositions="0.5" prefHeight="200.0" prefWidth="200.0">
-         <items>
-            <TilePane id="select-game-menu" prefHeight="832.0" prefWidth="986.0" />
-            <Pane id="main-window" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="832.0" prefWidth="1259.0">
+
+<VBox prefHeight="475.0" prefWidth="709.0" style="-fx-background-color: linear-gradient(to right bottom, #1C0E04 0%, #0B1133 87%);;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grapefruit.gamework.controller.ControllerMainWindow">
+  <children>
+      <Pane prefHeight="50.0" prefWidth="710.0" style="-fx-background-color: linear-gradient(to bottom, #ED3D11 49%, #0B2061 73%);;">
+         <effect>
+            <Bloom threshold="0.82">
+               <input>
+                  <GaussianBlur />
+               </input>
+            </Bloom>
+         </effect>
+      </Pane>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-color: linear-gradient(to right bottom, #030A30 49%, #1D244D 100%);;" VBox.vgrow="ALWAYS">
+         <children>
+            <HBox prefHeight="474.4" prefWidth="709.6" style="-fx-background-color: linear-gradient(to right bottom, #030A30 49%, #1D244D 100%);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <ScrollPane id="game-scroll-pane" fitToHeight="true" hbarPolicy="NEVER" prefHeight="832.0" prefWidth="274.0" style="-fx-background-color: lightgrey;">
-                     <content>
-                        <FlowPane id="scroll-flow-pane" fx:id="gamesFlowPane" prefHeight="830.0" prefWidth="271.0" />
-                     </content>
-                  </ScrollPane>
+                <AnchorPane minWidth="-Infinity" prefHeight="474.0" prefWidth="284.0" style="-fx-background-color: linear-gradient(to right bottom, #030A30 49%, #1D244D 100%);;">
+                     <children>
+                        <ScrollPane hbarPolicy="NEVER" minWidth="-Infinity" prefHeight="474.4" prefWidth="202.4" style="-fx-background-color: black;" stylesheets="@css/mainscrollbar.css" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <content>
+                            <AnchorPane minWidth="-Infinity" style="-fx-background-color: linear-gradient(to right bottom, #030A30 49%, #1D244D 100%);;">
+                                 <children>
+                                    <VBox fx:id="gamesVBox" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: linear-gradient(to right bottom, #030A30 49%, #1D244D 100%);;" />
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </ScrollPane>
+                     </children>
+                  </AnchorPane>
+                <AnchorPane>
+                     <children>
+                        <Pane prefHeight="474.0" prefWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
                </children>
-            </Pane>
-         </items>
-      </SplitPane>
-   </children>
+            </HBox>
+         </children>
+    </AnchorPane>
+  </children>
 </VBox>

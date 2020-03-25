@@ -1,7 +1,7 @@
 package com.grapefruit.gamework.games.othello;
 
 import com.grapefruit.gamework.games.Game;
-import com.grapefruit.gamework.view.presets.ImageRegistry;
+import com.grapefruit.gamework.view.ImageRegistry;
 import javafx.scene.image.Image;
 
 public class GameOthello implements Game {

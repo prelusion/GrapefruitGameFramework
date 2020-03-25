@@ -1,4 +1,4 @@
-package com.grapefruit.gamework.view.presets;
+package com.grapefruit.gamework.view;
 
 import com.grapefruit.gamework.view.ResourceLoader;
 import javafx.scene.image.Image;

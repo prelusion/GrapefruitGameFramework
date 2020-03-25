@@ -1,8 +1,9 @@
 package com.grapefruit.gamework.view.templates;
-
 import com.grapefruit.gamework.model.IModel;
 
-public interface ITemplate {
 
+public interface TemplateFactory {
+
+     Template buildTemplate(IModel model);
 
 }

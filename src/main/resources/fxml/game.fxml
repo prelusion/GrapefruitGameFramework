@@ -11,9 +11,9 @@
 <HBox fx:id="gameTile" alignment="CENTER_LEFT" onDragDropped="#dragDropped" onMouseClicked="#mouseClicked" onMouseDragEntered="#dragEntered" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" onMouseMoved="#mouseMoved" styleClass="game-tile" stylesheets="@css/gametile.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grapefruit.gamework.controller.ControllerGameTile">
    <children>
       <Pane minWidth="-Infinity" prefHeight="125.0" prefWidth="11.0" />
-      <ImageView id="game-image-icon" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="gameIcon" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" />
       <Pane minHeight="-Infinity" minWidth="-Infinity" prefHeight="125.0" prefWidth="26.0" />
-      <Text id="game-text-name" strokeType="OUTSIDE" strokeWidth="0.0" text="Game" wrappingWidth="132.60012817382812">
+      <Text id="game-text-name" fx:id="gameName" strokeType="OUTSIDE" strokeWidth="0.0" text="Game" wrappingWidth="132.60012817382812">
          <font>
             <Font size="30.0" />
          </font>

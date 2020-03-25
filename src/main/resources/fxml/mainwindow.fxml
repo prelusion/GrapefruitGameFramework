@@ -8,7 +8,7 @@
 
 <VBox prefHeight="475.0" prefWidth="709.0" styleClass="secondary-background" stylesheets="@css/mainwindow.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grapefruit.gamework.controller.ControllerMainWindow">
   <children>
-      <Pane prefHeight="42.0" prefWidth="710.0" style="-fx-view-order: 1;" styleClass="primary-background" />
+      <Pane prefHeight="42.0" prefWidth="710.0" style="-fx-view-order: -10;" styleClass="primary-background" />
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" style="-fx-view-order: 10;" VBox.vgrow="ALWAYS">
          <children>
             <HBox prefHeight="474.4" prefWidth="709.6" style="-fx-view-order: 10;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

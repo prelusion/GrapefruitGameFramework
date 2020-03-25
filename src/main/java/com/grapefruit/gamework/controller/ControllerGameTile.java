@@ -2,20 +2,16 @@ package com.grapefruit.gamework.controller;
 
 import com.grapefruit.gamework.model.IModel;
 import com.grapefruit.gamework.model.ModelGameTile;
-import com.grapefruit.gamework.model.ModelMainWindow;
+
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+
 import javafx.scene.effect.BlurType;
-import javafx.scene.effect.GaussianBlur;
-import javafx.scene.effect.Glow;
 import javafx.scene.effect.InnerShadow;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -28,6 +24,11 @@ public class ControllerGameTile implements IController{
     @FXML
     private HBox gameTile;
 
+    @FXML
+    private ImageView gameIcon;
+
+    @FXML
+    private Text gameName;
 
     @FXML
     private URL location;
@@ -39,9 +40,10 @@ public class ControllerGameTile implements IController{
     {
     }
 
-    @FXML
     private void initialize()
     {
+        gameName.setText(model.getGame().getName());
+        gameIcon.setImage(model.getGame().getIcon());
     }
 
     @FXML
@@ -79,5 +81,6 @@ public class ControllerGameTile implements IController{
     @Override
     public void setModel(IModel model) {
         this.model = (ModelGameTile) model;
+        initialize();
     }
 }

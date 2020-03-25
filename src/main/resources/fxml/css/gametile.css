@@ -1,0 +1,11 @@
+.game-tile{
+    -fx-background-color: linear-gradient(to right bottom, #FF6600 0%, #946B6B 64%);
+    -fx-border-color: black;
+    -fx-border-width: 1;
+}
+
+.game-tile-selected{
+    -fx-background-color: linear-gradient(to right bottom, #FF6600 0%, #946B6B 64%);
+    -fx-border-color: black;
+    -fx-border-width: 1;
+}

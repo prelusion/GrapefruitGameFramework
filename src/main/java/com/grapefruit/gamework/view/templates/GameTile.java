@@ -1,4 +1,4 @@
-package com.grapefruit.gamework.view.presets;
+package com.grapefruit.gamework.view.templates;
 
 import com.grapefruit.gamework.view.FXMLRegistry;
 import com.grapefruit.gamework.view.IPresetWrapper;

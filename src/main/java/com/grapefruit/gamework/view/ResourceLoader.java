@@ -1,17 +1,19 @@
 package com.grapefruit.gamework.view;
 
 import com.grapefruit.gamework.controller.ControllerMainWindow;
+import com.grapefruit.gamework.controller.IController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.util.Callback;
-
+import java.io.File;
 import java.io.IOException;
 
 public class ResourceLoader {
 
     private static String FXML_LOCATION = "/fxml/";
     private static String IMAGE_LOCATION = "/images/";
+    private static String CSS_LOCATION = FXML_LOCATION + "css/";
 
     public enum ImageType{
         GAME_ICON,
@@ -19,36 +21,13 @@ public class ResourceLoader {
     }
 
 
-    public Parent loadFXML(String fxmlName){
-        Parent resource = null;
+    public FXMLLoader getViewLoader(String fxmlName){
         FXMLLoader loader = new FXMLLoader();
-        loader.setControllerFactory(new Callback<Class<?>, Object>() {
-            @Override
-            public Object call(Class<?> controllerClass) {
-                if (controllerClass == ControllerMainWindow.class) {
-                    ControllerMainWindow controller = new ControllerMainWindow();
-                    return controller ;
-                } else {
-                    try {
-                        return controllerClass.newInstance();
-                    } catch (Exception exc) {
-                        throw new RuntimeException(exc); // just bail
-                    }
-                }
-            }
-        });
-
-        try {
-            loader.setLocation(getClass().getResource(FXML_LOCATION + fxmlName));
-            resource = loader.load();
-        }
-        catch (IOException e){
-            System.out.println(e.getMessage());
-        }
-        return resource;
+        loader.setLocation(getClass().getResource(FXML_LOCATION + fxmlName));
+        return loader;
     }
 
-    public Image loadImage(String imageName, ImageType imageType){
+    public static Image loadImage(String imageName, ImageType imageType){
         Image image;
         String prefix = "";
 
@@ -65,4 +44,5 @@ public class ResourceLoader {
         image = new Image(IMAGE_LOCATION + prefix + imageName);
         return image;
     }
+
 }

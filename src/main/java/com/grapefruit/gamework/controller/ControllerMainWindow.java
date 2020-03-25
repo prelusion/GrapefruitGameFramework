@@ -2,7 +2,7 @@ package com.grapefruit.gamework.controller;
 
 import com.grapefruit.gamework.games.Game;
 import com.grapefruit.gamework.games.GameRegistry;
-import com.grapefruit.gamework.view.presets.GameTile;
+import com.grapefruit.gamework.view.templates.GameTile;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 
@@ -32,7 +32,6 @@ public class ControllerMainWindow {
             gamesVBox.getChildren().add(new GameTile(game.getName(), game.getIcon()).getParent());
         }
 
-        
     }
 
 

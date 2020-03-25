@@ -1,32 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.effect.Bloom?>
-<?import javafx.scene.effect.GaussianBlur?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox prefHeight="475.0" prefWidth="709.0" style="-fx-background-color: linear-gradient(to right bottom, #1C0E04 0%, #0B1133 87%);;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grapefruit.gamework.controller.ControllerMainWindow">
+<VBox prefHeight="475.0" prefWidth="709.0" styleClass="secondary-background" stylesheets="@css/mainwindow.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grapefruit.gamework.controller.ControllerMainWindow">
   <children>
-      <Pane prefHeight="50.0" prefWidth="710.0" style="-fx-background-color: linear-gradient(to bottom, #ED3D11 49%, #0B2061 73%);;">
-         <effect>
-            <Bloom threshold="0.82">
-               <input>
-                  <GaussianBlur />
-               </input>
-            </Bloom>
-         </effect>
-      </Pane>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-color: linear-gradient(to right bottom, #030A30 49%, #1D244D 100%);;" VBox.vgrow="ALWAYS">
+      <Pane prefHeight="42.0" prefWidth="710.0" style="-fx-view-order: 1;" styleClass="primary-background" />
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" style="-fx-view-order: 10;" VBox.vgrow="ALWAYS">
          <children>
-            <HBox prefHeight="474.4" prefWidth="709.6" style="-fx-background-color: linear-gradient(to right bottom, #030A30 49%, #1D244D 100%);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <HBox prefHeight="474.4" prefWidth="709.6" style="-fx-view-order: 10;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                <AnchorPane minWidth="-Infinity" prefHeight="474.0" prefWidth="284.0" style="-fx-background-color: linear-gradient(to right bottom, #030A30 49%, #1D244D 100%);;">
+                <AnchorPane minWidth="-Infinity" prefHeight="474.0" prefWidth="284.0" style="-fx-background-color: linear-gradient(to right bottom, #030A30 49%, #1D244D 100%); -fx-view-order: 10;">
                      <children>
-                        <ScrollPane hbarPolicy="NEVER" minWidth="-Infinity" prefHeight="474.4" prefWidth="202.4" style="-fx-background-color: black;" stylesheets="@css/mainscrollbar.css" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <ScrollPane hbarPolicy="NEVER" minWidth="-Infinity" prefHeight="474.4" prefWidth="202.4" style="-fx-view-order: 10;" styleClass="secondary-background" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <content>
                             <AnchorPane minWidth="-Infinity" style="-fx-background-color: linear-gradient(to right bottom, #030A30 49%, #1D244D 100%);;">
                                  <children>
@@ -37,7 +26,7 @@
                         </ScrollPane>
                      </children>
                   </AnchorPane>
-                <AnchorPane>
+                <AnchorPane style="-fx-view-order: 10;">
                      <children>
                         <Pane prefHeight="474.0" prefWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>

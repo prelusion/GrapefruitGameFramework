@@ -22,3 +22,7 @@
     -fx-background-color:  linear-gradient(to right bottom, #1C0E04 0%, #0B1133 87%);
 }
 
+.menu-item{
+    -fx-background-color: linear-gradient(to right bottom, #FF6600 0%, #946B6B 64%);
+}
+

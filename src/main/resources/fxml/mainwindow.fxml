@@ -23,7 +23,7 @@
                   <Pane prefHeight="34.0" prefWidth="10.0" />
                   <ComboBox prefWidth="150.0" />
                   <Pane prefHeight="34.0" prefWidth="10.0" />
-                  <Button mnemonicParsing="false" text="Settings" />
+                  <Button fx:id="settingsButton" mnemonicParsing="false" onAction="#onSettingsClicked" text="Settings" />
                </children>
             </HBox>
          </children></Pane>

@@ -1,7 +1,7 @@
-package com.grapefruit.gamework.controller;
+package com.grapefruit.gamework.app.controller;
 
-import com.grapefruit.gamework.model.IModel;
-import com.grapefruit.gamework.model.ModelGameTile;
+import com.grapefruit.gamework.app.model.IModel;
+import com.grapefruit.gamework.app.model.ModelGameTile;
 
 import javafx.fxml.FXML;
 

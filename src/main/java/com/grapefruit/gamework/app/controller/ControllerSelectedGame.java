@@ -1,6 +1,6 @@
-package com.grapefruit.gamework.controller;
+package com.grapefruit.gamework.app.controller;
 
-import com.grapefruit.gamework.model.IModel;
+import com.grapefruit.gamework.app.model.IModel;
 
 public class ControllerSelectedGame implements IController {
 

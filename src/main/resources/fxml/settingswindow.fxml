@@ -15,12 +15,12 @@
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="204.0" prefWidth="100.0">
                <children>
-                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="90.0" styleClass="menu-item">
+                  <HBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onClickServer" prefHeight="50.0" prefWidth="90.0" styleClass="menu-item-normal">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Server presets" />
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="90.0" styleClass="menu-item">
+                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="90.0" styleClass="menu-item-normal">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="User presets" />
                      </children>
@@ -30,7 +30,7 @@
                   <Insets left="5.0" right="5.0" top="5.0" />
                </padding>
             </VBox>
-            <FlowPane prefHeight="363.0" prefWidth="503.0" />
+            <FlowPane fx:id="selectedSetting" layoutX="108.0" layoutY="10.0" prefHeight="363.0" prefWidth="503.0" />
          </children>
       </HBox>
       <ButtonBar minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0" styleClass="primary-background">

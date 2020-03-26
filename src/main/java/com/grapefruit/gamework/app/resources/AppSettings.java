@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public abstract class AppSettings {
 
@@ -16,15 +17,39 @@ public abstract class AppSettings {
     private static final Path SETTINGS_JSON = Paths.get(SETTINGS_FOLDER + "/settings.json");
     private static Settings SETTINGS;
 
-    public static void saveSettings(){
+    public static void addServer(String serverName, String serverAdress, String serverPort){
+        if (SETTINGS == null){
+            fetchSettings();
+        }
+        checkFiles();
+        SETTINGS.getServers().add(new Server(serverName, serverAdress, serverPort));
+        saveSettings();
+    }
+
+    public static void addUser(String user){
 
     }
 
-    public static Settings getSettings(){
+    public static void saveSettings(){
+        checkFiles();
+        createSettingsJson(SETTINGS);
+    }
+
+    private static Settings getSettings(){
         fetchSettings();
         return SETTINGS;
     }
 
+
+    public static HashMap<String, String> getServers(){
+        HashMap<String, String> servers = new HashMap<>();
+        Settings settings = getSettings();
+        for (Server server: settings.getServers()){
+            servers.put(server.name, server.ip + server.port);
+        }
+
+        return servers;
+    }
 
     private static boolean checkFiles(){
         try {
@@ -38,11 +63,11 @@ public abstract class AppSettings {
                 if (settingsJson.length() > 0) {
                     return true;
                 } else {
-                    return createSettingsJson();
+                    return createSettingsJson(null);
                 }
             } else {
                 if (settingsJson.createNewFile()) {
-                    return createSettingsJson();
+                    return createSettingsJson(null);
                 }
             }
             return false;
@@ -53,12 +78,14 @@ public abstract class AppSettings {
         }
     }
 
-    private static boolean createSettingsJson(){
+    private static boolean createSettingsJson(Settings settings){
         GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls();
         Gson gson = builder.setPrettyPrinting().create();
         try {
-            Settings settings = new Settings();
+            if (settings == null){
+                settings = new Settings();
+            }
             FileWriter writer  = new FileWriter(SETTINGS_JSON.toString());
             gson.toJson(settings, writer);
             writer.flush();
@@ -88,18 +115,32 @@ public abstract class AppSettings {
         public Settings(){
             servers = new ArrayList<>();
             users = new ArrayList<>();
+        }
 
+        public ArrayList<Server> getServers() {
+            return servers;
+        }
 
+        public ArrayList<User> getUsers() {
+            return users;
         }
     }
 
-    public class Server{
+    public static class Server{
         private String name;
         private String ip;
         private String port;
+
+        public Server(){}
+
+        public Server(String name, String ip, String port){
+            this.name = name;
+            this.ip = ip;
+            this.port = port;
+        }
     }
 
-    public class User{
+    public static class User{
         private String username;
     }
 }

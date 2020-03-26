@@ -2,35 +2,42 @@ package com.grapefruit.gamework.app.model;
 
 import com.grapefruit.gamework.app.games.Game;
 
-public class ModelGameTile implements IModel {
+import java.util.ArrayList;
+import java.util.HashMap;
 
-    private Game game;
-    private ModelMainWindow modelMainWindow;
-    private boolean selected;
+public class ModelTableSetting implements IModel {
 
-    public ModelGameTile(Game game, ModelMainWindow mainWindow){
-        this.game = game;
-        this.modelMainWindow = mainWindow;
-        if (modelMainWindow.getSelectedGame() != null){
-            if (modelMainWindow.getSelectedGame().getName() == game.getName()){
-                selected = true;
-            }
-        }
+    private String keyName;
+    private String valueName;
+    private HashMap<String, String> rows;
+
+    public ModelTableSetting(HashMap<String, String> rows, String keyName, String valueName){
+        this.rows = rows;
+        this.keyName = keyName;
+        this.valueName = valueName;
     }
 
-    public Game getGame() {
-        return game;
+    public String getKeyName() {
+        return keyName;
     }
 
-    public void gameSelected(){
-        modelMainWindow.setSelectedGame(game);
+    public void setKeyName(String keyName) {
+        this.keyName = keyName;
     }
 
-    public void gameUnselected(){
-        modelMainWindow.setSelectedGame(null);
+    public String getValueName() {
+        return valueName;
     }
 
-    public boolean isSelected(){
-        return selected;
+    public void setValueName(String valueName) {
+        this.valueName = valueName;
+    }
+
+    public HashMap<String, String> getRows() {
+        return rows;
+    }
+
+    public void setRows(HashMap<String, String> rows) {
+        this.rows = rows;
     }
 }

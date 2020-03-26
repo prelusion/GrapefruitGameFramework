@@ -8,9 +8,4 @@ public class ModelSettingsWindow implements IModel {
 
     }
 
-    public AppSettings.Settings getSettings(){
-        return AppSettings.getSettings();
-    }
-
-
 }

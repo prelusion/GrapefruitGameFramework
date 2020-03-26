@@ -1,6 +1,6 @@
-package com.grapefruit.gamework.view.templates.MainWindow;
+package com.grapefruit.gamework.app.view.templates.MainWindow;
 
-import com.grapefruit.gamework.view.templates.Template;
+import com.grapefruit.gamework.app.view.templates.Template;
 import javafx.scene.Parent;
 
 public class TemplateMainWindow extends Template {

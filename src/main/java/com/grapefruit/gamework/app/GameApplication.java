@@ -1,9 +1,8 @@
-package com.grapefruit.gamework;
+package com.grapefruit.gamework.app;
 
-import com.grapefruit.gamework.model.ModelMainWindow;
-import com.grapefruit.gamework.view.ImageRegistry;
-import com.grapefruit.gamework.view.templates.MainWindow.MainWindowFactory;
-import com.grapefruit.gamework.view.templates.MainWindow.TemplateMainWindow;
+import com.grapefruit.gamework.app.model.ModelMainWindow;
+import com.grapefruit.gamework.app.view.ImageRegistry;
+import com.grapefruit.gamework.app.view.templates.MainWindow.MainWindowFactory;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

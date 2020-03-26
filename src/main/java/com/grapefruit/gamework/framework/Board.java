@@ -41,8 +41,9 @@ public class Board {
      * @param Player, player is given to check which side is playing.
      * @param Move, Looks of the given move is valid.
      */
-    public void isValidMove(Move move) {
+    public boolean isValidMove(Move move) {
         //TODO check if the move is a valid move with the help of the Rule implementation of a certain game.
+        return false;
     }
 
     /**

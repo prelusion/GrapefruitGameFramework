@@ -7,17 +7,12 @@ public abstract class GameSession {
     /**
      * List of players on the client side;
      */
-    private List<Player> players = new List<Player>();
-
-    /**
-     * The board for the chosen game
-     */
-    private Board board;
+    private Player[] players;
 
     /**
      * The rules for the chosen game
      */
-    private ArrayList<Rule> rules = new ArrayList<>();
+    private Rule[] rules;
 
     /**
      * The time a player has for their turn
@@ -25,11 +20,18 @@ public abstract class GameSession {
     private int turnTimeout = 10;
 
     /**
+     * The board for the chosen game
+     */
+    private Board board;
+
+    /**
      * Constructor of making an GameSession
      * @param int turnTimeout, gives a timeout limit for turns.
      * @param int boardSize, gives a grid size for the new board.
      */
-    public GameSession(int turnTimeout, int boardSize) {
+    public GameSession(Player[] players, Rule[] rules, int turnTimeout, int boardSize) {
+        this.players = players;
+        this.rules = rules;
         this.turnTimeout = turnTimeout;
         this.board = new Board(boardSize);
     }
@@ -50,14 +52,9 @@ public abstract class GameSession {
     /**
      * @return Arraylist<Player> of players.
      */
-    public List<Player> getPlayers() {
+    public Player[] getPlayers() {
         return players;
     }
-
-    /**
-    * @Param Player, Adds player to the Arraylist players.
-    */
-    public void addPlayer(Player player) { this.players.add(player); }
 
     /**
      * @return Board, the games board.
@@ -69,7 +66,7 @@ public abstract class GameSession {
     /**
      * @return Arraylist<Rule> of the current games rules.
      */
-    public ArrayList<Rule> getRules() {
+    public Rule[] getRules() {
         return rules;
     }
 

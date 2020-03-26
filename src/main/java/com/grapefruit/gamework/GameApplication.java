@@ -7,6 +7,7 @@ import com.grapefruit.gamework.view.templates.MainWindow.TemplateMainWindow;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class GameApplication extends Application {
 
@@ -18,13 +19,13 @@ public class GameApplication extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
 
         modelMainWindow = new ModelMainWindow();
 
         primaryStage.setTitle("Grapefruit Gamework");
         primaryStage.setScene(new Scene(MainWindowFactory.build(modelMainWindow).getParent(), 1000, 600));
-        //primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.getIcons().add(ImageRegistry.GAMEWORK_ICON);
         primaryStage.show();
     }

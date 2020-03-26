@@ -53,7 +53,6 @@ public class ControllerGameTile implements IController{
     @FXML
     private void mouseEnter(MouseEvent event){
         gameTile.setEffect(new InnerShadow(BlurType.GAUSSIAN, Color.rgb(255,255,255), 64, 0,0,0 ));
-        gameTile.setStyle("");
     }
 
     @FXML

@@ -40,7 +40,7 @@ public abstract class Player {
     /**
      * Give player turn to set a move.
      */
-    public abstract void giveTurn();
+    public abstract void giveTurn(Board board, int timeout);
 
     /**
      * Check if player has the current turn.

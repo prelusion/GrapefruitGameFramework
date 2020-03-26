@@ -1,6 +1,5 @@
-package com.grapefruit.gamework.view;
+package com.grapefruit.gamework.app.view;
 
-import com.grapefruit.gamework.view.ResourceLoader;
 import javafx.scene.image.Image;
 
 public class ImageRegistry {

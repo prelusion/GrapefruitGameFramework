@@ -1,5 +1,5 @@
-package com.grapefruit.gamework.view.templates.GameTile;
-import com.grapefruit.gamework.view.templates.Template;
+package com.grapefruit.gamework.app.view.templates.GameTile;
+import com.grapefruit.gamework.app.view.templates.Template;
 import javafx.scene.Parent;
 
 public class TemplateGameTile extends Template {

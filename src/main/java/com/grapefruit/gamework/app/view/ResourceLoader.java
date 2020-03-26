@@ -1,13 +1,7 @@
-package com.grapefruit.gamework.view;
+package com.grapefruit.gamework.app.view;
 
-import com.grapefruit.gamework.controller.ControllerMainWindow;
-import com.grapefruit.gamework.controller.IController;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.image.Image;
-import javafx.util.Callback;
-import java.io.File;
-import java.io.IOException;
 
 public class ResourceLoader {
 

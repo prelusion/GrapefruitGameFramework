@@ -1,6 +1,5 @@
-package com.grapefruit.gamework.view.templates;
+package com.grapefruit.gamework.app.view.templates;
 
-import com.grapefruit.gamework.model.IModel;
 import javafx.scene.Parent;
 
 public abstract class Template {

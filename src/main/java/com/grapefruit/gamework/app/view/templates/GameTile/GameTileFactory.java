@@ -1,13 +1,11 @@
-package com.grapefruit.gamework.view.templates.GameTile;
+package com.grapefruit.gamework.app.view.templates.GameTile;
 
-import com.grapefruit.gamework.controller.IController;
-import com.grapefruit.gamework.model.IModel;
-import com.grapefruit.gamework.view.FXMLRegistry;
-import com.grapefruit.gamework.view.ResourceLoader;
-import com.grapefruit.gamework.view.templates.MainWindow.MainWindowFactory;
-import com.grapefruit.gamework.view.templates.MainWindow.TemplateMainWindow;
-import com.grapefruit.gamework.view.templates.Template;
-import com.grapefruit.gamework.view.templates.TemplateFactory;
+import com.grapefruit.gamework.app.controller.IController;
+import com.grapefruit.gamework.app.model.IModel;
+import com.grapefruit.gamework.app.view.FXMLRegistry;
+import com.grapefruit.gamework.app.view.ResourceLoader;
+import com.grapefruit.gamework.app.view.templates.Template;
+import com.grapefruit.gamework.app.view.templates.TemplateFactory;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 

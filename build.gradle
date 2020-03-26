@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'application'
-    id 'org.openjfx.javafxplugin' version '0.0.5'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
 }
 
 group 'grapefruit'
@@ -18,6 +18,8 @@ dependencies {
 }
 
 javafx {
-    version = "12"
-    modules = [ 'javafx.controls' ]
+    version = "13"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
+
+mainClassName = "Main"

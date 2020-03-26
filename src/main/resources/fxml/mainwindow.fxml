@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="554.0" prefWidth="860.0" styleClass="secondary-background" stylesheets="@css/mainwindow.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grapefruit.gamework.controller.ControllerMainWindow">
+  <children>
+      <Pane prefHeight="42.0" prefWidth="710.0" style="-fx-view-order: -10;" styleClass="primary-background">
+         <children>
+            <HBox alignment="CENTER" layoutX="4.0" layoutY="4.0" prefHeight="34.0" prefWidth="590.0" styleClass="secondary-background" stylesheets="@css/mainwindow.css">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select server:" />
+                  <Pane prefHeight="34.0" prefWidth="10.0" />
+                  <ComboBox prefWidth="150.0" />
+                  <Pane prefHeight="34.0" prefWidth="13.0" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select user:" />
+                  <Pane prefHeight="34.0" prefWidth="10.0" />
+                  <ComboBox prefWidth="150.0" />
+                  <Pane prefHeight="34.0" prefWidth="10.0" />
+                  <Button mnemonicParsing="false" text="Settings" />
+               </children>
+            </HBox>
+         </children></Pane>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" style="-fx-view-order: 10;" VBox.vgrow="ALWAYS">
+         <children>
+            <HBox prefHeight="474.4" prefWidth="709.6" style="-fx-view-order: 10;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                <AnchorPane minWidth="-Infinity" prefHeight="474.0" prefWidth="284.0" style="-fx-background-color: linear-gradient(to right bottom, #030A30 49%, #1D244D 100%); -fx-view-order: 10;">
+                     <children>
+                        <ScrollPane hbarPolicy="NEVER" minWidth="-Infinity" prefHeight="474.4" prefWidth="202.4" style="-fx-view-order: 10;" styleClass="secondary-background" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <content>
+                            <AnchorPane minWidth="-Infinity" style="-fx-background-color: linear-gradient(to right bottom, #030A30 49%, #1D244D 100%);;">
+                                 <children>
+                                    <VBox fx:id="gamesVBox" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: linear-gradient(to right bottom, #030A30 49%, #1D244D 100%);;" />
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </ScrollPane>
+                     </children>
+                  </AnchorPane>
+                <AnchorPane prefHeight="454.0" prefWidth="481.0" style="-fx-view-order: 10;">
+                     <children>
+                        <Pane prefHeight="453.6" prefWidth="425.6" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </HBox>
+         </children>
+    </AnchorPane>
+  </children>
+</VBox>

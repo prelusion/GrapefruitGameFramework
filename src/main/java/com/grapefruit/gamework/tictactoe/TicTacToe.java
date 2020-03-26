@@ -5,8 +5,8 @@ import com.grapefruit.gamework.framework.GameSession;
 import com.grapefruit.gamework.framework.Rule;
 
 public class TicTacToe extends Game {
-    public TicTacToe(Rule[] rules) {
-        super(rules);
+    public TicTacToe() {
+        super();
     }
 
 

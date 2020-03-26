@@ -1,8 +1,8 @@
 package com.grapefruit.gamework.framework;
 
 public class OfflineGameSession extends GameSession {
-    public OfflineGameSession(Player[] players, Rule[] rules, int turnTimeout, int boardSize) {
-        super(players, rules, turnTimeout, boardSize);
+    public OfflineGameSession(MoveSetter moveSetter, Player[] players, int turnTimeout, int boardSize) {
+        super(moveSetter, players, turnTimeout, boardSize);
     }
 
     @Override
@@ -12,5 +12,12 @@ public class OfflineGameSession extends GameSession {
                 player.giveTurn(getBoard(), getTurnTimeout());
             }
         }
+    }
+
+    /**
+     * @param Move, move is given to set the move on the board and apply all necessary changes.
+     */
+    public void setMove(Move move) {
+
     }
 }

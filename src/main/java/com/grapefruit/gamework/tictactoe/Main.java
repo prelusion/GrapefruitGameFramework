@@ -9,11 +9,12 @@ public class Main {
 
         Rule tictactoeRule1 = new TicTacToeRule1();
         Rule ticTacToeRule2 = new TicTacToeRule2();
+        MoveSetter tictactoeMoveSetter = new TicTacToeMoveSetter(new Rule[] {tictactoeRule1, ticTacToeRule2});
 
-        Game tictactoeGame = new TicTacToe(new Rule[] {tictactoeRule1, ticTacToeRule2});
+        Game tictactoeGame = new TicTacToe();
 
         Player[] players = new Player[] {playerA, playerB};
-        GameSession session = tictactoeGame.createSession(players);
+        GameSession session = tictactoeGame.createSession(tictactoeMoveSetter, players);
         session.start();
     }
 }

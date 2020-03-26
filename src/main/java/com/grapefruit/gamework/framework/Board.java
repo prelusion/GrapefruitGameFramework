@@ -18,6 +18,8 @@ public class Board {
         createBoard();
     }
 
+
+
     /**
      * Creates a board of given size with strategicValues given from the game implmentation. (TODO)
      */
@@ -33,8 +35,10 @@ public class Board {
      * @param Move, move is given to set the move on the board and apply all necessary changes.
      */
      public void setMove(Move move) {
+        //
+     }
         //TODO Set the move with the given function of the Rules implementation
-    }
+
 
     /**
      * This function will check if the given move is a valid move on the board.

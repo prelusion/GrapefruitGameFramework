@@ -15,6 +15,7 @@ public class GameApplication extends Application {
 
 
     private ModelMainWindow modelMainWindow;
+    private static Stage primaryStage;
 
     public void startApplication(String[] args){
         launch(args);
@@ -22,12 +23,16 @@ public class GameApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
+        this.primaryStage = primaryStage;
         modelMainWindow = new ModelMainWindow();
         primaryStage.setTitle("Grapefruit Gamework");
         primaryStage.setScene(new Scene(MainWindowFactory.build(modelMainWindow).getParent(), 1000, 600));
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.getIcons().add(ImageRegistry.GAMEWORK_ICON);
         primaryStage.show();
+    }
+
+    public static Stage getStage(){
+        return primaryStage;
     }
 }

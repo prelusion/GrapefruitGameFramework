@@ -22,7 +22,22 @@
     -fx-background-color:  linear-gradient(to right bottom, #1C0E04 0%, #0B1133 87%);
 }
 
-.menu-item{
+.menu-item-normal{
     -fx-background-color: linear-gradient(to right bottom, #FF6600 0%, #946B6B 64%);
+    -fx-effect: innershadow(GAUSSIAN, #000000, 10, 0, 0, 0);
 }
 
+.menu-item-hover{
+    -fx-background-color: linear-gradient(to right bottom, #FF6600 0%, #946B6B 64%);
+    -fx-effect: innershadow(GAUSSIAN, #000000, 120, 0, 0, 0);
+}
+
+.menu-item-hover-selected{
+    -fx-background-color: linear-gradient(to right bottom, #FF6600 0%, #946B6B 64%);
+    -fx-effect: innershadow(GAUSSIAN, #000000, 60, 0, 0, 0);
+}
+
+.menu-item-selected{
+    -fx-background-color: linear-gradient(to right bottom, #FF6600 0%, #946B6B 64%);
+    -fx-effect: innershadow(GAUSSIAN, #FFFFFF, 120, 0, 0, 0);
+}

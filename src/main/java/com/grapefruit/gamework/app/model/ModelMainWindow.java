@@ -7,6 +7,7 @@ import com.grapefruit.gamework.app.games.GameRegistry;
 public class ModelMainWindow implements IModel {
 
     private Game[] games = GameRegistry.games;
+    private Game selectedGame = null;
 
     public ModelMainWindow(){
 
@@ -14,5 +15,13 @@ public class ModelMainWindow implements IModel {
 
     public Game[] getGames() {
         return games;
+    }
+
+    public void setSelectedGame(Game game){
+        this.selectedGame = game;
+    }
+
+    public Game getSelectedGame(){
+        return selectedGame;
     }
 }

@@ -24,17 +24,22 @@ public abstract class GameSession {
      */
     private Board board;
 
+    private MoveSetter moveSetter;
+
     /**
      * Constructor of making an GameSession
      * @param int turnTimeout, gives a timeout limit for turns.
      * @param int boardSize, gives a grid size for the new board.
      */
-    public GameSession(Player[] players, Rule[] rules, int turnTimeout, int boardSize) {
+    public GameSession(MoveSetter moveSetter, Player[] players, int turnTimeout, int boardSize) {
+        this.moveSetter = moveSetter;
         this.players = players;
         this.rules = rules;
         this.turnTimeout = turnTimeout;
         this.board = new Board(boardSize);
     }
+
+
 
     /**
      * @abstract This function will start the current GameSession.
@@ -75,5 +80,13 @@ public abstract class GameSession {
      */
     public int getTurnTimeout() {
         return turnTimeout;
+    }
+
+    public boolean isValidMove(Move move) {
+        return moveSetter.isValidMove(board, move);
+    }
+
+    public void setMove(Move move) {
+        moveSetter.setMove(board, move);
     }
 }

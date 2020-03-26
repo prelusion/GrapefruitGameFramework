@@ -1,8 +1,6 @@
-package com.grapefruit.gamework.model;
+package com.grapefruit.gamework.app.model;
 
-import com.grapefruit.gamework.controller.IController;
-import com.grapefruit.gamework.games.Game;
-import javafx.scene.Parent;
+import com.grapefruit.gamework.app.games.Game;
 
 public class ModelGameTile implements IModel {
 

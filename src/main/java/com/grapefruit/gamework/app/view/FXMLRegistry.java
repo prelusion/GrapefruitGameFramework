@@ -1,6 +1,4 @@
-package com.grapefruit.gamework.view;
-
-import javafx.scene.Parent;
+package com.grapefruit.gamework.app.view;
 
 public abstract class FXMLRegistry {
 

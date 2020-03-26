@@ -1,7 +1,7 @@
-package com.grapefruit.gamework.games;
+package com.grapefruit.gamework.app.games;
 
-import com.grapefruit.gamework.games.othello.GameOthello;
-import com.grapefruit.gamework.games.othello.GameTicTacToe;
+import com.grapefruit.gamework.app.games.othello.GameOthello;
+import com.grapefruit.gamework.app.games.othello.GameTicTacToe;
 
 
 public class GameRegistry {

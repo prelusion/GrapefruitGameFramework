@@ -5,7 +5,6 @@ public final class Conditions {
         return checkFullRow(board) || checkFullColumn(board) || checkFullDiagonal(board);
     }
     public static Tile getTileOfAvailableConditions(Board board) {
-        Tile tile = null;
         if(getTileFullRow(board) != null) {
             return getTileFullRow(board);
         }

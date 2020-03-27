@@ -74,4 +74,8 @@ public abstract class GameSession {
     public void setMove(Move move) {
         moveSetter.setMove(board, move);
     }
+
+    public Move createMove(int row, int col, Player player) {
+        return new Move(new Tile(row, col, 1), player);
+    }
 }

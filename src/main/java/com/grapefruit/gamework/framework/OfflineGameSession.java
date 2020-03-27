@@ -7,11 +7,7 @@ public class OfflineGameSession extends GameSession {
 
     @Override
     public void start() {
-        while (true) {
-            for (Player player : getPlayers()) {
-                player.giveTurn(getBoard(), getTurnTimeout());
-            }
-        }
+
     }
 
     /**

@@ -76,6 +76,10 @@ public class ControllerMainWindow implements IController {
             ModelGameTile tile = new ModelGameTile(game, modelMainWindow);
             gamesVBox.getChildren().add(GameTileFactory.build(tile).getParent());
         }
+
+        if (modelMainWindow.getSelectedGame() != null){
+            
+        }
     }
 
     /**

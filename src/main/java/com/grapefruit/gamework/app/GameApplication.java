@@ -33,7 +33,7 @@ public class GameApplication extends Application {
         modelMainWindow = new ModelMainWindow();
         primaryStage.setTitle("Grapefruit Gamework");
         primaryStage.setScene(new Scene(MainWindowFactory.build(modelMainWindow).getParent(), 1000, 600));
-        primaryStage.initStyle(StageStyle.UNDECORATED);
+        //primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.getIcons().add(ImageRegistry.GAMEWORK_ICON);
         primaryStage.show();
     }

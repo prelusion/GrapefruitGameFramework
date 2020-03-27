@@ -1,6 +1,7 @@
 package com.grapefruit.gamework.cli;
 
 import com.grapefruit.gamework.framework.*;
+import com.grapefruit.gamework.tictactoe.TicTacToeFactory;
 
 import java.util.Scanner;
 
@@ -11,10 +12,11 @@ public class CLI {
     private Player[] players;
     private Player currPlayer;
     private int currPlayerIdx = 0;
+    private GameSession session;
 
     enum State {
         LOBBY,
-        WAIT_FOR_TURN,
+        PLAYING,
         PLAY_MOVE,
     }
 
@@ -49,7 +51,7 @@ public class CLI {
             case LOBBY:
                 System.out.println("Enter 'start' to play game");
                 break;
-            case WAIT_FOR_TURN:
+            case PLAYING:
                 System.out.println("Enter move for player " + currPlayer.getName() + ". Example: 12 (row 1, column 2)");
                 break;
         }
@@ -60,16 +62,24 @@ public class CLI {
             case LOBBY:
                 if (line.equals("start")) {
                     players = new Player[] {new HumanPlayer("A", "red"),  new HumanPlayer("B", "red")};
-                    currState = State.WAIT_FOR_TURN;
+                    Game game = TicTacToeFactory.create();
+                    session = game.createSession(players);
+                    currState = State.PLAYING;
                     giveTurn();
                 }
                 break;
-            case WAIT_FOR_TURN:
+            case PLAYING:
                 if (line.length() == 2) {
                     int row = Character.getNumericValue(line.charAt(0));
                     int col = Character.getNumericValue(line.charAt(0));
                     System.out.println("Player " + currPlayer.getName() + " entered: " + row + ", " + col);
-                    giveTurn();
+                    Move move = new Move(new Tile(row, col, 0), currPlayer);
+                    if (session.isValidMove(move)) {
+                        session.setMove(move);
+                        giveTurn();
+                    } else {
+                        System.out.println("Invalid move, please try again");
+                    }
                 }
                 break;
         }

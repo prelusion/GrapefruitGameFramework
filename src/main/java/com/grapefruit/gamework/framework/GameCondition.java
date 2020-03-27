@@ -9,14 +9,19 @@ public interface GameCondition {
     public boolean checkEndConditions(GameSession session);
 
     /**
-     * Checks which player won the match and returns that player.
+     * Return Result, Returns WINNING, TIE
      */
-    public Player getWinner(GameSession session, Player players);
+    public Result isWinner(GameSession session, Player[] players);
+
 
     /**
-     * Checks the result of the game and returns a String based on endstate or the winner.
-     * Returns player name if player won.
-     * Returns "remise" if its remise and an empty string if the game has not reached a end condition
+     * Checks which player won the match and returns that player.
      */
-    public String getGameResult(GameSession session, Player[] players);
+    public Player getWinner(GameSession session, Player[] players);
+
+
+    /**
+     * Returns GameState, Returns RUNNING, ENDED
+     */
+    public GameState getGameState();
 }

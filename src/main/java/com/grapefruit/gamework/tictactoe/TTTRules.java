@@ -12,4 +12,5 @@ public class TTTRules implements Rule {
         }
         return true;
     }
+
 }

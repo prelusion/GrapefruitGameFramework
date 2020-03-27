@@ -55,4 +55,9 @@ public class Board {
         }
         return true;
     }
+
+    public String getPieceString(int row, int col) {
+        return grid[row][col].getPiece().toString();
+    }
+
 }

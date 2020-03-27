@@ -19,13 +19,20 @@ public abstract class MoveSetter {
         return true;
     }
 
-    public String getGameResult(GameSession session, Player[] players) {
-        return gameConditions.getGameResult(session, players);
+    public GameState getGameState(GameSession session, Player[] players) {
+        return gameConditions.getGameState();
+    }
+
+    public Result isWinner(GameSession session, Player[] players) {
+        if (gameConditions.isWinner(session, players) == null) {
+
+        }
+        return null;
     }
 
     public Player getWinner(GameSession session, Player[] players) {
-        for (Player player: players) {
-            return gameConditions.getWinner(session, player);
+        if (gameConditions.getWinner(session, players) == null) {
+
         }
         return null;
     }

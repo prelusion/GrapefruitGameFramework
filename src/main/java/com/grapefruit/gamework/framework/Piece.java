@@ -1,6 +1,7 @@
 package com.grapefruit.gamework.framework;
 
 public class Piece {
+    Piece String;
     /**
      * The piece is assigned to this player.
      */

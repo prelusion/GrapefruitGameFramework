@@ -57,7 +57,7 @@ public class TTTGameConditions implements GameCondition {
     @Override
     public Player getWinner(GameSession session, Player[] players) {
         if (hasWinner != Result.WINNER) {
-            hasWinner = isWinner(session, players);
+            isWinner(session, players);
         }
         if (getGameState() == GameState.ENDED && hasWinner == Result.WINNER) {
             Tile tile = Conditions.getTileOfAvailableConditions(session.getBoard());

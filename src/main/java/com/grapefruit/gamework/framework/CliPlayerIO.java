@@ -19,7 +19,7 @@ public class CliPlayerIO implements PlayerIO {
             System.out.println("Please enter move");
             String s = in.nextLine();
             if (s != null && s.length() == 2) {
-                return new int[]{
+                return new int[] {
                         Character.getNumericValue(s.charAt(0)),
                         Character.getNumericValue(s.charAt(1))
                 };

@@ -30,38 +30,29 @@ public class Board {
     }
 
     /**
-     * @param Move, move is given to set the move on the board and apply all necessary changes.
-     */
-     public void setMove(Move move) {
-        //
-     }
-        //TODO Set the move with the given function of the Rules implementation
-
-
-    /**
-     * This function will check if the given move is a valid move on the board.
-     * @param Player, player is given to check which side is playing.
-     * @param Move, Looks of the given move is valid.
-     */
-    public boolean isValidMove(Move move) {
-        //TODO check if the move is a valid move with the help of the Rule implementation of a certain game.
-        return false;
-    }
-
-    /**
-     * Uses isValidMove() To check whether moves are available.
-     * @param Player, searches available moves for that specific player.
-     * @return Arraylist<Move> of available moves for the given player.
-     */
-    public Move[] getAvailableMoves(Player player) {
-        return null;
-    }
-
-
-    /**
      * @return Tile[][], Get the current board with tiles.
      */
     public Tile[][] getGrid() {
         return grid;
+    }
+
+
+    /**
+     * @return boolean, Checks if the tile chosen has a piece on it.
+     */
+    public boolean hasPiece(Tile tile) { return tile.getPiece() != null; }
+
+    /**
+     * @return boolean, Checks if the board is full. Return true if it is.
+     */
+    public boolean isBoardFull() {
+        for (int x = 0; x < grid.length-1; x++) {
+            for (int y = 0; y < grid.length-1; y++) {
+                if(grid[x][y] == null) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

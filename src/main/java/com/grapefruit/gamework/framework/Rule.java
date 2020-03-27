@@ -1,8 +1,11 @@
 package com.grapefruit.gamework.framework;
 
-import com.grapefruit.gamework.framework.Board;
-import com.grapefruit.gamework.framework.Move;
-
 public interface Rule {
-    public boolean validMove(Board board, Move move);
+    /**
+     * Checks if the following move will be valid or not.
+     * @param session, is a GameSession which is here to get info about the game and board.
+     * @param move, is a Move to check whether the move is valid.
+     * @return boolean, for if the move is valid or not.
+     */
+    public boolean validMove(GameSession session, Move move);
 }

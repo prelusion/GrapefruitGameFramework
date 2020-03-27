@@ -10,15 +10,15 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public void giveTurn(Board board, int timeout) {
+    public void giveTurn(GameSession session, int timeout) {
         setTurn(true);
         // setAvailableMoves(board.getAvailableMoves());
         int[] move = playerIO.askMove();
 //        board.setMove(move);
         setTurn(false);
         // setAvailableMoves(null);
-        if (board.isValidMove(null)) {
-            board.setMove(null);
+        if (session.isValidMove(null, null)) {
+            session.setMove(null);
         }
     }
 }

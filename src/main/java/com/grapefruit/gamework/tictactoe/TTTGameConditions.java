@@ -46,8 +46,10 @@ public class TTTGameConditions implements GameCondition {
                 hasWinner = Result.WINNER;
                 return Result.WINNER;
             }
+            hasWinner = Result.TIE;
             return Result.TIE;
         }
+        hasWinner = Result.NONE;
         return Result.NONE;
     }
 

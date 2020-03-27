@@ -1,7 +1,7 @@
 package com.grapefruit.gamework.cli;
 
-import com.grapefruit.gamework.framework.*;
-import com.grapefruit.gamework.tictactoe.TTTFactory;
+import com.grapefruit.gamework.framework.template.*;
+import com.grapefruit.gamework.games.tictactoe.TTTFactory;
 
 import java.util.Scanner;
 

@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 
 public class GameTicTacToe implements Game {
 
-    private String name = "TicTacToe";
+    private String name = "GameTicTacToe";
     private Image icon = ImageRegistry.GAME_ICON_TICTACTOE;
 
 

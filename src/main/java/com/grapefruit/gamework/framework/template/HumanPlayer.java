@@ -1,4 +1,4 @@
-package com.grapefruit.gamework.framework;
+package com.grapefruit.gamework.framework.template;
 
 public class HumanPlayer extends Player {
 

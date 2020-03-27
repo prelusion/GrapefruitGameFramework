@@ -1,6 +1,6 @@
-package com.grapefruit.gamework.tictactoe;
+package com.grapefruit.gamework.games.tictactoe;
 
-import com.grapefruit.gamework.framework.*;
+import com.grapefruit.gamework.framework.template.*;
 
 public class TTTRules implements Rule {
     @Override

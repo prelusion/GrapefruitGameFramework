@@ -1,6 +1,6 @@
 package com.grapefruit.gamework.framework;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Board {
 
@@ -17,8 +17,6 @@ public class Board {
         grid = new Tile[boardSize][boardSize];
         createBoard();
     }
-
-
 
     /**
      * Creates a board of given size with strategicValues given from the game implmentation. (TODO)
@@ -55,7 +53,7 @@ public class Board {
      * @param Player, searches available moves for that specific player.
      * @return Arraylist<Move> of available moves for the given player.
      */
-    public ArrayList<Move>getAvailableMoves(Player player) {
+    public Move[] getAvailableMoves(Player player) {
         return null;
     }
 

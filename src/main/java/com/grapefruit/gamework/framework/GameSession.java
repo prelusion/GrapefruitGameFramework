@@ -10,11 +10,6 @@ public abstract class GameSession {
     private Player[] players;
 
     /**
-     * The rules for the chosen game
-     */
-    private Rule[] rules;
-
-    /**
      * The time a player has for their turn
      */
     private int turnTimeout = 10;
@@ -34,12 +29,9 @@ public abstract class GameSession {
     public GameSession(MoveSetter moveSetter, Player[] players, int turnTimeout, int boardSize) {
         this.moveSetter = moveSetter;
         this.players = players;
-        this.rules = rules;
         this.turnTimeout = turnTimeout;
         this.board = new Board(boardSize);
     }
-
-
 
     /**
      * @abstract This function will start the current GameSession.
@@ -50,7 +42,7 @@ public abstract class GameSession {
      * @Param Player, gives the available moves for that player.
      * @return Arraylist<Move> of available moves;
      */
-    public ArrayList<Move> getAvailableMoves(Player player) {
+    public Move[] getAvailableMoves(Player player) {
         return board.getAvailableMoves(player);
     }
 
@@ -66,13 +58,6 @@ public abstract class GameSession {
      */
     public Board getBoard() {
         return board;
-    }
-
-    /**
-     * @return Arraylist<Rule> of the current games rules.
-     */
-    public Rule[] getRules() {
-        return rules;
     }
 
     /**

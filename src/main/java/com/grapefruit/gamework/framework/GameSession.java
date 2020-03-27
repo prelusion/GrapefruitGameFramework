@@ -81,9 +81,13 @@ public abstract class GameSession {
      */
     public boolean isGameEnded() { return moveSetter.isGameEnded(this); };
 
+    /**
+     * @return boolean, true if a winner is found.
+     */
+    public Result isWinner() { return moveSetter.isWinner(this, players); }
 
     /**
-     * @return player, the player that won.
+     * @return Player, Get the player if there is a winner.
      */
     public Player getWinner() { return moveSetter.getWinner(this, players); }
 
@@ -91,7 +95,8 @@ public abstract class GameSession {
      * This function will check who has won the game (isEndCondition() should be called first).
      * @return String, returns string of a player name when player has won. Returns "remise" if its a tie and returns an empty string if nowone won and game hasnt ended.
      */
-    public String getGameResult() { return moveSetter.getGameResult(this, players); };
+    public GameState getGameState() { return moveSetter.getGameState(this, players); };
+
 
     /**
      * Uses isValidMove() To check whether moves are available.

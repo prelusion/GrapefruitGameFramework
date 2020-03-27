@@ -1,12 +1,12 @@
 package com.grapefruit.gamework.tictactoe;
 
-import com.grapefruit.gamework.framework.Board;
-import com.grapefruit.gamework.framework.GameCondition;
-import com.grapefruit.gamework.framework.GameSession;
-import com.grapefruit.gamework.framework.Player;
+import com.grapefruit.gamework.framework.*;
+
+import java.util.ArrayList;
 
 public class TTTGameConditions implements GameCondition {
-    boolean endReached;
+    private boolean endReached;
+    private Result hasWinner;
 
     @Override
     /**
@@ -15,7 +15,7 @@ public class TTTGameConditions implements GameCondition {
      */
     public boolean checkEndConditions(GameSession session) {
         Board board = session.getBoard();
-        if(board.isBoardFull()) {
+        if (board.isBoardFull()) {
             endReached = true;
             return true;
         }
@@ -28,24 +28,53 @@ public class TTTGameConditions implements GameCondition {
      * @return boolean
      */
     @Override
-    public String getGameResult(GameSession session, Player[] players) {
-        if(endReached) {
-            for(Player player : players) {
-                if(getWinner(session, player) != null) {
-                    return player.getName();
-                }
-            }
-            return "remise";
+    public GameState getGameState() {
+        if (endReached) {
+            return GameState.ENDED;
         }
-        return "";
+        return GameState.RUNNING;
     }
 
+
+    /**
+     * Checks if a player won the match.
+     */
+    @Override
+    public Result isWinner(GameSession session, Player[] players) {
+        Board board = session.getBoard();
+        String[][] solutions = new String[board.getGrid().length][board.getGrid().length];
+
+
+        for (int row = 0; row < board.getGrid().length; row++) {
+            for (int col = 0; col < board.getGrid().length; col++) {
+                solutions[row][col] = board.getPieceString(row, col);
+            }
+        }
+
+        hasWinner = Result.WINNER;
+        return Result.WINNER;
+    }
 
     /**
      * Checks which player won the match and returns that player.
      */
     @Override
-    public Player getWinner(GameSession session, Player player) {
+    public Player getWinner(GameSession session, Player[] players) {
+        if(hasWinner != Result.WINNER) {
+            hasWinner = isWinner(session, players);
+        }
+        if(getGameState() == GameState.ENDED && hasWinner == Result.WINNER) {
+            Board board = session.getBoard();
+            Tile[][] grid = board.getGrid();
+
+            String[][] solutions = new String[board.getGrid().length][board.getGrid().length];
+            //Horizontal check
+            for (int x = 0; x < grid.length; x++) {
+                for (int y = 0; y < grid.length; y++) {
+
+                }
+            }
+        }
         return null;
     }
 }

@@ -17,7 +17,6 @@ public class CLI {
     enum State {
         LOBBY,
         PLAYING,
-        PLAY_MOVE,
     }
 
     private State currState = State.LOBBY;
@@ -72,8 +71,11 @@ public class CLI {
                 if (line.length() == 2) {
                     int row = Character.getNumericValue(line.charAt(0));
                     int col = Character.getNumericValue(line.charAt(0));
+
                     System.out.println("Player " + currPlayer.getName() + " entered: " + row + ", " + col);
-                    Move move = new Move(new Tile(row, col, 0), currPlayer);
+
+                    Move move = session.createMove(row, col, currPlayer);
+
                     if (session.isValidMove(move)) {
                         session.setMove(move);
                         giveTurn();

@@ -1,24 +1,41 @@
 package com.grapefruit.gamework.app.controller;
 
 import com.grapefruit.gamework.app.model.IModel;
-import com.grapefruit.gamework.app.model.ModelGameTile;
+import com.grapefruit.gamework.app.model.ModelSettingsWindow;
 import com.grapefruit.gamework.app.model.ModelTableSetting;
+import com.grapefruit.gamework.app.resources.AppSettings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.text.Text;
+import org.apache.commons.validator.routines.InetAddressValidator;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ControllerTableSetting implements IController{
 
+    @FXML
+    private Text keyName;
+
+    @FXML
+    private Text valueName;
+
+    @FXML
+    private Button removeButton;
+
+    @FXML
+    private TextField keyInput;
+
+    @FXML
+    private TextField valueInput;
+
+    @FXML
+    private Button addServerButton;
 
     private ModelTableSetting model;
 
@@ -45,6 +62,7 @@ public class ControllerTableSetting implements IController{
         this.model = (ModelTableSetting) model;
         updateTable();
         initialize();
+        checkRemoveButton();
     }
 
     private void updateTable(){
@@ -52,19 +70,87 @@ public class ControllerTableSetting implements IController{
         TableColumn values = new TableColumn(model.getValueName());
 
         final ObservableList<Setting> settings = FXCollections.observableArrayList();
-        Iterator iterator = model.getRows().entrySet().iterator();
-        while (iterator.hasNext()){
-            Map.Entry setting = (Map.Entry)iterator.next();
-            settings.add(new Setting((String)setting.getKey(), (String)setting.getValue()));
+        for (AppSettings.Server server: model.getSettings().getServers()){
+            settings.add(new Setting(server.getName(), server.getIp()));
         }
 
         keys.setCellValueFactory(new PropertyValueFactory<Setting,String>("key"));
-        keys.setCellValueFactory(new PropertyValueFactory<Setting,String>("value"));
+        values.setCellValueFactory(new PropertyValueFactory<Setting,String>("value"));
 
         settingTable.getItems().removeAll(settingTable.getItems());
         settingTable.getColumns().removeAll(settingTable.getColumns());
-        settingTable.getItems().add(settings);
+        settingTable.setItems(settings);
         settingTable.getColumns().addAll(keys, values);
+
+        keyName.setText(model.getKeyName() + ":");
+        valueName.setText(model.getValueName() + ":");
+        settingTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        ObservableList<Setting> selectedItems = settingTable.getSelectionModel().getSelectedItems();
+
+        selectedItems.addListener(new ListChangeListener<Setting>() {
+            @Override
+            public void onChanged(Change<? extends Setting> change) {
+                checkRemoveButton();
+            }
+        });
+    }
+
+    @FXML
+    private void onRemoveSetting(){
+        Integer selectedIndex = settingTable.getSelectionModel().getSelectedIndex();
+
+        if (selectedIndex != null){
+            if (model.getPreset() == ModelTableSetting.TableSettingPreset.SERVERS)
+            model.getSettings().removeServer(model.getSettings().getServers().get(selectedIndex));
+            updateTable();
+        }
+    }
+
+    private void checkRemoveButton(){
+        if (settingTable.getSelectionModel().getSelectedCells().size() > 0){
+            removeButton.setDisable(false);
+        } else {
+            removeButton.setDisable(true);
+        }
+    }
+
+    @FXML
+    private void onAddServer(){
+        InetAddressValidator validator = new InetAddressValidator();
+        String errorInfo = null;
+
+
+        if (validator.isValid(valueInput.getText())){
+            String name = keyInput.getText();
+            if (name == null){
+                errorInfo = "Please enter a name.";
+            } else {
+                if (name.equals("")){
+                    errorInfo = "Please enter a name.";
+                } else {
+                    if (name.length() > 20){
+                        errorInfo = "Please enter a name shorter than 20 characters.";
+                    }
+                }
+            }
+        } else {
+            errorInfo = "Please enter a valid IP adress";
+        }
+
+        if (errorInfo == null){
+            model.getSettings().addServer(new AppSettings.Server(keyInput.getText(), valueInput.getText()));
+            valueInput.setText("");
+            keyInput.setText("");
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error");
+            alert.setHeaderText("Wrong input entered.");
+            alert.setContentText(errorInfo);
+            alert.showAndWait();
+        }
+
+        updateTable();
     }
 
     public static class Setting {
@@ -81,20 +167,12 @@ public class ControllerTableSetting implements IController{
             return key.get();
         }
 
-        public SimpleStringProperty keyProperty() {
-            return key;
-        }
-
         public void setKey(String key) {
             this.key.set(key);
         }
 
         public String getValue() {
             return value.get();
-        }
-
-        public SimpleStringProperty valueProperty() {
-            return value;
         }
 
         public void setValue(String value) {

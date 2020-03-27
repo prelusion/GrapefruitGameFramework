@@ -40,7 +40,7 @@ public class SettingsWindowFactory implements TemplateFactory {
         }
         IController controller = loader.getController();
         controller.setModel(model);
-        stage.setScene(new Scene(parent, 500, 300));
+        stage.setScene(new Scene(parent, 700, 300));
         stage.initOwner(GameApplication.getStage());
         stage.initModality(Modality.WINDOW_MODAL);
         stage.show();

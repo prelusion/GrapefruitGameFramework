@@ -1,11 +1,27 @@
 package com.grapefruit.gamework.app.model;
 
+import com.grapefruit.gamework.app.controller.ControllerMainWindow;
 import com.grapefruit.gamework.app.resources.AppSettings;
 
 public class ModelSettingsWindow implements IModel {
 
-    public ModelSettingsWindow(){
+    AppSettings.Settings localSettings;
+    ModelMainWindow mainWindow;
+    ControllerMainWindow controllerMainWindow;
 
+    public ModelSettingsWindow(ModelMainWindow mainWindow, ControllerMainWindow controllerMainWindow){
+        localSettings = AppSettings.getSettings();
+        this.mainWindow = mainWindow;
+        this.controllerMainWindow = controllerMainWindow;
+    }
+
+    public AppSettings.Settings getLocalSettings(){
+        return localSettings;
+    }
+
+    public void saveSettings(){
+        AppSettings.saveSettings(localSettings);
+        controllerMainWindow.updateSelectionBoxes();
     }
 
 }

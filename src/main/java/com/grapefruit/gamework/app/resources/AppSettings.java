@@ -17,39 +17,16 @@ public abstract class AppSettings {
     private static final Path SETTINGS_JSON = Paths.get(SETTINGS_FOLDER + "/settings.json");
     private static Settings SETTINGS;
 
-    public static void addServer(String serverName, String serverAdress, String serverPort){
-        if (SETTINGS == null){
-            fetchSettings();
-        }
+    public static void saveSettings(Settings settings){
         checkFiles();
-        SETTINGS.getServers().add(new Server(serverName, serverAdress, serverPort));
-        saveSettings();
+        createSettingsJson(settings);
     }
 
-    public static void addUser(String user){
-
-    }
-
-    public static void saveSettings(){
-        checkFiles();
-        createSettingsJson(SETTINGS);
-    }
-
-    private static Settings getSettings(){
+    public static Settings getSettings(){
         fetchSettings();
         return SETTINGS;
     }
 
-
-    public static HashMap<String, String> getServers(){
-        HashMap<String, String> servers = new HashMap<>();
-        Settings settings = getSettings();
-        for (Server server: settings.getServers()){
-            servers.put(server.name, server.ip + server.port);
-        }
-
-        return servers;
-    }
 
     private static boolean checkFiles(){
         try {
@@ -117,6 +94,14 @@ public abstract class AppSettings {
             users = new ArrayList<>();
         }
 
+        public void addServer(Server server){
+            servers.add(server);
+        }
+
+        public void removeServer(Server server){
+            servers.remove(server);
+        }
+
         public ArrayList<Server> getServers() {
             return servers;
         }
@@ -129,14 +114,32 @@ public abstract class AppSettings {
     public static class Server{
         private String name;
         private String ip;
-        private String port;
 
         public Server(){}
 
-        public Server(String name, String ip, String port){
+        public Server(String name, String ip){
             this.name = name;
             this.ip = ip;
-            this.port = port;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String toString(){
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getIp() {
+            return ip;
+        }
+
+        public void setIp(String ip) {
+            this.ip = ip;
         }
     }
 

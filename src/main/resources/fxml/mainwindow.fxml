@@ -17,11 +17,11 @@
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select server:" />
                   <Pane prefHeight="34.0" prefWidth="10.0" />
-                  <ComboBox prefWidth="150.0" />
+                  <ComboBox fx:id="serverSelection" onAction="#onServerSelectionChange" prefWidth="150.0" promptText="Select a server" />
                   <Pane prefHeight="34.0" prefWidth="13.0" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select user:" />
                   <Pane prefHeight="34.0" prefWidth="10.0" />
-                  <ComboBox prefWidth="150.0" />
+                  <ComboBox fx:id="userSelection" prefWidth="150.0" promptText="Select a user" />
                   <Pane prefHeight="34.0" prefWidth="10.0" />
                   <Button fx:id="settingsButton" mnemonicParsing="false" onAction="#onSettingsClicked" text="Settings" />
                </children>

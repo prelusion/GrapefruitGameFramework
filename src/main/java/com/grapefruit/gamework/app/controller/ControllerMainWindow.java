@@ -51,16 +51,25 @@ public class ControllerMainWindow implements IController {
     @FXML
     private ResourceBundle resources;
 
+    /**
+     * Required for FXML
+     */
     public ControllerMainWindow()
     {
-
     }
 
+    /**
+     * Required for FXML
+     * also updates list of games.
+     */
     private void initialize()
     {
         updateGames();
     }
 
+    /**
+     * Updates list of games displayed on left side.
+     */
     private void updateGames(){
         gamesVBox.getChildren().removeAll(gamesVBox.getChildren());
         for (Game game: modelMainWindow.getGames()){
@@ -69,6 +78,9 @@ public class ControllerMainWindow implements IController {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setModel(IModel model) {
         modelMainWindow = (ModelMainWindow) model;
@@ -77,12 +89,22 @@ public class ControllerMainWindow implements IController {
     }
 
 
+    /**
+     * Called when settings button is clicked.
+     * Open settings window.
+     */
     @FXML
     private void onSettingsClicked(){
         TemplateSettingsWindow settingsWindow = (TemplateSettingsWindow) SettingsWindowFactory.build(new ModelSettingsWindow(modelMainWindow, this));
         settingsWindow.getParent();
     }
 
+    /**
+     * Called when mouse is clicked on main window.
+     * Used to determine if a GameTile was clicked.
+     *
+     * @param event supplied by FXML
+     */
     @FXML
     private void onClick(MouseEvent event){
         if (event.getTarget() instanceof Node){
@@ -104,6 +126,9 @@ public class ControllerMainWindow implements IController {
         }
     }
 
+    /**
+     * Updates selection boxes by fetching settings from AppSettings.
+     */
     public void updateSelectionBoxes(){
         ArrayList<AppSettings.Server> servers =  AppSettings.getSettings().getServers();
         ArrayList<AppSettings.User> users =  AppSettings.getSettings().getUsers();
@@ -121,6 +146,9 @@ public class ControllerMainWindow implements IController {
         }
     }
 
+    /**
+     * Called when selected server is changed in ComboBox.
+     */
     @FXML
     private void onServerSelectionChange(){
         if (serverSelection.getValue() instanceof AppSettings.Server) {

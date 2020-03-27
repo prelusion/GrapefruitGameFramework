@@ -23,6 +23,9 @@ public class MainWindowFactory implements TemplateFactory {
     private MainWindowFactory(){
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Template buildTemplate(IModel model) {
         FXMLLoader loader = new ResourceLoader().getViewLoader(FXMLRegistry.MAIN_WINDOW);

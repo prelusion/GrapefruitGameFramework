@@ -22,6 +22,9 @@ public class TableSettingFactory implements TemplateFactory {
     private TableSettingFactory(){
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Template buildTemplate(IModel model) {
         FXMLLoader loader = new ResourceLoader().getViewLoader(FXMLRegistry.TABLE_SETTING);

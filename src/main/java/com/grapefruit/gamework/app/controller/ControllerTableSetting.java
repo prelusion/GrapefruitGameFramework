@@ -48,15 +48,23 @@ public class ControllerTableSetting implements IController{
     @FXML
     private ResourceBundle resources;
 
+    /**
+     * Required for FXML
+     */
     public ControllerTableSetting()
     {
     }
 
+    /**
+     * Required for FXML
+     */
     private void initialize()
     {
-
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setModel(IModel model) {
         this.model = (ModelTableSetting) model;
@@ -65,6 +73,9 @@ public class ControllerTableSetting implements IController{
         checkRemoveButton();
     }
 
+    /**
+     * Updates the TableView and fetches (new) values from the model.
+     */
     private void updateTable(){
         TableColumn keys = new TableColumn(model.getKeyName());
         TableColumn values = new TableColumn(model.getValueName());
@@ -96,6 +107,9 @@ public class ControllerTableSetting implements IController{
         });
     }
 
+    /**
+     * Removes currently selected setting.
+     */
     @FXML
     private void onRemoveSetting(){
         Integer selectedIndex = settingTable.getSelectionModel().getSelectedIndex();
@@ -107,6 +121,9 @@ public class ControllerTableSetting implements IController{
         }
     }
 
+    /**
+     * Checks if a setting is selected that can be removed in order to disable or enable the remove button.
+     */
     private void checkRemoveButton(){
         if (settingTable.getSelectionModel().getSelectedCells().size() > 0){
             removeButton.setDisable(false);
@@ -115,6 +132,10 @@ public class ControllerTableSetting implements IController{
         }
     }
 
+    /**
+     * Adds a to the Configuration.
+     * Server object is built from input values.
+     */
     @FXML
     private void onAddServer(){
         InetAddressValidator validator = new InetAddressValidator();

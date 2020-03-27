@@ -27,6 +27,9 @@ public class SettingsWindowFactory implements TemplateFactory {
     private SettingsWindowFactory(){
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Template buildTemplate(IModel model) {
         FXMLLoader loader = new ResourceLoader().getViewLoader(FXMLRegistry.SETTINGS_WINDOW);

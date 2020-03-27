@@ -44,23 +44,34 @@ public class ControllerSettingsWindow implements IController {
     @FXML
     private ResourceBundle resources;
 
+    /**
+     * Required for FXML
+     */
     public ControllerSettingsWindow()
     {
-
     }
 
+    /**
+     * Required for FXML
+     */
     private void initialize()
     {
-
-
     }
 
+    /**
+     * Sets currently selected setting
+     *
+     * @param parent to be displayed
+     */
     private void setSelectedSetting(Parent parent){
         localSettings = AppSettings.getSettings();
         selectedSetting.getChildren().removeAll(selectedSetting.getChildren());
         selectedSetting.getChildren().add(parent);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setModel(IModel model) {
         modelSettingsWindow = (ModelSettingsWindow) model;
@@ -69,6 +80,9 @@ public class ControllerSettingsWindow implements IController {
         onClickServer();
     }
 
+    /**
+     *
+     */
     @FXML
     private void onClickServer(){
 

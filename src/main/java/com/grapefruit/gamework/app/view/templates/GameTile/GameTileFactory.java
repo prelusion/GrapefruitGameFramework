@@ -22,6 +22,9 @@ public class GameTileFactory implements TemplateFactory {
     private GameTileFactory(){
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Template buildTemplate(IModel model) {
         FXMLLoader loader = new ResourceLoader().getViewLoader(FXMLRegistry.GAME_TILE);

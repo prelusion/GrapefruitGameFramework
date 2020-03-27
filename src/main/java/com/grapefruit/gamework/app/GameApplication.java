@@ -21,6 +21,12 @@ public class GameApplication extends Application {
         launch(args);
     }
 
+    /**
+     *
+     * @param primaryStage
+     *
+     * Starts application.
+     */
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;

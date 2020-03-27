@@ -17,17 +17,29 @@ public abstract class AppSettings {
     private static final Path SETTINGS_JSON = Paths.get(SETTINGS_FOLDER + "/settings.json");
     private static Settings SETTINGS;
 
+    /**
+     * @param settings
+     * Saves settings to json in home dir.
+     */
     public static void saveSettings(Settings settings){
         checkFiles();
         createSettingsJson(settings);
     }
 
+    /**
+     * @return SETTINGS
+     * Fetches settings from home dir.
+     */
     public static Settings getSettings(){
         fetchSettings();
         return SETTINGS;
     }
 
 
+    /**
+     * @return Whether files are in order
+     * Checks if the files in the home folder are set up properly.
+     */
     private static boolean checkFiles(){
         try {
             if (Files.notExists(SETTINGS_FOLDER)) {
@@ -55,6 +67,11 @@ public abstract class AppSettings {
         }
     }
 
+    /**
+     * Created new json in home dir.
+     * @param settings
+     * @return Whether or not creation was successful.
+     */
     private static boolean createSettingsJson(Settings settings){
         GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls();
@@ -73,6 +90,9 @@ public abstract class AppSettings {
         return true;
     }
 
+    /**
+     * Fetches settings from home dir.
+     */
     private static void fetchSettings(){
         if (checkFiles()) {
             Gson gson = new Gson();

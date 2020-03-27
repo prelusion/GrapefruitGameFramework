@@ -18,18 +18,32 @@ public class ModelGameTile implements IModel {
         }
     }
 
+    /**
+     *
+     * @return returns Game
+     */
     public Game getGame() {
         return game;
     }
 
+    /**
+     * Sets selected game in main window to model's game.
+     */
     public void gameSelected(){
         modelMainWindow.setSelectedGame(game);
     }
 
+    /**
+     * Sets select game in main window to null
+     */
     public void gameUnselected(){
         modelMainWindow.setSelectedGame(null);
     }
 
+    /**
+     *
+     * @return Whether game is selected;
+     */
     public boolean isSelected(){
         return selected;
     }

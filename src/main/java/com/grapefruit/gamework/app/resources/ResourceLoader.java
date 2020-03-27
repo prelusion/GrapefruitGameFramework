@@ -15,12 +15,22 @@ public class ResourceLoader {
     }
 
 
+    /**
+     * @param fxmlName of relevant FXML to build loader from
+     * @return FXMLLoader for specified FXML file
+     */
     public FXMLLoader getViewLoader(String fxmlName){
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(FXML_LOCATION + fxmlName));
         return loader;
     }
 
+    /**
+     *
+     * @param imageName file name
+     * @param imageType image type used to find directory
+     * @return Image
+     */
     public static Image loadImage(String imageName, ImageType imageType){
         Image image;
         String prefix = "";

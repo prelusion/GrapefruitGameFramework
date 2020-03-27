@@ -37,20 +37,28 @@ public class ControllerGameTile implements IController{
     @FXML
     private ResourceBundle resources;
 
+    /**
+     * Required for FXML
+     */
     public ControllerGameTile()
     {
     }
 
+    /**
+     * Required for FXML
+     * Sets the displayed icon and name for listed game.
+     */
     private void initialize()
     {
         gameName.setText(model.getGame().getName());
         gameIcon.setImage(model.getGame().getIcon());
     }
 
-    @FXML
-    private void mouseMoved(){
-    }
-
+    /**
+     * Called when mouse enters tile to updates hover effect.
+     *
+     * @Param event supplied by FXML
+     */
     @FXML
     private void mouseEnter(MouseEvent event){
         if (!model.isSelected()) {
@@ -60,6 +68,11 @@ public class ControllerGameTile implements IController{
         }
     }
 
+    /**
+     * Called when mouse enters tile to updates hover effect.
+     *
+     * @Param event supplied by FXML
+     */
     @FXML
     private void mouseExit(){
         if (!model.isSelected()) {
@@ -69,7 +82,11 @@ public class ControllerGameTile implements IController{
 
         }
     }
-
+    /**
+     * Called when mouse enters tile to updates selected effect.
+     *
+     * @Param event supplied by FXML
+     */
     @FXML
     private void mouseClicked(MouseEvent event){
         if (model.isSelected()){
@@ -79,6 +96,9 @@ public class ControllerGameTile implements IController{
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setModel(IModel model) {
         this.model = (ModelGameTile) model;

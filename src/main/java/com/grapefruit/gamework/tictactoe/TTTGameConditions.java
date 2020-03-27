@@ -41,18 +41,14 @@ public class TTTGameConditions implements GameCondition {
      */
     @Override
     public Result isWinner(GameSession session, Player[] players) {
-        Board board = session.getBoard();
-        String[][] solutions = new String[board.getGrid().length][board.getGrid().length];
-
-
-        for (int row = 0; row < board.getGrid().length; row++) {
-            for (int col = 0; col < board.getGrid().length; col++) {
-                solutions[row][col] = board.getPieceString(row, col);
+        if(getGameState() == GameState.ENDED) {
+            if(Conditions.checkAllAdjacentConditions(session.getBoard())) {
+                hasWinner = Result.WINNER;
+                return Result.WINNER;
             }
+            return Result.TIE;
         }
-
-        hasWinner = Result.WINNER;
-        return Result.WINNER;
+        return Result.NONE;
     }
 
     /**
@@ -60,19 +56,13 @@ public class TTTGameConditions implements GameCondition {
      */
     @Override
     public Player getWinner(GameSession session, Player[] players) {
-        if(hasWinner != Result.WINNER) {
+        if (hasWinner != Result.WINNER) {
             hasWinner = isWinner(session, players);
         }
-        if(getGameState() == GameState.ENDED && hasWinner == Result.WINNER) {
-            Board board = session.getBoard();
-            Tile[][] grid = board.getGrid();
-
-            String[][] solutions = new String[board.getGrid().length][board.getGrid().length];
-            //Horizontal check
-            for (int x = 0; x < grid.length; x++) {
-                for (int y = 0; y < grid.length; y++) {
-
-                }
+        if (getGameState() == GameState.ENDED && hasWinner == Result.WINNER) {
+            Tile tile = Conditions.getTileOfAvailableConditions(session.getBoard());
+            if(tile != null) {
+                return tile.getPiece().getPlayer();
             }
         }
         return null;

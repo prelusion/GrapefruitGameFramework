@@ -14,7 +14,9 @@ public interface GameCondition {
     public Player getWinner(GameSession session, Player players);
 
     /**
-     * Checks the result and should return the player that won. Return null when no players won.
+     * Checks the result of the game and returns a String based on endstate or the winner.
+     * Returns player name if player won.
+     * Returns "remise" if its remise and an empty string if the game has not reached a end condition
      */
     public String getGameResult(GameSession session, Player[] players);
 }

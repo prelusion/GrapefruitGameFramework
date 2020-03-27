@@ -2,7 +2,7 @@ package com.grapefruit.gamework.tictactoe;
 
 import com.grapefruit.gamework.framework.*;
 
-public class TicTacToeRules implements Rule {
+public class TTTRules implements Rule {
     @Override
     public boolean validMove(GameSession session, Move move) {
         Board board = session.getBoard();

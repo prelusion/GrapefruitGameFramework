@@ -5,7 +5,7 @@ import com.grapefruit.gamework.framework.GameCondition;
 import com.grapefruit.gamework.framework.GameSession;
 import com.grapefruit.gamework.framework.Player;
 
-public class TicTacToeGameConditions implements GameCondition {
+public class TTTGameConditions implements GameCondition {
     boolean endReached;
 
     @Override

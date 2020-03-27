@@ -3,9 +3,9 @@ package com.grapefruit.gamework.tictactoe;
 import com.grapefruit.gamework.framework.*;
 
 
-public class TicTacToeMoveSetter extends MoveSetter {
+public class TTTMoveSetter extends MoveSetter {
 
-    public TicTacToeMoveSetter(Rule rule, GameCondition condition) {
+    public TTTMoveSetter(Rule rule, GameCondition condition) {
         super(rule, condition);
     }
 

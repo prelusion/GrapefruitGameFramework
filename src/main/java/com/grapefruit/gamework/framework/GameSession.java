@@ -98,11 +98,18 @@ public abstract class GameSession {
      * @param player, searches available moves for that specific player.
      * @return Move[] of available moves for the given player.
      */  //TODO
-    public List<Move> getAvailableMoves(Player player) {
+    public List<Move> getCurrentAvailableMoves(Player player) {
         return null;
     }
 
-
+    /**
+     * Uses isValidMove() To check whether moves are available.
+     * @param player, searches available moves for that specific player.
+     * @return Move[] of available moves for the given player.
+     */  //TODO
+    public List<Move> getMoveAvailableMoves(Player player, Move move) {
+        return null;
+    }
 
     public Move createMove(int row, int col, Player player) {
         return new Move(new Tile(row, col, 1), player);

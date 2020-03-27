@@ -1,6 +1,5 @@
 package com.grapefruit.gamework.framework;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class GameSession {
@@ -39,14 +38,6 @@ public abstract class GameSession {
     public abstract void start();
 
     /**
-     * @Param Player, gives the available moves for that player.
-     * @return Arraylist<Move> of available moves;
-     */
-    public Move[] getAvailableMoves(Player player) {
-        return board.getAvailableMoves(player);
-    }
-
-    /**
      * @return Arraylist<Player> of players.
      */
     public Player[] getPlayers() {
@@ -67,12 +58,57 @@ public abstract class GameSession {
         return turnTimeout;
     }
 
-    public boolean isValidMove(Move move) {
-        return moveSetter.isValidMove(board, move);
+    /**
+     * @param move, move is given to set the move on the board and apply all necessary changes.
+     */
+    public void setMove(Move move) {
+        moveSetter.setMove(this, move);
     }
 
-    public void setMove(Move move) {
-        moveSetter.setMove(board, move);
+    /**
+     * This function will check if the given move is a valid move on the board.
+     * @param player, player is given to check which side is playing.
+     * @param move, Looks of the given move is valid.
+     * @return boolean, State of the move is valid or not.
+     */
+    public boolean isValidMove(Player player, Move move) {
+        return moveSetter.isValidMove(this, move);
+    }
+
+    /**
+     * This function will check if the game should be ended or not.
+     * @return boolean, State of the game if its ended or not.
+     */
+    public boolean isGameEnded() { return moveSetter.isGameEnded(this); };
+
+
+    /**
+     * @return player, the player that won.
+     */
+    public Player getWinner() { return moveSetter.getWinner(this, players); }
+
+    /**
+     * This function will check who has won the game (isEndCondition() should be called first).
+     * @return String, returns string of a player name when player has won. Returns "remise" if its a tie and returns an empty string if nowone won and game hasnt ended.
+     */
+    public String getGameResult() { return moveSetter.getGameResult(this, players); };
+
+    /**
+     * Uses isValidMove() To check whether moves are available.
+     * @param player, searches available moves for that specific player.
+     * @return Move[] of available moves for the given player.
+     */  //TODO
+    public List<Move> getCurrentAvailableMoves(Player player) {
+        return null;
+    }
+
+    /**
+     * Uses isValidMove() To check whether moves are available.
+     * @param player, searches available moves for that specific player.
+     * @return Move[] of available moves for the given player.
+     */  //TODO
+    public List<Move> getMoveAvailableMoves(Player player, Move move) {
+        return null;
     }
 
     public Move createMove(int row, int col, Player player) {

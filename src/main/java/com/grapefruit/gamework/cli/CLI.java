@@ -1,7 +1,7 @@
 package com.grapefruit.gamework.cli;
 
 import com.grapefruit.gamework.framework.*;
-import com.grapefruit.gamework.tictactoe.TicTacToeFactory;
+import com.grapefruit.gamework.tictactoe.TTTFactory;
 
 import java.util.Scanner;
 
@@ -61,7 +61,7 @@ public class CLI {
             case LOBBY:
                 if (line.equals("start")) {
                     players = new Player[] {new HumanPlayer("A", "red"),  new HumanPlayer("B", "red")};
-                    Game game = TicTacToeFactory.create();
+                    Game game = TTTFactory.create();
                     session = game.createSession(players);
                     currState = State.PLAYING;
                     giveTurn();
@@ -76,7 +76,7 @@ public class CLI {
 
                     Move move = session.createMove(row, col, currPlayer);
 
-                    if (session.isValidMove(move)) {
+                    if (session.isValidMove(currPlayer, move)) {
                         session.setMove(move);
                         giveTurn();
                     } else {

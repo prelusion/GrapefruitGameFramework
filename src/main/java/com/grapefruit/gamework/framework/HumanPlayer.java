@@ -6,6 +6,7 @@ public class HumanPlayer extends Player {
         super(name, color);
     }
 
+
     @Override
-    public void giveTurn(Board board, int timeout) {}
+    public void giveTurn(GameSession session, int timeout) {}
 }

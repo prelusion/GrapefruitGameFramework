@@ -22,8 +22,8 @@ public abstract class GameSession {
 
     /**
      * Constructor of making an GameSession
-     * @param turnTimeout, gives a timeout limit for turns.
-     * @param boardSize, gives a grid size for the new board.
+     * @param int turnTimeout, gives a timeout limit for turns.
+     * @param int boardSize, gives a grid size for the new board.
      */
     public GameSession(MoveSetter moveSetter, Player[] players, int turnTimeout, int boardSize) {
         this.moveSetter = moveSetter;
@@ -103,4 +103,8 @@ public abstract class GameSession {
     }
 
 
+
+    public Move createMove(int row, int col, Player player) {
+        return new Move(new Tile(row, col, 1), player);
+    }
 }

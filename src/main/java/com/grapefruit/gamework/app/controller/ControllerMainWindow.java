@@ -1,12 +1,10 @@
 package com.grapefruit.gamework.app.controller;
 
 import com.grapefruit.gamework.app.games.Game;
-import com.grapefruit.gamework.app.model.IModel;
-import com.grapefruit.gamework.app.model.ModelGameTile;
-import com.grapefruit.gamework.app.model.ModelMainWindow;
-import com.grapefruit.gamework.app.model.ModelSettingsWindow;
+import com.grapefruit.gamework.app.model.*;
 import com.grapefruit.gamework.app.resources.AppSettings;
 import com.grapefruit.gamework.app.view.templates.GameTile.GameTileFactory;
+import com.grapefruit.gamework.app.view.templates.SelectedGame.SelectedGameFactory;
 import com.grapefruit.gamework.app.view.templates.SettingsWindow.SettingsWindowFactory;
 import com.grapefruit.gamework.app.view.templates.SettingsWindow.TemplateSettingsWindow;
 import javafx.event.EventTarget;
@@ -17,8 +15,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SelectionModel;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.net.URL;
@@ -32,6 +29,9 @@ public class ControllerMainWindow implements IController {
 
     @FXML
     private URL location;
+
+    @FXML
+    private HBox selectedGame;
 
     @FXML
     private ComboBox serverSelection;
@@ -78,7 +78,8 @@ public class ControllerMainWindow implements IController {
         }
 
         if (modelMainWindow.getSelectedGame() != null){
-            
+            selectedGame.getChildren().removeAll(selectedGame.getChildren());
+            selectedGame.getChildren().add(SelectedGameFactory.build(new ModelSelectedGame(modelMainWindow.getSelectedGame())).getParent());
         }
     }
 

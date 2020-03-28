@@ -1,4 +1,4 @@
-package com.grapefruit.gamework.app.view.templates.SettingsWindow;
+package com.grapefruit.gamework.app.view.templates.SelectedGame;
 
 import com.grapefruit.gamework.app.GameApplication;
 import com.grapefruit.gamework.app.controller.IController;
@@ -12,19 +12,18 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 import java.io.IOException;
 
-public class SettingsWindowFactory implements TemplateFactory {
+public class SelectedGameFactory implements TemplateFactory {
 
-    private static SettingsWindowFactory factory = new SettingsWindowFactory();
+    private static SelectedGameFactory factory = new SelectedGameFactory();
 
     public static Template build(IModel model){
         return factory.buildTemplate(model);
     }
 
-    private SettingsWindowFactory(){
+    private SelectedGameFactory(){
     }
 
     /**
@@ -32,9 +31,8 @@ public class SettingsWindowFactory implements TemplateFactory {
      */
     @Override
     public Template buildTemplate(IModel model) {
-        FXMLLoader loader = new ResourceLoader().getViewLoader(FXMLRegistry.SETTINGS_WINDOW);
+        FXMLLoader loader = new ResourceLoader().getViewLoader(FXMLRegistry.SELECTED_GAME);
         Parent parent = null;
-        Stage stage = new Stage();
         try {
             parent = loader.load();
         }
@@ -43,11 +41,7 @@ public class SettingsWindowFactory implements TemplateFactory {
         }
         IController controller = loader.getController();
         controller.setModel(model);
-        stage.setScene(new Scene(parent, 700, 300));
-        stage.initOwner(GameApplication.getStage());
-        stage.initModality(Modality.WINDOW_MODAL);
-        stage.show();
-        return new TemplateSettingsWindow(parent);
+        return new TemplateSelectedGame(parent);
     }
 
 }

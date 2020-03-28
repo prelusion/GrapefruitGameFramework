@@ -1,14 +1,12 @@
-package com.grapefruit.gamework.app.view.templates.SettingsWindow;
+package com.grapefruit.gamework.app.view.templates.SelectedGame;
 
 import com.grapefruit.gamework.app.view.templates.Template;
 import javafx.scene.Parent;
-import javafx.stage.Stage;
-import javafx.stage.Window;
 
-public class TemplateSettingsWindow extends Template {
+public class TemplateSelectedGame extends Template {
 
 
-    public TemplateSettingsWindow(Parent parent) {
+    public TemplateSelectedGame(Parent parent) {
         super(parent);
     }
 }

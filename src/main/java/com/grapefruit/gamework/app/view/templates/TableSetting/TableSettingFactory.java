@@ -1,10 +1,9 @@
-package com.grapefruit.gamework.app.view.templates.MainWindow;
+package com.grapefruit.gamework.app.view.templates.TableSetting;
 
 import com.grapefruit.gamework.app.controller.IController;
 import com.grapefruit.gamework.app.model.IModel;
 import com.grapefruit.gamework.app.resources.FXMLRegistry;
 import com.grapefruit.gamework.app.resources.ResourceLoader;
-
 import com.grapefruit.gamework.app.view.templates.Template;
 import com.grapefruit.gamework.app.view.templates.TemplateFactory;
 import javafx.fxml.FXMLLoader;
@@ -12,15 +11,15 @@ import javafx.scene.Parent;
 
 import java.io.IOException;
 
-public class MainWindowFactory implements TemplateFactory {
+public class TableSettingFactory implements TemplateFactory {
 
-    private static MainWindowFactory factory = new  MainWindowFactory();
+    private static TableSettingFactory factory = new TableSettingFactory();
 
     public static Template build(IModel model){
         return factory.buildTemplate(model);
     }
 
-    private MainWindowFactory(){
+    private TableSettingFactory(){
     }
 
     /**
@@ -28,7 +27,7 @@ public class MainWindowFactory implements TemplateFactory {
      */
     @Override
     public Template buildTemplate(IModel model) {
-        FXMLLoader loader = new ResourceLoader().getViewLoader(FXMLRegistry.MAIN_WINDOW);
+        FXMLLoader loader = new ResourceLoader().getViewLoader(FXMLRegistry.TABLE_SETTING);
         Parent parent = null;
         try {
             parent = loader.load();
@@ -38,7 +37,7 @@ public class MainWindowFactory implements TemplateFactory {
         }
         IController controller = loader.getController();
         controller.setModel(model);
-        return new TemplateMainWindow(parent);
+        return new TemplateTableSetting(parent);
     }
 
 }

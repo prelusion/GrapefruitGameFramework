@@ -8,12 +8,14 @@ public abstract class Game {
     private Board board;
     private String name;
     private Image icon;
+    private Assets assets;
 
-    public Game(MoveSetter moveSetter, Board board, String name, Image icon) {
+    public Game(MoveSetter moveSetter, Board board, String name, Image icon, Assets assets) {
         this.moveSetter = moveSetter;
         this.board = board;
         this.name = name;
         this.icon = icon;
+        this.assets = assets;
     }
 
     public GameSession createSession(Player[] players) {
@@ -31,5 +33,9 @@ public abstract class Game {
 
     public String getName() {
         return name;
+    }
+
+    public Assets getAssets() {
+        return assets;
     }
 }

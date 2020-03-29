@@ -14,4 +14,8 @@ public class ImageRegistry {
     //Reversi
     public static Image GAME_PIECE_WHITE = loader.loadImage("piece_white.png", ResourceLoader.ImageType.ASSET);
     public static Image GAME_PIECE_BLACK = loader.loadImage("piece_black.png", ResourceLoader.ImageType.ASSET);
+
+    //Game
+    public static Image GREEN_BACKGROUND = loader.loadImage("green_board_background.png", ResourceLoader.ImageType.ASSET);
+    public static Image WOOD_BACKGROUND = loader.loadImage("wood_background.png", ResourceLoader.ImageType.ASSET);
 }

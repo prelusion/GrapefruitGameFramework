@@ -43,14 +43,8 @@
 }
 
 .game-board-tile{
-    -fx-border-color:  #6e2604;
-    -fx-border-width: 3;
-    -fx-border-radius: 3;
 }
 
 .game-board-tile-hover{
     -fx-effect: innershadow(GAUSSIAN, #000000, 60, 0, 0, 0);
-    -fx-border-color:  #6e2604;
-    -fx-border-width: 3;
-    -fx-border-radius: 3;
 }

@@ -10,16 +10,13 @@ public class ReversiPiece extends Piece {
      *
      * @param player
      */
-    public ReversiPiece(Player player) {
-        super(player);
+
+    private Image pieceImage;
+
+    public ReversiPiece(Player player, Image image) {
+        super("idk", player);
+
+        this.pieceImage = image;
     }
 
-    public Image getImage(){
-        if (getPlayer().getColor().equals("white")){
-            return Reversi.IMAGE_WHITE_PIECE;
-        } else if (getPlayer().getColor().equals("black")){
-            return Reversi.IMAGE_BLACK_PIECE;
-        }
-        return null;
-    }
 }

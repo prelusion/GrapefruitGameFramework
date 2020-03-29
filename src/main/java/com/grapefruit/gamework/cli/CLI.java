@@ -60,7 +60,7 @@ public class CLI {
         switch (currState) {
             case LOBBY:
                 if (line.equals("start")) {
-                    players = new Player[] {new HumanPlayer("A", "red"),  new HumanPlayer("B", "red")};
+                    players = new Player[] {new HumanPlayer("A", Team.TeamColour.BLACK),  new HumanPlayer("B", Team.TeamColour.WHITE)};
                     Game game = TTTFactory.create();
                     session = game.createSession(players);
                     currState = State.PLAYING;

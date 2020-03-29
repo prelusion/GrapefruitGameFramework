@@ -11,5 +11,5 @@ public interface Rule {
      */
     public boolean validMove(GameSession session, Move move);
 
-    public HashSet<Tile> getValidMoves(Player player);
+    public HashSet<Tile> getValidMoves(Board board, Player player);
 }

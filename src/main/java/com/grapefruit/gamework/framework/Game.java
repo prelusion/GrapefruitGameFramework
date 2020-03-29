@@ -4,11 +4,11 @@ import javafx.scene.image.Image;
 
 public abstract class Game {
 
-    private MoveSetter moveSetter;
-    private Board board;
-    private String name;
-    private Image icon;
-    private Assets assets;
+    protected MoveSetter moveSetter;
+    protected Board board;
+    protected String name;
+    protected Image icon;
+    protected Assets assets;
 
     public Game(MoveSetter moveSetter, Board board, String name, Image icon, Assets assets) {
         this.moveSetter = moveSetter;
@@ -37,5 +37,9 @@ public abstract class Game {
 
     public Assets getAssets() {
         return assets;
+    }
+
+    public MoveSetter getMoveSetter() {
+        return moveSetter;
     }
 }

@@ -21,7 +21,6 @@ public class Reversi extends Game {
         grid[3][4].setPiece(new Piece("", players[1]));
         grid[4][3].setPiece(new Piece("", players[1]));
 
-
         return super.createSession(players);
     }
 }

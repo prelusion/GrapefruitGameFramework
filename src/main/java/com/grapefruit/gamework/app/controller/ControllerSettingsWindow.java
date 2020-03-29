@@ -1,6 +1,5 @@
 package com.grapefruit.gamework.app.controller;
 
-import com.grapefruit.gamework.app.games.Game;
 import com.grapefruit.gamework.app.model.IModel;
 import com.grapefruit.gamework.app.model.ModelGameTile;
 import com.grapefruit.gamework.app.model.ModelSettingsWindow;

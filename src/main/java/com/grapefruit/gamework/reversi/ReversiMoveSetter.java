@@ -5,7 +5,7 @@ import com.grapefruit.gamework.framework.*;
 public class ReversiMoveSetter extends MoveSetter {
 
     public ReversiMoveSetter() {
-        super(new ReversiRules(), (GameCondition) new ReversiConditions());
+        super(new ReversiRules(), new ReversiConditions());
     }
 
     @Override

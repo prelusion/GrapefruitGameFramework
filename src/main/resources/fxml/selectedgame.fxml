@@ -34,12 +34,11 @@
                   </Text>
                </children>
             </HBox>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button fx:id="onlineButton" layoutX="108.0" layoutY="14.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="95.0" text="Play online" />
-                  <Button fx:id="offlineButton" layoutX="108.0" layoutY="77.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="95.0" text="Play offline" />
+                  <VBox fx:id="buttonBox" alignment="CENTER" prefHeight="92.0" prefWidth="132.0" />
                </children>
-            </AnchorPane>
+            </HBox>
             <Pane minHeight="-Infinity" prefHeight="142.0" prefWidth="310.0" />
          </children>
       </VBox>

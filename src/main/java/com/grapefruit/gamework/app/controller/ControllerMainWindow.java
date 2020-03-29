@@ -1,12 +1,12 @@
 package com.grapefruit.gamework.app.controller;
 
-import com.grapefruit.gamework.app.games.Game;
 import com.grapefruit.gamework.app.model.*;
 import com.grapefruit.gamework.app.resources.AppSettings;
 import com.grapefruit.gamework.app.view.templates.GameTile.GameTileFactory;
 import com.grapefruit.gamework.app.view.templates.SelectedGame.SelectedGameFactory;
 import com.grapefruit.gamework.app.view.templates.SettingsWindow.SettingsWindowFactory;
 import com.grapefruit.gamework.app.view.templates.SettingsWindow.TemplateSettingsWindow;
+import com.grapefruit.gamework.framework.Game;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.scene.Node;

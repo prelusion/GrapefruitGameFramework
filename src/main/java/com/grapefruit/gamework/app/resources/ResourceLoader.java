@@ -11,7 +11,7 @@ public class ResourceLoader {
 
     public enum ImageType{
         GAME_ICON,
-        BACKGROUND
+        ASSET
     }
 
 
@@ -40,8 +40,8 @@ public class ResourceLoader {
                 prefix = "gameicons/";
                 break;
 
-            case BACKGROUND:
-                prefix = "background/";
+            case ASSET:
+                prefix = "assets/";
                 break;
         }
 

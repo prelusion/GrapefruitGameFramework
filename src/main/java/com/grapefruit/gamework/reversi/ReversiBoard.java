@@ -8,7 +8,7 @@ public class ReversiBoard extends Board {
      *
      * @param boardSize
      */
-    public ReversiBoard() {
-        super(8);
+    public ReversiBoard(int size) {
+        super(size);
     }
 }

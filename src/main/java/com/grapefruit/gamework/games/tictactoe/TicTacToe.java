@@ -2,6 +2,7 @@ package com.grapefruit.gamework.games.tictactoe;
 
 import com.grapefruit.gamework.framework.*;
 
+import java.util.HashSet;
 import java.util.List;
 
 public class TicTacToe extends Game {
@@ -19,7 +20,7 @@ public class TicTacToe extends Game {
 
     @Override
     public boolean isValidMove(int row, int col, Player player) {
-        return !getBoard().hasPiece(row, col);
+        return !getBoard().hasPlayer(row, col);
     }
 
     @Override
@@ -71,7 +72,7 @@ public class TicTacToe extends Game {
     }
 
     @Override
-    public List<Tile> getAvailableMoves(Player player) {
+    public HashSet<Tile> getAvailableMoves(Player player) {
         return null;
     }
 }

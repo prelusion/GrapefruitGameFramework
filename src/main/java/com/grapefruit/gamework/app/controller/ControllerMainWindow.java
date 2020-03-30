@@ -7,6 +7,7 @@ import com.grapefruit.gamework.app.view.templates.SelectedGame.SelectedGameFacto
 import com.grapefruit.gamework.app.view.templates.SettingsWindow.SettingsWindowFactory;
 import com.grapefruit.gamework.app.view.templates.SettingsWindow.TemplateSettingsWindow;
 import com.grapefruit.gamework.framework.Game;
+import com.grapefruit.gamework.framework.GameWrapper;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -72,8 +73,8 @@ public class ControllerMainWindow implements IController {
      */
     private void updateGames(){
         gamesVBox.getChildren().removeAll(gamesVBox.getChildren());
-        for (Game game: modelMainWindow.getGames()){
-            ModelGameTile tile = new ModelGameTile(game, modelMainWindow);
+        for (GameWrapper gameWrapper: modelMainWindow.getGames()){
+            ModelGameTile tile = new ModelGameTile(gameWrapper, modelMainWindow);
             gamesVBox.getChildren().add(GameTileFactory.build(tile).getParent());
         }
 

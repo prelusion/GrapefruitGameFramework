@@ -12,10 +12,10 @@ public class Reversi extends Game {
 
     public Reversi(Board board, Player[] players, int turnTimeout) {
         super(board, players, turnTimeout);
-        board.setPiece(3, 3, players[0]);
+        board.setPiece(3, 3, players[1]);
         board.setPiece(4, 4, players[1]);
         board.setPiece(3, 4, players[0]);
-        board.setPiece(4, 3, players[1]);
+        board.setPiece(4, 3, players[0]);
 
     }
 
@@ -50,55 +50,58 @@ public class Reversi extends Game {
     }
 
     @Override
-    public List<Tile> getAvailableMoves(Player player) {
-        /* TODO grid of board should be private, and game should manipulate board through methods.
-        *   If the method requires special methods to operate on the grid, please inherit the board itself
-        *   and create methods on the board for manipulation.
-        * */
-//        HashSet<Tile> playerOwnedTiles = new HashSet<>();
-//        HashSet<Tile> validMoves = new HashSet<>();
-//        for (Tile[] column: board.getGrid()){
-//            for (Tile tile: column){
-//                if (tile.getPlayer() != null){
-//                    if (tile.getPlayer() == player){
-//                        playerOwnedTiles.add(tile);
-//                    }
-//                }
-//            }
-//        }
-//
-//        for (Tile tile: playerOwnedTiles) {
-//            HashSet<Tile> neighbours = getDirectNeighbours(board, tile);
-//            for (Tile t : neighbours) {
-//                if (t.getPlayer() != null) {
-//                    if (t.getPlayer() != player) {
-//                        getEmptyTileInDirection(board, player, t.getCol(), t.getRow(), tile.getCol() - t.getCol(), tile.getRow() - t.getRow());
-//                    }
-//                }
-//            }
-//        }
-//
-//        return validMoves;
+    public HashSet<Tile> getAvailableMoves(Player player) {
+        HashSet<Tile> playerOwnedTiles = new HashSet<>();
+        HashSet<Tile> validMoves = new HashSet<>();
+        for (Tile[] column: super.getBoard().getGrid()){
+            for (Tile tile: column){
+                if (tile.getPlayer() != null){
+                    if (tile.getPlayer() == player){
+                        playerOwnedTiles.add(tile);
+                    }
+                }
+            }
+        }
 
-        return null;
+        for (Tile tile: playerOwnedTiles) {
+            HashSet<Tile> neighbours = getDirectNeighbours(super.getBoard(), tile);
+            for (Tile t : neighbours) {
+                if (t.getPlayer() != null) {
+                    if (t.getPlayer() != player) {
+                        Tile emptyTile = getEmptyTileInDirection(super.getBoard(), player, t.getCol(), t.getRow(), t.getCol() - tile.getCol(), t.getRow() - tile.getRow());
+                        if (emptyTile != null) {
+                            if (!validMoves.contains(emptyTile)) {
+                                validMoves.add(emptyTile);
+                            }
+                        }
+                   }
+               }
+            }
+        }
+
+        return validMoves;
     }
 
     private HashSet<Tile> getDirectNeighbours(Board board, Tile tile){
-        return new HashSet<>();
+        HashSet<Tile> neighbours = new HashSet<>();
+        for (int[] coord: Util.outerGrid){
+            if (board.isValidLocation(tile.getRow() + coord[0], tile.getCol() + coord[1])){
+                neighbours.add(board.getGrid()[tile.getRow() + coord[0]][tile.getCol() + coord[1]]);
+            }
+        }
+        return neighbours;
     }
 
     private Tile getEmptyTileInDirection(Board board,Player player, int startx, int starty, int dx, int dy) {
-        /* TODO grid of board should be private, and game should manipulate board through methods.
-         *   If the method requires special methods to operate on the grid, please inherit the board itself
-         *   and create methods on the board for manipulation.
-         * */
-//        if (board.isValidLocation(startx + dx, starty + dy)) {
-//            if (board.hasPiece(startx + dx, starty + dy)) {
-//                if (board.getGrid()[startx + dx][starty + dy].getPlayer() != player) {
-//                    return getEmptyTileInDirection(board, player, startx + dy, starty + dy, dx, dy);
-//                }
-//            }
-//        }
+        if (board.isValidLocation(startx + dx, starty + dy)) {
+            if (board.hasPlayer(startx + dx, starty + dy)) {
+               if (board.getGrid()[startx + dx][starty + dy].getPlayer() != player) {
+                    return getEmptyTileInDirection(board, player, startx + dx, starty + dy, dx, dy);
+                }
+            } else {
+                return board.getGrid()[startx + dx][ starty + dy];
+            }
+        }
         return null;
     }
 }

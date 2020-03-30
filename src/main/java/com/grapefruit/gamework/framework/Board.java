@@ -9,7 +9,7 @@ public class Board {
 
     /**
      * Constructor for making a new Board object.
-     * @param int, boardSize is given to give the board grid a size.
+     * @param boardSize, boardSize is given to give the board grid a size.
      */
     public Board(int boardSize) {
         grid = new Tile[boardSize][boardSize];
@@ -20,8 +20,8 @@ public class Board {
      * Creates a board of given size with strategicValues given from the game implmentation. (TODO)
      */
     public void createBoard() {
-        for (int x = 0; x < grid.length-1; x++) {
-            for (int y = 0; y < grid.length-1; y++) {
+        for (int x = 0; x < grid.length; x++) {
+            for (int y = 0; y < grid[0].length; y++) {
                 grid[x][y] = new Tile(x, y, /* TODO  */ 0);
             }
         }
@@ -36,8 +36,20 @@ public class Board {
     /**
      * @return boolean, Checks if the tile chosen has a piece on it.
      */
-    public boolean hasPiece(int row, int col) {
+    public boolean hasPlayer(int row, int col) {
         return grid[row][col].getPlayer() != null;
+    }
+
+
+    /**
+     * @return boolean, Checks if the tile chosen has a piece on it.
+     */
+    public boolean hasPlayer(Tile tile) {
+        return grid[tile.getRow()][tile.getCol()].getPlayer() != null;
+    }
+
+    public Player getPlayer(Tile tile) {
+        return grid[tile.getRow()][tile.getCol()].getPlayer();
     }
 
     /**
@@ -59,6 +71,11 @@ public class Board {
     }
 
     public boolean isValidLocation(int row, int col) {
+        if (grid.length > row){
+            if (grid[0].length > col){
+                return true;
+            }
+        }
         return false;
     }
 

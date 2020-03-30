@@ -1,6 +1,7 @@
 package com.grapefruit.gamework.framework;
 
 
+import java.util.HashSet;
 import java.util.List;
 
 public abstract class Game {
@@ -129,5 +130,5 @@ public abstract class Game {
      * @param player, searches available moves for that specific player.
      * @return Move[] of available moves for the given player.
      */  //TODO
-    public abstract List<Tile> getAvailableMoves(Player player);
+    public abstract HashSet<Tile> getAvailableMoves(Player player);
 }

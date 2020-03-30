@@ -2,7 +2,7 @@ package com.grapefruit.gamework.games.tictactoe;
 
 import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.framework.Assets;
-import com.grapefruit.gamework.framework.Colors;
+import com.grapefruit.gamework.framework.TeamColor;
 import javafx.scene.image.Image;
 
 public class TicTacToeAssets extends Assets {
@@ -22,7 +22,7 @@ public class TicTacToeAssets extends Assets {
     }
 
     @Override
-    public Image getPieceImageByColor(Colors color) {
+    public Image getPieceImageByColor(TeamColor color) {
         return null;
     }
 

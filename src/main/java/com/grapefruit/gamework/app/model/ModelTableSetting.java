@@ -1,7 +1,6 @@
 package com.grapefruit.gamework.app.model;
 
-import com.grapefruit.gamework.app.controller.ControllerSettingsWindow;
-import com.grapefruit.gamework.app.games.Game;
+
 import com.grapefruit.gamework.app.resources.AppSettings;
 
 import java.util.ArrayList;

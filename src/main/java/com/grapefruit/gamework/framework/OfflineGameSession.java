@@ -1,14 +1,21 @@
 package com.grapefruit.gamework.framework;
 
 public class OfflineGameSession extends GameSession {
-
-    private Player currentTurnPlayer;
-
+    /**
+     * Constructor of OfflineGameSession
+     * @Param moveSetter, The rules and conditions being made for the game.
+     * @Param players, The players that has been made for a game.
+     * @Param turnTimeout, The amount of time a player has for calculating or setting your turn.
+     * @Param boardSize, The size of the board being made.
+     */
     public OfflineGameSession(MoveSetter moveSetter, Player[] players, int turnTimeout, int boardSize) {
         super(moveSetter, players, turnTimeout, boardSize);
     }
 
     @Override
+    /**
+     * Start the GameSession and makeing sure that everything is being used.
+     */
     public void start() {
         currentTurnPlayer = getPlayers()[0];
     }
@@ -18,7 +25,7 @@ public class OfflineGameSession extends GameSession {
     }
 
     /**
-     * @param Move, move is given to set the move on the board and apply all necessary changes.
+     * @param move, move is given to set the move on the board and apply all necessary changes.
      */
     public void setMove(Move move) {
         if (getCurrentAvailableMoves(currentTurnPlayer).contains(move.getTile())) {

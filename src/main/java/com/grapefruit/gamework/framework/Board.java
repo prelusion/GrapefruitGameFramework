@@ -1,7 +1,5 @@
 package com.grapefruit.gamework.framework;
 
-import java.util.List;
-
 public class Board {
 
     /**
@@ -72,6 +70,11 @@ public class Board {
         return true;
     }
 
+    /**
+     * @param row is the row of the chosen Tile.
+     * @param col is the col of the chosen Tile.
+     * @return String, Gets the string of the piece string name.
+     */
     public String getPieceString(int row, int col) {
         return grid[row][col].getPiece().toString();
     }

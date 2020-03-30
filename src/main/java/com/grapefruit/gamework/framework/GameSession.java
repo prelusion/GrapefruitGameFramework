@@ -18,6 +18,9 @@ public abstract class GameSession {
      */
     private Board board;
 
+    /**
+     * The rules and conditions for the chosen game.
+     */
     private MoveSetter moveSetter;
 
     /**

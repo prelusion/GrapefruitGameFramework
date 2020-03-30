@@ -3,21 +3,24 @@ package com.grapefruit.gamework.framework;
 import javafx.scene.image.Image;
 
 public abstract class Game {
+    /**
+     * The moveSetter is a variable Object that saves the rules and conditions of the game.
+     */
+    private MoveSetter moveSetter;
 
-    protected MoveSetter moveSetter;
-    protected Board board;
-    protected String name;
-    protected Image icon;
-    protected Assets assets;
-
-    public Game(MoveSetter moveSetter, Board board, String name, Image icon, Assets assets) {
+    /**
+     * @param moveSetter sets the game moveSetter within the global variable.
+     */
+    public Game(MoveSetter moveSetter) {
         this.moveSetter = moveSetter;
         this.board = board;
-        this.name = name;
-        this.icon = icon;
         this.assets = assets;
     }
 
+    /**
+     * @param players gives the players to the gameSession.
+     * @return gameSession with the moveSetter, players, turnTimeout and boardSize.
+     */
     public GameSession createSession(Player[] players) {
         return new OfflineGameSession(moveSetter, players, 10, 9);
     }

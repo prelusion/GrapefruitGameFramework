@@ -1,13 +1,11 @@
 package com.grapefruit.gamework.tictactoe;
 
-import com.grapefruit.gamework.framework.Game;
-import com.grapefruit.gamework.framework.GameSession;
-import com.grapefruit.gamework.framework.MoveSetter;
-import com.grapefruit.gamework.framework.Rule;
+import com.grapefruit.gamework.app.resources.ImageRegistry;
+import com.grapefruit.gamework.framework.*;
 
 public class TicTacToe extends Game {
     public TicTacToe(MoveSetter moveSetter) {
-        super(moveSetter);
+        super(moveSetter, new Board(3), "Tic Tac Toe", ImageRegistry.GAME_ICON_TICTACTOE, null);
     }
 
 

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="255.0" prefWidth="542.0" styleClass="secondary-background" stylesheets="@css/mainwindow.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grapefruit.gamework.app.controller.ControllerTableSetting">
+   <children>
+      <VBox alignment="TOP_RIGHT" prefHeight="255.0" prefWidth="103.0">
+         <children>
+            <Pane prefHeight="48.0" prefWidth="100.0" />
+            <Text fx:id="keyName" strokeType="OUTSIDE" strokeWidth="0.0" text="key" wrappingWidth="92.53666830062866" />
+            <Pane prefHeight="15.0" prefWidth="100.0" />
+            <Text fx:id="valueName" strokeType="OUTSIDE" strokeWidth="0.0" text="value" wrappingWidth="90.2261290550232" />
+         </children>
+      </VBox>
+      <Pane minWidth="-Infinity" prefHeight="400.0" prefWidth="10.0" />
+      <VBox prefHeight="255.0" prefWidth="257.0">
+         <children>
+            <Pane prefHeight="40.0" prefWidth="106.0" />
+            <TextField fx:id="keyInput" />
+            <Pane prefHeight="10.0" prefWidth="106.0" />
+            <TextField fx:id="valueInput" />
+            <Pane prefHeight="10.0" prefWidth="106.0" />
+            <Button fx:id="addServerButton" mnemonicParsing="false" onAction="#onAddServer" text="Add" />
+            <Pane prefHeight="18.0" prefWidth="78.0" />
+            <Button fx:id="removeButton" mnemonicParsing="false" onAction="#onRemoveSetting" text="Remove" />
+         </children>
+      </VBox>
+      <Pane minHeight="-Infinity" minWidth="-Infinity" prefHeight="255.0" prefWidth="25.0" />
+      <ScrollPane hbarPolicy="NEVER" prefHeight="255.0" prefWidth="405.0">
+        <content>
+          <AnchorPane>
+               <children>
+                  <TableView fx:id="settingTable" minHeight="-Infinity" minWidth="-Infinity" prefHeight="255.0" prefWidth="235.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-77.0" AnchorPane.topAnchor="0.0">
+                    <columns>
+                      <TableColumn minWidth="30.0" prefWidth="75.0" text="key" />
+                      <TableColumn prefWidth="150.0" text="value" />
+                    </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <padding>
+      <Insets left="50.0" right="50.0" />
+   </padding>
+</HBox>

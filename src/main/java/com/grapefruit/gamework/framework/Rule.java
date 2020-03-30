@@ -1,5 +1,7 @@
 package com.grapefruit.gamework.framework;
 
+import java.util.HashSet;
+
 public interface Rule {
     /**
      * Checks if the following move will be valid or not.
@@ -8,4 +10,6 @@ public interface Rule {
      * @return boolean, for if the move is valid or not.
      */
     public boolean validMove(GameSession session, Move move);
+
+    public HashSet<Tile> getValidMoves(Board board, Player player);
 }

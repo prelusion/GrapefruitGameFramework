@@ -9,8 +9,6 @@ import java.util.List;
 
 public class Reversi extends Game {
 
-    public static Image IMAGE_BLACK_PIECE = ImageRegistry.GAME_PIECE_BLACK;
-    public static Image IMAGE_WHITE_PIECE = ImageRegistry.GAME_PIECE_WHITE;
 
     public Reversi(Board board, Player[] players, int turnTimeout) {
         super(board, players, turnTimeout);
@@ -24,6 +22,11 @@ public class Reversi extends Game {
     @Override
     public boolean isValidMove(int row, int col, Player player) {
         return false;
+    }
+
+    @Override
+    public GameResult checkGameResult() {
+        return null;
     }
 
     @Override

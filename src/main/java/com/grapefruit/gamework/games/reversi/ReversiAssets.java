@@ -10,6 +10,18 @@ public class ReversiAssets extends Assets {
 
     public static Image PIECE_BLACK = ImageRegistry.GAME_PIECE_BLACK;
     public static Image PIECE_WHITE = ImageRegistry.GAME_PIECE_WHITE;
+    private static Image ICON = ImageRegistry.GAME_ICON_OTHELLO;
+    private static String DISPLAYNAME = "Reversi";
+
+    @Override
+    public String getDisplayName() {
+        return DISPLAYNAME;
+    }
+
+    @Override
+    public Image getIcon() {
+        return ICON;
+    }
 
     public Image getPieceImageByColor(Colors color){
         switch (color) {

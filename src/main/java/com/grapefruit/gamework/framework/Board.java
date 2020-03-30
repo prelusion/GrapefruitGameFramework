@@ -27,21 +27,18 @@ public class Board {
         }
     }
 
-    /**
-     * @return Tile[][], Get the current board with tiles.
-     */
-    public Tile[][] getGrid() {
-        return grid;
-    }
+    public Tile[][] getGrid() { return grid; }
 
-    public void setPiece(Tile tile) {
-
+    public void setPiece(int row, int col, Player player) {
+        grid[row][col] = new Tile(row, col, 1, player);
     }
 
     /**
      * @return boolean, Checks if the tile chosen has a piece on it.
      */
-    public boolean hasPiece(Tile tile) { return tile.getPlayer() != null; }
+    public boolean hasPiece(int row, int col) {
+        return grid[row][col].getPlayer() != null;
+    }
 
     /**
      * @return boolean, Checks if the board is full. Return true if it is.
@@ -59,6 +56,10 @@ public class Board {
 
     public String getPieceString(int row, int col) {
         return grid[row][col].getPlayer().toString();
+    }
+
+    public boolean isValidLocation(int row, int col) {
+        return false;
     }
 
 }

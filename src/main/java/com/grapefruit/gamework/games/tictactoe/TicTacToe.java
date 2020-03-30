@@ -4,7 +4,7 @@ import com.grapefruit.gamework.framework.*;
 
 import java.util.List;
 
-public class TTTGame extends Game {
+public class TicTacToe extends Game {
 
     /**
      * Constructor of making an GameSession
@@ -13,13 +13,13 @@ public class TTTGame extends Game {
      * @param players
      * @param turnTimeout
      */
-    public TTTGame(Board board, Player[] players, int turnTimeout) {
+    public TicTacToe(Board board, Player[] players, int turnTimeout) {
         super(board, players, turnTimeout);
     }
 
     @Override
-    public boolean isValidMove(Player player, Tile tile) {
-        return !getBoard().hasPiece(tile);
+    public boolean isValidMove(int row, int col, Player player) {
+        return !getBoard().hasPiece(row, col);
     }
 
     @Override

@@ -50,7 +50,7 @@ public class ControllerSelectedGame implements IController {
     public void setModel(IModel model) {
         this.model = (ModelSelectedGame) model;
         gameName.setText(this.model.getSelectedGame().getName());
-        gameIcon.setImage(this.model.getSelectedGame().getIcon());
+//        gameIcon.setImage(this.model.getSelectedGame().getIcon());
         setMainMenuButtons();
     }
 

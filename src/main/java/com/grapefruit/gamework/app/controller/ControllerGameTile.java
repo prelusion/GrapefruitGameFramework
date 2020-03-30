@@ -51,7 +51,7 @@ public class ControllerGameTile implements IController{
     private void initialize()
     {
         gameName.setText(model.getGame().getName());
-        gameIcon.setImage(model.getGame().getIcon());
+//        gameIcon.setImage(model.getGame().getIcon());
     }
 
     /**

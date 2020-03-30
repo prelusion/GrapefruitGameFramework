@@ -12,8 +12,7 @@ public class ReversiAssets extends Assets {
     public static Image PIECE_WHITE = ImageRegistry.GAME_PIECE_WHITE;
 
     public Image getPieceImageByColor(Colors color){
-
-        switch (color){
+        switch (color) {
             case BLACK:
                 return ReversiAssets.PIECE_BLACK;
 

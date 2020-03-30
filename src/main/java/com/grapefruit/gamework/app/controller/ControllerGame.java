@@ -5,7 +5,6 @@ import com.grapefruit.gamework.app.model.ModelGame;
 import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.app.util.ImageHelper;
 import com.grapefruit.gamework.framework.*;
-import com.grapefruit.gamework.reversi.ReversiPlayer;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -28,7 +27,6 @@ public class ControllerGame implements IController{
 
     private ModelGame model;
 
-    private GameSession session;
 
     private GridPane boardPane;
 
@@ -68,10 +66,10 @@ public class ControllerGame implements IController{
 
         //Testing
         Player[] players = new Player[2];
-        players[0] = new ReversiPlayer("Player 1", Team.TeamColor.BLACK);
-        players[1] = new ReversiPlayer("Player 2", Team.TeamColor.WHITE);
-        session = this.model.getGame().createSession(players);
-        drawBoard(this.model.getGame().getBoard(), false);
+//        players[0] = new ReversiPlayer("Player 1", Team.TeamColor.BLACK);
+//        players[1] = new ReversiPlayer("Player 2", Team.TeamColor.WHITE);
+//        session = this.model.getGame().createSession(players);
+//        drawBoard(this.model.getGame().getBoard(), false);
     }
 
     private void drawBoard(Board board, boolean checkered){
@@ -95,7 +93,7 @@ public class ControllerGame implements IController{
                 } else {
                     pane = createBoardTile(tileSize, Color.GREEN, tile);
                 }
-                gridPane.add(pane, tile.getX(), tile.getY(), 1, 1);
+                gridPane.add(pane, tile.getCol(), tile.getRow(), 1, 1);
             }
             toggle = !toggle;
         }
@@ -106,7 +104,7 @@ public class ControllerGame implements IController{
     }
 
     private void onTurnCompleted(){
-        markPossibleMoves(model.getGame().getMoveSetter().getRules().getValidMoves(model.getGame().getBoard(), session.get));
+//        markPossibleMoves(model.getGame().getMoveSetter().getRules().getValidMoves(model.getGame().getBoard(), session.get));
     }
 
     private Pane createBoardTile(int size, Color color, Tile tile){
@@ -118,18 +116,18 @@ public class ControllerGame implements IController{
         hbox.setBackground(new Background(new BackgroundImage(background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
         hbox.getStyleClass().add(0, "game-board-tile");
 
-        if (tile.getPiece() != null){
-            Image pieceImage = model.getGame().getAssets().getPieceImageByColor(tile.getPiece().getPlayer().getColour());
-            ImageView imageView = new ImageView();
-            imageView.setFitHeight(65);
-            imageView.setFitWidth(65);
-            imageView.setImage(pieceImage);
-
-            if (hbox.getChildren().size() > 0){
-                hbox.getChildren().removeAll(hbox.getChildren());
-            }
-            hbox.getChildren().add(imageView);
-        }
+//        if (tile.getPiece() != null){
+//            Image pieceImage = model.getGame().getAssets().getPieceImageByColor(tile.getPiece().getPlayer().getColour());
+//            ImageView imageView = new ImageView();
+//            imageView.setFitHeight(65);
+//            imageView.setFitWidth(65);
+//            imageView.setImage(pieceImage);
+//
+//            if (hbox.getChildren().size() > 0){
+//                hbox.getChildren().removeAll(hbox.getChildren());
+//            }
+//            hbox.getChildren().add(imageView);
+//        }
 
         hbox.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
@@ -165,7 +163,7 @@ public class ControllerGame implements IController{
         }
 
         for (Tile tile: tiles) {
-            HBox pane = (HBox) boardPane.getChildren().get(tile.getX()*model.getGame().getBoard().getGrid().length + tile.getY());
+            HBox pane = (HBox) boardPane.getChildren().get(tile.getRow()*model.getGame().getBoard().getGrid().length + tile.getCol());
 
             Circle r1 = new Circle(32.5, Paint.valueOf("blue"));
             r1.setStroke(Color.BLACK);

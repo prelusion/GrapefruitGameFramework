@@ -5,7 +5,14 @@ import com.grapefruit.gamework.framework.*;
 import java.util.ArrayList;
 
 public class TTTGameConditions implements GameCondition {
+    /**
+     * endReached is a variable that checks if the game has ended or not.
+     */
     private boolean endReached;
+
+    /**
+     * hasWinner is a variable that checks if the game being played has a winner or not.
+     */
     private Result hasWinner;
 
     @Override

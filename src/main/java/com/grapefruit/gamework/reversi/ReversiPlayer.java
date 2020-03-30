@@ -1,8 +1,8 @@
 package com.grapefruit.gamework.reversi;
 
+import com.grapefruit.gamework.framework.Colors;
 import com.grapefruit.gamework.framework.GameSession;
 import com.grapefruit.gamework.framework.Player;
-import com.grapefruit.gamework.framework.Team;
 
 public class ReversiPlayer extends Player {
 

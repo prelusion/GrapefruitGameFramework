@@ -21,6 +21,7 @@ public class ControllerGameTile implements IController{
 
     private ModelGameTile model;
 
+
     @FXML
     private HBox gameTile;
 
@@ -36,50 +37,76 @@ public class ControllerGameTile implements IController{
     @FXML
     private ResourceBundle resources;
 
+    /**
+     * Required for FXML
+     */
     public ControllerGameTile()
     {
     }
 
+    /**
+     * Required for FXML
+     * Sets the displayed icon and name for listed game.
+     */
     private void initialize()
     {
         gameName.setText(model.getGame().getName());
         gameIcon.setImage(model.getGame().getIcon());
     }
 
-    @FXML
-    private void mouseMoved(){
-    }
-
+    /**
+     * Called when mouse enters tile to updates hover effect.
+     *
+     * @Param event supplied by FXML
+     */
     @FXML
     private void mouseEnter(MouseEvent event){
-        gameTile.setEffect(new InnerShadow(BlurType.GAUSSIAN, Color.rgb(255,255,255), 64, 0,0,0 ));
+        if (!model.isSelected()) {
+            gameTile.getStyleClass().set(0, "menu-item-hover");
+        } else {
+            gameTile.getStyleClass().set(0, "menu-item-hover-selected");
+        }
     }
 
+    /**
+     * Called when mouse enters tile to updates hover effect.
+     *
+     * @Param event supplied by FXML
+     */
     @FXML
     private void mouseExit(){
-        gameTile.setEffect(null);
-    }
+        if (!model.isSelected()) {
+            gameTile.getStyleClass().set(0, "menu-item-normal");
+        } else {
+            gameTile.getStyleClass().set(0, "menu-item-selected");
 
-    @FXML
-    private void dragEntered(MouseEvent event){
-        gameTile.setLayoutY(event.getY());
+        }
     }
-
-    @FXML
-    private void dragDropped(MouseEvent event){
-        gameTile.setLayoutY(event.getY());
-    }
-
+    /**
+     * Called when mouse enters tile to updates selected effect.
+     *
+     * @Param event supplied by FXML
+     */
     @FXML
     private void mouseClicked(MouseEvent event){
-        gameTile.toBack();
-        gameTile.getViewOrder();
-        gameTile.getViewOrder();
+        if (model.isSelected()){
+            model.gameUnselected();
+        } else {
+            model.gameSelected();
+        }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setModel(IModel model) {
         this.model = (ModelGameTile) model;
+        if (this.model.isSelected()) {
+            gameTile.getStyleClass().set(0, "menu-item-selected");
+        } else {
+            gameTile.getStyleClass().set(0, "menu-item-normal");
+        }
         initialize();
     }
 }

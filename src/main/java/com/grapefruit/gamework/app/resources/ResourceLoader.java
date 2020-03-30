@@ -1,4 +1,4 @@
-package com.grapefruit.gamework.app.view;
+package com.grapefruit.gamework.app.resources;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
@@ -11,16 +11,26 @@ public class ResourceLoader {
 
     public enum ImageType{
         GAME_ICON,
-        BACKGROUND
+        ASSET
     }
 
 
+    /**
+     * @param fxmlName of relevant FXML to build loader from
+     * @return FXMLLoader for specified FXML file
+     */
     public FXMLLoader getViewLoader(String fxmlName){
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(FXML_LOCATION + fxmlName));
         return loader;
     }
 
+    /**
+     *
+     * @param imageName file name
+     * @param imageType image type used to find directory
+     * @return Image
+     */
     public static Image loadImage(String imageName, ImageType imageType){
         Image image;
         String prefix = "";
@@ -30,8 +40,8 @@ public class ResourceLoader {
                 prefix = "gameicons/";
                 break;
 
-            case BACKGROUND:
-                prefix = "background/";
+            case ASSET:
+                prefix = "assets/";
                 break;
         }
 

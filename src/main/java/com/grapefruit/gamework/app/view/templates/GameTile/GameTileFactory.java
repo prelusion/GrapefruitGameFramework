@@ -2,8 +2,8 @@ package com.grapefruit.gamework.app.view.templates.GameTile;
 
 import com.grapefruit.gamework.app.controller.IController;
 import com.grapefruit.gamework.app.model.IModel;
-import com.grapefruit.gamework.app.view.FXMLRegistry;
-import com.grapefruit.gamework.app.view.ResourceLoader;
+import com.grapefruit.gamework.app.resources.FXMLRegistry;
+import com.grapefruit.gamework.app.resources.ResourceLoader;
 import com.grapefruit.gamework.app.view.templates.Template;
 import com.grapefruit.gamework.app.view.templates.TemplateFactory;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +22,9 @@ public class GameTileFactory implements TemplateFactory {
     private GameTileFactory(){
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Template buildTemplate(IModel model) {
         FXMLLoader loader = new ResourceLoader().getViewLoader(FXMLRegistry.GAME_TILE);

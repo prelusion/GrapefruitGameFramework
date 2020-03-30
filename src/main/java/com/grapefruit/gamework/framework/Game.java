@@ -20,6 +20,7 @@ public abstract class Game {
     private Board board;
 
     protected boolean finished = false;
+    protected GameResult gameResult = GameResult.NONE;
 
     /**
      * Constructor of making an GameSession
@@ -66,10 +67,16 @@ public abstract class Game {
      * This function will check if the given move is a valid move on the board.
      *
      * @param player, player is given to check which side is playing.
-     * @param move,   Looks of the given move is valid.
+     * @param tile,   Looks of the given tile is valid.
      * @return boolean, State of the move is valid or not.
      */
     public abstract boolean isValidMove(Player player, Tile tile);
+
+    /**
+     * Checks whether the game has a WINNER, a TIE or NONE of those.
+     * @return GameResult, The result of the game so WINNER, TIE or NONE
+     */
+    public abstract GameResult checkGameResult();
 
     /**
      * @param move, move is given to set the move on the board and apply all necessary changes.
@@ -101,6 +108,10 @@ public abstract class Game {
     public abstract boolean hasWinner();
 
     public abstract boolean isTie();
+
+    public GameResult getGameResult() {
+        return gameResult;
+    }
 
     /**
      * @return Player, Get the player if there is a winner. If the game has finished an

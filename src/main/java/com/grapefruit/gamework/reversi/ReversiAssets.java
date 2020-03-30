@@ -2,7 +2,7 @@ package com.grapefruit.gamework.reversi;
 
 import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.framework.Assets;
-import com.grapefruit.gamework.framework.Team;
+import com.grapefruit.gamework.framework.Colors;
 import javafx.scene.image.Image;
 
 
@@ -11,7 +11,7 @@ public class ReversiAssets extends Assets {
     public static Image PIECE_BLACK = ImageRegistry.GAME_PIECE_BLACK;
     public static Image PIECE_WHITE = ImageRegistry.GAME_PIECE_WHITE;
 
-    public Image getPieceImageByColor(Team.TeamColor color){
+    public Image getPieceImageByColor(Colors color){
 
         switch (color){
             case BLACK:

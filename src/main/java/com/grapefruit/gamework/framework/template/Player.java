@@ -1,6 +1,6 @@
 package com.grapefruit.gamework.framework.template;
 
-public abstract class Player {
+public class Player {
 
     private String name;
     private String color;
@@ -29,6 +29,10 @@ public abstract class Player {
         return color;
     }
 
+    public void setScore(int score) {
+        this.score = score;
+    }
+
     /**
      * Get current score of player.
      * @return score
@@ -37,10 +41,9 @@ public abstract class Player {
         return score;
     }
 
-    /**
-     * Give player turn to set a move.
-     */
-    public abstract void giveTurn(GameSession session, int timeout);
+    protected void setTurn(boolean turn) {
+        hasTurn = turn;
+    }
 
     /**
      * Check if player has the current turn.
@@ -48,17 +51,6 @@ public abstract class Player {
      */
     public boolean hasTurn() {
         return hasTurn;
-    }
-
-    protected void setTurn(boolean turn) {
-        hasTurn = turn;
-    }
-    /**
-     * Check if player has any moves left.
-     * @return boolean whether player has moves left
-     */
-    public boolean hasMoves() {
-        return false;
     }
 
     /**
@@ -75,5 +67,9 @@ public abstract class Player {
      */
     public void setAvailableMoves(int[] availableMoves) {
         this.availableMoves = availableMoves;
+    }
+
+    public String toString() {
+        return this.color;
     }
 }

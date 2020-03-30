@@ -1,18 +1,18 @@
 package com.grapefruit.gamework.games.tictactoe;
 
-import com.grapefruit.gamework.framework.template.GameCondition;
-import com.grapefruit.gamework.framework.template.MoveSetter;
-import com.grapefruit.gamework.framework.template.Rule;
+import com.grapefruit.gamework.framework.old.MoveSetter;
+import com.grapefruit.gamework.framework.template.*;
 
 public class TTTFactory {
 
     private TTTFactory() {}
 
-    public static GameTicTacToe create() {
-        Rule rules = new TTTRules();
-        GameCondition conditions = new TTTGameConditions();
-
-        MoveSetter moveSetter = new TTTMoveSetter(rules, conditions);
-        return new GameTicTacToe(moveSetter);
+    public static void create(Player[] players) {
+        Condition[] conditions = new Condition[] {new TTTCondition1()};
+        MoveSetter moveSetter = new TTTMoveSetter();
+        Board board = new Board(9);
+        int turnTimeout = 10;
+//        Game session = new OfflineGame(board, moveSetter, players, turnTimeout);
+//        return new TTT(board, moveSetter, conditions, session, players);
     }
 }

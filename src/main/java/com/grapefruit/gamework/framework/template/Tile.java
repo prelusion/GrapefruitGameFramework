@@ -5,7 +5,7 @@ public class Tile {
     /**
      * The piece is assigned to this Tile.
      */
-    private Piece piece;
+    private Player player = null;
 
     /**
      * The Tiles row position on the board state.
@@ -25,6 +25,7 @@ public class Tile {
 
     /**
      * Constructor of making an GameSession
+     *
      * @param int row, gives the tile grid[x][] position from the board.
      * @param int col, gives the tile grid[][y] position from the board.
      * @param int strategicValue, is the given strategicValue of the Tile.
@@ -38,14 +39,15 @@ public class Tile {
     /**
      * @return Player, player of piece.
      */
-    public Piece getPiece() {
-        return piece;
+    public Player getPlayer() {
+        return player;
     }
+
     /**
      * @return Player, player of piece.
      */
-    public void setPiece(Piece piece) {
-        this.piece = piece;
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     /**
@@ -61,6 +63,7 @@ public class Tile {
     public int getCol() {
         return col;
     }
+
     /**
      * @return int, strategicValue of the tile.
      */

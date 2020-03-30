@@ -1,4 +1,6 @@
-package com.grapefruit.gamework.framework.template;
+package com.grapefruit.gamework.framework.old;
+
+import com.grapefruit.gamework.framework.template.Game;
 
 public interface Rule {
     /**
@@ -7,5 +9,5 @@ public interface Rule {
      * @param move, is a Move to check whether the move is valid.
      * @return boolean, for if the move is valid or not.
      */
-    public boolean validMove(GameSession session, Move move);
+    public boolean validMove(Game session, Move move);
 }

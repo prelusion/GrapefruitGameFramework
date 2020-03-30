@@ -1,4 +1,7 @@
-package com.grapefruit.gamework.framework.template;
+package com.grapefruit.gamework.framework.old;
+
+import com.grapefruit.gamework.framework.template.Game;
+import com.grapefruit.gamework.framework.template.Player;
 
 public interface GameCondition {
     /**
@@ -6,18 +9,18 @@ public interface GameCondition {
      * @param session, is a GameSession which is here to get info about the game and board.
      * @return boolean, for if the game.
      */
-    public boolean checkEndConditions(GameSession session);
+    public boolean checkEndConditions(Game session);
 
     /**
      * Return Result, Returns WINNING, TIE
      */
-    public Result isWinner(GameSession session, Player[] players);
+    public Result isWinner(Game session, Player[] players);
 
 
     /**
      * Checks which player won the match and returns that player.
      */
-    public Player getWinner(GameSession session, Player[] players);
+    public Player getWinner(Game session, Player[] players);
 
 
     /**

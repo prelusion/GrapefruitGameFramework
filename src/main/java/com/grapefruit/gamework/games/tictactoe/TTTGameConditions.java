@@ -1,5 +1,8 @@
 package com.grapefruit.gamework.games.tictactoe;
 
+import com.grapefruit.gamework.framework.old.GameCondition;
+import com.grapefruit.gamework.framework.old.GameState;
+import com.grapefruit.gamework.framework.old.Result;
 import com.grapefruit.gamework.framework.template.*;
 
 public class TTTGameConditions implements GameCondition {
@@ -11,7 +14,7 @@ public class TTTGameConditions implements GameCondition {
      * Returns true if there is an end condition reached.
      * @return boolean
      */
-    public boolean checkEndConditions(GameSession session) {
+    public boolean checkEndConditions(Game session) {
         Board board = session.getBoard();
         if (board.isBoardFull()) {
             endReached = true;
@@ -38,7 +41,7 @@ public class TTTGameConditions implements GameCondition {
      * Checks if a player won the match.
      */
     @Override
-    public Result isWinner(GameSession session, Player[] players) {
+    public Result isWinner(Game session, Player[] players) {
         Board board = session.getBoard();
         String[][] solutions = new String[board.getGrid().length][board.getGrid().length];
 
@@ -57,7 +60,7 @@ public class TTTGameConditions implements GameCondition {
      * Checks which player won the match and returns that player.
      */
     @Override
-    public Player getWinner(GameSession session, Player[] players) {
+    public Player getWinner(Game session, Player[] players) {
         if(hasWinner != Result.WINNER) {
             hasWinner = isWinner(session, players);
         }

@@ -1,4 +1,7 @@
-package com.grapefruit.gamework.framework.template;
+package com.grapefruit.gamework.framework.old;
+
+import com.grapefruit.gamework.framework.template.Player;
+import com.grapefruit.gamework.framework.template.Tile;
 
 public class Move {
     /**

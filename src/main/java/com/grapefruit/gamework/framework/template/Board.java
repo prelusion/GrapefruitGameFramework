@@ -34,11 +34,14 @@ public class Board {
         return grid;
     }
 
+    public void setPiece(Tile tile) {
+
+    }
 
     /**
      * @return boolean, Checks if the tile chosen has a piece on it.
      */
-    public boolean hasPiece(Tile tile) { return tile.getPiece() != null; }
+    public boolean hasPiece(Tile tile) { return tile.getPlayer() != null; }
 
     /**
      * @return boolean, Checks if the board is full. Return true if it is.
@@ -55,7 +58,7 @@ public class Board {
     }
 
     public String getPieceString(int row, int col) {
-        return grid[row][col].getPiece().toString();
+        return grid[row][col].getPlayer().toString();
     }
 
 }

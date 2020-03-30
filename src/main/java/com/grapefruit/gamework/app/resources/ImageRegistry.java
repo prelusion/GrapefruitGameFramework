@@ -12,9 +12,13 @@ public class ImageRegistry {
     public static Image GAMEWORK_ICON = loader.loadImage("icon.png", ResourceLoader.ImageType.GAME_ICON);
 
     //Reversi
-    public static Image GAME_PIECE_WHITE = loader.loadImage("piece_white.png", ResourceLoader.ImageType.ASSET);
-    public static Image GAME_PIECE_BLACK = loader.loadImage("piece_black.png", ResourceLoader.ImageType.ASSET);
-    public static Image GAME_PIECE_GHOST = loader.loadImage("piece_ghost.png", ResourceLoader.ImageType.ASSET);
+    public static Image REVERSI_GAME_PIECE_WHITE = loader.loadImage("reversi_piece_white.png", ResourceLoader.ImageType.ASSET);
+    public static Image REVERSI_GAME_PIECE_BLACK = loader.loadImage("reversi_piece_black.png", ResourceLoader.ImageType.ASSET);
+    public static Image REVERSI_GAME_PIECE_GHOST = loader.loadImage("reversi_piece_ghost.png", ResourceLoader.ImageType.ASSET);
+
+    //TicTacToe
+    public static Image TICTACTOE_GAME_PIECE_WHITE = loader.loadImage("tictactoe_piece_cross.png", ResourceLoader.ImageType.ASSET);
+    public static Image TICTACTOE_GAME_PIECE_BLACK = loader.loadImage("tictactoe_piece_circle.png", ResourceLoader.ImageType.ASSET);
 
     //Game
     public static Image GREEN_BACKGROUND = loader.loadImage("green_board_background.png", ResourceLoader.ImageType.ASSET);

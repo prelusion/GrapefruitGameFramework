@@ -1,7 +1,6 @@
 package com.grapefruit.gamework.app;
 
 import com.grapefruit.gamework.framework.Game;
-import com.grapefruit.gamework.reversi.Reversi;
 
 public abstract class GameRegistry {
 

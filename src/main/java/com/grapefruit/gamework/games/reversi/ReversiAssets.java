@@ -1,4 +1,4 @@
-package com.grapefruit.gamework.reversi;
+package com.grapefruit.gamework.games.reversi;
 
 import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.framework.Assets;

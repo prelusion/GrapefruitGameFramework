@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/GrapefruitGameFramework.iml" filepath="$PROJECT_DIR$/.idea/GrapefruitGameFramework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gamework.iml" filepath="$PROJECT_DIR$/.idea/modules/gamework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gamework.main.iml" filepath="$PROJECT_DIR$/.idea/modules/gamework.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gamework.test.iml" filepath="$PROJECT_DIR$/.idea/modules/gamework.test.iml" />
     </modules>
   </component>
 </project>

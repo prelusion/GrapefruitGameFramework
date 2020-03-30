@@ -33,6 +33,9 @@ public abstract class Game {
         this.turnTimeout = turnTimeout;
     }
 
+    public String getName() { return ""; }
+    public String getIcon() { return null; }
+
     /**
      * @return Arraylist<Player> of players.
      */
@@ -69,17 +72,19 @@ public abstract class Game {
      * @param move,   Looks of the given move is valid.
      * @return boolean, State of the move is valid or not.
      */
-    public abstract boolean isValidMove(Player player, Tile tile);
+    public abstract boolean isValidMove(int row, int col, Player player);
 
     /**
      * @param move, move is given to set the move on the board and apply all necessary changes.
      */
-    public boolean setMove(Player player, Tile tile) {
-        if (!isValidMove(player, tile)) {
+    public boolean setMove(int row, int col, Player player) {
+        Tile tile = new Tile(row, col, 1, player);
+
+        if (!isValidMove(row, col, player)) {
             return false;
         }
 
-        board.setPiece(tile);
+        board.setPiece(row, col, player);
 
         if (hasGameFinished()) {
             finished = true;

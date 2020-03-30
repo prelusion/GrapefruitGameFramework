@@ -17,23 +17,17 @@ public class OfflineGameSession extends GameSession {
      * Start the GameSession and makeing sure that everything is being used.
      */
     public void start() {
-        currentTurnPlayer = getPlayers()[0];
+
     }
 
     public Player getCurrentTurnPlayer(){
-        return currentTurnPlayer;
+        return null;
     }
 
     /**
      * @param move, move is given to set the move on the board and apply all necessary changes.
      */
     public void setMove(Move move) {
-        if (getCurrentAvailableMoves(currentTurnPlayer).contains(move.getTile())) {
-            if (currentTurnPlayer == getPlayers()[0]) {
-                currentTurnPlayer = getPlayers()[1];
-            } else if (currentTurnPlayer == getPlayers()[1]) {
-                currentTurnPlayer = getPlayers()[0];
-            }
-        }
+
     }
 }

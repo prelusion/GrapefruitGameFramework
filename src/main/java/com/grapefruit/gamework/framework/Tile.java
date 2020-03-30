@@ -8,14 +8,14 @@ public class Tile {
     private Piece piece;
 
     /**
-     * The Tiles x position on the board state.
+     * The Tiles row position on the board state.
      */
-    private int x;
+    private int row;
 
     /**
      * The Tiles column position on the board state.
      */
-    private int y;
+    private int col;
 
     /**
      * the Tiles strategic value which is the best possible move to make for given algorithms.
@@ -25,13 +25,13 @@ public class Tile {
 
     /**
      * Constructor of making an GameSession
-     * @param int x, gives the tile grid[x][] position from the board.
-     * @param int y, gives the tile grid[][y] position from the board.
-     * @param int strategicValue, is the given strategicValue of the Tile.
+     * @param row, gives the tile grid[x][] position from the board.
+     * @param col, gives the tile grid[][y] position from the board.
+     * @param strategicValue, is the given strategicValue of the Tile.
      */
-    public Tile(int x, int y, int strategicValue) {
-        this.x = x;
-        this.y = y;
+    public Tile(int row, int col, int strategicValue) {
+        this.row = row;
+        this.col = col;
         this.strategicValue = strategicValue;
     }
 
@@ -52,14 +52,14 @@ public class Tile {
      * @return int, grid[x](x) position of tile.
      */
     public int getX() {
-        return x;
+        return row;
     }
 
     /**
      * @return int, grid[y](column) position of tile.
      */
     public int getY() {
-        return y;
+        return col;
     }
     /**
      * @return int, strategicValue of the tile.

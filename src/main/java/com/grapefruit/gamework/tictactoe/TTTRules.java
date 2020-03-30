@@ -21,8 +21,7 @@ public class TTTRules implements Rule {
     }
 
     @Override
-    public HashSet<Tile> getValidMoves(Player player) {
+    public HashSet<Tile> getValidMoves(Board board, Player player) {
         return null;
     }
-
 }

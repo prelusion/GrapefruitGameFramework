@@ -10,12 +10,11 @@ public class Reversi extends Game {
     public static Image IMAGE_WHITE_PIECE = ImageRegistry.GAME_PIECE_WHITE;
 
     public Reversi(MoveSetter moveSetter) {
-        super(moveSetter, new ReversiBoard(8), "Reversi", ImageRegistry.GAME_ICON_OTHELLO, new ReversiAssets());
+        super(moveSetter);
     }
 
-    @Override
-    public GameSession createSession(Player[] players) {
-        Tile[][] grid = getBoard().getGrid();
+    public GameSession createSession(GameSession session, Player[] players) {
+        Tile[][] grid = session.getBoard().getGrid();
         grid[3][3].setPiece(new Piece("", players[0]));
         grid[4][4].setPiece(new Piece("", players[0]));
         grid[3][4].setPiece(new Piece("", players[1]));

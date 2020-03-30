@@ -6,7 +6,7 @@ public class HumanPlayer extends Player {
      * @param name The name of the player.
      * @param color The color of the player.
      */
-    public HumanPlayer(String name, String color) {
+    public HumanPlayer(String name, Team.TeamColor color) {
         super(name, color);
     }
 

@@ -3,14 +3,14 @@ package com.grapefruit.gamework.framework;
 public abstract class Player {
 
     private String name;
-    private Team.TeamColour colour;
+    private Team.TeamColor color;
     private int score = 0;
     private boolean hasTurn = false;
     private int[] availableMoves;
 
-    public Player(String name, Team.TeamColour colour) {
+    public Player(String name, Team.TeamColor color) {
         this.name = name;
-        this.colour = colour;
+        this.color = color;
     }
 
     /**
@@ -25,8 +25,8 @@ public abstract class Player {
      * Get color of player.
      * @return color
      */
-    public Team.TeamColour getColour() {
-        return colour;
+    public Team.TeamColor getColor() {
+        return color;
     }
 
     /**

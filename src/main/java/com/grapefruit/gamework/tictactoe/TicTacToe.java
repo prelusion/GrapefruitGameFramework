@@ -5,7 +5,7 @@ import com.grapefruit.gamework.framework.*;
 
 public class TicTacToe extends Game {
     public TicTacToe(MoveSetter moveSetter) {
-        super(moveSetter, new Board(3), "Tic Tac Toe", ImageRegistry.GAME_ICON_TICTACTOE, null);
+        super(moveSetter);
     }
 
 

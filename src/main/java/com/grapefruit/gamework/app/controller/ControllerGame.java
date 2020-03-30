@@ -2,7 +2,6 @@ package com.grapefruit.gamework.app.controller;
 
 import com.grapefruit.gamework.app.model.IModel;
 import com.grapefruit.gamework.app.model.ModelGame;
-import com.grapefruit.gamework.app.model.ModelGameTile;
 import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.app.util.ImageHelper;
 import com.grapefruit.gamework.framework.*;
@@ -20,7 +19,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -69,8 +68,8 @@ public class ControllerGame implements IController{
 
         //Testing
         Player[] players = new Player[2];
-        players[0] = new ReversiPlayer("Player 1", Team.TeamColour.BLACK);
-        players[1] = new ReversiPlayer("Player 2", Team.TeamColour.WHITE);
+        players[0] = new ReversiPlayer("Player 1", Team.TeamColor.BLACK);
+        players[1] = new ReversiPlayer("Player 2", Team.TeamColor.WHITE);
         session = this.model.getGame().createSession(players);
         drawBoard(this.model.getGame().getBoard(), false);
     }

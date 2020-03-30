@@ -11,7 +11,7 @@ public class ReversiAssets extends Assets {
     public static Image PIECE_BLACK = ImageRegistry.GAME_PIECE_BLACK;
     public static Image PIECE_WHITE = ImageRegistry.GAME_PIECE_WHITE;
 
-    public Image getPieceImageByColor(Team.TeamColour color){
+    public Image getPieceImageByColor(Team.TeamColor color){
 
         switch (color){
             case BLACK:

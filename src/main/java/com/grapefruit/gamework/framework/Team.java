@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 
 public abstract class Team {
 
-    public enum TeamColour {
+    public enum TeamColor {
         WHITE,
         BLACK
     }

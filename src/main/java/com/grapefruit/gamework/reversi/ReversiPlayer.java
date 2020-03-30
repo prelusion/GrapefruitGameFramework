@@ -6,7 +6,7 @@ import com.grapefruit.gamework.framework.Team;
 
 public class ReversiPlayer extends Player {
 
-    public ReversiPlayer(String name, Team.TeamColour color) {
+    public ReversiPlayer(String name, Team.TeamColor color) {
         super(name, color);
     }
 

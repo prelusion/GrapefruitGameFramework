@@ -1,4 +1,4 @@
-package com.grapefruit.gamework.framework.template;
+package com.grapefruit.gamework.framework;
 
 public class Board {
 

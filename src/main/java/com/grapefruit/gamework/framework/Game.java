@@ -1,6 +1,5 @@
-package com.grapefruit.gamework.framework.template;
+package com.grapefruit.gamework.framework;
 
-import com.grapefruit.gamework.framework.old.Move;
 
 import java.util.List;
 
@@ -19,6 +18,8 @@ public abstract class Game {
      * The board for the chosen game
      */
     private Board board;
+
+    protected boolean finished = false;
 
     /**
      * Constructor of making an GameSession
@@ -57,8 +58,8 @@ public abstract class Game {
         return turnTimeout;
     }
 
-    public Move createMove(int row, int col, Player player) {
-        return new Move(new Tile(row, col, 1), player);
+    public Tile createMove(int row, int col, Player player) {
+        return new Tile(row, col, 1, player);
     }
 
     /**
@@ -79,6 +80,10 @@ public abstract class Game {
         }
 
         board.setPiece(tile);
+
+        if (hasGameFinished()) {
+            finished = true;
+        }
 
         return true;
     }

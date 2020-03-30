@@ -1,9 +1,6 @@
-package com.grapefruit.gamework.games.tttnew;
+package com.grapefruit.gamework.games.tictactoe;
 
-import com.grapefruit.gamework.framework.template.Board;
-import com.grapefruit.gamework.framework.template.Game;
-import com.grapefruit.gamework.framework.template.Player;
-import com.grapefruit.gamework.framework.template.Tile;
+import com.grapefruit.gamework.framework.*;
 
 import java.util.List;
 
@@ -22,26 +19,41 @@ public class TTTGame extends Game {
 
     @Override
     public boolean isValidMove(Player player, Tile tile) {
-        return false;
+        return !getBoard().hasPiece(tile);
     }
 
     @Override
     public boolean hasGameFinished() {
-        return false;
+        return getBoard().isBoardFull();
     }
 
     @Override
     public boolean hasWinner() {
-        return false;
+        if(!finished) {
+            return false;
+        }
+
+        return Conditions.checkAllAdjacentConditions(getBoard());
     }
 
     @Override
     public boolean isTie() {
-        return false;
+        if(!finished) {
+            return false;
+        }
+
+        return !Conditions.checkAllAdjacentConditions(getBoard());
     }
 
     @Override
     public Player getWinner() {
+        if (!finished || !hasWinner()) {
+            return null;
+        }
+        Tile tile = Conditions.getTileOfAvailableConditions(getBoard());
+        if(tile != null) {
+            return tile.getPlayer();
+        }
         return null;
     }
 

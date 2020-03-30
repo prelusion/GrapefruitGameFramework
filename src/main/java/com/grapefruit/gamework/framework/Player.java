@@ -1,4 +1,4 @@
-package com.grapefruit.gamework.framework.template;
+package com.grapefruit.gamework.framework;
 
 public class Player {
 
@@ -51,22 +51,6 @@ public class Player {
      */
     public boolean hasTurn() {
         return hasTurn;
-    }
-
-    /**
-     * Get available moves for player.
-     * @return list of available moves
-     */
-    public int[] getAvailableMoves() {
-        return availableMoves;
-    }
-
-    /**
-     * Set available moves for player.
-     * @param availableMoves
-     */
-    public void setAvailableMoves(int[] availableMoves) {
-        this.availableMoves = availableMoves;
     }
 
     public String toString() {

@@ -1,4 +1,6 @@
-package com.grapefruit.gamework.framework.template;
+package com.grapefruit.gamework.framework;
+
+import com.grapefruit.gamework.framework.Player;
 
 public class Tile {
 
@@ -34,6 +36,11 @@ public class Tile {
         this.row = row;
         this.col = col;
         this.strategicValue = strategicValue;
+    }
+
+    public Tile(int row, int col, int strategicValue, Player player) {
+        this(row, col, strategicValue);
+        this.player = player;
     }
 
     /**

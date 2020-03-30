@@ -13,8 +13,8 @@ public class Move {
 
     /**
      * Constructor of making an Move object
-     * @param Tile tile, gives a reference to the given tile.
-     * @param Player player, gives a reference to the given player.
+     * @param tile tile, gives a reference to the given tile.
+     * @param player player, gives a reference to the given player.
      */
     public Move(Tile tile, Player player) {
         this.tile = tile;

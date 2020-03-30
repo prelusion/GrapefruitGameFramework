@@ -1,29 +1,117 @@
 package com.grapefruit.gamework.framework;
 
-import javafx.scene.image.Image;
+
+import java.util.List;
 
 public abstract class Game {
     /**
-     * The moveSetter is a variable Object that saves the rules and conditions of the game.
+     * List of players on the client side;
      */
-    private MoveSetter moveSetter;
+    private Player[] players;
 
     /**
-     * @param moveSetter sets the game moveSetter within the global variable.
+     * The time a player has for their turn
      */
-    public Game(MoveSetter moveSetter) {
-        this.moveSetter = moveSetter;
+    private int turnTimeout = 10;
+
+    /**
+     * The board for the chosen game
+     */
+    private Board board;
+
+    protected boolean finished = false;
+
+    /**
+     * Constructor of making an GameSession
+     *
+     * @param int turnTimeout, gives a timeout limit for turns.
+     * @param int boardSize, gives a grid size for the new board.
+     */
+    public Game(Board board, Player[] players, int turnTimeout) {
+        this.board = board;
+        this.players = players;
+        this.turnTimeout = turnTimeout;
     }
 
     /**
-     * @param players gives the players to the gameSession.
-     * @return gameSession with the moveSetter, players, turnTimeout and boardSize.
+     * @return Arraylist<Player> of players.
      */
-    public GameSession createSession(Player[] players) {
-        return new OfflineGameSession(moveSetter, players, 10, 9);
+    public Player[] getPlayers() {
+        return players;
     }
 
-    public MoveSetter getMoveSetter() {
-        return moveSetter;
+    public Player getNextPlayer() {
+        return null;
     }
+
+    /**
+     * @return Board, the games board.
+     */
+    public Board getBoard() {
+        return board;
+    }
+
+    /**
+     * @return int turnTimeout.
+     */
+    public int getTurnTimeout() {
+        return turnTimeout;
+    }
+
+    public Tile createMove(int row, int col, Player player) {
+        return new Tile(row, col, 1, player);
+    }
+
+    /**
+     * This function will check if the given move is a valid move on the board.
+     *
+     * @param player, player is given to check which side is playing.
+     * @param move,   Looks of the given move is valid.
+     * @return boolean, State of the move is valid or not.
+     */
+    public abstract boolean isValidMove(Player player, Tile tile);
+
+    /**
+     * @param move, move is given to set the move on the board and apply all necessary changes.
+     */
+    public boolean setMove(Player player, Tile tile) {
+        if (!isValidMove(player, tile)) {
+            return false;
+        }
+
+        board.setPiece(tile);
+
+        if (hasGameFinished()) {
+            finished = true;
+        }
+
+        return true;
+    }
+
+    /**
+     * This function will check if the game should be ended or not.
+     *
+     * @return boolean, State of the game if its ended or not.
+     */
+    public abstract boolean hasGameFinished();
+
+    /**
+     * @return boolean, true if a winner is found
+     */
+    public abstract boolean hasWinner();
+
+    public abstract boolean isTie();
+
+    /**
+     * @return Player, Get the player if there is a winner. If the game has finished an
+     */
+    public abstract Player getWinner();
+
+    /**
+     * Uses isValidMove() To check whether moves are available.
+     *
+     * @param player, searches available moves for that specific player.
+     * @return Move[] of available moves for the given player.
+     */  //TODO
+    public abstract List<Tile> getAvailableMoves(Player player);
 }

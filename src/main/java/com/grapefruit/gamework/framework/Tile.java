@@ -1,11 +1,13 @@
 package com.grapefruit.gamework.framework;
 
+import com.grapefruit.gamework.framework.Player;
+
 public class Tile {
 
     /**
      * The piece is assigned to this Tile.
      */
-    private Piece piece;
+    private Player player = null;
 
     /**
      * The Tiles row position on the board state.
@@ -25,9 +27,10 @@ public class Tile {
 
     /**
      * Constructor of making an GameSession
-     * @param row, gives the tile grid[x][] position from the board.
-     * @param col, gives the tile grid[][y] position from the board.
-     * @param strategicValue, is the given strategicValue of the Tile.
+     *
+     * @param int row, gives the tile grid[x][] position from the board.
+     * @param int col, gives the tile grid[][y] position from the board.
+     * @param int strategicValue, is the given strategicValue of the Tile.
      */
     public Tile(int row, int col, int strategicValue) {
         this.row = row;
@@ -35,32 +38,39 @@ public class Tile {
         this.strategicValue = strategicValue;
     }
 
-    /**
-     * @return Player, player of piece.
-     */
-    public Piece getPiece() {
-        return piece;
-    }
-    /**
-     * @return Player, player of piece.
-     */
-    public void setPiece(Piece piece) {
-        this.piece = piece;
+    public Tile(int row, int col, int strategicValue, Player player) {
+        this(row, col, strategicValue);
+        this.player = player;
     }
 
     /**
-     * @return int, grid[x](x) position of tile.
+     * @return Player, player of piece.
      */
-    public int getX() {
+    public Player getPlayer() {
+        return player;
+    }
+
+    /**
+     * @return Player, player of piece.
+     */
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    /**
+     * @return int, grid[x](row) position of tile.
+     */
+    public int getRow() {
         return row;
     }
 
     /**
      * @return int, grid[y](column) position of tile.
      */
-    public int getY() {
+    public int getCol() {
         return col;
     }
+
     /**
      * @return int, strategicValue of the tile.
      */

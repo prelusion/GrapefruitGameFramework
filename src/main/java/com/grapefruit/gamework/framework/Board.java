@@ -3,7 +3,7 @@ package com.grapefruit.gamework.framework;
 public class Board {
 
     /**
-     * This grid is the board. Size is dynamic so instantiated in the constructor.
+     * This grid is the board. Size is dcolnamic so instantiated in the constructor.
      */
     private Tile[][] grid;
 
@@ -20,9 +20,9 @@ public class Board {
      * Creates a board of given size with strategicValues given from the game implmentation. (TODO)
      */
     public void createBoard() {
-        for (int x = 0; x < grid.length; x++) {
-            for (int y = 0; y < grid.length; y++) {
-                grid[x][y] = new Tile(x, y, /* TODO  */ 0);
+        for (int row = 0; row < grid.length; row++) {
+            for (int col = 0; col < grid.length; col++) {
+                grid[row][col] = new Tile(row, col, /* TODO  */ 0);
             }
         }
     }
@@ -38,18 +38,18 @@ public class Board {
     /**
      * @return boolean, Checks if the tile chosen has a piece on it.
      */
-    public boolean hasPiece(int x, int y) {
-        if (isValidLocation(x, y)){
-            return grid[x][y].getPiece() != null;
+    public boolean hasPiece(int row, int col) {
+        if (isValidLocation(row, col)){
+            return grid[row][col].getPiece() != null;
         }
         else {
             return false;
         }
     }
 
-    public boolean isValidLocation(int x, int y){
-        if (grid.length > x - 1) {
-            if (grid[x].length > y - 1) {
+    public boolean isValidLocation(int row, int col){
+        if (grid.length > row - 1) {
+            if (grid[row].length > col - 1) {
                 return true;
             }
         }
@@ -60,9 +60,9 @@ public class Board {
      * @return boolean, Checks if the board is full. Return true if it is.
      */
     public boolean isBoardFull() {
-        for (int x = 0; x < grid.length-1; x++) {
-            for (int y = 0; y < grid.length-1; y++) {
-                if(grid[x][y] == null) {
+        for (int row = 0; row < grid.length-1; row++) {
+            for (int col = 0; col < grid.length-1; col++) {
+                if(grid[row][col] == null) {
                     return false;
                 }
             }

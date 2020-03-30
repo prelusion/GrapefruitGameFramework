@@ -79,5 +79,9 @@ public abstract class MoveSetter {
         return null;
     }
 
+    public Rule getRules() {
+        return rules;
+    }
+
     public abstract void setMove(GameSession session, Move move);
 }

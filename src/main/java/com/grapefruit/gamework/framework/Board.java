@@ -20,8 +20,8 @@ public class Board {
      * Creates a board of given size with strategicValues given from the game implmentation. (TODO)
      */
     public void createBoard() {
-        for (int x = 0; x < grid.length-1; x++) {
-            for (int y = 0; y < grid.length-1; y++) {
+        for (int x = 0; x < grid.length; x++) {
+            for (int y = 0; y < grid.length; y++) {
                 grid[x][y] = new Tile(x, y, /* TODO  */ 0);
             }
         }
@@ -38,7 +38,23 @@ public class Board {
     /**
      * @return boolean, Checks if the tile chosen has a piece on it.
      */
-    public boolean hasPiece(Tile tile) { return tile.getPiece() != null; }
+    public boolean hasPiece(int x, int y) {
+        if (isValidLocation(x, y)){
+            return grid[x][y].getPiece() != null;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public boolean isValidLocation(int x, int y){
+        if (grid.length > x - 1) {
+            if (grid[x].length > y - 1) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * @return boolean, Checks if the board is full. Return true if it is.

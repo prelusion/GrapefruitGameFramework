@@ -25,9 +25,9 @@ public class Tile {
 
     /**
      * Constructor of making an GameSession
-     * @param int row, gives the tile grid[x][] position from the board.
-     * @param int col, gives the tile grid[][y] position from the board.
-     * @param int strategicValue, is the given strategicValue of the Tile.
+     * @param row, gives the tile grid[x][] position from the board.
+     * @param col, gives the tile grid[][y] position from the board.
+     * @param strategicValue, is the given strategicValue of the Tile.
      */
     public Tile(int row, int col, int strategicValue) {
         this.row = row;
@@ -49,16 +49,16 @@ public class Tile {
     }
 
     /**
-     * @return int, grid[x](row) position of tile.
+     * @return int, grid[x](x) position of tile.
      */
-    public int getRow() {
+    public int getX() {
         return row;
     }
 
     /**
      * @return int, grid[y](column) position of tile.
      */
-    public int getCol() {
+    public int getY() {
         return col;
     }
     /**

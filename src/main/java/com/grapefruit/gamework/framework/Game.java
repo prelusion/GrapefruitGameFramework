@@ -1,8 +1,6 @@
 package com.grapefruit.gamework.framework;
 
-import com.grapefruit.gamework.framework.Board;
-import com.grapefruit.gamework.framework.Move;
-import com.grapefruit.gamework.framework.Rule;
+import javafx.scene.image.Image;
 
 public abstract class Game {
     /**
@@ -23,5 +21,9 @@ public abstract class Game {
      */
     public GameSession createSession(Player[] players) {
         return new OfflineGameSession(moveSetter, players, 10, 9);
+    }
+
+    public MoveSetter getMoveSetter() {
+        return moveSetter;
     }
 }

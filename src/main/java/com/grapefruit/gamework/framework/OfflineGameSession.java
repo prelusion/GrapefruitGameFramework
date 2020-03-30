@@ -20,6 +20,10 @@ public class OfflineGameSession extends GameSession {
 
     }
 
+    public Player getCurrentTurnPlayer(){
+        return null;
+    }
+
     /**
      * @param move, move is given to set the move on the board and apply all necessary changes.
      */

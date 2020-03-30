@@ -1,0 +1,50 @@
+
+.primary-background{
+    -fx-background-color:  linear-gradient(to right bottom, #030A30 49%, #1D244D 100%);
+}
+
+.secondary-background{
+    -fx-background-color: linear-gradient(to bottom, #BF4701 0%, #825F4B 100%, #6E3618 100%, #9B8072 100%, #BA9A95 100%, #E0B9B3 100%, #FFDED7 100%);
+}
+
+.scroll-bar:horizontal, .scroll-bar:vertical{
+    -fx-background-color:transparent;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color:  linear-gradient(to right bottom, #1C0E04 0%, #0B1133 87%);
+}
+
+.menu-item-normal{
+    -fx-background-color: linear-gradient(to right bottom, #FF6600 0%, #946B6B 64%);
+    -fx-effect: innershadow(GAUSSIAN, #000000, 10, 0, 0, 0);
+}
+
+.menu-item-hover{
+    -fx-background-color: linear-gradient(to right bottom, #FF6600 0%, #946B6B 64%);
+    -fx-effect: innershadow(GAUSSIAN, #000000, 120, 0, 0, 0);
+}
+
+.menu-item-hover-selected{
+    -fx-background-color: linear-gradient(to right bottom, #FF6600 0%, #946B6B 64%);
+    -fx-effect: innershadow(GAUSSIAN, #000000, 60, 0, 0, 0);
+}
+
+.menu-item-selected{
+    -fx-background-color: linear-gradient(to right bottom, #FF6600 0%, #946B6B 64%);
+    -fx-effect: innershadow(GAUSSIAN, #FFFFFF, 120, 0, 0, 0);
+}
+
+.game-board-tile{
+}
+
+.game-board-tile-hover{
+    -fx-effect: innershadow(GAUSSIAN, #000000, 60, 0, 0, 0);
+}

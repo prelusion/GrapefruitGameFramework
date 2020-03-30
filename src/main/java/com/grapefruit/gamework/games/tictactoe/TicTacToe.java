@@ -29,25 +29,38 @@ public class TicTacToe extends Game {
 
     @Override
     public boolean hasWinner() {
-        if(!finished) {
-            return false;
+        if(gameResult == GameResult.WINNER) {
+            return true;
         }
-
-        return Conditions.checkAllAdjacentConditions(getBoard());
+        return false;
     }
 
     @Override
     public boolean isTie() {
-        if(!finished) {
-            return false;
+        if(gameResult == GameResult.TIE) {
+            return true;
         }
-
-        return !Conditions.checkAllAdjacentConditions(getBoard());
+        return false;
     }
 
     @Override
+    public GameResult checkGameResult() {
+        if(finished) {
+            if(Conditions.checkAllAdjacentConditions(getBoard())) {
+                gameResult = GameResult.WINNER;
+                return gameResult;
+            }
+            gameResult = GameResult.TIE;
+            return gameResult;
+        }
+        gameResult = GameResult.NONE;
+        return gameResult;
+    }
+
+
+    @Override
     public Player getWinner() {
-        if (!finished || !hasWinner()) {
+        if (checkGameResult() == GameResult.NONE) {
             return null;
         }
         Tile tile = Conditions.getTileOfAvailableConditions(getBoard());

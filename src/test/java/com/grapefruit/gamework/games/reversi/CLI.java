@@ -22,7 +22,8 @@ public class CLI {
             System.out.println("--------------------------------------");
 
             game.nextPlayer();
-            System.out.println("available moves for player "+ game.getCurrentPlayer().getColor());
+            Player currentPlayer = game.getCurrentPlayer();
+            System.out.println("available moves for player "+ currentPlayer.getColor());
             board.printAvailableMoves(game.getCurrentPlayer());
             System.out.println("--------------------------------------");
 
@@ -35,7 +36,7 @@ public class CLI {
                 int col = Character.getNumericValue(line.charAt(1));
                 System.out.println("row: " + row + ", col: " + col);
 
-//                success = game.setMove(row, col, currentPlayer);
+                success = game.setMove(row, col);
                 if (!success) System.out.println("invalid move");
             }
 

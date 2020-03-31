@@ -26,8 +26,8 @@ public class Reversi extends Game {
     }
 
     @Override
-    public GameResult checkGameResult() {
-        return null;
+    public void calculateGameResult() {
+
     }
 
     @Override

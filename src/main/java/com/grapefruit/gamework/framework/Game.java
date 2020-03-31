@@ -2,7 +2,6 @@ package com.grapefruit.gamework.framework;
 
 
 import java.util.HashSet;
-import java.util.List;
 
 public abstract class Game {
     /**
@@ -103,7 +102,7 @@ public abstract class Game {
      * Checks whether the game has a WINNER, a TIE or NONE of those.
      * @return GameResult, The result of the game so WINNER, TIE or NONE
      */
-    public abstract GameResult checkGameResult();
+    public abstract void calculateGameResult();
 
     /**
      * @param move, move is given to set the move on the board and apply all necessary changes.
@@ -132,9 +131,13 @@ public abstract class Game {
     /**
      * @return boolean, true if a winner is found
      */
-    public abstract boolean hasWinner();
+    public boolean hasWinner() {
+        return getGameResult() == GameResult.WINNER;
+    }
 
-    public abstract boolean isTie();
+    public boolean isTie() {
+        return getGameResult() == GameResult.TIE;
+    }
 
     public GameResult getGameResult() {
         return gameResult;
@@ -152,4 +155,10 @@ public abstract class Game {
      * @return Move[] of available moves for the given player.
      */  //TODO
     public abstract HashSet<Tile> getAvailableMoves(Player player);
+
+    public enum GameResult {
+        WINNER,
+        TIE,
+        NONE
+    }
 }

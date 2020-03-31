@@ -1,6 +1,7 @@
 package com.grapefruit.gamework.framework;
 
-import java.util.HashSet;
+import java.util.List;
+
 
 public abstract class Board {
 
@@ -45,6 +46,9 @@ public abstract class Board {
      * @return boolean, Checks if the tile chosen has a piece on it.
      */
     public boolean hasPlayer(int row, int col) {
+        if (!isValidLocation(row, col)) {
+            return false;
+        }
         return grid[row][col].getPlayer() != null;
     }
 
@@ -67,12 +71,7 @@ public abstract class Board {
     }
 
     public boolean isValidLocation(int row, int col) {
-        if (grid.length > row){
-            if (grid[0].length > col){
-                return true;
-            }
-        }
-        return false;
+        return row < grid.length && row >= 0 && col < grid.length && col >= 0;
     }
 
     /**
@@ -95,15 +94,13 @@ public abstract class Board {
                 } else {
                     value = String.format("[%s]", player.getColor().toString());
                 }
-
-                System.out.print(value + " ");
             }
             System.out.println();
         }
     }
 
     public void printAvailableMoves(Player player) {
-        HashSet<Tile> moves = getAvailableMoves(player);
+        List<Tile> moves = getAvailableMoves(player);
 
         System.out.print("  ");
         for (int m = 0; m < grid.length; m++) {
@@ -139,7 +136,7 @@ public abstract class Board {
         }
     }
 
-    public abstract HashSet<Tile> getAvailableMoves(Player player);
+    public abstract List<Tile> getAvailableMoves(Player player);
 
     public Player getPlayer(int row, int col) {
         return grid[row][col].getPlayer();

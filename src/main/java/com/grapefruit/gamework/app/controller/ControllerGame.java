@@ -22,6 +22,7 @@ import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.HashSet;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ControllerGame implements IController{
@@ -170,7 +171,7 @@ public class ControllerGame implements IController{
         }
     }
 
-    private void markPossibleMoves(HashSet<Tile> tiles){
+    private void markPossibleMoves(List<Tile> tiles){
         for (HBox[] column: boardTiles){
             for (HBox hbox: column) {
                 ObservableList<Node> nodes = hbox.getChildren();

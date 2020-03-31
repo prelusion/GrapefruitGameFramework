@@ -18,7 +18,7 @@ public class TicTacToeBoard extends Board {
     }
 
     @Override
-    public HashSet<Tile> getAvailableMoves(Player player) {
+    public List<Tile> getAvailableMoves(Player player) {
         return null;
     }
 }

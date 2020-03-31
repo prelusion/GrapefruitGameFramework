@@ -4,7 +4,9 @@ import com.grapefruit.gamework.framework.Board;
 import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.Tile;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class ReversiBoard extends Board {
 
@@ -13,9 +15,9 @@ public class ReversiBoard extends Board {
     }
 
     @Override
-    public HashSet<Tile> getAvailableMoves(Player player) {
+    public List<Tile> getAvailableMoves(Player player) {
         HashSet<Tile> playerOwnedTiles = new HashSet<>();
-        HashSet<Tile> validMoves = new HashSet<>();
+        ArrayList<Tile> validMoves = new ArrayList<>();
 
         for (int i = 0; i < grid.length - 1; i++) {
             for (int j = 0; j < grid.length - 1; j++) {
@@ -43,7 +45,8 @@ public class ReversiBoard extends Board {
 
                 if (emptyTile == null) continue;
 
-                validMoves.add(emptyTile);
+                if(!validMoves.contains(emptyTile))
+                    validMoves.add(emptyTile);
             }
         }
 

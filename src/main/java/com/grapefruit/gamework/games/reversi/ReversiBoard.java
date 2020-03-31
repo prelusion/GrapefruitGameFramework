@@ -20,7 +20,7 @@ public class ReversiBoard extends Board {
         for (int i = 0; i < grid.length - 1; i++) {
             for (int j = 0; j < grid.length - 1; j++) {
                 Tile tile = grid[i][j];
-                if (tile.getPlayer() != null) {
+                if (tile.getPlayer() != null && tile.getPlayer() == player) {
                     playerOwnedTiles.add(tile);
                 }
             }
@@ -77,12 +77,10 @@ public class ReversiBoard extends Board {
             return grid[row][col];
         }
 
-        Player playerFound = grid[row][col].getPlayer();
-
-        if (playerFound != player) {
-            return getEmptyTileInDirection(player, row, col, dRow, dCol);
+        if (grid[row][col].getPlayer() == player) {
+            return null;
         }
 
-        return null;
+        return getEmptyTileInDirection(player, row, col, dRow, dCol);
     }
 }

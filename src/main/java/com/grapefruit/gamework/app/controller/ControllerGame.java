@@ -148,14 +148,15 @@ public class ControllerGame implements IController{
         for (Node node: boardPane.getChildren()){
             HBox box = (HBox) node;
             ObservableList<Node> nodes =  box.getChildren();
-            if (nodes.size() > 0){
-                for (Node node2: nodes){
-                    if (node instanceof Circle){
+            if (nodes.size() > 0) {
+                for (Node node2 : nodes) {
+                    if (node instanceof Circle) {
                         boardPane.getChildren().remove(node2);
                     }
                 }
             }
         }
+
 
         for (Tile tile: tiles) {
             HBox pane = (HBox) boardPane.getChildren().get(tile.getRow()*model.getGame().getBoard().getGrid().length + tile.getCol());

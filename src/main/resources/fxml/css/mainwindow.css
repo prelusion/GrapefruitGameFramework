@@ -4,7 +4,7 @@
 }
 
 .secondary-background{
-    -fx-background-color: linear-gradient(to bottom, #BF4701 0%, #825F4B 100%, #6E3618 100%, #9B8072 100%, #BA9A95 100%, #E0B9B3 100%, #FFDED7 100%);
+    -fx-background-color: linear-gradient(to bottom, #69D2E7 0%, #FA6800 100%, #A7DBD8 100%, #E0E4CC 100%, #F38430 100%);;
 }
 
 .scroll-bar:horizontal, .scroll-bar:vertical{

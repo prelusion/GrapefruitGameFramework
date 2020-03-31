@@ -21,9 +21,10 @@ public class CLI {
         while (true) {
             System.out.println("--------------------------------------");
 
-            Player currentPlayer = game.getNextPlayer();
+            game.nextPlayer();
+            Player currentPlayer = game.getCurrentPlayer();
             System.out.println("available moves for player "+ currentPlayer.getColor());
-            board.printAvailableMoves(currentPlayer);
+            board.printAvailableMoves(game.getCurrentPlayer());
             System.out.println("--------------------------------------");
 
             boolean success = false;

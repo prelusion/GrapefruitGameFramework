@@ -26,8 +26,8 @@ public abstract class Board {
      * Creates a board of given size with strategicValues given from the game implmentation. (TODO)
      */
     public void createBoard() {
-        for (int i = 0; i < grid.length - 1; i++) {
-            for (int j = 0; j < grid.length - 1; j++) {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid.length; j++) {
                 grid[i][j] = new Tile(i, j, /* TODO  */ 0);
             }
         }
@@ -52,8 +52,8 @@ public abstract class Board {
      * @return boolean, Checks if the board is full. Return true if it is.
      */
     public boolean isBoardFull() {
-        for (int i = 0; i < grid.length - 1; i++) {
-            for (int j = 0; j < grid.length - 1; j++) {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid.length; j++) {
                 if (grid[i][j].getPlayer() == null) {
                     return false;
                 }
@@ -75,14 +75,14 @@ public abstract class Board {
      */
     public void printBoard() {
         System.out.print("  ");
-        for (int m = 0; m < grid.length - 1; m++) {
+        for (int m = 0; m < grid.length; m++) {
             System.out.print(" " + m + "  ");
         }
         System.out.println();
 
-        for (int i = 0; i < grid.length - 1; i++) {
+        for (int i = 0; i < grid.length; i++) {
             System.out.print(i + " ");
-            for (int j = 0; j < grid.length - 1; j++) {
+            for (int j = 0; j < grid.length; j++) {
                 Player player = grid[i][j].getPlayer();
                 String value;
                 if (player == null) {
@@ -101,14 +101,14 @@ public abstract class Board {
         HashSet<Tile> moves = getAvailableMoves(player);
 
         System.out.print("  ");
-        for (int m = 0; m < grid.length - 1; m++) {
+        for (int m = 0; m < grid.length; m++) {
             System.out.print(" " + m + "  ");
         }
         System.out.println();
 
-        for (int i = 0; i < grid.length - 1; i++) {
+        for (int i = 0; i < grid.length; i++) {
             System.out.print(i + " ");
-            for (int j = 0; j < grid.length - 1; j++) {
+            for (int j = 0; j < grid.length; j++) {
                 Player positionPlayer = grid[i][j].getPlayer();
                 String value;
 

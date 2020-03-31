@@ -1,6 +1,7 @@
 package com.grapefruit.gamework.games.reversi;
 
 import com.grapefruit.gamework.framework.*;
+import com.grapefruit.gamework.framework.player.Player;
 
 import java.util.HashSet;
 import java.util.List;
@@ -36,6 +37,11 @@ public class Reversi extends Game {
     }
 
     @Override
+    public boolean playMove(int row, int col) {
+        return false;
+    }
+
+    @Override
     public boolean hasGameFinished() {
         return false;
     }
@@ -49,4 +55,5 @@ public class Reversi extends Game {
     public List<Tile> getAvailableMoves(Player player) {
         return getBoard().getAvailableMoves(player);
     }
+
 }

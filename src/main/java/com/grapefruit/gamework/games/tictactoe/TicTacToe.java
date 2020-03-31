@@ -1,6 +1,7 @@
 package com.grapefruit.gamework.games.tictactoe;
 
 import com.grapefruit.gamework.framework.*;
+import com.grapefruit.gamework.framework.player.Player;
 
 import java.util.List;
 
@@ -56,5 +57,27 @@ public class TicTacToe extends Game {
     @Override
     public List<Tile> getAvailableMoves(Player player) {
         return getBoard().getAvailableMoves(player);
+    }
+
+    @Override
+    public boolean doMove(int row, int col) {
+        if (!isValidMove(row, col, getCurrentPlayer())) {
+            return false;
+        }
+
+        getBoard().setPlayer(row, col, getCurrentPlayer());
+        if (hasGameFinished()) {
+            finished = true;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean playMove(int row, int col){
+        if(doMove(row, col)) {
+            nextPlayer();
+            return true;
+        }
+        return false;
     }
 }

@@ -5,6 +5,7 @@ import com.grapefruit.gamework.framework.*;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+import com.grapefruit.gamework.framework.player.Player;
 
 public class RandomAI {
     /* AI vs AI */
@@ -12,8 +13,8 @@ public class RandomAI {
         int turnTimeout = 10;
         Scanner in = new Scanner(System.in);
         Board board = new ReversiBoard(9);
-        Player playerWhite = new Player("White", Colors.WHITE);
-        Player playerBlack = new Player("Black", Colors.BLACK);
+        Player playerWhite = new Player("White", Colors.WHITE, true);
+        Player playerBlack = new Player("Black", Colors.BLACK, true);
         Game game = new Reversi(board, playerWhite, playerBlack, turnTimeout);
 
         board.printBoard();
@@ -41,7 +42,7 @@ public class RandomAI {
             Tile move = availableMoves.get(idx);
 
             System.out.println("row: " + move.getRow() + ", col: " + move.getCol());
-            boolean success = game.setMove(move.getRow(), move.getCol());
+            boolean success = game.doMove(move.getRow(), move.getCol());
             assert success;
 
             System.out.println("-- CURRENT BOARD -- ");

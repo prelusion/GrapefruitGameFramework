@@ -3,7 +3,7 @@ package com.grapefruit.gamework.app.controller;
 import com.grapefruit.gamework.app.GameApplication;
 import com.grapefruit.gamework.app.model.IModel;
 import com.grapefruit.gamework.app.model.ModelSelectedGame;
-import com.grapefruit.gamework.framework.Player;
+import com.grapefruit.gamework.framework.player.Player;
 import com.grapefruit.gamework.framework.Colors;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -89,7 +89,7 @@ public class ControllerSelectedGame implements IController {
             @Override
             public void handle(ActionEvent event) {
                 GameApplication.playGame(model.getSelectedGame().getAssets(), model.getSelectedGame().getFactory()
-                        .create(new Player[]{new Player("Pieter", Colors.WHITE), new Player("kees", Colors.BLACK)}));
+                        .create(new Player[]{new Player("Pieter", Colors.WHITE, true), new Player("kees", Colors.BLACK, true)}));
             }
         });
 

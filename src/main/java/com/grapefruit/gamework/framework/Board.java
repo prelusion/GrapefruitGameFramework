@@ -1,7 +1,7 @@
 package com.grapefruit.gamework.framework;
 
 import java.util.List;
-
+import com.grapefruit.gamework.framework.player.Player;
 
 public abstract class Board {
 

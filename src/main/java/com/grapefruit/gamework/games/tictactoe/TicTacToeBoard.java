@@ -18,6 +18,11 @@ public class TicTacToeBoard extends Board {
     }
 
     @Override
+    public void setMove(int row, int col, Player player) {
+        setPlayer(row, col, player);
+    }
+
+    @Override
     public List<Tile> getAvailableMoves(Player player) {
         return null;
     }

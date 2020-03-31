@@ -115,7 +115,7 @@ public abstract class Game {
             return false;
         }
 
-        board.setPlayer(row, col, currentPlayer);
+        board.setMove(row, col, currentPlayer);
 
         if (hasGameFinished()) {
             finished = true;

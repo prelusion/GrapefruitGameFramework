@@ -38,6 +38,8 @@ public abstract class Board {
         return grid;
     }
 
+    public abstract void setMove(int row, int col, Player player);
+
     public void setPlayer(int row, int col, Player player) {
         grid[row][col] = new Tile(row, col, 1, player);
     }
@@ -92,8 +94,9 @@ public abstract class Board {
                 if (player == null) {
                     value = "[ ]";
                 } else {
-                    value = String.format("[%s]", player.getColor().toString());
+                    value = String.format("[%s]", player.getColor().toString().charAt(0));
                 }
+                System.out.print(value + " ");
             }
             System.out.println();
         }

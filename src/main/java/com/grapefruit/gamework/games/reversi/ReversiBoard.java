@@ -86,4 +86,56 @@ public class ReversiBoard extends Board {
 
         return getEmptyTileInDirection(player, row, col, dRow, dCol);
     }
+
+    private List<Tile> getTilesToTurn(Player player, int startRow, int startCol, int dRow, int dCol) {
+        ArrayList<Tile> searchOrder = new ArrayList<>();
+        return getTilesToTurn(player, startRow, startCol, dRow, dCol, searchOrder);
+    }
+
+    private List<Tile> getTilesToTurn(Player player, int row, int col, int dRow, int dCol, List<Tile> searchOrder) {
+        if (!isValidLocation(row, col)) {
+            return null;
+        }
+
+        if (!hasPlayer(row, col)) {
+            return null;
+        }
+
+        if (grid[row][col].getPlayer() == player) {
+            return searchOrder;
+        }
+
+        searchOrder.add(new Tile(row, col, 1, player));
+
+        return getTilesToTurn(player, row + dRow, col + dCol, dRow, dCol, searchOrder);
+    }
+
+    public void setMove(int row, int col, Player player) {
+        Tile tile = new Tile(row, col, 1, player);
+
+        grid[row][col] = tile;
+
+        HashSet<Tile> neighbours = getDirectNeighbours(tile);
+
+        for (Tile neighbour : neighbours) {
+            if (neighbour.getPlayer() == null || neighbour.getPlayer() == player)
+                continue;
+
+            List<Tile> tiles = getTilesToTurn(
+                    player,
+                    neighbour.getRow(),
+                    neighbour.getCol(),
+                    neighbour.getRow() - tile.getRow(),
+                    neighbour.getCol() - tile.getCol()
+            );
+
+            if (tiles == null) {
+                continue;
+            }
+
+            for (Tile t : tiles) {
+                grid[t.getRow()][t.getCol()] = t;
+            }
+        }
+    }
 }

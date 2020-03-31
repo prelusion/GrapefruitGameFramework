@@ -7,7 +7,9 @@ import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.app.view.templates.Game.GameFactory;
 import com.grapefruit.gamework.app.view.templates.GameTile.GameTileFactory;
 import com.grapefruit.gamework.app.view.templates.MainWindow.MainWindowFactory;
+import com.grapefruit.gamework.framework.Assets;
 import com.grapefruit.gamework.framework.Game;
+import com.grapefruit.gamework.framework.GameWrapper;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -41,9 +43,9 @@ public class GameApplication extends Application {
         return primaryStage;
     }
 
-    public static void playGame(Game game){
-        primaryStage.setScene(new Scene(GameFactory.build(new ModelGame(game)).getParent(), 1100, 800));
-        primaryStage.setTitle("Now playing: " + game.getName());
+    public static void playGame(Assets assets, Game game){
+        primaryStage.setScene(new Scene(GameFactory.build(new ModelGame(game, assets)).getParent(), 1100, 800));
+        primaryStage.setTitle("Now playing: " + assets.getDisplayName());
         primaryStage.show();
     }
 

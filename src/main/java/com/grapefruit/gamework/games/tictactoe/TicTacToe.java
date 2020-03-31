@@ -2,7 +2,7 @@ package com.grapefruit.gamework.games.tictactoe;
 
 import com.grapefruit.gamework.framework.*;
 
-import java.util.List;
+import java.util.HashSet;
 
 public class TicTacToe extends Game {
 
@@ -31,24 +31,18 @@ public class TicTacToe extends Game {
 
     @Override
     public boolean hasWinner() {
-        if(gameResult == GameResult.WINNER) {
-            return true;
-        }
-        return false;
+        return gameResult == GameResult.WINNER;
     }
 
     @Override
     public boolean isTie() {
-        if(gameResult == GameResult.TIE) {
-            return true;
-        }
-        return false;
+        return gameResult == GameResult.TIE;
     }
 
     @Override
     public GameResult checkGameResult() {
-        if(finished) {
-            if(Conditions.checkAllAdjacentConditions(getBoard())) {
+        if (finished) {
+            if (Conditions.checkAllAdjacentConditions(getBoard())) {
                 gameResult = GameResult.WINNER;
                 return gameResult;
             }
@@ -66,7 +60,7 @@ public class TicTacToe extends Game {
             return null;
         }
         Tile tile = Conditions.getTileOfAvailableConditions(getBoard());
-        if(tile != null) {
+        if (tile != null) {
             System.out.println("row " + tile.getRow() + " col " + tile.getCol());
             return tile.getPlayer();
         }
@@ -74,7 +68,7 @@ public class TicTacToe extends Game {
     }
 
     @Override
-    public List<Tile> getAvailableMoves(Player player) {
+    public HashSet<Tile> getAvailableMoves(Player player) {
         return null;
     }
 }

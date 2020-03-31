@@ -6,6 +6,6 @@ public abstract class Assets {
 
     public abstract String getDisplayName();
     public abstract Image getIcon();
-    public abstract Image getPieceImageByColor(TeamColor color);
+    public abstract Image getPieceImageByColor(Colors color);
 
 }

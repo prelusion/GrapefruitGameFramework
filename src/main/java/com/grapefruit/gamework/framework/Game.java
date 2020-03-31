@@ -9,7 +9,7 @@ public abstract class Game {
      * List of players on the client side;
      */
     private Player[] players;
-
+    private int currentPlayerIndex = 0;
     /**
      * The time a player has for their turn
      */
@@ -38,8 +38,13 @@ public abstract class Game {
         this.playersTurn = players[0];
     }
 
-    public String getName() { return ""; }
-    public String getIcon() { return null; }
+    public String getName() {
+        return "";
+    }
+
+    public String getIcon() {
+        return null;
+    }
 
     /**
      * @return Arraylist<Player> of players.
@@ -48,9 +53,17 @@ public abstract class Game {
         return players;
     }
 
-    public void nextPlayer() {
-        playersTurn = ((playersTurn == players[0]) ? players[1] : players[0]);
-        playersTurn.setTurn(true);
+    /**
+     * Next player is done in RR fashion, starting from index 0.
+     * If first player needs to be selected randomly, player array in constructor needs to be sorted randomly.
+     *
+     * @return
+     */
+    public Player getNextPlayer() {
+        Player player = players[currentPlayerIndex];
+        currentPlayerIndex++;
+        if (currentPlayerIndex == players.length) currentPlayerIndex = 0;
+        return player;
     }
 
     public Player getPlayersTurn() {
@@ -93,23 +106,20 @@ public abstract class Game {
      */
     public abstract GameResult checkGameResult();
 
+
     /**
      * @param move, move is given to set the move on the board and apply all necessary changes.
      */
     public boolean setMove(int row, int col) {
-        //Set the move of the player on the tile
-        getBoard().getGrid()[row][col].setPlayer(playersTurn);
-
         if (!isValidMove(row, col, playersTurn)) {
             return false;
         }
 
-        board.setPiece(row, col, playersTurn);
+        board.setPlayer(row, col, playersTurn);
         if (hasGameFinished()) {
             finished = true;
         }
 
-        nextPlayer();
         return true;
     }
 

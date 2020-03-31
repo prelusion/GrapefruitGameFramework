@@ -1,6 +1,6 @@
 package com.grapefruit.gamework.framework;
 
-public enum TeamColor {
+public enum Colors {
     WHITE,
     BLACK
 }

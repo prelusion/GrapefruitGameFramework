@@ -116,8 +116,8 @@ public class ControllerGame implements IController{
 
     private void updateBooard(){
         showPlayerPieces();
-        markPossibleMoves(model.getGame().getAvailableMoves(model.getGame().getPlayersTurn()));
-        currentTurnPlayer.setText(model.getGame().getPlayersTurn().getName());
+        markPossibleMoves(model.getGame().getAvailableMoves(model.getGame().getCurrentPlayer()));
+        currentTurnPlayer.setText(model.getGame().getCurrentPlayer().getName());
     }
 
     private HBox createBoardTile(int size, Color color, Tile tile){

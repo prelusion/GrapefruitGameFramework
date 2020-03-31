@@ -34,7 +34,7 @@ public abstract class Game {
         this.board = board;
         this.players = players;
         this.turnTimeout = turnTimeout;
-        this.playersTurn = players[0];
+        this.currentPlayer = players[0];
     }
 
     public String getName() {

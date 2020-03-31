@@ -9,10 +9,10 @@ public class Reversi extends Game {
 
     public Reversi(Board board, Player playerWhite, Player playerBlack, int turnTimeout) {
         super(board, new Player[]{playerBlack, playerWhite}, turnTimeout);
-        board.setPiece(3, 3, playerWhite);
-        board.setPiece(4, 4, playerWhite);
-        board.setPiece(3, 4, playerBlack);
-        board.setPiece(4, 3, playerBlack);
+        board.setPlayer(3, 3, playerWhite);
+        board.setPlayer(4, 4, playerWhite);
+        board.setPlayer(3, 4, playerBlack);
+        board.setPlayer(4, 3, playerBlack);
 
     }
 

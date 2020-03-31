@@ -136,11 +136,6 @@ public abstract class Board {
 
     public abstract HashSet<Tile> getAvailableMoves(Player player);
 
-    public boolean hasPlayer(int row, int col) {
-        return grid[row][col].getPlayer() != null;
-
-    }
-
     public Player getPlayer(int row, int col) {
         return grid[row][col].getPlayer();
     }

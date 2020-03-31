@@ -21,7 +21,7 @@ public class Reversi extends Game {
 
     @Override
     public boolean isValidMove(int row, int col, Player player) {
-        return false;
+        return !getBoard().hasPlayer(row, col);
     }
 
     @Override
@@ -51,57 +51,6 @@ public class Reversi extends Game {
 
     @Override
     public HashSet<Tile> getAvailableMoves(Player player) {
-        HashSet<Tile> playerOwnedTiles = new HashSet<>();
-        HashSet<Tile> validMoves = new HashSet<>();
-        for (Tile[] column: super.getBoard().getGrid()){
-            for (Tile tile: column){
-                if (tile.getPlayer() != null){
-                    if (tile.getPlayer() == player){
-                        playerOwnedTiles.add(tile);
-                    }
-                }
-            }
-        }
-
-        for (Tile tile: playerOwnedTiles) {
-            HashSet<Tile> neighbours = getDirectNeighbours(super.getBoard(), tile);
-            for (Tile t : neighbours) {
-                if (t.getPlayer() != null) {
-                    if (t.getPlayer() != player) {
-                        Tile emptyTile = getEmptyTileInDirection(super.getBoard(), player, t.getCol(), t.getRow(), t.getCol() - tile.getCol(), t.getRow() - tile.getRow());
-                        if (emptyTile != null) {
-                            if (!validMoves.contains(emptyTile)) {
-                                validMoves.add(emptyTile);
-                            }
-                        }
-                   }
-               }
-            }
-        }
-
-        return validMoves;
-    }
-
-    private HashSet<Tile> getDirectNeighbours(Board board, Tile tile){
-        HashSet<Tile> neighbours = new HashSet<>();
-        for (int[] coord: Util.outerGrid){
-            if (board.isValidLocation(tile.getRow() + coord[0], tile.getCol() + coord[1])){
-                neighbours.add(board.getGrid()[tile.getRow() + coord[0]][tile.getCol() + coord[1]]);
-            }
-        }
-        return neighbours;
-    }
-
-    private Tile getEmptyTileInDirection(Board board,Player player, int startx, int starty, int dx, int dy) {
-        if (board.isValidLocation(startx + dx, starty + dy)) {
-            if (board.hasPlayer(startx + dx, starty + dy)) {
-               if (board.getGrid()[startx + dx][starty + dy].getPlayer() != player) {
-                    return getEmptyTileInDirection(board, player, startx + dx, starty + dy, dx, dy);
-                }
-            } else {
-                return board.getGrid()[startx + dx][ starty + dy];
-            }
-        }
-        return null;
+        return getBoard().getAvailableMoves(player);
     }
 }

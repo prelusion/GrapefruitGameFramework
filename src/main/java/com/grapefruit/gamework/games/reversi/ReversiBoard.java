@@ -4,77 +4,85 @@ import com.grapefruit.gamework.framework.Board;
 import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.Tile;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 
 public class ReversiBoard extends Board {
-    /**
-     * Constructor for making a new Board object.
-     *
-     * @param boardSize
-     */
+
     public ReversiBoard(int boardSize) {
         super(boardSize);
     }
 
     @Override
-    public void getAvailableMoves(Player player) {
-        for (int x = 0; x < grid.length - 1; x++) {
-            for (int y = 0; y < grid.length - 1; y++) {
-                if (grid[x][y].getPlayer() == player){
-                    System.out.println("Position: " + x +  " " + y);
-                    List<List<Integer>> validPositions = getAvailablePositions(x, y, player);
-                    if (validPositions.size() < 1) {
-                        System.out.println("No valid position found");
-                    } else {
-                        for (List<Integer> pos : validPositions) {
-                            System.out.println("Valid position: " + pos.get(0) + " " + pos.get(1));
-                        }
-                    }
+    public HashSet<Tile> getAvailableMoves(Player player) {
+        HashSet<Tile> playerOwnedTiles = new HashSet<>();
+        HashSet<Tile> validMoves = new HashSet<>();
 
+        for (int i = 0; i < grid.length - 1; i++) {
+            for (int j = 0; j < grid.length - 1; j++) {
+                Tile tile = grid[i][j];
+                if (tile.getPlayer() != null) {
+                    playerOwnedTiles.add(tile);
                 }
             }
         }
+
+        for (Tile tile : playerOwnedTiles) {
+            HashSet<Tile> neighbours = getDirectNeighbours(tile);
+
+            for (Tile neighbour : neighbours) {
+                if (neighbour.getPlayer() == null || neighbour.getPlayer() == player)
+                    continue;
+
+                Tile emptyTile = getEmptyTileInDirection(
+                        player,
+                        neighbour.getRow(),
+                        neighbour.getCol(),
+                        neighbour.getRow() - tile.getRow(),
+                        neighbour.getCol() - tile.getCol()
+                );
+
+                if (emptyTile == null) continue;
+
+                validMoves.add(emptyTile);
+            }
+        }
+
+        return validMoves;
     }
 
-    private List<List<Integer>> getAvailablePositions(int row, int col, Player player) {
-        List<List<Integer>> positions = new ArrayList<>();
+    private HashSet<Tile> getDirectNeighbours(Tile tile) {
+        HashSet<Tile> neighbours = new HashSet<>();
 
-        List<Integer> position = checkPosition(row - 1, col, player, true);
-        if (position != null) positions.add(position);
+        for (int[] coord : relativeNeighborGrid) {
+            int row = tile.getRow() + coord[0];
+            int col = tile.getCol() + coord[1];
 
-        return positions;
+            if (isValidLocation(row, col)) {
+                neighbours.add(grid[row][col]);
+            }
+        }
+
+        return neighbours;
     }
 
-    private List<Integer> checkPosition(int row, int col, Player player, boolean first) {
-        if (row < 0 || row > boardSize || col < 0 || col > boardSize) {
+    private Tile getEmptyTileInDirection(Player player, int startRow, int startCol, int dRow, int dCol) {
+        int col = startCol + dCol;
+        int row = startRow + dRow;
+
+        if (!isValidLocation(row, col)) {
             return null;
         }
 
-        Tile tile = grid[row][col];
-        Player positionPlayer = tile.getPlayer();
-
-        if (positionPlayer == player) {
-            return null;
-        } else if (!first && positionPlayer == null) {
-            ArrayList<Integer> position = new ArrayList<>();
-            position.add(row);
-            position.add(col);
-            return position;
-        } else if (positionPlayer != null){
-            return checkPosition(row - 1, col, player, false);
-        } else {
-            return null;
+        if (!hasPlayer(row, col)) {
+            return grid[row][col];
         }
-    }
 
-    static class Position {
-        int x;
-        int y;
+        Player playerFound = grid[row][col].getPlayer();
 
-        Position(int x, int y) {
-            this.x = x;
-            this.y = y;
+        if (playerFound != player) {
+            return getEmptyTileInDirection(player, row, col, dRow, dCol);
         }
+
+        return null;
     }
 }

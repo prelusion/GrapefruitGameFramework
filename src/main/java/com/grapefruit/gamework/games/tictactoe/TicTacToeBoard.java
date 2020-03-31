@@ -4,6 +4,7 @@ import com.grapefruit.gamework.framework.Board;
 import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.Tile;
 
+import java.util.HashSet;
 import java.util.List;
 
 public class TicTacToeBoard extends Board {
@@ -17,7 +18,7 @@ public class TicTacToeBoard extends Board {
     }
 
     @Override
-    public void getAvailableMoves(Player player) {
-
+    public HashSet<Tile> getAvailableMoves(Player player) {
+        return null;
     }
 }

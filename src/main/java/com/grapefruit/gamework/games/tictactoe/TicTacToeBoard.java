@@ -17,8 +17,15 @@ public class TicTacToeBoard extends Board {
         super(boardSize);
     }
 
+
     @Override
     public HashSet<Tile> getAvailableMoves(Player player) {
-        return null;
+        HashSet<Tile> tiles = new HashSet<>();
+        for (Tile[] row: this.getGrid()){
+            for (Tile tile: row){
+                tiles.add(tile);
+            }
+        }
+        return tiles;
     }
 }

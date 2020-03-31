@@ -55,12 +55,6 @@ public class TicTacToe extends Game {
 
     @Override
     public HashSet<Tile> getAvailableMoves(Player player) {
-        HashSet<Tile> tiles = new HashSet<>();
-        for (Tile[] column: getBoard().getGrid()){
-            for (Tile tile: column){
-                tiles.add(tile);
-            }
-        }
-        return tiles;
+        return getBoard().getAvailableMoves(player);
     }
 }

@@ -20,6 +20,8 @@ public abstract class Game {
      */
     private Board board;
 
+    private Player playersTurn;
+
     protected boolean finished = false;
     protected GameResult gameResult = GameResult.NONE;
 
@@ -30,7 +32,6 @@ public abstract class Game {
      * @param int boardSize, gives a grid size for the new board.
      */
     public Game(Board board, Player[] players, int turnTimeout) {
-
         this.board = board;
         this.players = players;
         this.turnTimeout = turnTimeout;
@@ -64,6 +65,13 @@ public abstract class Game {
         return player;
     }
 
+    public Player getPlayersTurn() {
+        return playersTurn;
+    }
+    public void setPlayersTurn(Player playersTurn) {
+        this.playersTurn = playersTurn;
+    }
+
     /**
      * @return Board, the games board.
      */
@@ -93,7 +101,6 @@ public abstract class Game {
 
     /**
      * Checks whether the game has a WINNER, a TIE or NONE of those.
-     *
      * @return GameResult, The result of the game so WINNER, TIE or NONE
      */
     public abstract GameResult checkGameResult();

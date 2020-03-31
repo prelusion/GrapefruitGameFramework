@@ -3,8 +3,7 @@ package com.grapefruit.gamework.games.reversi;
 import com.grapefruit.gamework.framework.Board;
 import com.grapefruit.gamework.framework.Game;
 import com.grapefruit.gamework.framework.Player;
-import com.grapefruit.gamework.framework.TeamColor;
-import com.grapefruit.gamework.games.reversi.Reversi;
+import com.grapefruit.gamework.framework.Colors;
 
 import java.util.Scanner;
 
@@ -13,8 +12,8 @@ public class CLI {
         int turnTimeout = 10;
         Scanner in = new Scanner(System.in);
         Board board = new ReversiBoard(9);
-        Player playerWhite = new Player("White", TeamColor.WHITE);
-        Player playerBlack = new Player("Black", TeamColor.BLACK);
+        Player playerWhite = new Player("White", Colors.WHITE);
+        Player playerBlack = new Player("Black", Colors.BLACK);
         Game game = new Reversi(board, playerWhite, playerBlack, turnTimeout);
 
         board.printBoard();

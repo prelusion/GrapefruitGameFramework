@@ -14,7 +14,7 @@ public abstract class Board {
     /**
      * Constructor for making a new Board object.
      *
-     * @param int, boardSize is given to give the board grid a size.
+     * @param boardSize, boardSize is given to give the board grid a size.
      */
     public Board(int boardSize) {
         this.boardSize = boardSize;
@@ -54,7 +54,7 @@ public abstract class Board {
     public boolean isBoardFull() {
         for (int i = 0; i < grid.length - 1; i++) {
             for (int j = 0; j < grid.length - 1; j++) {
-                if (grid[i][j] == null) {
+                if (grid[i][j].getPlayer() == null) {
                     return false;
                 }
             }

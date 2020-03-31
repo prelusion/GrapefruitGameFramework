@@ -6,7 +6,7 @@ import com.grapefruit.gamework.framework.Player;
 
 public class TicTacToeFactory extends GameFactory {
     public TicTacToe create(Player[] players) {
-        Board board = new TicTacToeBoard(3);
+        TicTacToeBoard board = new TicTacToeBoard(3);
         int turnTimeout = 10;
         return new TicTacToe(board, players, turnTimeout);
     }

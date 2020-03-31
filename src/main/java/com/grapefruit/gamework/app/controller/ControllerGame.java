@@ -18,6 +18,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.HashSet;
@@ -28,8 +29,15 @@ public class ControllerGame implements IController{
 
     private ModelGame model;
 
-
     private GridPane boardPane;
+
+    private HBox[][] boardTiles;
+
+    @FXML
+    private ImageView gameIcon;
+
+    @FXML
+    private Text gameName;
 
     @FXML
     private VBox gameBoard;
@@ -64,10 +72,14 @@ public class ControllerGame implements IController{
     public void setModel(IModel model) {
         this.model = (ModelGame) model;
         drawBoard(this.model.getGame().getBoard(), false);
-        onTurnCompleted();
+        gameName.setText(this.model.getAssets().getDisplayName());
+        gameIcon.setImage(this.model.getAssets().getIcon());
+
+        updateBooard();
     }
 
     private void drawBoard(Board board, boolean checkered){
+        boardTiles = new HBox[board.getGrid().length][board.getGrid()[0].length];
         GridPane gridPane = new GridPane();
         Tile[][] tiles = board.getGrid();
         int tileSize = 80;
@@ -76,19 +88,20 @@ public class ControllerGame implements IController{
 
         for (Tile[] column: tiles){
             for (Tile tile: column){
-                Pane pane;
+                HBox hbox;
                 if (checkered) {
                     if (toggle) {
-                        pane = createBoardTile(tileSize, Color.rgb(232, 214, 202), tile);
+                        hbox = createBoardTile(tileSize, Color.rgb(232, 214, 202), tile);
                         toggle = !toggle;
                     } else {
-                        pane = createBoardTile(tileSize, Color.rgb(59, 41, 29), tile);
+                        hbox = createBoardTile(tileSize, Color.rgb(59, 41, 29), tile);
                         toggle = !toggle;
                     }
                 } else {
-                    pane = createBoardTile(tileSize, Color.GREEN, tile);
+                    hbox = createBoardTile(tileSize, Color.GREEN, tile);
                 }
-                gridPane.add(pane, tile.getCol(), tile.getRow(), 1, 1);
+                gridPane.add(hbox, tile.getCol(), tile.getRow(), 1, 1);
+                boardTiles[tile.getCol()][tile.getRow()] = hbox;
             }
             toggle = !toggle;
         }
@@ -98,11 +111,12 @@ public class ControllerGame implements IController{
         boardPane = gridPane;
     }
 
-    private void onTurnCompleted(){
+    private void updateBooard(){
         markPossibleMoves(model.getGame().getAvailableMoves(model.getGame().getPlayers()[1]));
+        showPlayerPieces();
     }
 
-    private Pane createBoardTile(int size, Color color, Tile tile){
+    private HBox createBoardTile(int size, Color color, Tile tile){
         HBox hbox = new HBox();
         hbox.setAlignment(Pos.CENTER);
         hbox.setMinSize(size,size);
@@ -110,19 +124,6 @@ public class ControllerGame implements IController{
         Image background = ImageHelper.getRandomChunkOfImage(ImageRegistry.GREEN_BACKGROUND, 100, 100);
         hbox.setBackground(new Background(new BackgroundImage(background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
         hbox.getStyleClass().add(0, "game-board-tile");
-
-        if (model.getGame().getBoard().getPlayer(tile) != null){
-            Image pieceImage = model.getAssets().getPieceImageByColor(model.getGame().getBoard().getPlayer(tile).getColor());
-            ImageView imageView = new ImageView();
-            imageView.setFitHeight(65);
-            imageView.setFitWidth(65);
-            imageView.setImage(pieceImage);
-
-            if (hbox.getChildren().size() > 0){
-                hbox.getChildren().removeAll(hbox.getChildren());
-            }
-            hbox.getChildren().add(imageView);
-        }
 
         hbox.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
@@ -144,22 +145,46 @@ public class ControllerGame implements IController{
         return hbox;
     }
 
+    private void showPlayerPieces(){
+        Tile[][] tiles = model.getGame().getBoard().getGrid();
+        for (Tile[] column: tiles){
+            for (Tile tile: column){
+                if (model.getGame().getBoard().getPlayer(tile) != null) {
+                    Image pieceImage = model.getAssets().getPieceImageByColor(model.getGame().getBoard().getPlayer(tile).getColor());
+                    ImageView imageView = new ImageView();
+                    imageView.setFitHeight(65);
+                    imageView.setFitWidth(65);
+                    imageView.setImage(pieceImage);
+
+                    HBox hbox = boardTiles[tile.getCol()][tile.getRow()];
+                    if (hbox.getChildren().size() > 0) {
+                        hbox.getChildren().removeAll(hbox.getChildren());
+                    }
+                    hbox.getChildren().add(imageView);
+                }
+            }
+        }
+    }
+
     private void markPossibleMoves(HashSet<Tile> tiles){
-        for (Node node: boardPane.getChildren()){
-            HBox box = (HBox) node;
-            ObservableList<Node> nodes =  box.getChildren();
-            if (nodes.size() > 0) {
-                for (Node node2 : nodes) {
-                    if (node instanceof Circle) {
-                        boardPane.getChildren().remove(node2);
+        for (HBox[] column: boardTiles){
+            for (HBox hbox: column) {
+                ObservableList<Node> nodes = hbox.getChildren();
+                HashSet<Node> nodesToRemove = new HashSet<>();
+                if (nodes.size() > 0) {
+                    for (Node node : nodes) {
+                        if (node instanceof Circle) {
+                            nodesToRemove.add(node);
+                        }
                     }
                 }
+                hbox.getChildren().removeAll(nodesToRemove);
             }
         }
 
 
         for (Tile tile: tiles) {
-            HBox pane = (HBox) boardPane.getChildren().get(tile.getRow()*model.getGame().getBoard().getGrid().length + tile.getCol());
+            HBox pane = boardTiles[tile.getRow()][tile.getCol()];
             Circle marker = new Circle(32.5, Paint.valueOf("blue"));
             marker.setStroke(Color.BLACK);
             marker.setFill(Color.rgb(200, 200, 200, 0.5));
@@ -169,9 +194,8 @@ public class ControllerGame implements IController{
                 @Override
                 public void handle(MouseEvent event) {
                     //model.getGame().setMove(tile.getRow(), tile.getRow(), model.getGame().getPlayers()[0]);
-                    model.getGame().getBoard().setPiece(tile.getRow(), tile.getCol(), model.getGame().getPlayers()[0]);
-                    drawBoard(model.getGame().getBoard(), false );
-                    onTurnCompleted();
+                    model.getGame().getBoard().setPiece( tile.getCol(), tile.getRow(), model.getGame().getPlayers()[0]);
+                    showPlayerPieces();
                 }
             });
         }

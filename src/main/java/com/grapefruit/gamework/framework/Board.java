@@ -71,8 +71,8 @@ public class Board {
     }
 
     public boolean isValidLocation(int row, int col) {
-        if (grid.length > row){
-            if (grid[0].length > col){
+        if (grid.length > row && row >= 0){
+            if (grid[0].length > col && col >= 0){
                 return true;
             }
         }

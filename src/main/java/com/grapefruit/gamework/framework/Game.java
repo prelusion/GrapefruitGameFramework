@@ -110,7 +110,7 @@ public abstract class Game {
      * @param row
      * @param col
      */
-    public boolean setMove(int row, int col) {
+    public boolean doMove(int row, int col) {
         if (!isValidMove(row, col, currentPlayer)) {
             return false;
         }
@@ -123,6 +123,8 @@ public abstract class Game {
 
         return true;
     }
+
+    public abstract boolean playMove(int row, int col);
 
     /**
      * This function will check if the game should be ended or not.

@@ -5,7 +5,6 @@ public class Player {
     private String name;
     private Colors color;
     private int score = 0;
-    private int[] availableMoves;
 
     public Player(String name, Colors color) {
         this.name = name;

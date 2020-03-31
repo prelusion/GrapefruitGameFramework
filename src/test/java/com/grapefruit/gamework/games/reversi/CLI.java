@@ -36,7 +36,7 @@ public class CLI {
                 int col = Character.getNumericValue(line.charAt(1));
                 System.out.println("row: " + row + ", col: " + col);
 
-                success = game.setMove(row, col);
+                success = game.doMove(row, col);
                 if (!success) System.out.println("invalid move");
             }
 

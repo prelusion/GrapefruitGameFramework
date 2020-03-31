@@ -8,14 +8,15 @@ public class BoardTest {
     @Test
     public void printBoard() {
         Player[] players = new Player[2];
-        players[0] = new Player("Delano", Colors.BLACK);
+        players[0] = new Computer("Delano", Colors.BLACK, new MinimaxAlgorithm());
         players[1] = new Player("Lorenzo", Colors.WHITE);
         TicTacToe game = new TicTacToe(new TicTacToeBoard(3), players, 10);
-        game.nextPlayer();
-        
+        Computer AI = (Computer)players[0];
+        Tile tile = AI.calculateMove(game.getBoard());
+        game.doMove(tile.getRow(), tile.getCol());
+
         System.out.println("Turn 0 " + game.getCurrentPlayer().getColor().toString());
-        game.setMove(0, 2);
-        game.nextPlayer();
+        game.doMove(0, 2);
         game.getBoard().printBoard();
         if(game.finished) {
             showResult(game);
@@ -23,8 +24,7 @@ public class BoardTest {
         }
 
         System.out.println("Turn 1 " + game.getCurrentPlayer().getColor().toString());
-        game.setMove(0, 1);
-        game.nextPlayer();
+        game.doMove(0, 1);
         game.getBoard().printBoard();
         if(game.finished) {
             showResult(game);
@@ -32,16 +32,14 @@ public class BoardTest {
         }
 
         System.out.println("Turn 2 " + game.getCurrentPlayer().getColor().toString());
-        game.setMove(1, 2);
-        game.nextPlayer();
+        game.doMove(1, 2);
         game.getBoard().printBoard();
         if(game.finished) {
             showResult(game);
             System.exit(0);
         }
         System.out.println("Turn 3 " + game.getCurrentPlayer().getColor().toString());
-        game.setMove(1, 1);
-        game.nextPlayer();
+        game.doMove(1, 1);
         game.getBoard().printBoard();
         if(game.finished) {
             showResult(game);
@@ -50,18 +48,17 @@ public class BoardTest {
 
 
         System.out.println("Turn 4 " + game.getCurrentPlayer().getColor().toString());
-        game.setMove(2, 2);
-        game.nextPlayer();
+        game.doMove(2, 2);
         game.getBoard().printBoard();
         if(game.finished) {
             showResult(game);
             System.exit(0);
         }
 
+        AI.calculateMove(game.getBoard());
 
         System.out.println("Turn 5 " + game.getCurrentPlayer().getColor().toString());
-        game.setMove(2, 1);
-        game.nextPlayer();
+        game.doMove(2, 1);
         game.getBoard().printBoard();
         if(game.finished) {
             showResult(game);

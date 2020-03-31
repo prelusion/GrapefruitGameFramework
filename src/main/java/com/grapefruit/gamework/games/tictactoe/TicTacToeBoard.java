@@ -22,8 +22,10 @@ public class TicTacToeBoard extends Board {
     public HashSet<Tile> getAvailableMoves(Player player) {
         HashSet<Tile> tiles = new HashSet<>();
         for (Tile[] row: this.getGrid()){
-            for (Tile tile: row){
-                tiles.add(tile);
+            for (Tile tile: row) {
+                if(tile.getPlayer() == null) {
+                    tiles.add(tile);
+                }
             }
         }
         return tiles;

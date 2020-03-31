@@ -5,7 +5,6 @@ public class Player {
     private String name;
     private Colors color;
     private int score = 0;
-    private boolean hasTurn = false;
     private int[] availableMoves;
 
     public Player(String name, Colors color) {
@@ -39,18 +38,6 @@ public class Player {
      */
     public int getScore() {
         return score;
-    }
-
-    protected void setTurn(boolean turn) {
-        hasTurn = turn;
-    }
-
-    /**
-     * Check if player has the current turn.
-     * @return boolean of current turn
-     */
-    public boolean hasTurn() {
-        return hasTurn;
     }
 
     public String toString() {

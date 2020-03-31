@@ -91,18 +91,17 @@ public abstract class Game {
      */
     public abstract GameResult checkGameResult();
 
+
     /**
      * @param move, move is given to set the move on the board and apply all necessary changes.
      */
     public boolean setMove(int row, int col) {
         //Set the move of the player on the tile
-        getBoard().getGrid()[row][col].setPlayer(playersTurn);
-
         if (!isValidMove(row, col, playersTurn)) {
             return false;
         }
 
-        board.setPiece(row, col, playersTurn);
+        board.setPlayer(row, col, playersTurn);
         if (hasGameFinished()) {
             finished = true;
         }

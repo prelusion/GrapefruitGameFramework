@@ -19,7 +19,7 @@ public class TicTacToe extends Game {
 
     @Override
     public boolean isValidMove(int row, int col, Player player) {
-        return getBoard().hasPiece(row, col);
+        return !getBoard().hasPlayer(row, col);
     }
 
     @Override

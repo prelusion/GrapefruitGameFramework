@@ -111,8 +111,8 @@ public class ControllerGame implements IController{
         hbox.setBackground(new Background(new BackgroundImage(background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
         hbox.getStyleClass().add(0, "game-board-tile");
 
-        if (model.getGame().getBoard().getPlayer(tile) != null){
-            Image pieceImage = model.getAssets().getPieceImageByColor(model.getGame().getBoard().getPlayer(tile).getColor());
+        if (model.getGame().getBoard().getPlayer(tile.getRow(), tile.getCol()) != null){
+            Image pieceImage = model.getAssets().getPieceImageByColor(model.getGame().getBoard().getPlayer(tile.getRow(), tile.getCol()).getColor());
             ImageView imageView = new ImageView();
             imageView.setFitHeight(65);
             imageView.setFitWidth(65);

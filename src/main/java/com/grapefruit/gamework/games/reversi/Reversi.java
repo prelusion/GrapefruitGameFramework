@@ -10,12 +10,12 @@ import java.util.List;
 public class Reversi extends Game {
 
 
-    public Reversi(Board board, Player[] players, int turnTimeout) {
-        super(board, players, turnTimeout);
-        board.setPiece(3, 3, players[1]);
-        board.setPiece(4, 4, players[1]);
-        board.setPiece(3, 4, players[0]);
-        board.setPiece(4, 3, players[0]);
+    public Reversi(Board board, Player playerWhite, Player playerBlack, int turnTimeout) {
+        super(board, new Player[] {playerWhite, playerBlack}, turnTimeout);
+        board.setPiece(3, 3, playerWhite);
+        board.setPiece(4, 4, playerWhite);
+        board.setPiece(3, 4, playerBlack);
+        board.setPiece(4, 3, playerBlack);
 
     }
 

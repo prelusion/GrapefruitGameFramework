@@ -30,7 +30,7 @@ public class TicTacToe extends Game {
 
     @Override
     public boolean hasWinner() {
-        if(gameResult == GameResult.WINNER) {
+        if (gameResult == GameResult.WINNER) {
             return true;
         }
         return false;
@@ -38,7 +38,7 @@ public class TicTacToe extends Game {
 
     @Override
     public boolean isTie() {
-        if(gameResult == GameResult.TIE) {
+        if (gameResult == GameResult.TIE) {
             return true;
         }
         return false;
@@ -46,8 +46,8 @@ public class TicTacToe extends Game {
 
     @Override
     public GameResult checkGameResult() {
-        if(finished) {
-            if(Conditions.checkAllAdjacentConditions(getBoard())) {
+        if (finished) {
+            if (Conditions.checkAllAdjacentConditions(getBoard())) {
                 gameResult = GameResult.WINNER;
                 return gameResult;
             }
@@ -65,7 +65,7 @@ public class TicTacToe extends Game {
             return null;
         }
         Tile tile = Conditions.getTileOfAvailableConditions(getBoard());
-        if(tile != null) {
+        if (tile != null) {
             return tile.getPlayer();
         }
         return null;

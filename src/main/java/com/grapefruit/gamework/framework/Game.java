@@ -9,7 +9,7 @@ public abstract class Game {
      * List of players on the client side;
      */
     private Player[] players;
-
+    private int currentPlayerIndex = 0;
     /**
      * The time a player has for their turn
      */
@@ -30,13 +30,19 @@ public abstract class Game {
      * @param int boardSize, gives a grid size for the new board.
      */
     public Game(Board board, Player[] players, int turnTimeout) {
+
         this.board = board;
         this.players = players;
         this.turnTimeout = turnTimeout;
     }
 
-    public String getName() { return ""; }
-    public String getIcon() { return null; }
+    public String getName() {
+        return "";
+    }
+
+    public String getIcon() {
+        return null;
+    }
 
     /**
      * @return Arraylist<Player> of players.
@@ -45,8 +51,17 @@ public abstract class Game {
         return players;
     }
 
+    /**
+     * Next player is done in RR fashion, starting from index 0.
+     * If first player needs to be selected randomly, player array in constructor needs to be sorted randomly.
+     *
+     * @return
+     */
     public Player getNextPlayer() {
-        return null;
+        Player player = players[currentPlayerIndex];
+        currentPlayerIndex++;
+        if (currentPlayerIndex > players.length) currentPlayerIndex = 0;
+        return player;
     }
 
     /**
@@ -78,6 +93,7 @@ public abstract class Game {
 
     /**
      * Checks whether the game has a WINNER, a TIE or NONE of those.
+     *
      * @return GameResult, The result of the game so WINNER, TIE or NONE
      */
     public abstract GameResult checkGameResult();
@@ -86,8 +102,6 @@ public abstract class Game {
      * @param move, move is given to set the move on the board and apply all necessary changes.
      */
     public boolean setMove(int row, int col, Player player) {
-        Tile tile = new Tile(row, col, 1, player);
-
         if (!isValidMove(row, col, player)) {
             return false;
         }

@@ -4,13 +4,13 @@ import com.grapefruit.gamework.framework.Game;
 
 public class ModelGameEndDialog implements IModel {
 
-    private Game game;
+    private String resultMessage;
 
-    public ModelGameEndDialog(Game game){
-        this.game = game;
+    public ModelGameEndDialog(String gameResult){
+        this.resultMessage = gameResult;
     }
 
-    public Game getGame() {
-        return game;
+    public String getGameResult() {
+        return resultMessage;
     }
 }

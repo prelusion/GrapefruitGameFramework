@@ -1,9 +1,12 @@
 package com.grapefruit.gamework.app.controller;
 
+import com.grapefruit.gamework.app.GameApplication;
 import com.grapefruit.gamework.app.model.IModel;
 import com.grapefruit.gamework.app.model.ModelGameEndDialog;
 import com.grapefruit.gamework.app.model.ModelGameTile;
+import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -16,6 +19,9 @@ public class ControllerGameEndDialog implements IController{
 
     private ModelGameEndDialog model;
 
+
+    @FXML
+    private Button backButton;
 
     @FXML
     private Text gameEndMessage;
@@ -48,5 +54,10 @@ public class ControllerGameEndDialog implements IController{
     public void setModel(IModel model) {
         this.model = (ModelGameEndDialog) model;
         initialize();
+    }
+
+    @FXML
+    private void onBack(){
+        GameApplication.openLauncher();
     }
 }

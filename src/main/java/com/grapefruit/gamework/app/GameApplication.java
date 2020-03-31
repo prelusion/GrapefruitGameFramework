@@ -18,7 +18,7 @@ import javafx.stage.StageStyle;
 public class GameApplication extends Application {
 
 
-    private ModelMainWindow modelMainWindow;
+    private static ModelMainWindow modelMainWindow;
     private static Stage primaryStage;
     private static int WINDOW_START_HEIGHT = 600;
     private static int WINDOW_START_WIDTH = 1000;
@@ -49,7 +49,7 @@ public class GameApplication extends Application {
         primaryStage.show();
     }
 
-    public void openLauncher(){
+    public static void openLauncher(){
         modelMainWindow = new ModelMainWindow();
         primaryStage.setTitle("Grapefruit Gamework");
         primaryStage.setScene(new Scene(MainWindowFactory.build(modelMainWindow).getParent(), WINDOW_START_WIDTH, WINDOW_START_HEIGHT));

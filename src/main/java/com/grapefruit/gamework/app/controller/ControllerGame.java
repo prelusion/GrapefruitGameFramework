@@ -2,8 +2,10 @@ package com.grapefruit.gamework.app.controller;
 
 import com.grapefruit.gamework.app.model.IModel;
 import com.grapefruit.gamework.app.model.ModelGame;
+import com.grapefruit.gamework.app.model.ModelGameEndDialog;
 import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.app.util.ImageHelper;
+import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDialogFactory;
 import com.grapefruit.gamework.framework.*;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -79,7 +81,7 @@ public class ControllerGame implements IController{
         gameName.setText(this.model.getAssets().getDisplayName());
         gameIcon.setImage(this.model.getAssets().getIcon());
 
-        updateBooard();
+        updateBoard();
     }
 
     private void drawBoard(Board board, boolean checkered){
@@ -105,7 +107,7 @@ public class ControllerGame implements IController{
                     hbox = createBoardTile(tileSize, Color.GREEN, tile);
                 }
                 gridPane.add(hbox, tile.getCol(), tile.getRow(), 1, 1);
-                boardTiles[tile.getCol()][tile.getRow()] = hbox;
+                boardTiles[tile.getRow()][tile.getCol()] = hbox;
             }
             toggle = !toggle;
         }
@@ -115,10 +117,28 @@ public class ControllerGame implements IController{
         boardPane = gridPane;
     }
 
-    private void updateBooard(){
+    private void updateBoard(){
         showPlayerPieces();
         markPossibleMoves(model.getGame().getAvailableMoves(model.getGame().getCurrentPlayer()));
         currentTurnPlayer.setText(model.getGame().getCurrentPlayer().getName());
+        if (model.getGame().getGameResult() == Game.GameResult.TIE || model.getGame().getGameResult() == Game.GameResult.WINNER){
+            if (model.getGame().getGameResult() == Game.GameResult.WINNER){
+                if (true) {
+                    createEndDialog("You win!");
+                } else {
+                    createEndDialog("You lose!");
+                }
+            }
+            if (model.getGame().getGameResult() == Game.GameResult.TIE) {
+                if (true) {
+                    createEndDialog("Tie!");
+                }
+            }
+        }
+    }
+
+    private void createEndDialog(String message){
+        GameEndDialogFactory.build(new ModelGameEndDialog(message));
     }
 
     private HBox createBoardTile(int size, Color color, Tile tile){
@@ -161,7 +181,7 @@ public class ControllerGame implements IController{
                     imageView.setFitWidth(65);
                     imageView.setImage(pieceImage);
 
-                    HBox hbox = boardTiles[tile.getCol()][tile.getRow()];
+                    HBox hbox = boardTiles[tile.getRow()][tile.getCol()];
                     if (hbox.getChildren().size() > 0) {
                         hbox.getChildren().removeAll(hbox.getChildren());
                     }

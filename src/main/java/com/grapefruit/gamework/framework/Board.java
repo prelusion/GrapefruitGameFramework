@@ -56,9 +56,9 @@ public class Board {
      * @return boolean, Checks if the board is full. Return true if it is.
      */
     public boolean isBoardFull() {
-        for (int x = 0; x < grid.length-1; x++) {
-            for (int y = 0; y < grid.length-1; y++) {
-                if(grid[x][y] == null) {
+        for (int x = 0; x < grid.length; x++) {
+            for (int y = 0; y < grid.length; y++) {
+                if(grid[x][y].getPlayer() == null) {
                     return false;
                 }
             }
@@ -79,4 +79,24 @@ public class Board {
         return false;
     }
 
+
+    /**
+     * Helper function
+     */
+    public void printBoard() {
+        for (int x = 0; x < grid.length; x++) {
+            for (int y = 0; y < grid.length; y++) {
+                Player player = grid[x][y].getPlayer();
+                String value;
+                if (player == null) {
+                    value = "[ ]";
+                } else {
+                    value = String.format("[%s]", player.getColor().charAt(0));
+                }
+
+                System.out.print(value + " ");
+            }
+            System.out.println();
+        }
+    }
 }

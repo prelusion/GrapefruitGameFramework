@@ -25,7 +25,9 @@ public class TicTacToe extends Game {
 
     @Override
     public boolean hasGameFinished() {
-        return getBoard().isBoardFull();
+        System.out.println("Conditions  + " + Conditions.checkAllAdjacentConditions(getBoard()));
+        System.out.println("BoardFull  + " + getBoard().isBoardFull());
+        return getBoard().isBoardFull() || Conditions.checkAllAdjacentConditions(getBoard());
     }
 
     @Override
@@ -66,6 +68,7 @@ public class TicTacToe extends Game {
         }
         Tile tile = Conditions.getTileOfAvailableConditions(getBoard());
         if(tile != null) {
+            System.out.println("row " + tile.getRow() + " col " + tile.getCol());
             return tile.getPlayer();
         }
         return null;

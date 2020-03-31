@@ -24,8 +24,6 @@ public class TicTacToe extends Game {
 
     @Override
     public boolean hasGameFinished() {
-        System.out.println("Conditions  + " + Conditions.checkAllAdjacentConditions(getBoard()));
-        System.out.println("BoardFull  + " + getBoard().isBoardFull());
         return getBoard().isBoardFull() || Conditions.checkAllAdjacentConditions(getBoard());
     }
 

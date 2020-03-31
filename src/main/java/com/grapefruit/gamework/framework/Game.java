@@ -2,7 +2,6 @@ package com.grapefruit.gamework.framework;
 
 
 import java.util.HashSet;
-import java.util.List;
 
 public abstract class Game {
     /**
@@ -20,7 +19,7 @@ public abstract class Game {
      */
     private Board board;
 
-    private Player playersTurn;
+    private Player currentPlayer;
 
     protected boolean finished = false;
     protected GameResult gameResult = GameResult.NONE;
@@ -59,18 +58,18 @@ public abstract class Game {
      *
      * @return
      */
-    public Player getNextPlayer() {
-        Player player = players[currentPlayerIndex];
+    public void nextPlayer() {
+        currentPlayer = players[currentPlayerIndex];
         currentPlayerIndex++;
         if (currentPlayerIndex == players.length) currentPlayerIndex = 0;
-        return player;
     }
 
-    public Player getPlayersTurn() {
-        return playersTurn;
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
-    public void setPlayersTurn(Player playersTurn) {
-        this.playersTurn = playersTurn;
+
+    public void setCurrentPlayer(Player currentPlayerTurn) {
+        this.currentPlayer = currentPlayerTurn;
     }
 
     /**
@@ -102,20 +101,20 @@ public abstract class Game {
 
     /**
      * Checks whether the game has a WINNER, a TIE or NONE of those.
+     *
      * @return GameResult, The result of the game so WINNER, TIE or NONE
      */
     public abstract GameResult checkGameResult();
-
 
     /**
      * @param move, move is given to set the move on the board and apply all necessary changes.
      */
     public boolean setMove(int row, int col) {
-        if (!isValidMove(row, col, playersTurn)) {
+        if (!isValidMove(row, col, currentPlayer)) {
             return false;
         }
 
-        board.setPlayer(row, col, playersTurn);
+        board.setPlayer(row, col, currentPlayer);
         if (hasGameFinished()) {
             finished = true;
         }

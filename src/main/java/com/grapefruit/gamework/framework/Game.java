@@ -59,7 +59,7 @@ public abstract class Game {
      */
     public Player getNextPlayer() {
         Player player = players[currentPlayerIndex];
-        currentPlayerIndex--;
+        currentPlayerIndex++;
         if (currentPlayerIndex == players.length) currentPlayerIndex = 0;
         return player;
     }

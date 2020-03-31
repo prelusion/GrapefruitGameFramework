@@ -30,6 +30,8 @@ public class CLI {
             boolean success = false;
             while (!success) {
                 String line = in.nextLine();
+                if (line.charAt(0) == 'q') return;
+
                 int row = Character.getNumericValue(line.charAt(0));
                 int col = Character.getNumericValue(line.charAt(1));
                 System.out.println("row: " + row + ", col: " + col);

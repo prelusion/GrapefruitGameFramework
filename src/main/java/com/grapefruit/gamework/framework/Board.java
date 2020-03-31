@@ -74,7 +74,14 @@ public abstract class Board {
      * Helper function
      */
     public void printBoard() {
+        System.out.print("  ");
+        for (int m = 0; m < grid.length - 1; m++) {
+            System.out.print(" " + m + "  ");
+        }
+        System.out.println();
+
         for (int i = 0; i < grid.length - 1; i++) {
+            System.out.print(i + " ");
             for (int j = 0; j < grid.length - 1; j++) {
                 Player player = grid[i][j].getPlayer();
                 String value;
@@ -93,14 +100,21 @@ public abstract class Board {
     public void printAvailableMoves(Player player) {
         HashSet<Tile> moves = getAvailableMoves(player);
 
+        System.out.print("  ");
+        for (int m = 0; m < grid.length - 1; m++) {
+            System.out.print(" " + m + "  ");
+        }
+        System.out.println();
+
         for (int i = 0; i < grid.length - 1; i++) {
+            System.out.print(i + " ");
             for (int j = 0; j < grid.length - 1; j++) {
                 Player positionPlayer = grid[i][j].getPlayer();
                 String value;
 
                 Tile tileFound = null;
 
-                for (Tile tile : moves ){
+                for (Tile tile : moves) {
                     if (tile.getRow() == i && tile.getCol() == j) {
                         tileFound = tile;
                     }
@@ -131,7 +145,7 @@ public abstract class Board {
         return grid[row][col].getPlayer();
     }
 
-    private static int[][] initRelativeNeighborGrid(){
+    private static int[][] initRelativeNeighborGrid() {
         int[][] coords = new int[8][2];
 
         /* top left */

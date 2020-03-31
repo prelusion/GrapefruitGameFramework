@@ -1,17 +1,14 @@
 package com.grapefruit.gamework.games.reversi;
 
-import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.framework.*;
-import javafx.scene.image.Image;
 
 import java.util.HashSet;
-import java.util.List;
 
 public class Reversi extends Game {
 
 
     public Reversi(Board board, Player playerWhite, Player playerBlack, int turnTimeout) {
-        super(board, new Player[] {playerWhite, playerBlack}, turnTimeout);
+        super(board, new Player[]{playerBlack, playerWhite}, turnTimeout);
         board.setPiece(3, 3, playerWhite);
         board.setPiece(4, 4, playerWhite);
         board.setPiece(3, 4, playerBlack);

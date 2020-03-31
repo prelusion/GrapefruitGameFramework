@@ -4,6 +4,8 @@ import com.grapefruit.gamework.framework.Board;
 import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.Tile;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -17,6 +19,7 @@ public class TicTacToeBoard extends Board {
         super(boardSize);
     }
 
+
     @Override
     public void setMove(int row, int col, Player player) {
         setPlayer(row, col, player);
@@ -24,6 +27,10 @@ public class TicTacToeBoard extends Board {
 
     @Override
     public List<Tile> getAvailableMoves(Player player) {
-        return null;
+        ArrayList<Tile> tiles = new ArrayList<>();
+        for (Tile[] row: this.getGrid()){
+            tiles.addAll(Arrays.asList(row));
+        }
+        return tiles;
     }
 }

@@ -1,8 +1,9 @@
 package com.grapefruit.gamework.games.tictactoe;
 
 import com.grapefruit.gamework.framework.*;
+import com.grapefruit.gamework.framework.player.Player;
 
-import java.util.HashSet;
+import java.util.List;
 
 public class TicTacToe extends Game {
 
@@ -54,13 +55,29 @@ public class TicTacToe extends Game {
     }
 
     @Override
-    public HashSet<Tile> getAvailableMoves(Player player) {
-        HashSet<Tile> tiles = new HashSet<>();
-        for (Tile[] column: getBoard().getGrid()){
-            for (Tile tile: column){
-                tiles.add(tile);
-            }
+    public List<Tile> getAvailableMoves(Player player) {
+        return getBoard().getAvailableMoves(player);
+    }
+
+    @Override
+    public boolean doMove(int row, int col) {
+        if (!isValidMove(row, col, getCurrentPlayer())) {
+            return false;
         }
-        return tiles;
+
+        getBoard().setPlayer(row, col, getCurrentPlayer());
+        if (hasGameFinished()) {
+            finished = true;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean playMove(int row, int col){
+        if(doMove(row, col)) {
+            nextPlayer();
+            return true;
+        }
+        return false;
     }
 }

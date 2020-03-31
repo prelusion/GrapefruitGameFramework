@@ -1,6 +1,7 @@
 package com.grapefruit.gamework.framework;
 
-import java.util.HashSet;
+import java.util.List;
+import com.grapefruit.gamework.framework.player.Player;
 
 public abstract class Board {
 
@@ -37,6 +38,8 @@ public abstract class Board {
         return grid;
     }
 
+    public abstract void setMove(int row, int col, Player player);
+
     public void setPlayer(int row, int col, Player player) {
         grid[row][col] = new Tile(row, col, 1, player);
     }
@@ -45,6 +48,9 @@ public abstract class Board {
      * @return boolean, Checks if the tile chosen has a piece on it.
      */
     public boolean hasPlayer(int row, int col) {
+        if (!isValidLocation(row, col)) {
+            return false;
+        }
         return grid[row][col].getPlayer() != null;
     }
 
@@ -67,12 +73,7 @@ public abstract class Board {
     }
 
     public boolean isValidLocation(int row, int col) {
-        if (grid.length > row){
-            if (grid[0].length > col){
-                return true;
-            }
-        }
-        return false;
+        return row < grid.length && row >= 0 && col < grid.length && col >= 0;
     }
 
     /**
@@ -93,9 +94,8 @@ public abstract class Board {
                 if (player == null) {
                     value = "[ ]";
                 } else {
-                    value = String.format("[%s]", player.getColor().toString());
+                    value = String.format("[%s]", player.getColor().toString().charAt(0));
                 }
-
                 System.out.print(value + " ");
             }
             System.out.println();
@@ -103,7 +103,7 @@ public abstract class Board {
     }
 
     public void printAvailableMoves(Player player) {
-        HashSet<Tile> moves = getAvailableMoves(player);
+        List<Tile> moves = getAvailableMoves(player);
 
         System.out.print("  ");
         for (int m = 0; m < grid.length; m++) {
@@ -139,7 +139,7 @@ public abstract class Board {
         }
     }
 
-    public abstract HashSet<Tile> getAvailableMoves(Player player);
+    public abstract List<Tile> getAvailableMoves(Player player);
 
     public Player getPlayer(int row, int col) {
         return grid[row][col].getPlayer();

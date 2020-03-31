@@ -24,6 +24,7 @@ import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.HashSet;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ControllerGame implements IController{
@@ -190,7 +191,7 @@ public class ControllerGame implements IController{
         }
     }
 
-    private void markPossibleMoves(HashSet<Tile> tiles){
+    private void markPossibleMoves(List<Tile> tiles){
         for (HBox[] column: boardTiles){
             for (HBox hbox: column) {
                 ObservableList<Node> nodes = hbox.getChildren();
@@ -217,8 +218,8 @@ public class ControllerGame implements IController{
             marker.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    model.getGame().setMove(tile.getRow(), tile.getCol());
-                    updateBoard();
+                    model.getGame().doMove( tile.getCol(), tile.getRow());
+                    updateBooard();
                 }
             });
         }

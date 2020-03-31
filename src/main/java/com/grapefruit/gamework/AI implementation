@@ -1,0 +1,86 @@
+class Board {
+    /*
+    null: no piece
+    1: player A
+    2: player B
+    */
+    boardState = int[][];
+    boardScores = int[][];
+
+    Board():h
+        board = int[3][3];
+
+    function availableMoves(player):
+        moves = []
+        for each available move:
+            move = Move(x, y, boardScores[x, y])
+            moves.add(move)
+        return moves
+}
+
+
+class Move {
+    x
+    y
+    score
+}
+
+
+class AI {
+    score
+
+    function getBestMove(board, timeout, player):
+        board = clone(board)
+        move = minimax(3, board, score, true)
+        return move
+}
+
+
+function minimax(depth, board, score, alpha, beta, maximizingPlayer):
+    if depth == 0 or board.availableMoves() == 0:
+        return score
+
+    if maximizingPlayer
+        maxScore = -infinity
+        for each move of board.availableMoves():
+            board.setMove(move)
+            score += move.score
+            currentScore = minimax(depth - 1, board, score, alpha, beta, false)
+            maxScore = max(maxScore, currentScore)
+            alpha = max(alpha, currentScore)
+            if beta <= alpha
+                break
+       return maxScore
+    else:
+        minScore = +infinity
+        for each move of board.availableMoves():
+            board.setMove(move)
+            score += move.score
+            currentScore = minimax(depth - 1, board, score, alpha, beta, true, true)
+            minScore = min(minScore, currentScore)
+            beta = min(beta, currentScore)
+            if beta <= alpha
+                break
+        return minScore
+
+
+function minimaxThreaded(depth, board, score, alpha, beta, maximizingPlayer):
+    threads = []
+    if maximizingPlayer
+        maxScore = -infinity
+        for each move of board.availableMoves():
+            t = thread(() -> return minimax(depth - 1, board, score, alpha, beta, true))
+            threads.add(t)
+        for t in threads:
+            t.join()
+            maxScore = max(maxScore, t.result())
+        return maxScore
+    else:
+        minScore = +infinity
+        for each move of board.availableMoves():
+            t = thread(() -> return minimax(depth - 1, board, score, alpha, beta, false))
+            threads.add(t)
+        for t in threads:
+            t.join()
+            minScore = min(minScore, t.result())
+        return minScore

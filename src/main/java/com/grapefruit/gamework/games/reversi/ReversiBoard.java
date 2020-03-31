@@ -1,10 +1,12 @@
 package com.grapefruit.gamework.games.reversi;
 
 import com.grapefruit.gamework.framework.Board;
-import com.grapefruit.gamework.framework.Player;
+import com.grapefruit.gamework.framework.player.Player;
 import com.grapefruit.gamework.framework.Tile;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class ReversiBoard extends Board {
 
@@ -13,9 +15,9 @@ public class ReversiBoard extends Board {
     }
 
     @Override
-    public HashSet<Tile> getAvailableMoves(Player player) {
+    public List<Tile> getAvailableMoves(Player player) {
         HashSet<Tile> playerOwnedTiles = new HashSet<>();
-        HashSet<Tile> validMoves = new HashSet<>();
+        ArrayList<Tile> validMoves = new ArrayList<>();
 
         for (int i = 0; i < grid.length - 1; i++) {
             for (int j = 0; j < grid.length - 1; j++) {
@@ -43,7 +45,8 @@ public class ReversiBoard extends Board {
 
                 if (emptyTile == null) continue;
 
-                validMoves.add(emptyTile);
+                if(!validMoves.contains(emptyTile))
+                    validMoves.add(emptyTile);
             }
         }
 
@@ -82,5 +85,57 @@ public class ReversiBoard extends Board {
         }
 
         return getEmptyTileInDirection(player, row, col, dRow, dCol);
+    }
+
+    private List<Tile> getTilesToTurn(Player player, int startRow, int startCol, int dRow, int dCol) {
+        ArrayList<Tile> searchOrder = new ArrayList<>();
+        return getTilesToTurn(player, startRow, startCol, dRow, dCol, searchOrder);
+    }
+
+    private List<Tile> getTilesToTurn(Player player, int row, int col, int dRow, int dCol, List<Tile> searchOrder) {
+        if (!isValidLocation(row, col)) {
+            return null;
+        }
+
+        if (!hasPlayer(row, col)) {
+            return null;
+        }
+
+        if (grid[row][col].getPlayer() == player) {
+            return searchOrder;
+        }
+
+        searchOrder.add(new Tile(row, col, 1, player));
+
+        return getTilesToTurn(player, row + dRow, col + dCol, dRow, dCol, searchOrder);
+    }
+
+    public void setMove(int row, int col, Player player) {
+        Tile tile = new Tile(row, col, 1, player);
+
+        grid[row][col] = tile;
+
+        HashSet<Tile> neighbours = getDirectNeighbours(tile);
+
+        for (Tile neighbour : neighbours) {
+            if (neighbour.getPlayer() == null || neighbour.getPlayer() == player)
+                continue;
+
+            List<Tile> tiles = getTilesToTurn(
+                    player,
+                    neighbour.getRow(),
+                    neighbour.getCol(),
+                    neighbour.getRow() - tile.getRow(),
+                    neighbour.getCol() - tile.getCol()
+            );
+
+            if (tiles == null) {
+                continue;
+            }
+
+            for (Tile t : tiles) {
+                grid[t.getRow()][t.getCol()] = t;
+            }
+        }
     }
 }

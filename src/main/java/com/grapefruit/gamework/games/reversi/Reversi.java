@@ -54,4 +54,5 @@ public class Reversi extends Game {
     public HashSet<Tile> getAvailableMoves(Player player) {
         return getBoard().getAvailableMoves(player);
     }
+
 }

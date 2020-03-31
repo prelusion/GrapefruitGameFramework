@@ -107,7 +107,8 @@ public abstract class Game {
     public abstract void calculateGameResult();
 
     /**
-     * @param move, move is given to set the move on the board and apply all necessary changes.
+     * @param row
+     * @param col
      */
     public boolean setMove(int row, int col) {
         if (!isValidMove(row, col, currentPlayer)) {

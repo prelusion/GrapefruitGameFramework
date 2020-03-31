@@ -26,8 +26,8 @@ public abstract class Board {
      * Creates a board of given size with strategicValues given from the game implmentation. (TODO)
      */
     public void createBoard() {
-        for (int i = 0; i < grid.length - 1; i++) {
-            for (int j = 0; j < grid.length - 1; j++) {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid.length; j++) {
                 grid[i][j] = new Tile(i, j, /* TODO  */ 0);
             }
         }
@@ -93,7 +93,7 @@ public abstract class Board {
                 if (player == null) {
                     value = "[ ]";
                 } else {
-                    value = String.format("[%s]", player.getColor().charAt(0));
+                    value = String.format("[%s]", player.getColor().toString());
                 }
 
                 System.out.print(value + " ");
@@ -140,11 +140,6 @@ public abstract class Board {
     }
 
     public abstract HashSet<Tile> getAvailableMoves(Player player);
-
-    public boolean hasPlayer(int row, int col) {
-        return grid[row][col].getPlayer() != null;
-
-    }
 
     public Player getPlayer(int row, int col) {
         return grid[row][col].getPlayer();

@@ -153,8 +153,8 @@ public class ControllerGame implements IController{
         Tile[][] tiles = model.getGame().getBoard().getGrid();
         for (Tile[] column: tiles){
             for (Tile tile: column){
-                if (model.getGame().getBoard().getPlayer(tile) != null) {
-                    Image pieceImage = model.getAssets().getPieceImageByColor(model.getGame().getBoard().getPlayer(tile).getColor());
+                if (model.getGame().getBoard().getPlayer(tile.getRow(), tile.getCol()) != null) {
+                    Image pieceImage = model.getAssets().getPieceImageByColor(model.getGame().getBoard().getPlayer(tile.getRow(), tile.getCol()).getColor());
                     ImageView imageView = new ImageView();
                     imageView.setFitHeight(65);
                     imageView.setFitWidth(65);
@@ -181,8 +181,8 @@ public class ControllerGame implements IController{
                             nodesToRemove.add(node);
                         }
                     }
+                    hbox.getChildren().removeAll(nodesToRemove);
                 }
-                hbox.getChildren().removeAll(nodesToRemove);
             }
         }
 

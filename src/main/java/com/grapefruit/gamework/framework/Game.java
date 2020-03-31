@@ -38,6 +38,7 @@ public abstract class Game {
         this.players = players;
         this.turnTimeout = turnTimeout;
         this.currentPlayer = players[0];
+        nextPlayer();
     }
 
     public String getName() {

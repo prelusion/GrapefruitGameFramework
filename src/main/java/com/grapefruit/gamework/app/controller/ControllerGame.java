@@ -40,6 +40,9 @@ public class ControllerGame implements IController{
     private Text gameName;
 
     @FXML
+    private Text currentTurnPlayer;
+
+    @FXML
     private VBox gameBoard;
 
     @FXML
@@ -112,8 +115,9 @@ public class ControllerGame implements IController{
     }
 
     private void updateBooard(){
-        markPossibleMoves(model.getGame().getAvailableMoves(model.getGame().getPlayers()[1]));
         showPlayerPieces();
+        markPossibleMoves(model.getGame().getAvailableMoves(model.getGame().getPlayersTurn()));
+        currentTurnPlayer.setText(model.getGame().getPlayersTurn().getName());
     }
 
     private HBox createBoardTile(int size, Color color, Tile tile){
@@ -193,9 +197,8 @@ public class ControllerGame implements IController{
             marker.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    //model.getGame().setMove(tile.getRow(), tile.getRow(), model.getGame().getPlayers()[0]);
-                    model.getGame().getBoard().setPiece( tile.getCol(), tile.getRow(), model.getGame().getPlayers()[0]);
-                    showPlayerPieces();
+                    model.getGame().setMove( tile.getCol(), tile.getRow());
+                    updateBooard();
                 }
             });
         }

@@ -23,7 +23,7 @@ public class TicTacToeAssets extends Assets {
     }
 
     @Override
-    public Image getPieceImageByColor(Colors color) {
+    public Image getPieceImageByColor(TeamColor color) {
         switch (color) {
             case BLACK:
                 return PIECE_BLACK;

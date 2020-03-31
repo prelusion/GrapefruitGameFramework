@@ -91,7 +91,7 @@ public class Board {
                 if (player == null) {
                     value = "[ ]";
                 } else {
-                    value = String.format("[%s]", player.getColor().charAt(0));
+                    value = String.format("[%s]", player.getColor().toString());
                 }
 
                 System.out.print(value + " ");

@@ -26,7 +26,21 @@
                      </font>
                   </Text>
                </children></VBox>
-            <VBox prefHeight="150.0" prefWidth="201.0" />
+            <HBox alignment="CENTER">
+               <children>
+                  <VBox alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="98.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Currently playing:" />
+                     </children>
+                  </VBox>
+                  <Pane prefHeight="200.0" prefWidth="12.0" />
+                  <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Text fx:id="currentTurnPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="playername" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
             <Pane minHeight="-Infinity" prefHeight="50.0" prefWidth="201.0" />
          </children>
       </VBox>

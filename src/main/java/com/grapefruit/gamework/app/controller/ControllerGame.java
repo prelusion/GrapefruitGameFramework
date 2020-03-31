@@ -169,7 +169,7 @@ public class ControllerGame implements IController{
                 @Override
                 public void handle(MouseEvent event) {
                     //model.getGame().setMove(tile.getRow(), tile.getRow(), model.getGame().getPlayers()[0]);
-                    model.getGame().getBoard().setPiece(tile.getRow(), tile.getCol(), model.getGame().getPlayers()[0]);
+                    model.getGame().getBoard().setPlayer(tile.getRow(), tile.getCol(), model.getGame().getPlayers()[0]);
                     drawBoard(model.getGame().getBoard(), false );
                     onTurnCompleted();
                 }

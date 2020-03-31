@@ -7,23 +7,28 @@ import javafx.scene.image.Image;
 import java.util.HashSet;
 import java.util.List;
 
+
 public class Reversi extends Game {
 
-    public static Image IMAGE_BLACK_PIECE = ImageRegistry.GAME_PIECE_BLACK;
-    public static Image IMAGE_WHITE_PIECE = ImageRegistry.GAME_PIECE_WHITE;
+//    public static Image IMAGE_BLACK_PIECE = ImageRegistry.GAME_PIECE_BLACK;
+//    public static Image IMAGE_WHITE_PIECE = ImageRegistry.GAME_PIECE_WHITE;
 
-    public Reversi(Board board, Player[] players, int turnTimeout) {
-        super(board, players, turnTimeout);
-        board.setPiece(3, 3, players[0]);
-        board.setPiece(4, 4, players[1]);
-        board.setPiece(3, 4, players[0]);
-        board.setPiece(4, 3, players[1]);
-
+    public Reversi(Board board, Player playerWhite, Player playerBlack, int turnTimeout) {
+        super(board, new Player[] {playerWhite, playerBlack}, turnTimeout);
+        board.setPiece(3, 3, playerWhite);
+        board.setPiece(4, 4, playerWhite);
+        board.setPiece(3, 4, playerBlack);
+        board.setPiece(4, 3, playerBlack);
     }
 
     @Override
     public boolean isValidMove(int row, int col, Player player) {
-        return false;
+        return !getBoard().hasPiece(row, col);
+    }
+
+    @Override
+    public GameResult checkGameResult() {
+        return null;
     }
 
     @Override

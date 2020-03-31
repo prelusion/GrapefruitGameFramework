@@ -21,7 +21,11 @@ public class Reversi extends Game {
 
     @Override
     public boolean isValidMove(int row, int col, Player player) {
-        return !getBoard().hasPlayer(row, col);
+        HashSet<Tile> validMoves = getBoard().getAvailableMoves(player);
+        for (Tile tile : validMoves) {
+            if (tile.getRow() == row && tile.getCol() == col) return true;
+        }
+        return false;
     }
 
     @Override

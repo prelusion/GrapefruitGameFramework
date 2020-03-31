@@ -27,13 +27,16 @@ public class CLI {
             board.printAvailableMoves(currentPlayer);
             System.out.println("--------------------------------------");
 
-            String line = in.nextLine();
-            int row = Character.getNumericValue(line.charAt(0));
-            int col = Character.getNumericValue(line.charAt(1));
-            System.out.println("row: " + row + ", col: " + col);
+            boolean success = false;
+            while (!success) {
+                String line = in.nextLine();
+                int row = Character.getNumericValue(line.charAt(0));
+                int col = Character.getNumericValue(line.charAt(1));
+                System.out.println("row: " + row + ", col: " + col);
 
-            boolean success = game.setMove(row, col, currentPlayer);
-            if (!success) System.out.println("invalid move");
+                success = game.setMove(row, col, currentPlayer);
+                if (!success) System.out.println("invalid move");
+            }
 
             board.printBoard();
         }

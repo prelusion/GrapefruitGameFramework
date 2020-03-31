@@ -1,6 +1,7 @@
 package com.grapefruit.gamework.framework;
 
 
+import java.util.HashSet;
 import java.util.List;
 
 public abstract class Game {
@@ -8,7 +9,7 @@ public abstract class Game {
      * List of players on the client side;
      */
     private Player[] players;
-
+    private int currentPlayerIndex = 0;
     /**
      * The time a player has for their turn
      */
@@ -36,8 +37,13 @@ public abstract class Game {
         this.turnTimeout = turnTimeout;
     }
 
-    public String getName() { return ""; }
-    public String getIcon() { return null; }
+    public String getName() {
+        return "";
+    }
+
+    public String getIcon() {
+        return null;
+    }
 
     /**
      * @return Arraylist<Player> of players.
@@ -46,9 +52,17 @@ public abstract class Game {
         return players;
     }
 
-    public void nextPlayer() {
-        playersTurn = ((playersTurn == players[0]) ? players[1] : players[0]);
-        playersTurn.setTurn(true);
+    /**
+     * Next player is done in RR fashion, starting from index 0.
+     * If first player needs to be selected randomly, player array in constructor needs to be sorted randomly.
+     *
+     * @return
+     */
+    public Player getNextPlayer() {
+        Player player = players[currentPlayerIndex];
+        currentPlayerIndex++;
+        if (currentPlayerIndex == players.length) currentPlayerIndex = 0;
+        return player;
     }
 
     public Player getPlayersTurn() {
@@ -94,20 +108,17 @@ public abstract class Game {
     /**
      * @param move, move is given to set the move on the board and apply all necessary changes.
      */
-    public boolean setMove(int row, int col) {
-        //Set the move of the player on the tile
-        getBoard().getGrid()[row][col].setPlayer(playersTurn);
-
-        if (!isValidMove(row, col, playersTurn)) {
+    public boolean setMove(int row, int col, Player player) {
+        if (!isValidMove(row, col, player)) {
             return false;
         }
 
-        board.setPiece(row, col, playersTurn);
+        board.setPiece(row, col, player);
+
         if (hasGameFinished()) {
             finished = true;
         }
 
-        nextPlayer();
         return true;
     }
 
@@ -140,5 +151,5 @@ public abstract class Game {
      * @param player, searches available moves for that specific player.
      * @return Move[] of available moves for the given player.
      */  //TODO
-    public abstract List<Tile> getAvailableMoves(Player player);
+    public abstract HashSet<Tile> getAvailableMoves(Player player);
 }

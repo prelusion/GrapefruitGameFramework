@@ -1,11 +1,10 @@
 package com.grapefruit.gamework.games.tictactoe;
 
 import com.grapefruit.gamework.framework.Board;
-import com.grapefruit.gamework.framework.Player;
+import com.grapefruit.gamework.framework.player.Player;
 import com.grapefruit.gamework.framework.Tile;
 
 import java.util.HashSet;
-import java.util.List;
 
 public class TicTacToeBoard extends Board {
     /**

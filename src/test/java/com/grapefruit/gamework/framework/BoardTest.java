@@ -1,5 +1,7 @@
 package com.grapefruit.gamework.framework;
 
+import com.grapefruit.gamework.framework.player.AIPlayer;
+import com.grapefruit.gamework.framework.player.Player;
 import com.grapefruit.gamework.games.tictactoe.TicTacToe;
 import com.grapefruit.gamework.games.tictactoe.TicTacToeBoard;
 import org.junit.Test;
@@ -8,12 +10,12 @@ public class BoardTest {
     @Test
     public void printBoard() {
         Player[] players = new Player[2];
-        players[0] = new Computer("Delano", Colors.BLACK, new MinimaxAlgorithm());
-        players[1] = new Player("Lorenzo", Colors.WHITE);
+        players[0] = new AIPlayer("Delano", Colors.BLACK, new MinimaxAlgorithm());
+        players[1] = new Player("Lorenzo", Colors.WHITE, true);
         TicTacToe game = new TicTacToe(new TicTacToeBoard(3), players, 10);
-        Computer AI = (Computer)players[0];
-        Tile tile = AI.calculateMove(game.getBoard());
-        game.doMove(tile.getRow(), tile.getCol());
+        AIPlayer AI = (AIPlayer)players[0];
+//        Tile tile = AI.calculateMove(game.getBoard());
+//        game.doMove(tile.getRow(), tile.getCol());
 
         System.out.println("Turn 0 " + game.getCurrentPlayer().getColor().toString());
         game.doMove(0, 2);

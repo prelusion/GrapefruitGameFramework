@@ -1,6 +1,7 @@
 package com.grapefruit.gamework.games.tictactoe;
 
 import com.grapefruit.gamework.framework.*;
+import com.grapefruit.gamework.framework.player.Player;
 
 import java.util.HashSet;
 

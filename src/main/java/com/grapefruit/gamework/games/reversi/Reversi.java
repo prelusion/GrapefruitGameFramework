@@ -1,6 +1,7 @@
 package com.grapefruit.gamework.games.reversi;
 
 import com.grapefruit.gamework.framework.*;
+import com.grapefruit.gamework.framework.player.Player;
 
 import java.util.HashSet;
 
@@ -28,6 +29,11 @@ public class Reversi extends Game {
     @Override
     public void calculateGameResult() {
 
+    }
+
+    @Override
+    public boolean playMove(int row, int col) {
+        return false;
     }
 
     @Override

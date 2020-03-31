@@ -1,12 +1,6 @@
 package com.grapefruit.gamework.games.reversi;
 
-import com.grapefruit.gamework.framework.Board;
-import com.grapefruit.gamework.framework.Game;
-import com.grapefruit.gamework.framework.Player;
-import com.grapefruit.gamework.framework.Tile;
 import org.junit.Test;
-
-import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 

@@ -28,45 +28,39 @@ public class TicTacToe extends Game {
     }
 
     @Override
-    public boolean hasWinner() {
-        return gameResult == GameResult.WINNER;
-    }
-
-    @Override
-    public boolean isTie() {
-        return gameResult == GameResult.TIE;
-    }
-
-    @Override
-    public GameResult checkGameResult() {
-        if (finished) {
-            if (Conditions.checkAllAdjacentConditions(getBoard())) {
-                gameResult = GameResult.WINNER;
-                return gameResult;
-            }
+    public void calculateGameResult() {
+        if (!finished)
+            gameResult = GameResult.NONE;
+        if (Conditions.checkAllAdjacentConditions(getBoard()))
+            gameResult = GameResult.WINNER;
+        else
             gameResult = GameResult.TIE;
-            return gameResult;
-        }
-        gameResult = GameResult.NONE;
-        return gameResult;
     }
 
 
     @Override
     public Player getWinner() {
-        if (checkGameResult() == GameResult.NONE) {
+        if (getGameResult() == GameResult.NONE) {
             return null;
         }
+
         Tile tile = Conditions.getTileOfAvailableConditions(getBoard());
         if (tile != null) {
             System.out.println("row " + tile.getRow() + " col " + tile.getCol());
             return tile.getPlayer();
         }
+
         return null;
     }
 
     @Override
     public HashSet<Tile> getAvailableMoves(Player player) {
-        return null;
+        HashSet<Tile> tiles = new HashSet<>();
+        for (Tile[] column: getBoard().getGrid()){
+            for (Tile tile: column){
+                tiles.add(tile);
+            }
+        }
+        return tiles;
     }
 }

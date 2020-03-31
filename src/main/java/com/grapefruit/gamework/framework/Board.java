@@ -67,7 +67,12 @@ public abstract class Board {
     }
 
     public boolean isValidLocation(int row, int col) {
-        return row >= 0 && row <= boardSize && col >= 0 && col <= boardSize;
+        if (grid.length > row){
+            if (grid[0].length > col){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -88,7 +93,7 @@ public abstract class Board {
                 if (player == null) {
                     value = "[ ]";
                 } else {
-                    value = String.format("[%s]", player.getColor().toString().charAt(0));
+                    value = String.format("[%s]", player.getColor().toString());
                 }
 
                 System.out.print(value + " ");

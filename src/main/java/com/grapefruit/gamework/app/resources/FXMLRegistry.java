@@ -8,5 +8,6 @@ public abstract class FXMLRegistry {
     public static String TABLE_SETTING = "tablesetting.fxml";
     public static String SELECTED_GAME = "selectedgame.fxml";
     public static String GAME_WINDOW = "gamewindow.fxml";
+    public static String GAME_END_DIALOG = "gameenddialog.fxml";
     
 }

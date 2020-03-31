@@ -46,8 +46,12 @@ public final class Conditions {
         for (int x = 0; x < grid.length; x++) {
             fullRow = true;
             for (int y = 1; y < grid.length; y++) {
-                if (!grid[x][y].getPlayer().equals(grid[x][y - 1].getPlayer())) {
+                if(grid[x][y].getPlayer() == null) {
                     fullRow = false;
+                } else {
+                    if (!grid[x][y].getPlayer().equals(grid[x][y - 1].getPlayer())) {
+                        fullRow = false;
+                    }
                 }
             }
             if (fullRow) {
@@ -68,8 +72,12 @@ public final class Conditions {
         for (int x = 0; x < grid.length; x++) {
             fullRow = true;
             for (int y = 1; y < grid.length; y++) {
-                if (!grid[x][y].getPlayer().equals(grid[x][y - 1].getPlayer())) {
+                if(grid[x][y].getPlayer() == null) {
                     fullRow = false;
+                } else {
+                    if (!grid[x][y].getPlayer().equals(grid[x][y - 1].getPlayer())) {
+                        fullRow = false;
+                    }
                 }
             }
             if (fullRow) {
@@ -90,8 +98,12 @@ public final class Conditions {
         for (int y = 0; y < grid.length; y++) {
             fullColumn = true;
             for (int x = 1; x < grid.length; x++) {
-                if (!grid[x][y].getPlayer().equals(grid[x - 1][y].getPlayer())) {
+                if(grid[x][y].getPlayer() == null) {
                     fullColumn = false;
+                } else {
+                    if (!grid[x][y].getPlayer().equals(grid[x - 1][y].getPlayer())) {
+                        fullColumn = false;
+                    }
                 }
             }
             if (fullColumn) {
@@ -112,8 +124,12 @@ public final class Conditions {
         for (int y = 0; y < grid.length; y++) {
             fullColumn = true;
             for (int x = 1; x < grid.length; x++) {
-                if (!grid[x][y].getPlayer().equals(grid[x - 1][y].getPlayer())) {
+                if(grid[x][y].getPlayer() == null) {
                     fullColumn = false;
+                } else {
+                    if (!grid[x][y].getPlayer().equals(grid[x - 1][y].getPlayer())) {
+                        fullColumn = false;
+                    }
                 }
             }
             if (fullColumn) {
@@ -132,10 +148,14 @@ public final class Conditions {
         Tile[][] grid = board.getGrid();
         boolean firstFullDiagonal = true;
         int y;
-        for (int x = 1; x < grid.length - 1; x++) {
+        for (int x = 1; x < grid.length; x++) {
             y = x;
-            if (!grid[x - 1][y - 1].getPlayer().equals(grid[x][y].getPlayer())) {
+            if(grid[x - 1][y - 1].getPlayer() == null) {
                 firstFullDiagonal = false;
+            } else {
+                if (!grid[x - 1][y - 1].getPlayer().equals(grid[x][y].getPlayer())) {
+                    firstFullDiagonal = false;
+                }
             }
         }
         if (firstFullDiagonal) {
@@ -145,8 +165,12 @@ public final class Conditions {
         boolean secondFullDiagonal = true;
         for (int x = grid.length - 1; x > 0; x--) {
             y = (x % (grid.length - 1));
-            if (!grid[x][y].getPlayer().equals(grid[x - 1][y + 1].getPlayer())) {
+            if(grid[x][y].getPlayer() == null) {
                 secondFullDiagonal = false;
+            } else {
+                if (!grid[x][y].getPlayer().equals(grid[x - 1][y + 1].getPlayer())) {
+                    secondFullDiagonal = false;
+                }
             }
         }
         if (secondFullDiagonal) {
@@ -164,10 +188,14 @@ public final class Conditions {
         Tile[][] grid = board.getGrid();
         boolean firstFullDiagonal = true;
         int y;
-        for (int x = 1; x < grid.length - 1; x++) {
+        for (int x = 1; x < grid.length; x++) {
             y = x;
-            if (!grid[x - 1][y - 1].getPlayer().equals(grid[x][y].getPlayer())) {
+            if(grid[x - 1][y - 1].getPlayer() == null) {
                 firstFullDiagonal = false;
+            } else {
+                if (!grid[x - 1][y - 1].getPlayer().equals(grid[x][y].getPlayer())) {
+                    firstFullDiagonal = false;
+                }
             }
         }
         if (firstFullDiagonal) {
@@ -178,12 +206,16 @@ public final class Conditions {
         boolean secondFullDiagonal = true;
         for (int x = grid.length - 1; x > 0; x--) {
             y = (x % (grid.length - 1));
-            if (!grid[x][y].getPlayer().equals(grid[x - 1][y + 1].getPlayer())) {
+            if(grid[x][y].getPlayer() == null) {
                 secondFullDiagonal = false;
+            } else {
+                if (!grid[x][y].getPlayer().equals(grid[x - 1][y + 1].getPlayer())) {
+                    secondFullDiagonal = false;
+                }
             }
         }
         if (secondFullDiagonal) {
-            return grid[grid.length - 2][0];
+            return grid[grid.length - 1][0];
         }
         return null;
     }

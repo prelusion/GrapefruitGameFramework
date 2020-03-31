@@ -46,7 +46,7 @@ public class Board {
     public boolean isBoardFull() {
         for (int x = 0; x < grid.length; x++) {
             for (int y = 0; y < grid.length; y++) {
-                if(grid[x][y] == null) {
+                if(grid[x][y].getPlayer() == null) {
                     return false;
                 }
             }

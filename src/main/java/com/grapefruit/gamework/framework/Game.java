@@ -105,16 +105,16 @@ public abstract class Game {
      */
     public abstract GameResult checkGameResult();
 
+
     /**
      * @param move, move is given to set the move on the board and apply all necessary changes.
      */
-    public boolean setMove(int row, int col, Player player) {
-        if (!isValidMove(row, col, player)) {
+    public boolean setMove(int row, int col) {
+        if (!isValidMove(row, col, playersTurn)) {
             return false;
         }
 
-        board.setPiece(row, col, player);
-
+        board.setPlayer(row, col, playersTurn);
         if (hasGameFinished()) {
             finished = true;
         }

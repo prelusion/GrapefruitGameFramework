@@ -19,6 +19,8 @@ public abstract class Game {
      */
     private Board board;
 
+    private Player playersTurn;
+
     protected boolean finished = false;
     protected GameResult gameResult = GameResult.NONE;
 
@@ -44,8 +46,16 @@ public abstract class Game {
         return players;
     }
 
-    public Player getNextPlayer() {
-        return null;
+    public void nextPlayer() {
+        playersTurn = ((playersTurn == players[0]) ? players[1] : players[0]);
+        playersTurn.setTurn(true);
+    }
+
+    public Player getPlayersTurn() {
+        return playersTurn;
+    }
+    public void setPlayersTurn(Player playersTurn) {
+        this.playersTurn = playersTurn;
     }
 
     /**
@@ -84,19 +94,20 @@ public abstract class Game {
     /**
      * @param move, move is given to set the move on the board and apply all necessary changes.
      */
-    public boolean setMove(int row, int col, Player player) {
-        Tile tile = new Tile(row, col, 1, player);
+    public boolean setMove(int row, int col) {
+        //Set the move of the player on the tile
+        getBoard().getGrid()[row][col].setPlayer(playersTurn);
 
-        if (!isValidMove(row, col, player)) {
+        if (!isValidMove(row, col, playersTurn)) {
             return false;
         }
 
-        board.setPiece(row, col, player);
-
+        board.setPiece(row, col, playersTurn);
         if (hasGameFinished()) {
             finished = true;
         }
 
+        nextPlayer();
         return true;
     }
 

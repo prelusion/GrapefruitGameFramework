@@ -9,7 +9,7 @@ public class Board {
 
     /**
      * Constructor for making a new Board object.
-     * @param int, boardSize is given to give the board grid a size.
+     * @param boardSize, boardSize is given to give the board grid a size.
      */
     public Board(int boardSize) {
         grid = new Tile[boardSize][boardSize];
@@ -20,8 +20,8 @@ public class Board {
      * Creates a board of given size with strategicValues given from the game implmentation. (TODO)
      */
     public void createBoard() {
-        for (int x = 0; x < grid.length-1; x++) {
-            for (int y = 0; y < grid.length-1; y++) {
+        for (int x = 0; x < grid.length; x++) {
+            for (int y = 0; y < grid.length; y++) {
                 grid[x][y] = new Tile(x, y, /* TODO  */ 0);
             }
         }
@@ -44,9 +44,9 @@ public class Board {
      * @return boolean, Checks if the board is full. Return true if it is.
      */
     public boolean isBoardFull() {
-        for (int x = 0; x < grid.length-1; x++) {
-            for (int y = 0; y < grid.length-1; y++) {
-                if(grid[x][y] == null) {
+        for (int x = 0; x < grid.length; x++) {
+            for (int y = 0; y < grid.length; y++) {
+                if(grid[x][y].getPlayer() == null) {
                     return false;
                 }
             }
@@ -62,4 +62,24 @@ public class Board {
         return false;
     }
 
+
+    /**
+     * Helper function
+     */
+    public void printBoard() {
+        for (int x = 0; x < grid.length; x++) {
+            for (int y = 0; y < grid.length; y++) {
+                Player player = grid[x][y].getPlayer();
+                String value;
+                if (player == null) {
+                    value = "[ ]";
+                } else {
+                    value = String.format("[%s]", player.getColor().charAt(0));
+                }
+
+                System.out.print(value + " ");
+            }
+            System.out.println();
+        }
+    }
 }

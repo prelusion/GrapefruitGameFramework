@@ -37,14 +37,14 @@ public abstract class Board {
         return grid;
     }
 
-    public void setPiece(int row, int col, Player player) {
+    public void setPlayer(int row, int col, Player player) {
         grid[row][col] = new Tile(row, col, 1, player);
     }
 
     /**
      * @return boolean, Checks if the tile chosen has a piece on it.
      */
-    public boolean hasPiece(int row, int col) {
+    public boolean hasPlayer(int row, int col) {
         return grid[row][col].getPlayer() != null;
     }
 
@@ -62,7 +62,7 @@ public abstract class Board {
         return true;
     }
 
-    public String getPieceString(int row, int col) {
+    public String getPlayerName(int row, int col) {
         return grid[row][col].getPlayer().toString();
     }
 

@@ -1,5 +1,7 @@
 package com.grapefruit.gamework.framework;
 
+import com.grapefruit.gamework.framework.player.Player;
+
 import java.util.HashSet;
 
 public abstract class Board {

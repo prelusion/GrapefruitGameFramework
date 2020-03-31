@@ -1,6 +1,8 @@
 package com.grapefruit.gamework.framework;
 
 
+import com.grapefruit.gamework.framework.player.Player;
+
 import java.util.HashSet;
 
 public abstract class Game {
@@ -107,9 +109,10 @@ public abstract class Game {
     public abstract void calculateGameResult();
 
     /**
-     * @param move, move is given to set the move on the board and apply all necessary changes.
+     * @param row
+     * @param col
      */
-    public boolean setMove(int row, int col) {
+    public boolean doMove(int row, int col) {
         if (!isValidMove(row, col, currentPlayer)) {
             return false;
         }
@@ -122,6 +125,8 @@ public abstract class Game {
 
         return true;
     }
+
+    public abstract boolean playMove(int row, int col);
 
     /**
      * This function will check if the game should be ended or not.

@@ -197,7 +197,7 @@ public class ControllerGame implements IController{
             marker.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    model.getGame().setMove( tile.getCol(), tile.getRow());
+                    model.getGame().doMove( tile.getCol(), tile.getRow());
                     updateBooard();
                 }
             });

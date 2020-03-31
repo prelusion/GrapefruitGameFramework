@@ -1,11 +1,10 @@
 package com.grapefruit.gamework.games.tictactoe;
 
 import com.grapefruit.gamework.framework.Board;
-import com.grapefruit.gamework.framework.Player;
+import com.grapefruit.gamework.framework.player.Player;
 import com.grapefruit.gamework.framework.Tile;
 
 import java.util.HashSet;
-import java.util.List;
 
 public class TicTacToeBoard extends Board {
     /**
@@ -22,8 +21,10 @@ public class TicTacToeBoard extends Board {
     public HashSet<Tile> getAvailableMoves(Player player) {
         HashSet<Tile> tiles = new HashSet<>();
         for (Tile[] row: this.getGrid()){
-            for (Tile tile: row){
-                tiles.add(tile);
+            for (Tile tile: row) {
+                if(tile.getPlayer() == null) {
+                    tiles.add(tile);
+                }
             }
         }
         return tiles;

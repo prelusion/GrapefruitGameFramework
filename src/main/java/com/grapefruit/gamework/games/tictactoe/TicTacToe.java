@@ -3,7 +3,7 @@ package com.grapefruit.gamework.games.tictactoe;
 import com.grapefruit.gamework.framework.*;
 import com.grapefruit.gamework.framework.player.Player;
 
-import java.util.HashSet;
+import java.util.List;
 
 public class TicTacToe extends Game {
 
@@ -55,7 +55,7 @@ public class TicTacToe extends Game {
     }
 
     @Override
-    public HashSet<Tile> getAvailableMoves(Player player) {
+    public List<Tile> getAvailableMoves(Player player) {
         return getBoard().getAvailableMoves(player);
     }
 

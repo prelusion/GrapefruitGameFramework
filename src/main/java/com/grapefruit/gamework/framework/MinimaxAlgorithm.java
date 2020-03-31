@@ -3,6 +3,7 @@ package com.grapefruit.gamework.framework;
 import com.grapefruit.gamework.framework.player.Player;
 
 import java.util.HashSet;
+import java.util.List;
 
 public class MinimaxAlgorithm implements MoveAlgorithm {
     public MinimaxAlgorithm() {
@@ -12,9 +13,8 @@ public class MinimaxAlgorithm implements MoveAlgorithm {
 
     @Override
     public Tile calculateBestMove(Board board, Player player) {
-        HashSet<Tile> tiles = board.getAvailableMoves(player);
+        List<Tile> tiles = board.getAvailableMoves(player);
         System.out.println(tiles);
-
         return null;
     }
 

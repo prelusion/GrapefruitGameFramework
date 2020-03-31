@@ -4,6 +4,7 @@ package com.grapefruit.gamework.framework;
 import com.grapefruit.gamework.framework.player.Player;
 
 import java.util.HashSet;
+import java.util.List;
 
 public abstract class Game {
     /**
@@ -117,7 +118,7 @@ public abstract class Game {
             return false;
         }
 
-        board.setPlayer(row, col, currentPlayer);
+        board.setMove(row, col, currentPlayer);
 
         if (hasGameFinished()) {
             finished = true;
@@ -161,7 +162,7 @@ public abstract class Game {
      * @param player, searches available moves for that specific player.
      * @return Move[] of available moves for the given player.
      */  //TODO
-    public abstract HashSet<Tile> getAvailableMoves(Player player);
+    public abstract List<Tile> getAvailableMoves(Player player);
 
     public enum GameResult {
         WINNER,

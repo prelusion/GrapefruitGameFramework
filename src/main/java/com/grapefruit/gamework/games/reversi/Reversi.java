@@ -4,6 +4,7 @@ import com.grapefruit.gamework.framework.*;
 import com.grapefruit.gamework.framework.player.Player;
 
 import java.util.HashSet;
+import java.util.List;
 
 public class Reversi extends Game {
 
@@ -19,7 +20,7 @@ public class Reversi extends Game {
 
     @Override
     public boolean isValidMove(int row, int col, Player player) {
-        HashSet<Tile> validMoves = getBoard().getAvailableMoves(player);
+        List<Tile> validMoves = getBoard().getAvailableMoves(player);
         for (Tile tile : validMoves) {
             if (tile.getRow() == row && tile.getCol() == col) return true;
         }
@@ -28,7 +29,11 @@ public class Reversi extends Game {
 
     @Override
     public void calculateGameResult() {
+        if (!finished) {
+            gameResult = GameResult.NONE;
+        }
 
+        gameResult = GameResult.TIE;
     }
 
     @Override
@@ -42,22 +47,12 @@ public class Reversi extends Game {
     }
 
     @Override
-    public boolean hasWinner() {
-        return false;
-    }
-
-    @Override
-    public boolean isTie() {
-        return false;
-    }
-
-    @Override
     public Player getWinner() {
         return null;
     }
 
     @Override
-    public HashSet<Tile> getAvailableMoves(Player player) {
+    public List<Tile> getAvailableMoves(Player player) {
         return getBoard().getAvailableMoves(player);
     }
 

@@ -4,9 +4,7 @@ import com.grapefruit.gamework.framework.Board;
 import com.grapefruit.gamework.framework.player.Player;
 import com.grapefruit.gamework.framework.Tile;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class ReversiBoard extends Board {
 
@@ -137,5 +135,16 @@ public class ReversiBoard extends Board {
                 grid[t.getRow()][t.getCol()] = t;
             }
         }
+    }
+
+    public Map<Player, Integer> countPieces() {
+        HashMap<Player, Integer> pieces = new HashMap<>();
+        for (Tile[] row : grid) {
+            for (Tile tile : row) {
+                Player player = tile.getPlayer();
+                pieces.putIfAbsent(player, pieces.getOrDefault(player, 1) + 1);
+            }
+        }
+        return pieces;
     }
 }

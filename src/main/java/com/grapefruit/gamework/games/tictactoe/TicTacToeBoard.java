@@ -6,6 +6,7 @@ import com.grapefruit.gamework.framework.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class TicTacToeBoard extends Board {
     /**
@@ -34,5 +35,10 @@ public class TicTacToeBoard extends Board {
             }
         }
         return tiles;
+    }
+
+    @Override
+    public Map<Player, Integer> countPieces() {
+        return null;
     }
 }

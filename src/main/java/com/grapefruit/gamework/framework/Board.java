@@ -1,6 +1,8 @@
 package com.grapefruit.gamework.framework;
 
 import java.util.List;
+import java.util.Map;
+
 import com.grapefruit.gamework.framework.player.Player;
 
 public abstract class Board {
@@ -140,6 +142,8 @@ public abstract class Board {
     }
 
     public abstract List<Tile> getAvailableMoves(Player player);
+
+    public abstract Map<Player, Integer> countPieces();
 
     public Player getPlayer(int row, int col) {
         return grid[row][col].getPlayer();

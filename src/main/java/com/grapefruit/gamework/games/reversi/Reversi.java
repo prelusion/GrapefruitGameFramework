@@ -6,6 +6,7 @@ import com.grapefruit.gamework.framework.player.Player;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 public class Reversi extends Game {
 
@@ -33,6 +34,8 @@ public class Reversi extends Game {
         if (!finished) {
             gameResult = GameResult.NONE;
         }
+        Map<Player, Integer> pieces = getBoard().countPieces();
+
         gameResult = GameResult.TIE;
     }
 

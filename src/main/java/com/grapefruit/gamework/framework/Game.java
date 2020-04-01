@@ -3,7 +3,6 @@ package com.grapefruit.gamework.framework;
 
 import com.grapefruit.gamework.framework.player.Player;
 
-import java.util.HashSet;
 import java.util.List;
 
 public abstract class Game {
@@ -121,7 +120,7 @@ public abstract class Game {
 
         board.setMove(row, col, currentPlayer);
 
-        if (hasGameFinished()) {
+        if (hasFinished()) {
             finished = true;
         }
 
@@ -135,7 +134,7 @@ public abstract class Game {
      *
      * @return boolean, State of the game if its ended or not.
      */
-    public abstract boolean hasGameFinished();
+    public abstract boolean hasFinished();
 
     /**
      * @return boolean, true if a winner is found

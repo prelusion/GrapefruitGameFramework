@@ -21,32 +21,31 @@ public class RandomAI {
 
         Random random = new Random();
 
-        while (true) {
+        while (!game.hasFinished()) {
             System.out.println("--------------------------------------");
-
-            game.nextPlayer();
             Player currentPlayer = game.getCurrentPlayer();
 
             System.out.println("-- AVAILABLE MOVES for player " + currentPlayer.getColor());
             board.printAvailableMoves(game.getCurrentPlayer());
             System.out.println("--------------------------------------");
 
-
             List<Tile> availableMoves = game.getAvailableMoves(currentPlayer);
             System.out.println("available moves: " + availableMoves.size());
 
-            if (availableMoves.size() < 1) break;
+            if (availableMoves.size() > 0) {
+                int idx = random.nextInt(availableMoves.size());
+                System.out.println("random move index: " + idx);
+                Tile move = availableMoves.get(idx);
 
-            int idx = random.nextInt(availableMoves.size());
-            System.out.println("random move index: " + idx);
-            Tile move = availableMoves.get(idx);
+                System.out.println("row: " + move.getRow() + ", col: " + move.getCol());
+                boolean success = game.playMove(move.getRow(), move.getCol());
+                assert success;
 
-            System.out.println("row: " + move.getRow() + ", col: " + move.getCol());
-            boolean success = game.doMove(move.getRow(), move.getCol());
-            assert success;
-
-            System.out.println("-- CURRENT BOARD -- ");
-            board.printBoard();
+                System.out.println("-- CURRENT BOARD -- ");
+                board.printBoard();
+            } else {
+                game.nextPlayer();
+            }
         }
     }
 }

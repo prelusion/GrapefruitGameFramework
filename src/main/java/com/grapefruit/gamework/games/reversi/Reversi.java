@@ -3,6 +3,7 @@ package com.grapefruit.gamework.games.reversi;
 import com.grapefruit.gamework.framework.*;
 import com.grapefruit.gamework.framework.player.Player;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -45,8 +46,9 @@ public class Reversi extends Game {
     }
 
     @Override
-    public boolean hasGameFinished() {
-        return false;
+    public boolean hasFinished() {
+        return Arrays.stream(getPlayers())
+                .noneMatch(player -> (getAvailableMoves(player).size()) > 0);
     }
 
     @Override

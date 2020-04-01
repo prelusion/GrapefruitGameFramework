@@ -24,7 +24,7 @@ public class TicTacToe extends Game {
     }
 
     @Override
-    public boolean hasGameFinished() {
+    public boolean hasFinished() {
         return getBoard().isBoardFull() || Conditions.checkAllAdjacentConditions(getBoard());
     }
 
@@ -66,7 +66,7 @@ public class TicTacToe extends Game {
         }
 
         getBoard().setPlayer(row, col, getCurrentPlayer());
-        if (hasGameFinished()) {
+        if (hasFinished()) {
             finished = true;
         }
         return true;

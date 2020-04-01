@@ -2,7 +2,7 @@ package com.grapefruit.gamework.app.resources;
 
 import javafx.scene.image.Image;
 
-public class ImageRegistry {
+public abstract class ImageRegistry {
 
     private static ResourceLoader loader = new ResourceLoader();
 

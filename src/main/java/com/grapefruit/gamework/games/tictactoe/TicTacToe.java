@@ -32,7 +32,7 @@ public class TicTacToe extends Game {
     public void calculateGameResult() {
         if (!finished)
             gameResult = GameResult.NONE;
-        if (Conditions.checkAllAdjacentConditions(getBoard()))
+        else if (Conditions.checkAllAdjacentConditions(getBoard()))
             gameResult = GameResult.WINNER;
         else
             gameResult = GameResult.TIE;
@@ -68,6 +68,7 @@ public class TicTacToe extends Game {
         getBoard().setPlayer(row, col, getCurrentPlayer());
         if (hasGameFinished()) {
             finished = true;
+            calculateGameResult();
         }
         return true;
     }

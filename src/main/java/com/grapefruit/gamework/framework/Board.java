@@ -34,6 +34,17 @@ public abstract class Board {
         }
     }
 
+    public void copyState(Board AIBoard, Board board) {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid.length; j++) {
+                Tile tile = board.getGrid()[i][j];
+                if (tile.getPlayer() != null) {
+                    AIBoard.setMove(i, j, tile.getPlayer());
+                }
+            }
+        }
+    }
+
     public Tile[][] getGrid() {
         return grid;
     }

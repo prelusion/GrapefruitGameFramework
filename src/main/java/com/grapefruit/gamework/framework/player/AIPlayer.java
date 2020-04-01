@@ -1,18 +1,17 @@
 package com.grapefruit.gamework.framework.player;
 
-import com.grapefruit.gamework.framework.Board;
-import com.grapefruit.gamework.framework.Colors;
-import com.grapefruit.gamework.framework.MoveAlgorithm;
-import com.grapefruit.gamework.framework.Tile;
+import com.grapefruit.gamework.framework.*;
 
 public class AIPlayer extends Player {
     private MoveAlgorithm moveAlgorithm;
-    public AIPlayer(String name, Colors color, MoveAlgorithm moveAlgorithm) {
+    private int depth;
+    public AIPlayer(String name, Colors color, MoveAlgorithm moveAlgorithm, int depth) {
         super(name, color, false);
         this.moveAlgorithm = moveAlgorithm;
+        this.depth = depth;
     }
 
     public Tile calculateMove(Board board) {
-        return moveAlgorithm.calculateBestMove(board, this);
+        return moveAlgorithm.calculateBestMove(board, this, depth);
     }
 }

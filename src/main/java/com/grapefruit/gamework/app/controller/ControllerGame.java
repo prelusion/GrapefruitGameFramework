@@ -91,22 +91,22 @@ public class ControllerGame implements IController{
 
         boolean toggle = false;
 
-        for (int x = 0; x < board.getBoardSize(); x++) {
-            for (int y = 0; y < board.getBoardSize(); y++) {
+        for (int row = 0; row < board.getBoardSize(); row++) {
+            for (int col = 0; col < board.getBoardSize(); col++) {
                 HBox hbox;
                 if (checkered) {
                     if (toggle) {
-                        hbox = createBoardTile(tileSize, Color.rgb(232, 214, 202), board.getTile(y, x));
+                        hbox = createBoardTile(tileSize, Color.rgb(232, 214, 202), board.getTile(row, col));
                         toggle = false;
                     } else {
-                        hbox = createBoardTile(tileSize, Color.rgb(59, 41, 29), board.getTile(y, x));
+                        hbox = createBoardTile(tileSize, Color.rgb(59, 41, 29), board.getTile(row, col));
                         toggle = true;
                     }
                 } else {
-                    hbox = createBoardTile(tileSize, Color.GREEN, board.getTile(y, x));
+                    hbox = createBoardTile(tileSize, Color.GREEN, board.getTile(row, col));
                 }
-                gridPane.add(hbox, x,y, 1, 1);
-                boardTiles[y][x] = hbox;
+                gridPane.add(hbox, row, col, 1, 1);
+                boardTiles[col][row] = hbox;
             }
         }
 
@@ -169,10 +169,10 @@ public class ControllerGame implements IController{
     }
 
     private void showPlayerPieces(){
-        for (int x = 0; x < model.getGame().getBoard().getBoardSize(); x++) {
-            for (int y = 0; y < model.getGame().getBoard().getBoardSize(); y++) {
+        for (int row = 0; row < model.getGame().getBoard().getBoardSize(); row++) {
+            for (int col = 0; col < model.getGame().getBoard().getBoardSize(); col++) {
 
-                Tile tile = model.getGame().getBoard().getTile(y, x);
+                Tile tile = model.getGame().getBoard().getTile(row, col);
 
                 if (model.getGame().getBoard().getPlayer(tile.getRow(), tile.getCol()) != null) {
                     Image pieceImage = model.getAssets().getPieceImageByColor(model.getGame().getBoard().getPlayer(tile.getRow(), tile.getCol()).getColor());

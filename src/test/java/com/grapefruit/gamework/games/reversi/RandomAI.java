@@ -47,5 +47,13 @@ public class RandomAI {
                 game.nextPlayer();
             }
         }
+
+        Game.GameResult result = game.getGameResult();
+        System.out.println("Result: " + result);
+        if (game.hasWinner()) {
+            System.out.println("Winner: " + game.getWinner().getColor().toString());
+        }
+
+
     }
 }

@@ -69,7 +69,7 @@ public class BoardTest {
     }
 
     public void showResult(Game game) {
-        game.calculateGameResult();
+        game.getGameResult();
         System.out.println("GameFinished Player: " + game.getWinner() + " Won!");
     }
 }

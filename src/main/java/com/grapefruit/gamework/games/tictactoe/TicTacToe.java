@@ -30,12 +30,14 @@ public class TicTacToe extends Game {
 
     @Override
     public void calculateGameResult() {
-        if (!finished)
+        if (!finished) {
             gameResult = GameResult.NONE;
-        if (Conditions.checkAllAdjacentConditions(getBoard()))
-            gameResult = GameResult.WINNER;
-        else
-            gameResult = GameResult.TIE;
+        } else {
+            if (Conditions.checkAllAdjacentConditions(getBoard()))
+                gameResult = GameResult.WINNER;
+            else
+                gameResult = GameResult.TIE;
+        }
     }
 
 
@@ -68,6 +70,7 @@ public class TicTacToe extends Game {
         getBoard().setPlayer(row, col, getCurrentPlayer());
         if (hasFinished()) {
             finished = true;
+            calculateGameResult();
         }
         return true;
     }

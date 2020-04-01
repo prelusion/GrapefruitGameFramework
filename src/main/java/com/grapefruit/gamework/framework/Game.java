@@ -135,7 +135,7 @@ public abstract class Game {
         return winner;
     }
 
-    public void setWinner(Player player) {
+    protected void setWinner(Player player) {
         winner = player;
     }
 

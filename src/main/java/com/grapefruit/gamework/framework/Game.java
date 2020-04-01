@@ -30,8 +30,6 @@ public abstract class Game {
 
     protected boolean finished = false;
 
-    protected GameResult gameResult = GameResult.NONE;
-
     public Game(Board board, Player[] players, int turnTimeout) {
         this.board = board;
         this.players = players;

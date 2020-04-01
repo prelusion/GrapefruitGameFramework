@@ -38,6 +38,18 @@ public class ControllerGame implements IController{
     private HBox[][] boardTiles;
 
     @FXML
+    private Text turnNumber;
+
+    @FXML
+    private Text timeLeft;
+
+    @FXML
+    private VBox scorePlayerName;
+
+    @FXML
+    private VBox scorePlayerScore;
+
+    @FXML
     private ImageView gameIcon;
 
     @FXML
@@ -83,6 +95,7 @@ public class ControllerGame implements IController{
         gameIcon.setImage(this.model.getAssets().getIcon());
 
         updateBoard();
+        updateInfoPanel();
     }
 
     private void drawBoard(Board board, boolean checkered){
@@ -118,7 +131,6 @@ public class ControllerGame implements IController{
 
     private void updateBoard(){
         boolean playerLocal = model.getLocalPlayers().contains(model.getGame().getCurrentPlayer());
-
         showPlayerPieces();
         markPossibleMoves(model.getGame().getAvailableMoves(model.getGame().getCurrentPlayer()), playerLocal);
         currentTurnPlayer.setText(model.getGame().getCurrentPlayer().getName());
@@ -228,6 +240,7 @@ public class ControllerGame implements IController{
                     public void handle(MouseEvent event) {
                         playerDoesMove(tile.getRow(), tile.getCol(), model.getGame().getCurrentPlayer());
                         updateBoard();
+                        updateInfoPanel();
                     }
                 });
             } else {
@@ -239,5 +252,20 @@ public class ControllerGame implements IController{
 
     private void playerDoesMove(int row, int col, Player player){
         model.getGame().playMove(row, col, player);
+    }
+
+    private void updateInfoPanel(){
+        scorePlayerName.getChildren().removeAll(scorePlayerName.getChildren());
+        scorePlayerScore.getChildren().removeAll(scorePlayerScore.getChildren());
+
+        for (Player player: model.getGame().getPlayers()){
+            scorePlayerName.getChildren().add(new Text("PlayerName"));
+            scorePlayerScore.getChildren().add(new Text("100"));
+        }
+
+        currentTurnPlayer.setText(model.getGame().getCurrentPlayer().toString());
+        timeLeft.setText(String.valueOf(model.getGame().getTurnTimeout()));
+        //Todo implement turn number
+        turnNumber.setText("99");
     }
 }

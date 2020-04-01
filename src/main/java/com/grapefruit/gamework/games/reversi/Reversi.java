@@ -32,12 +32,15 @@ public class Reversi extends Game {
         if (!finished) {
             gameResult = GameResult.NONE;
         }
-
         gameResult = GameResult.TIE;
     }
 
     @Override
     public boolean playMove(int row, int col) {
+        if(doMove(row, col)) {
+            nextPlayer();
+            return true;
+        }
         return false;
     }
 

@@ -87,12 +87,12 @@ public abstract class Game {
      * @param row
      * @param col
      */
-    public boolean doMove(int row, int col) {
-        if (!isValidMove(row, col, currentPlayer)) {
+    public boolean doMove(int row, int col, Player player) {
+        if (!isValidMove(row, col, player)) {
             return false;
         }
 
-        board.setMove(row, col, currentPlayer);
+        board.setMove(row, col, player);
 
         if (hasFinished()) {
             finished = true;
@@ -101,7 +101,7 @@ public abstract class Game {
         return true;
     }
 
-    public abstract boolean playMove(int row, int col);
+    public abstract boolean playMove(int row, int col, Player player);
 
     /**
      * This function will check if the game should be ended or not.

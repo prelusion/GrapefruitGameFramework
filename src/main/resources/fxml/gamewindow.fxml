@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -7,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<HBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="796.0" prefWidth="1012.0" styleClass="primary-background" stylesheets="@css/mainwindow.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grapefruit.gamework.app.controller.ControllerGame">
+<HBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="796.0" prefWidth="1012.0" styleClass="primary-background" stylesheets="@css/mainwindow.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grapefruit.gamework.app.controller.ControllerGame">
    <children>
       <Pane minWidth="-Infinity" prefHeight="796.0" prefWidth="60.0" />
       <VBox fx:id="gameBoard" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" stylesheets="@css/mainwindow.css" HBox.hgrow="SOMETIMES" />
@@ -31,12 +35,36 @@
                   <VBox alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="98.0">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Currently playing:" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Remain turn time:" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Turn number:" />
                      </children>
                   </VBox>
                   <Pane prefHeight="200.0" prefWidth="12.0" />
                   <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <Text fx:id="currentTurnPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="playername" />
+                        <Text fx:id="timeLeft" strokeType="OUTSIDE" strokeWidth="0.0" text="time" />
+                        <Text fx:id="turnNumber" strokeType="OUTSIDE" strokeWidth="0.0" text="turn" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <Pane minHeight="-Infinity" prefHeight="25.0" prefWidth="300.0" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Player" underline="true" />
+                        <Pane minHeight="-Infinity" prefHeight="10.0" prefWidth="100.0" />
+                        <VBox fx:id="scorePlayerName" prefHeight="200.0" prefWidth="100.0" />
+                     </children>
+                  </VBox>
+                  <Pane minWidth="-Infinity" prefHeight="200.0" prefWidth="12.0" />
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Score" underline="true" />
+                        <Pane minHeight="-Infinity" prefHeight="10.0" prefWidth="100.0" />
+                        <VBox fx:id="scorePlayerScore" prefHeight="200.0" prefWidth="100.0" />
                      </children>
                   </VBox>
                </children>

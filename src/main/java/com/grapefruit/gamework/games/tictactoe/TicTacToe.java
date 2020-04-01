@@ -60,7 +60,6 @@ public class TicTacToe extends Game {
         return getBoard().getAvailableMoves(player);
     }
 
-    @Override
     public boolean doMove(int row, int col) {
         if (!isValidMove(row, col, getCurrentPlayer())) {
             return false;
@@ -75,8 +74,8 @@ public class TicTacToe extends Game {
     }
 
     @Override
-    public boolean playMove(int row, int col){
-        if(doMove(row, col)) {
+    public boolean playMove(int row, int col, Player player){
+        if(doMove(row, col, player)) {
             nextPlayer();
             return true;
         }

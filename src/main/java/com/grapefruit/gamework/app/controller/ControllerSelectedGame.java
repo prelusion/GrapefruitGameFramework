@@ -16,6 +16,8 @@ import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 public class ControllerSelectedGame implements IController {
 
@@ -88,8 +90,11 @@ public class ControllerSelectedGame implements IController {
         friendButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                Player[] players = new Player[2];
+                players[0] = new Player("Player 1", Colors.WHITE, true);
+                players[1] = new Player("Player 2", Colors.BLACK, true);
                 GameApplication.playGame(model.getSelectedGame().getAssets(), model.getSelectedGame().getFactory()
-                        .create(new Player[]{new Player("Pieter", Colors.WHITE, true), new Player("kees", Colors.BLACK, true)}));
+                        .create(players), players);
             }
         });
 

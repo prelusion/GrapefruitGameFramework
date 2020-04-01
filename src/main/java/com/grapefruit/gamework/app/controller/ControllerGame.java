@@ -85,31 +85,29 @@ public class ControllerGame implements IController{
     }
 
     private void drawBoard(Board board, boolean checkered){
-        boardTiles = new HBox[board.getGrid().length][board.getGrid()[0].length];
+        boardTiles = new HBox[board.getBoardSize()][board.getBoardSize()];
         GridPane gridPane = new GridPane();
-        Tile[][] tiles = board.getGrid();
         int tileSize = 80;
 
         boolean toggle = false;
 
-        for (Tile[] column: tiles){
-            for (Tile tile: column){
+        for (int x = 0; x < board.getBoardSize(); x++) {
+            for (int y = 0; y < board.getBoardSize(); y++) {
                 HBox hbox;
                 if (checkered) {
                     if (toggle) {
-                        hbox = createBoardTile(tileSize, Color.rgb(232, 214, 202), tile);
-                        toggle = !toggle;
+                        hbox = createBoardTile(tileSize, Color.rgb(232, 214, 202), board.getTile(y, x));
+                        toggle = false;
                     } else {
-                        hbox = createBoardTile(tileSize, Color.rgb(59, 41, 29), tile);
-                        toggle = !toggle;
+                        hbox = createBoardTile(tileSize, Color.rgb(59, 41, 29), board.getTile(y, x));
+                        toggle = true;
                     }
                 } else {
-                    hbox = createBoardTile(tileSize, Color.GREEN, tile);
+                    hbox = createBoardTile(tileSize, Color.GREEN, board.getTile(y, x));
                 }
-                gridPane.add(hbox, tile.getCol(), tile.getRow(), 1, 1);
-                boardTiles[tile.getRow()][tile.getCol()] = hbox;
+                gridPane.add(hbox, x,y, 1, 1);
+                boardTiles[y][x] = hbox;
             }
-            toggle = !toggle;
         }
 
         gameBoard.getChildren().removeAll(gameBoard.getChildren());
@@ -171,9 +169,11 @@ public class ControllerGame implements IController{
     }
 
     private void showPlayerPieces(){
-        Tile[][] tiles = model.getGame().getBoard().getGrid();
-        for (Tile[] column: tiles){
-            for (Tile tile: column){
+        for (int x = 0; x < model.getGame().getBoard().getBoardSize(); x++) {
+            for (int y = 0; y < model.getGame().getBoard().getBoardSize(); y++) {
+
+                Tile tile = model.getGame().getBoard().getTile(y, x);
+
                 if (model.getGame().getBoard().getPlayer(tile.getRow(), tile.getCol()) != null) {
                     Image pieceImage = model.getAssets().getPieceImageByColor(model.getGame().getBoard().getPlayer(tile.getRow(), tile.getCol()).getColor());
                     ImageView imageView = new ImageView();

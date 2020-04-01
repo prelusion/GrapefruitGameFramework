@@ -27,7 +27,7 @@ public class TicTacToeBoard extends Board {
     @Override
     public List<Tile> getAvailableMoves(Player player) {
         ArrayList<Tile> tiles = new ArrayList<>();
-        for (Tile[] row : this.getGrid()) {
+        for (Tile[] row : grid) {
             for (Tile tile : row) {
                 if (tile.getPlayer() == null) {
                     tiles.add(tile);

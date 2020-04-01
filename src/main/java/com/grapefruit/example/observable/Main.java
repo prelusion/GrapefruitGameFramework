@@ -16,13 +16,13 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        Player leon = new Player("Leon", false);
+        Player player = new Player("Leon", false);
 
         Button btn = new Button();
-        btn.setText("Mijn naam is: " + leon.getName());
+        btn.setText("Mijn naam is: " + player.getName());
 
-        leon.getNameProperty().addListener(
-                (observable, oldValue, newValue) -> btn.setText("Mijn naam is: " + leon.getName())
+        player.getNameProperty().addListener(
+                (observable, oldValue, newValue) -> btn.setText("Mijn naam is: " + newValue)
         );
 
         btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -30,7 +30,7 @@ public class Main extends Application {
 
             @Override
             public void handle(ActionEvent event) {
-                leon.setName(toggle ? "Leon" : "Janus");
+                player.setName(toggle ? "Leon" : "Janus");
                 toggle = !toggle;
             }
         });

@@ -1,6 +1,9 @@
 package com.grapefruit.gamework.framework;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import com.grapefruit.gamework.framework.player.Player;
 
 public abstract class Board {
@@ -9,8 +12,14 @@ public abstract class Board {
      * This grid is the board. Size is dynamic so instantiated in the constructor.
      */
     protected Tile[][] grid;
+
     protected int boardSize;
-    protected static final int[][] relativeNeighborGrid = initRelativeNeighborGrid();
+
+    protected static final int[][] relativeNeighborGrid = new int[][] {
+            {-1, -1}, {-1, 0}, {-1, 1},
+            {0, -1}, {0, 1},
+            {1, -1}, {1, 0}, {1, 1},
+    };
 
     /**
      * Constructor for making a new Board object.
@@ -19,14 +28,14 @@ public abstract class Board {
      */
     public Board(int boardSize) {
         this.boardSize = boardSize;
-        grid = new Tile[boardSize][boardSize];
-        createBoard();
+        initGrid();
     }
 
     /**
      * Creates a board of given size with strategicValues given from the game implmentation. (TODO)
      */
-    public void createBoard() {
+    private void initGrid() {
+        grid = new Tile[boardSize][boardSize];
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid.length; j++) {
                 grid[i][j] = new Tile(i, j, /* TODO  */ 0);
@@ -45,14 +54,28 @@ public abstract class Board {
         }
     }
 
+    public int getBoardSize() {
+        return boardSize;
+    }
+    
     public Tile[][] getGrid() {
         return grid;
+    }
+    
+    public Tile getTile(int row, int col) {
+        return grid[row][col];
     }
 
     public abstract void setMove(int row, int col, Player player);
 
+    public abstract List<Tile> getAvailableMoves(Player player);
+
     public void setPlayer(int row, int col, Player player) {
         grid[row][col] = new Tile(row, col, 1, player);
+    }
+
+    public Player getPlayer(int row, int col) {
+        return grid[row][col].getPlayer();
     }
 
     /**
@@ -69,26 +92,44 @@ public abstract class Board {
      * @return boolean, Checks if the board is full. Return true if it is.
      */
     public boolean isBoardFull() {
-        for (int i = 0; i < grid.length; i++) {
+        for (Tile[] tiles : grid) {
             for (int j = 0; j < grid.length; j++) {
-                if (grid[i][j].getPlayer() == null) {
-                    return false;
-                }
+                if (tiles[j].getPlayer() == null) return false;
             }
         }
         return true;
-    }
-
-    public String getPlayerName(int row, int col) {
-        return grid[row][col].getPlayer().toString();
     }
 
     public boolean isValidLocation(int row, int col) {
         return row < grid.length && row >= 0 && col < grid.length && col >= 0;
     }
 
+    public Map<Player, Integer> countPieces() {
+        HashMap<Player, Integer> pieces = new HashMap<>();
+
+        for (Tile[] row : grid) {
+            for (Tile tile : row) {
+                pieces.merge(tile.getPlayer(), 1, Integer::sum);
+            }
+        }
+
+        return pieces;
+    }
+
+    public int countPieces(Player player) {
+        int count = 0;
+
+        for (Tile[] row : grid) {
+            for (Tile tile : row) {
+                if (tile.getPlayer() == player) count++;
+            }
+        }
+
+        return count;
+    }
+
     /**
-     * Helper function
+     * Helper function to print the board.
      */
     public void printBoard() {
         System.out.print("  ");
@@ -113,6 +154,10 @@ public abstract class Board {
         }
     }
 
+    /**
+     * Helper function to print available moves for a player.
+     * @param player
+     */
     public void printAvailableMoves(Player player) {
         List<Tile> moves = getAvailableMoves(player);
 
@@ -148,49 +193,5 @@ public abstract class Board {
             }
             System.out.println();
         }
-    }
-
-    public abstract List<Tile> getAvailableMoves(Player player);
-
-    public Player getPlayer(int row, int col) {
-        return grid[row][col].getPlayer();
-    }
-
-    private static int[][] initRelativeNeighborGrid() {
-        int[][] coords = new int[8][2];
-
-        /* top left */
-        coords[0][0] = -1;
-        coords[0][1] = -1;
-
-        /* top center */
-        coords[1][0] = -1;
-        coords[1][1] = 0;
-
-        /* top right */
-        coords[2][0] = -1;
-        coords[2][1] = 1;
-
-        /* mid left */
-        coords[3][0] = 0;
-        coords[3][1] = -1;
-
-        /* mid right */
-        coords[4][0] = 0;
-        coords[4][1] = 1;
-
-        /* bottm left */
-        coords[5][0] = 1;
-        coords[5][1] = -1;
-
-        /* bottom center */
-        coords[6][0] = 1;
-        coords[6][1] = 0;
-
-        /* bottom right */
-        coords[7][0] = 1;
-        coords[7][1] = 1;
-
-        return coords;
     }
 }

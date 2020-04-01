@@ -24,17 +24,18 @@ public class TicTacToe extends Game {
     }
 
     @Override
-    public boolean hasGameFinished() {
+    public boolean hasFinished() {
         return getBoard().isBoardFull() || Conditions.checkAllAdjacentConditions(getBoard());
     }
 
     @Override
     public void calculateGameResult() {
-        if (!finished)
+        if (!finished) {
             gameResult = GameResult.NONE;
-        else if (Conditions.checkAllAdjacentConditions(getBoard()))
+            
+        } else if (Conditions.checkAllAdjacentConditions(getBoard()))
             gameResult = GameResult.WINNER;
-        else
+        } else {
             gameResult = GameResult.TIE;
     }
 

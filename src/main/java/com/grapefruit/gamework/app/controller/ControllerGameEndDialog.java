@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -54,10 +55,13 @@ public class ControllerGameEndDialog implements IController{
     public void setModel(IModel model) {
         this.model = (ModelGameEndDialog) model;
         initialize();
+        gameEndMessage.setText(this.model.getGameResult());
     }
 
     @FXML
     private void onBack(){
         GameApplication.openLauncher();
+        Stage stage = (Stage )backButton.getScene().getWindow();
+        stage.close();
     }
 }

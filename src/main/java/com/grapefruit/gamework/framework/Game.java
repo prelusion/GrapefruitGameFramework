@@ -3,15 +3,17 @@ package com.grapefruit.gamework.framework;
 
 import com.grapefruit.gamework.framework.player.Player;
 
-import java.util.HashSet;
 import java.util.List;
 
 public abstract class Game {
+
     /**
      * List of players on the client side;
      */
     private Player[] players;
+
     private int currentPlayerIndex = 0;
+
     /**
      * The time a player has for their turn
      */
@@ -24,15 +26,10 @@ public abstract class Game {
 
     private Player currentPlayer;
 
-    protected boolean finished = false;
-    protected GameResult gameResult = GameResult.NONE;
+    private Player winner;
 
-    /**
-     * Constructor of making an GameSession
-     *
-     * @param int turnTimeout, gives a timeout limit for turns.
-     * @param int boardSize, gives a grid size for the new board.
-     */
+    protected boolean finished = false;
+
     public Game(Board board, Player[] players, int turnTimeout) {
         this.board = board;
         this.players = players;
@@ -41,17 +38,6 @@ public abstract class Game {
         nextPlayer();
     }
 
-    public String getName() {
-        return "";
-    }
-
-    public String getIcon() {
-        return null;
-    }
-
-    /**
-     * @return Arraylist<Player> of players.
-     */
     public Player[] getPlayers() {
         return players;
     }
@@ -59,8 +45,6 @@ public abstract class Game {
     /**
      * Next player is done in RR fashion, starting from index 0.
      * If first player needs to be selected randomly, player array in constructor needs to be sorted randomly.
-     *
-     * @return
      */
     public void nextPlayer() {
         currentPlayer = players[currentPlayerIndex];
@@ -90,10 +74,6 @@ public abstract class Game {
         return turnTimeout;
     }
 
-    public Tile createMove(int row, int col, Player player) {
-        return new Tile(row, col, 1, player);
-    }
-
     /**
      * This function will check if the given move is a valid move on the board.
      *
@@ -102,13 +82,6 @@ public abstract class Game {
      * @return boolean, State of the move is valid or not.
      */
     public abstract boolean isValidMove(int row, int col, Player player);
-
-    /**
-     * Checks whether the game has a WINNER, a TIE or NONE of those.
-     *
-     * @return GameResult, The result of the game so WINNER, TIE or NONE
-     */
-    public abstract void calculateGameResult();
 
     /**
      * @param row
@@ -121,7 +94,7 @@ public abstract class Game {
 
         board.setMove(row, col, currentPlayer);
 
-        if (hasGameFinished()) {
+        if (hasFinished()) {
             finished = true;
         }
 
@@ -135,7 +108,14 @@ public abstract class Game {
      *
      * @return boolean, State of the game if its ended or not.
      */
-    public abstract boolean hasGameFinished();
+    public abstract boolean hasFinished();
+
+    /**
+     * Checks whether the game has a WINNER, a TIE or NONE of those.
+     *
+     * @return GameResult, The result of the game so WINNER, TIE or NONE
+     */
+    public abstract GameResult getGameResult();
 
     /**
      * @return boolean, true if a winner is found
@@ -148,14 +128,16 @@ public abstract class Game {
         return getGameResult() == GameResult.TIE;
     }
 
-    public GameResult getGameResult() {
-        return gameResult;
-    }
-
     /**
      * @return Player, Get the player if there is a winner. If the game has finished an
      */
-    public abstract Player getWinner();
+    public Player getWinner() {
+        return winner;
+    }
+
+    protected void setWinner(Player player) {
+        winner = player;
+    }
 
     /**
      * Uses isValidMove() To check whether moves are available.

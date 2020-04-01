@@ -4,9 +4,7 @@ import com.grapefruit.gamework.framework.Board;
 import com.grapefruit.gamework.framework.player.Player;
 import com.grapefruit.gamework.framework.Tile;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class ReversiBoard extends Board {
 
@@ -19,9 +17,8 @@ public class ReversiBoard extends Board {
         HashSet<Tile> playerOwnedTiles = new HashSet<>();
         ArrayList<Tile> validMoves = new ArrayList<>();
 
-        for (int i = 0; i < grid.length - 1; i++) {
-            for (int j = 0; j < grid.length - 1; j++) {
-                Tile tile = grid[i][j];
+        for (Tile[] row : grid) {
+            for (Tile tile : row) {
                 if (tile.getPlayer() != null && tile.getPlayer() == player) {
                     playerOwnedTiles.add(tile);
                 }
@@ -68,10 +65,7 @@ public class ReversiBoard extends Board {
         return neighbours;
     }
 
-    private Tile getEmptyTileInDirection(Player player, int startRow, int startCol, int dRow, int dCol) {
-        int col = startCol + dCol;
-        int row = startRow + dRow;
-
+    private Tile getEmptyTileInDirection(Player player, int row, int col, int dRow, int dCol) {
         if (!isValidLocation(row, col)) {
             return null;
         }
@@ -84,30 +78,7 @@ public class ReversiBoard extends Board {
             return null;
         }
 
-        return getEmptyTileInDirection(player, row, col, dRow, dCol);
-    }
-
-    private List<Tile> getTilesToTurn(Player player, int startRow, int startCol, int dRow, int dCol) {
-        ArrayList<Tile> searchOrder = new ArrayList<>();
-        return getTilesToTurn(player, startRow, startCol, dRow, dCol, searchOrder);
-    }
-
-    private List<Tile> getTilesToTurn(Player player, int row, int col, int dRow, int dCol, List<Tile> searchOrder) {
-        if (!isValidLocation(row, col)) {
-            return null;
-        }
-
-        if (!hasPlayer(row, col)) {
-            return null;
-        }
-
-        if (grid[row][col].getPlayer() == player) {
-            return searchOrder;
-        }
-
-        searchOrder.add(new Tile(row, col, 1, player));
-
-        return getTilesToTurn(player, row + dRow, col + dCol, dRow, dCol, searchOrder);
+        return getEmptyTileInDirection(player, row + dRow, col + dCol, dRow, dCol);
     }
 
     public void setMove(int row, int col, Player player) {
@@ -137,5 +108,27 @@ public class ReversiBoard extends Board {
                 grid[t.getRow()][t.getCol()] = t;
             }
         }
+    }
+
+    private List<Tile> getTilesToTurn(Player player, int startRow, int startCol, int dRow, int dCol) {
+        return getTilesToTurn(player, startRow, startCol, dRow, dCol, new ArrayList<>());
+    }
+
+    private List<Tile> getTilesToTurn(Player player, int row, int col, int dRow, int dCol, List<Tile> searchOrder) {
+        if (!isValidLocation(row, col)) {
+            return null;
+        }
+
+        if (!hasPlayer(row, col)) {
+            return null;
+        }
+
+        if (grid[row][col].getPlayer() == player) {
+            return searchOrder;
+        }
+
+        searchOrder.add(new Tile(row, col, 1, player));
+
+        return getTilesToTurn(player, row + dRow, col + dCol, dRow, dCol, searchOrder);
     }
 }

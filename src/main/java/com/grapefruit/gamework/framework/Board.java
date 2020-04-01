@@ -43,9 +43,12 @@ public abstract class Board {
         }
     }
 
-    /* TODO remove getGrid because the grid should be private. */
-    public Tile[][] getGrid() {
-        return grid;
+    public int getBoardSize() {
+        return boardSize;
+    }
+
+    public Tile getTile(int row, int col) {
+        return grid[row][col];
     }
 
     public abstract void setMove(int row, int col, Player player);
@@ -76,9 +79,7 @@ public abstract class Board {
     public boolean isBoardFull() {
         for (Tile[] tiles : grid) {
             for (int j = 0; j < grid.length; j++) {
-                if (tiles[j].getPlayer() == null) {
-                    return false;
-                }
+                if (tiles[j].getPlayer() == null) return false;
             }
         }
         return true;

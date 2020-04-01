@@ -6,7 +6,7 @@ import com.grapefruit.gamework.framework.GameFactory;
 import com.grapefruit.gamework.framework.player.Player;
 
 public class ReversiFactory extends GameFactory {
-    public static Reversi create(Player playerWhite, Player playerBlack) {
+    public Reversi create(Player playerWhite, Player playerBlack) {
         Board board = new ReversiBoard(9);
         int turnTimeout = 10;
         return new Reversi(board, playerWhite, playerBlack, turnTimeout);

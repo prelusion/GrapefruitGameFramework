@@ -27,4 +27,6 @@ public class Command {
     public boolean isConfirmed() {
         return confirmed;
     }
+
+    public String getCommandString() {return commandString;}
 }

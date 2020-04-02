@@ -6,6 +6,8 @@ import java.util.concurrent.SynchronousQueue;
 
 public class ServerManager {
 
+    private boolean sending;
+
     public enum ResponseType{
         LIST,
         SINGLE,
@@ -19,10 +21,14 @@ public class ServerManager {
     public ServerManager(String serverAddress){
         this.connection = new ServerConnection(serverAddress, this);
         this.commandQueue = new SynchronousQueue<>();
+        this.sending = false;
     }
 
     public void queueCommand(Command command){
         commandQueue.add(command);
+        if (!sending) {
+            startSending();
+        }
     }
 
     public void respond(String[] args){
@@ -41,10 +47,30 @@ public class ServerManager {
 
     public Command getFirstUnconfirmed(){
         for (Command command: commandQueue){
-            if (command.isConfirmed() == false){
+            if (!command.isConfirmed()){
                 return command;
             }
         }
         return null;
     }
+
+    private void startSending() {
+        Thread timer = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!Thread.interrupted()) {
+                    if (getFirstUnconfirmed() != null) {
+                        connection.sendCommand(getFirstUnconfirmed().getCommandString());
+                    }
+                    try{
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        timer.start();
+    }
 }
+

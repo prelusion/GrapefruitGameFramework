@@ -61,14 +61,28 @@ public class ServerConnection {
         listenerThread.start();
     }
 
-    public void sendCommand(String input) {
-        System.out.println("command sent: " + input);
-        out.println(input);
-    }
-
     public void closeConnection() throws IOException {
         socket.close();
         in.close();
         out.close();
+    }
+
+    public void startSending() {
+        Thread timer = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!Thread.interrupted()) {
+                    if (manager.getFirstUnconfirmed() != null) {
+                        out.println(manager.getFirstUnconfirmed().getCommandString());
+                    }
+                    try{
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        timer.start();
     }
 }

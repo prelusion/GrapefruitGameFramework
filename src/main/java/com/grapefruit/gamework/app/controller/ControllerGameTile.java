@@ -11,6 +11,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import java.net.URL;
@@ -21,6 +23,9 @@ public class ControllerGameTile implements IController{
 
     private ModelGameTile model;
 
+
+    @FXML
+    private Circle availableOnServer;
 
     @FXML
     private HBox gameTile;
@@ -108,5 +113,8 @@ public class ControllerGameTile implements IController{
             gameTile.getStyleClass().set(0, "menu-item-normal");
         }
         initialize();
+        if (this.model.isAvailableOnServer()){
+            availableOnServer = new Circle(0, 0, 10, Paint.valueOf("green"));
+        }
     }
 }

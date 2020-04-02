@@ -61,22 +61,21 @@ public class TicTacToe extends Game {
     }
 
     @Override
-    public boolean doMove(int row, int col) {
-        if (!isValidMove(row, col, getCurrentPlayer())) {
+    public boolean doMove(int row, int col, Player player) {
+        if (!isValidMove(row, col, player)) {
             return false;
         }
 
         getBoard().setPlayer(row, col, getCurrentPlayer());
         if (hasFinished()) {
             finished = true;
-            getGameResult();
         }
         return true;
     }
 
     @Override
-    public boolean playMove(int row, int col){
-        if(doMove(row, col)) {
+    public boolean playMove(int row, int col, Player player){
+        if(doMove(row, col, player)) {
             nextPlayer();
             return true;
         }

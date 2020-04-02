@@ -7,6 +7,7 @@ import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.app.util.ImageHelper;
 import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDialogFactory;
 import com.grapefruit.gamework.framework.*;
+import com.grapefruit.gamework.framework.player.Player;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -35,6 +36,18 @@ public class ControllerGame implements IController{
     private GridPane boardPane;
 
     private HBox[][] boardTiles;
+
+    @FXML
+    private Text turnNumber;
+
+    @FXML
+    private Text timeLeft;
+
+    @FXML
+    private VBox scorePlayerName;
+
+    @FXML
+    private VBox scorePlayerScore;
 
     @FXML
     private ImageView gameIcon;
@@ -82,6 +95,7 @@ public class ControllerGame implements IController{
         gameIcon.setImage(this.model.getAssets().getIcon());
 
         updateBoard();
+        updateInfoPanel();
     }
 
     private void drawBoard(Board board, boolean checkered){
@@ -116,13 +130,18 @@ public class ControllerGame implements IController{
     }
 
     private void updateBoard(){
+        boolean playerLocal = model.getLocalPlayers().contains(model.getGame().getCurrentPlayer());
         showPlayerPieces();
-        markPossibleMoves(model.getGame().getAvailableMoves(model.getGame().getCurrentPlayer()));
+        markPossibleMoves(model.getGame().getAvailableMoves(model.getGame().getCurrentPlayer()), playerLocal);
         currentTurnPlayer.setText(model.getGame().getCurrentPlayer().getName());
         if (model.getGame().getGameResult() == Game.GameResult.TIE || model.getGame().getGameResult() == Game.GameResult.WINNER){
             if (model.getGame().getGameResult() == Game.GameResult.WINNER){
-                if (true) {
-                    createEndDialog("You win!");
+                if (model.getLocalPlayers().contains(model.getGame().getWinner())) {
+                    if (model.getLocalPlayers().size() == 1) {
+                        createEndDialog("You win!");
+                    } else {
+                        createEndDialog(model.getGame().getWinner().getName() + " has won the game!");
+                    }
                 } else {
                     createEndDialog("You lose!");
                 }
@@ -191,7 +210,7 @@ public class ControllerGame implements IController{
         }
     }
 
-    private void markPossibleMoves(List<Tile> tiles){
+    private void markPossibleMoves(List<Tile> tiles, boolean locallyAvailable){
         for (HBox[] column: boardTiles){
             for (HBox hbox: column) {
                 ObservableList<Node> nodes = hbox.getChildren();
@@ -207,21 +226,45 @@ public class ControllerGame implements IController{
             }
         }
 
-
         for (Tile tile: tiles) {
             HBox pane = boardTiles[tile.getRow()][tile.getCol()];
             Circle marker = new Circle(32.5, Paint.valueOf("blue"));
-            marker.setStroke(Color.BLACK);
-            marker.setFill(Color.rgb(200, 200, 200, 0.5));
+            marker.setFill(Color.rgb(100, 100, 100, 0.5));
             pane.getChildren().add(marker);
 
-            marker.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    model.getGame().playMove(tile.getRow(), tile.getCol());
-                    updateBoard();
-                }
-            });
+            if (locallyAvailable) {
+                marker.setStroke(Color.GREEN);
+                marker.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        playerDoesMove(tile.getRow(), tile.getCol(), model.getGame().getCurrentPlayer());
+                        updateBoard();
+                        updateInfoPanel();
+                    }
+                });
+            } else {
+                marker.setStroke(Color.GREEN);
+            }
         }
+    }
+
+
+    private void playerDoesMove(int row, int col, Player player){
+        model.getGame().playMove(row, col, player);
+    }
+
+    private void updateInfoPanel(){
+        scorePlayerName.getChildren().removeAll(scorePlayerName.getChildren());
+        scorePlayerScore.getChildren().removeAll(scorePlayerScore.getChildren());
+
+        for (Player player: model.getGame().getPlayers()){
+            scorePlayerName.getChildren().add(new Text("PlayerName"));
+            scorePlayerScore.getChildren().add(new Text("100"));
+        }
+
+        currentTurnPlayer.setText(model.getGame().getCurrentPlayer().toString());
+        timeLeft.setText(String.valueOf(model.getGame().getTurnTimeout()));
+        //Todo implement turn number
+        turnNumber.setText("99");
     }
 }

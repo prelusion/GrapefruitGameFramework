@@ -10,10 +10,13 @@ import com.grapefruit.gamework.app.view.templates.MainWindow.MainWindowFactory;
 import com.grapefruit.gamework.framework.Assets;
 import com.grapefruit.gamework.framework.Game;
 import com.grapefruit.gamework.framework.GameWrapper;
+import com.grapefruit.gamework.framework.player.Player;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.util.List;
 
 public class GameApplication extends Application {
 
@@ -43,8 +46,8 @@ public class GameApplication extends Application {
         return primaryStage;
     }
 
-    public static void playGame(Assets assets, Game game){
-        primaryStage.setScene(new Scene(GameFactory.build(new ModelGame(game, assets)).getParent(), 1100, 800));
+    public static void playGame(Assets assets, Game game, Player[] localPlayers){
+        primaryStage.setScene(new Scene(GameFactory.build(new ModelGame(game, assets, localPlayers)).getParent(), 1100, 800));
         primaryStage.setTitle("Now playing: " + assets.getDisplayName());
         primaryStage.show();
     }

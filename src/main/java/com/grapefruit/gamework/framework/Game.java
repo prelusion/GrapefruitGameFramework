@@ -52,6 +52,12 @@ public abstract class Game {
         if (currentPlayerIndex == players.length) currentPlayerIndex = 0;
     }
 
+    public Player getOpponentPlayer() {
+        int index = currentPlayerIndex + 1;
+        if (index == players.length) index = 0;
+        return players[index];
+    }
+
     public Player getCurrentPlayer() {
         return currentPlayer;
     }

@@ -16,8 +16,8 @@ public class RealAI {
         int turnTimeout = 10;
         Scanner in = new Scanner(System.in);
         Board board = new ReversiBoard(8);
-        Player playerWhite = new AIPlayer("White", Colors.WHITE, new MinimaxAlgorithm(), 3 );
-        Player playerBlack = new AIPlayer("Black", Colors.BLACK, new MinimaxAlgorithm(), 2);
+        AIPlayer playerWhite = new AIPlayer("White", Colors.WHITE, new MinimaxAlgorithm(), 3);
+        AIPlayer playerBlack = new AIPlayer("Black", Colors.BLACK, new MinimaxAlgorithm(), 1);
         Reversi game = new Reversi(board, playerWhite, playerBlack, turnTimeout);
 
         System.out.println("INIT BOARD:");
@@ -33,8 +33,15 @@ public class RealAI {
             System.out.println("current player: " + currentPlayer.getColor());
             List<Tile> availableMoves = game.getAvailableMoves(currentPlayer);
             System.out.println("available moves: " + availableMoves.size());
-            board.printAvailableMoves(game.getCurrentPlayer());
-            Tile move = ((AIPlayer)game.getCurrentPlayer()).calculateMove(game.getBoard());
+            board.printAvailableMoves(currentPlayer);
+
+            Player opponent;
+            if (currentPlayer == playerWhite) {
+                opponent = playerBlack;
+            } else {
+                opponent = playerWhite;
+            }
+            Tile move = ((AIPlayer) currentPlayer).calculateMove(game.getBoard(), opponent);
 
             if (move == null) {
                 System.out.println("WTF MOVE IS NULL");
@@ -53,7 +60,7 @@ public class RealAI {
                 System.out.println("current board");
                 board.printBoard();
             }
-            System.exit(0);
+//            System.exit(0);
         }
 
         Game.GameResult result = game.getGameResult();

@@ -31,8 +31,7 @@ public class ServerConnection {
                         String answer = in.readLine();
                         if (!answer.equals("null")) {
 //                            controller.answer(answer);
-                            System.out.println(answer);
-                        }
+                       }
                     }
                 } catch (Exception e){
                     e.printStackTrace();
@@ -53,4 +52,3 @@ public class ServerConnection {
         out.close();
     }
 }
-

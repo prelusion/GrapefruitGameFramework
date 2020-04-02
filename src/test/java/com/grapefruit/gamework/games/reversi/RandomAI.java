@@ -43,6 +43,8 @@ public class RandomAI {
 
                 System.out.println("-- CURRENT BOARD -- ");
                 board.printBoard();
+
+
             } else {
                 game.nextPlayer();
             }

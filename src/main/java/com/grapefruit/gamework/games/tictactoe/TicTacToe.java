@@ -30,15 +30,12 @@ public class TicTacToe extends Game {
 
     @Override
     public GameResult getGameResult() {
-        Tile tile = Conditions.getTileOfAvailableConditions(getBoard());
-        if (tile != null) {
+        if (!finished) {
+            return GameResult.NONE;
+        } else if (Conditions.checkAllAdjacentConditions(getBoard())) {
             return GameResult.WINNER;
         } else {
-            if (finished){
-                return GameResult.TIE;
-            } else {
-                return GameResult.NONE;
-            }
+            return GameResult.TIE;
         }
     }
 

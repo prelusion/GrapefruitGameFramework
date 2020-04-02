@@ -17,8 +17,7 @@ public abstract class Commands {
         conn.sendCommand(KEYWORD_LOGOUT);
     }
 
-    public static List<String> getGameList(ServerConnection conn){
+    public static void getGameList(ServerConnection conn){
         conn.sendCommand(KEYWORD_GAMELIST);
-        return new ArrayList<>();
     }
 }

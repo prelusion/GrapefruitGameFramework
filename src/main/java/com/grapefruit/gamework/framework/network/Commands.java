@@ -1,5 +1,6 @@
 package com.grapefruit.gamework.framework.network;
 
+import javax.security.auth.callback.Callback;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,70 +11,71 @@ public abstract class Commands {
 
     private static final String KEYWORD_LOGIN = "login ";
     private static final String KEYWORD_LOGOUT = "logout";
-    private static final String KEYWORD_GAMELIST = "get gamelist";
-    private static final String KEYWORD_PLAYERLIST = "get playerlist";
-    private static final String KEYWORD_HELP = "help";
+    private static final String KEYWORD_GAME_LIST = "get gamelist";
+    private static final String KEYWORD_PLAYER_LIST = "get playerlist";
+    private static final String KEYWORD_HELP = "help ";
     private static final String KEYWORD_MOVE = "move ";
     private static final String KEYWORD_FORFEIT = "forfeit";
     private static final String KEYWORD_CHALLENGE = "challenge ";
 
-
     /**
      * The login function sends a login command from the client to the server.
      *
-     * @param conn ServerConnection the object that handles the server connection.
+     * @param callback callback to execute after response has been received.
      * @param name String the username of the user to login
      */
-    public static void login(ServerConnection conn, String name){
-        conn.sendCommand(KEYWORD_LOGIN + name);
+    public static Command login(String name, CommandCallback callback){
+        return new Command(KEYWORD_LOGIN+ name, callback, ServerManager.ResponseType.CONFIRMONLY);
     }
 
     /**
      * The function logout logs the currently logged in user out.
      *
-     * @param conn ServerConnection the object that handles the server connection.
+     * @param callback callback to execute after response has been received.
      */
-    public static void logout(ServerConnection conn){
-        conn.sendCommand(KEYWORD_LOGOUT);
+    public static Command logout(CommandCallback callback){
+        return new Command(KEYWORD_LOGOUT, callback, ServerManager.ResponseType.CONFIRMONLY);
     }
 
     /**
      * This functions asks the server for a list of available games.
      *
-     * @param conn ServerConnection the object that handles the server connection.
+     * @param callback callback to execute after response has been received.
      */
-    public static void getGameList(ServerConnection conn){
-        conn.sendCommand(KEYWORD_GAMELIST);
+    public static Command getGameList(CommandCallback callback){
+        return new Command(KEYWORD_GAME_LIST, callback, ServerManager.ResponseType.LIST);
     }
 
     /**
      * This function asks the server for a list of available players.
      *
-     * @param conn ServerConnection the object that handles the server connection.
+     * @param callback callback to execute after response has been received.
      */
-    public static void getPlayerList(ServerConnection conn) {
-        conn.sendCommand(KEYWORD_PLAYERLIST);
+    public static Command getPlayerList(CommandCallback callback) {
+        return new Command(KEYWORD_PLAYER_LIST, callback, ServerManager.ResponseType.LIST);
     }
 
     /**
      * This function asks the server for a list of all possible commands.
      *
-     * @param conn ServerConnection the object that handles the server connection.
+     * @param callback callback to execute after response has been received.
      */
-    public static void getHelp(ServerConnection conn) {
-        conn.sendCommand(KEYWORD_HELP);
+    public static Command getHelp(CommandCallback callback, String command) {
+        return new Command(KEYWORD_HELP + command, callback, ServerManager.ResponseType.LIST);
     }
 
     /**
      * This functions asks the server to set a move.
      *
-     * @param conn      ServerConnection the object that handles the server connection.
+     *      * @param callback callback to execute after response has been received.
+     * @param callback callback to execute after response has been received.
      * @param row       int the row on the board.
      * @param col       int the col on the board.
      * @param boardSize int the board size.
      */
-    public static void setMove(ServerConnection conn, int row, int col, int boardSize) {
-        conn.sendCommand(KEYWORD_MOVE + Integer.toString((int)row * boardSize + col + 1));
+    public static Command setMove(CommandCallback callback, int row, int col, int boardSize) {
+        double index = row * boardSize + col + 1;
+        return new Command(KEYWORD_MOVE + index, callback, ServerManager.ResponseType.CONFIRMONLY);
     }
 
     /**
@@ -88,14 +90,14 @@ public abstract class Commands {
     /**
      * The challenge function is used to indicate if the current logged in player accepts the challenge by passing a boolean value.
      *
-     * @param conn   ServerConnection the object that handles the server connection.
+     * @param callback callback to execute after response has been received.
      * @param accept boolean Flag to indicate if the challenge is accepted or not.
      */
-    public static void challenge(ServerConnection conn, boolean accept) {
+    public static Command challenge(CommandCallback callback, boolean accept) {
         if (accept) {
-            conn.sendCommand(KEYWORD_CHALLENGE + "accept");
+            return new Command(KEYWORD_CHALLENGE + "accept", callback, ServerManager.ResponseType.CONFIRMONLY);
         } else {
-            conn.sendCommand(KEYWORD_CHALLENGE + "decline");
+            return new Command(KEYWORD_CHALLENGE + "decline", callback, ServerManager.ResponseType.CONFIRMONLY);
         }
     }
 }

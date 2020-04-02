@@ -33,12 +33,23 @@ public class ServerConnection {
                         String answer = in.readLine();
                         if (!answer.equals("null")) {
                             if (answer.equals("OK")){
-                                manager.getFirstUnconfirmed().confirm();
+                                Command command = manager.getFirstUnconfirmed();
+                                command.confirm();
+                                if (command.getResponseType() == ServerManager.ResponseType.CONFIRMONLY){
+                                    manager.removeCommandFromQueue(command);
+                                }
                             } else if (answer.startsWith("ERR")){
                                 manager.getFirstUnconfirmed().confirm();
                             }
                             if (answer.contains("SVR") && answer.contains("[")){
-                                List<String> items = Arrays.asList(answer.split("\\s*,\\s*"));
+                                List<String> arguments = Arrays.asList(answer.split("(?<=(['\"])\\b)(?:(?!\\1|\\\\).|\\\\.)*(?=\\1)"));
+                                String[] args = new String[arguments.size()];
+                                int i = 0;
+                                for (String arg: arguments){
+                                    args[i] = arg;
+                                    i++;
+                                }
+                                manager.findFirstFittingCommand(ServerManager.ResponseType.LIST, true).doCallBack(args);
                             }
                        }
                     }

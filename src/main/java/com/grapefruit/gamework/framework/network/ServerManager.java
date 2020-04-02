@@ -2,7 +2,6 @@ package com.grapefruit.gamework.framework.network;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.SynchronousQueue;
 
 public class ServerManager {
 
@@ -18,7 +17,7 @@ public class ServerManager {
 
     public ServerManager(String serverAddress){
         this.connection = new ServerConnection(serverAddress, this);
-        this.commandQueue = new SynchronousQueue<>();
+        this.commandQueue = new LinkedList<>();
     }
 
     public void queueCommand(Command command){
@@ -32,7 +31,6 @@ public class ServerManager {
     public Command findFirstFittingCommand(ResponseType responseType, boolean isConfirmed){
         for (Command command: commandQueue){
             if (command.getResponseType() == responseType && command.isConfirmed() == isConfirmed){
-                commandQueue.remove(command);
                 return command;
             }
         }
@@ -46,5 +44,9 @@ public class ServerManager {
             }
         }
         return null;
+    }
+
+    public void removeCommandFromQueue(Command command){
+        commandQueue.remove(command);
     }
 }

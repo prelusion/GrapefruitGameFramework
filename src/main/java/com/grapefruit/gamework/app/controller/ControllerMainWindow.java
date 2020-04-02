@@ -11,6 +11,7 @@ import com.grapefruit.gamework.framework.GameWrapper;
 import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.ServerManager;
+import com.jfoenix.controls.JFXPopup;
 import javafx.application.Platform;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
@@ -21,6 +22,8 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SelectionModel;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import org.apache.commons.validator.routines.InetAddressValidator;
 

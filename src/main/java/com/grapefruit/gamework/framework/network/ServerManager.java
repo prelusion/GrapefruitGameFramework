@@ -52,6 +52,10 @@ public class ServerManager {
         return null;
     }
 
+    public void removeCommandFromQueue(Command command){
+        commandQueue.remove(command);
+    }
+
     private void startSending() {
         Thread timer = new Thread(new Runnable() {
             @Override

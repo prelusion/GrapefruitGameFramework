@@ -26,6 +26,7 @@ public class ServerManager {
         commandQueue.add(command);
         if (!sending) {
             startSending();
+            sending = true;
         }
     }
 
@@ -49,6 +50,25 @@ public class ServerManager {
             }
         }
         return null;
+    }
+
+    private void startSending() {
+        Thread timer = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!Thread.interrupted()) {
+                    if (getFirstUnconfirmed() != null) {
+                        connection.sendCommand(getFirstUnconfirmed().getCommandString());
+                    }
+                    try{
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        timer.start();
     }
 }
 

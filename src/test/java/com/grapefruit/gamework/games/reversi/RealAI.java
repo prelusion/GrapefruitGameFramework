@@ -16,26 +16,31 @@ public class RealAI {
         int turnTimeout = 10;
         Scanner in = new Scanner(System.in);
         Board board = new ReversiBoard(8);
-        Player playerWhite = new AIPlayer("White", Colors.WHITE, new MinimaxAlgorithm(), 1);
-        Player playerBlack = new AIPlayer("Black", Colors.BLACK, new MinimaxAlgorithm(), 1);
-        Game game = new Reversi(board, playerWhite, playerBlack, turnTimeout);
+        Player playerWhite = new AIPlayer("White", Colors.WHITE, new MinimaxAlgorithm(), 2);
+        Player playerBlack = new AIPlayer("Black", Colors.BLACK, new MinimaxAlgorithm(), 5);
+        Reversi game = new Reversi(board, playerWhite, playerBlack, turnTimeout);
 
+        System.out.println("INIT BOARD:");
         board.printBoard();
 
         while (!game.hasFinished()) {
-            Thread.sleep(500);
-            System.out.println("--------------------------------------");
+//            Thread.sleep(50);
+            System.out.println("\n\n----------------NEW TURN--------------------");
+
             Player currentPlayer = game.getCurrentPlayer();
-
-            System.out.println("-- AVAILABLE MOVES for player " + currentPlayer.getColor());
-            board.printAvailableMoves(game.getCurrentPlayer());
-
-            System.out.println("--------------------------------------");
+            System.out.println("current player: " + currentPlayer.getColor());
             List<Tile> availableMoves = game.getAvailableMoves(currentPlayer);
             System.out.println("available moves: " + availableMoves.size());
-
-            System.out.println("--------------------------------------");
+            board.printAvailableMoves(game.getCurrentPlayer());
             Tile move = ((AIPlayer)game.getCurrentPlayer()).calculateMove(game.getBoard());
+
+            if (move == null) {
+                System.out.println("WTF MOVE IS NULL");
+                game.nextPlayer();
+                game.checkFinished();
+                continue;
+            }
+
             game.playMove(move.getRow(), move.getCol());
             System.out.println("Row " + move.getRow() + " Col " + move.getCol() + " Player " + currentPlayer.getColor());
             System.out.println(game.getBoard().getGrid()[move.getRow()][move.getCol()].getPlayer());
@@ -43,16 +48,8 @@ public class RealAI {
             System.out.println();
 
             if (availableMoves.size() > 0) {
-
-//                System.out.println("row: " + move.getRow() + ", col: " + move.getCol());
-//                boolean success = game.playMove(move.getRow(), move.getCol());
-//                assert success;
-
-                System.out.println("-- CURRENT BOARD -- ");
+                System.out.println("current board");
                 board.printBoard();
-            } else {
-                System.out.println("testsertestestestst");
-                //game.nextPlayer();
             }
         }
 
@@ -61,8 +58,6 @@ public class RealAI {
         if (game.hasWinner()) {
             System.out.println("Winner: " + game.getWinner().getColor().toString());
         }
-
-
     }
 }
 

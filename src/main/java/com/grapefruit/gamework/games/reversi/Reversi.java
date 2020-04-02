@@ -68,6 +68,10 @@ public class Reversi extends Game {
                 .noneMatch(player -> (getAvailableMoves(player).size()) > 0);
     }
 
+    public void checkFinished() {
+        if (hasFinished()) finished = true;
+    }
+
     @Override
     public List<Tile> getAvailableMoves(Player player) {
         return getBoard().getAvailableMoves(player);

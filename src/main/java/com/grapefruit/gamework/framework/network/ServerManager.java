@@ -52,6 +52,15 @@ public class ServerManager {
         return null;
     }
 
+    public Command getFirstUnsent(){
+        for (Command command: commandQueue){
+            if (!command.isSent()){
+                return command;
+            }
+        }
+        return null;
+    }
+
     private void startSending() {
         Thread timer = new Thread(new Runnable() {
             @Override

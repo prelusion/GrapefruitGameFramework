@@ -16,7 +16,7 @@ public class RealAI {
         int turnTimeout = 10;
         Scanner in = new Scanner(System.in);
         Board board = new ReversiBoard(8);
-        AIPlayer playerWhite = new AIPlayer("White", Colors.WHITE, new MinimaxAlgorithm(), 3);
+        AIPlayer playerWhite = new AIPlayer("White", Colors.WHITE, new MinimaxAlgorithm(), 7);
         AIPlayer playerBlack = new AIPlayer("Black", Colors.BLACK, new MinimaxAlgorithm(), 1);
         Reversi game = new Reversi(board, playerWhite, playerBlack, turnTimeout);
 

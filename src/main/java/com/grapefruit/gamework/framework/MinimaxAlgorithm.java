@@ -27,15 +27,16 @@ public class MinimaxAlgorithm implements MoveAlgorithm {
         int alpha = -999999;
         int beta = +999999;
         int maxScore = -9999999;
-        Tile bestTile= null;
+        Tile bestTile = null;
 
         List<Tile> moves = board.getAvailableMoves(player);
+        Map<Tile, Integer> tiles = new HashMap<>();
         for (Tile tile : moves) {
             Board newBoard = new ReversiBoard(board.boardSize);
             newBoard.copyState(board);
             newBoard.setMove(tile.getRow(), tile.getCol(), player);
-//            System.out.println("Maximizing first depth");
-            int score = minimax2(
+
+            tiles.put(tile, minimax2(
                     depth - 1,
                     newBoard,
                     tile.getStrategicValue(),
@@ -44,31 +45,35 @@ public class MinimaxAlgorithm implements MoveAlgorithm {
                     player,
                     opponent,
                     false
-            );
+            ));
+        }
 
-            if (score > maxScore) {
-                maxScore = score;
-                bestTile = tile;
+        int bestValue = -9999;
+        for (Map.Entry<Tile, Integer> entry : tiles.entrySet()) {
+            System.out.println("Best value " + bestValue);
+            if(entry.getValue() > bestValue) {
+                System.out.println("Better Move Found!");
+                if(bestTile != null) {
+                    System.out.println("Old Move value: " + bestTile.getRow() + " " + bestTile.getCol() + " score " + bestTile.getStrategicValue());
+                }
+                System.out.println("New Move Value " + entry.getKey().getRow() + entry.getKey().getCol() + " score " + entry.getKey().getStrategicValue());
+                bestTile = entry.getKey();
+                bestValue = entry.getValue();
+            } else {
+                System.out.println("IgnoreMove " + entry.getKey().getRow() + entry.getKey().getCol() + " score " + entry.getKey().getStrategicValue());
             }
         }
 
-        if (bestTile == null) return null;
 
-        if (bestTile.getStrategicValue() == -24) {
-            System.out.println("WRONG MOVE!");
-            moves.forEach(move ->
-                    System.out.println(move.getStrategicValue() + "," + move.getRow()  + "," +  move.getCol()));
-            System.exit(0);
+        if(bestTile != null) {
+            System.out.println("RETURNS " + bestTile.getStrategicValue() + " BESTVAL " + bestValue);
         }
-
         return bestTile;
     }
 
 
     public int minimax2(int depth, Board board, int score, int alpha, int beta,
                         Player player, Player opponent, boolean maximizingPlayer) {
-//        System.out.println("minimax board:");
-//        board.printBoard();
 
         if (depth == 0) {
             return score;
@@ -77,15 +82,12 @@ public class MinimaxAlgorithm implements MoveAlgorithm {
         if (maximizingPlayer) {
             int maxScore = -999;
             List<Tile> moves = board.getAvailableMoves(player);
-//            System.out.println("minimax available moves:" + moves.size());
-//            board.printAvailableMoves(moves);
 
             if (moves.size() == 0) {
                 return score;
             }
 
             for (Tile move : moves) {
-//                System.out.println("MAXIMIZING");
                 Board newBoard = new ReversiBoard(board.boardSize);
                 newBoard.copyState(board);
                 newBoard.setMove(move.getRow(), move.getCol(), player);
@@ -93,64 +95,53 @@ public class MinimaxAlgorithm implements MoveAlgorithm {
                 int currentScore = minimax2(
                         depth - 1,
                         newBoard,
-                        move.getStrategicValue(),
+                        score + move.getStrategicValue(),
                         alpha, beta,
                         player,
                         opponent,
                         false
                 );
-//                System.out.println("maximizing current score: " + currentScore);
 
                 maxScore = max(maxScore, currentScore);
 
-//                alpha = max(alpha, currentScore);
-//                if (beta <= alpha) {
-//                    break;
-//                }
+                alpha = max(alpha, currentScore);
+                if (beta <= alpha) {
+                    break;
+                }
             }
-//            System.out.println("maximizing depth:" + depth);
-//            System.out.println("-----");
             return maxScore;
 
         } else {
             int minScore = 999;
             List<Tile> moves = board.getAvailableMoves(opponent);
-//            System.out.println("minimax available moves:" + moves.size());
-//            board.printAvailableMoves(moves);
 
             if (moves.size() == 0) {
                 return score;
             }
 
             for (Tile move : moves) {
-//                System.out.println("MINIMIZING");
                 Board newBoard = new ReversiBoard(board.boardSize);
                 newBoard.copyState(board);
                 newBoard.setMove(move.getRow(), move.getCol(), opponent);
-//                System.out.println("minimizing set move + " + move.getRow() + ", " + move.getCol());
-
 
                 int currentScore = minimax2(
                         depth - 1,
                         newBoard,
-                        move.getStrategicValue(),
+                        score - move.getStrategicValue(),
                         alpha,
                         beta,
                         player,
                         opponent,
                         true
                 );
-//                System.out.println("minimizing current score: " + currentScore);
 
                 minScore = min(minScore, currentScore);
 
-//                beta = min(beta, currentScore);
-//                if (beta <= alpha) {
-//                    break;
-//                }
+                beta = min(beta, currentScore);
+                if (beta <= alpha) {
+                    break;
+                }
             }
-//            System.out.println("minimizing depth:" + depth);
-//            System.out.println("-----");
             return minScore;
         }
     }

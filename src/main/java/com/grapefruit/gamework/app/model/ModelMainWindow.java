@@ -9,6 +9,7 @@ public class ModelMainWindow implements IModel {
 
     private ArrayList<GameWrapper> gameWrappers = GameRegistry.GAMES;
     private GameWrapper selectedGameWrapper = null;
+    private String[] availableGames;
 
     public ModelMainWindow(){
     }
@@ -34,5 +35,14 @@ public class ModelMainWindow implements IModel {
      */
     public GameWrapper getSelectedGame(){
         return selectedGameWrapper;
+    }
+
+
+    public void setAvailableGames(String[] availableGames) {
+        this.availableGames = availableGames;
+    }
+
+    public String[] getAvailableGames() {
+        return availableGames;
     }
 }

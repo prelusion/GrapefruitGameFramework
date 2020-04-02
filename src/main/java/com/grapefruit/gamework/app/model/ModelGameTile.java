@@ -9,6 +9,7 @@ public class ModelGameTile implements IModel {
     private GameWrapper game;
     private ModelMainWindow modelMainWindow;
     private boolean selected;
+    private boolean availableOnServer;
 
     public ModelGameTile(GameWrapper game, ModelMainWindow mainWindow){
         this.game = game;
@@ -18,6 +19,19 @@ public class ModelGameTile implements IModel {
                 selected = true;
             }
         }
+        if (mainWindow.getAvailableGames() != null && mainWindow.getAvailableGames().length > 0){
+            for (String availableGame: mainWindow.getAvailableGames()){
+                 if (game.getAssets().getServerId().equals(availableGame)){
+                     availableOnServer = true;
+                 }
+            }
+        } else {
+            availableOnServer = false;
+        }
+    }
+
+    public boolean isAvailableOnServer(){
+        return availableOnServer;
     }
 
     /**

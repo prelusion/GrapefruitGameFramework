@@ -8,6 +8,10 @@ import com.grapefruit.gamework.app.view.templates.SettingsWindow.SettingsWindowF
 import com.grapefruit.gamework.app.view.templates.SettingsWindow.TemplateSettingsWindow;
 import com.grapefruit.gamework.framework.Game;
 import com.grapefruit.gamework.framework.GameWrapper;
+import com.grapefruit.gamework.framework.network.CommandCallback;
+import com.grapefruit.gamework.framework.network.Commands;
+import com.grapefruit.gamework.framework.network.ServerManager;
+import javafx.application.Platform;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -18,6 +22,7 @@ import javafx.scene.control.SelectionModel;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import org.apache.commons.validator.routines.InetAddressValidator;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -27,9 +32,17 @@ public class ControllerMainWindow implements IController {
 
     private ModelMainWindow modelMainWindow= null;
     private AppSettings.Server selectedServer;
+    private ServerManager serverManager;
+    private String[] availableGames;
 
     @FXML
     private URL location;
+
+    @FXML
+    private Button connectButton;
+
+    @FXML
+    private Text connectionStatus;
 
     @FXML
     private HBox selectedGame;
@@ -160,5 +173,41 @@ public class ControllerMainWindow implements IController {
         if (serverSelection.getValue() instanceof AppSettings.Server) {
             selectedServer = (AppSettings.Server) serverSelection.getValue();
         }
+    }
+
+    @FXML
+    private void onConnect(){
+        InetAddressValidator validator = new InetAddressValidator();
+        if (selectedServer != null &&validator.isValid(selectedServer.getIp()) && serverManager == null){
+            serverManager = new ServerManager(selectedServer.getIp());
+            connectionStatus.setText("Connected");
+            serverManager.queueCommand(Commands.getGameList(new CommandCallback() {
+                @Override
+                public void onResponse(String[] args) {
+                    setAvailableGames(args);
+                }
+            }));
+        } else {
+            connectionStatus.setText("Invalid");
+        }
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                while(connectionStatus.getText() == "connected"){
+                    //todo Check connection
+                    //Is manager still connected?
+                }
+            }
+        });
+    }
+
+    public String[] getAvailableGames() {
+        return availableGames;
+    }
+
+    public synchronized void setAvailableGames(String[] games){
+        availableGames = games;
+        modelMainWindow.setAvailableGames(games);
     }
 }

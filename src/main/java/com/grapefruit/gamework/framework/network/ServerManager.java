@@ -1,5 +1,6 @@
 package com.grapefruit.gamework.framework.network;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -17,9 +18,23 @@ public class ServerManager {
     private ServerConnection connection;
     private Queue<Command> commandQueue;
 
-    public ServerManager(String serverAddress){
-        this.connection = new ServerConnection(serverAddress, this);
+    public ServerManager(){
+        this.connection = new ServerConnection(this);
         this.commandQueue = new LinkedList<>();
+    }
+
+    public boolean isConnected(){
+        return connection.isConnected();
+    }
+
+    public boolean connect(String address){
+        try {
+            connection.connect(address);
+        } catch (IOException e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return true;
     }
 
     public void queueCommand(Command command){
@@ -60,6 +75,10 @@ public class ServerManager {
 
     public void removeCommandFromQueue(Command command){
         commandQueue.remove(command);
+    }
+
+    public boolean commandsInQueue(){
+        return commandQueue.size() > 0;
     }
 }
 

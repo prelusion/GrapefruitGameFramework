@@ -182,11 +182,13 @@ public class ControllerMainWindow implements IController {
     private void onConnect(){
         InetAddressValidator validator = new InetAddressValidator();
         if (selectedServer != null &&validator.isValid(selectedServer.getIp()) && serverManager == null){
-            serverManager = new ServerManager(selectedServer.getIp());
+            serverManager = new ServerManager();
+            serverManager.connect(selectedServer.getIp());
             connectionStatus.setText("Connected");
             serverManager.queueCommand(Commands.getGameList(new CommandCallback() {
                 @Override
-                public void onResponse(String[] args) {
+                public void onResponse(boolean success, String[] args) {
+                    if (success && args != null && args.length > 0)
                     setAvailableGames(args);
                 }
             }));

@@ -72,7 +72,6 @@ public class TicTacToe extends Game {
         getBoard().setPlayer(row, col, getCurrentPlayer());
         if (hasFinished()) {
             finished = true;
-            getGameResult();
         }
         return true;
     }

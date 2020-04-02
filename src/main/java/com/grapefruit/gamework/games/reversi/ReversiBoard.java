@@ -127,8 +127,8 @@ public class ReversiBoard extends Board {
         }
 
         Tile tile = grid[row][col];
-        tile.setPlayer(player);
-        searchOrder.add(tile);
+
+        searchOrder.add(new Tile(tile.getRow(), tile.getCol(), tile.getStrategicValue(), player));
 
         return getTilesToTurn(player, row + dRow, col + dCol, dRow, dCol, searchOrder);
     }

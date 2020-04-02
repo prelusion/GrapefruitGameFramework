@@ -52,6 +52,15 @@ public class ServerManager {
         return null;
     }
 
+    public Command getFirstUnsent(){
+        for (Command command: commandQueue){
+            if (!command.isSent()){
+                return command;
+            }
+        }
+        return null;
+    }
+
     public void removeCommandFromQueue(Command command){
         commandQueue.remove(command);
     }

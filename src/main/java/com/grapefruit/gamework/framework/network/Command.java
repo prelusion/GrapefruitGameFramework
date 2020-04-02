@@ -5,6 +5,7 @@ public class Command {
     private String commandString;
     private CommandCallback callback;
     private boolean confirmed = false;
+    private boolean sent = false;
     private ServerManager.ResponseType responseType;
 
     public Command(String commandString, CommandCallback callback, ServerManager.ResponseType responseType){
@@ -18,6 +19,14 @@ public class Command {
 
     public void confirm(){
         confirmed = true;
+    }
+
+    public void send(){
+        sent = true;
+    }
+
+    public boolean isSent(){
+        return sent;
     }
 
     public ServerManager.ResponseType getResponseType() {

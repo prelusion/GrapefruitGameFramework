@@ -232,7 +232,6 @@ public class ControllerGame implements IController{
             marker.setFill(Color.rgb(100, 100, 100, 0.5));
             pane.getChildren().add(marker);
 
-
             if (locallyAvailable) {
                 marker.setStroke(Color.GREEN);
                 marker.setOnMouseClicked(new EventHandler<MouseEvent>() {

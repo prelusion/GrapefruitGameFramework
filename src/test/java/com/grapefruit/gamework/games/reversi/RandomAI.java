@@ -38,7 +38,7 @@ public class RandomAI {
                 Tile move = availableMoves.get(idx);
 
                 System.out.println("row: " + move.getRow() + ", col: " + move.getCol());
-                boolean success = game.playMove(move.getRow(), move.getCol());
+                boolean success = game.playMove(move.getRow(), move.getCol(), currentPlayer);
                 assert success;
 
                 System.out.println("-- CURRENT BOARD -- ");

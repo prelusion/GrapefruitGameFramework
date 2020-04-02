@@ -19,7 +19,7 @@ public class BoardTest {
         for (int i = 0; i < game.getBoard().getGrid().length * game.getBoard().getGrid().length; i++) {
             System.out.println("Turn " + i + " " + game.getCurrentPlayer().getColor().toString());
             tile = ((AIPlayer)game.getCurrentPlayer()).calculateMove(game.getBoard());
-            game.playMove(tile.getRow(), tile.getCol());
+            //game.playMove(tile.getRow(), tile.getCol());
             game.getBoard().printBoard();
             if(game.finished) {
                 showResult(game);

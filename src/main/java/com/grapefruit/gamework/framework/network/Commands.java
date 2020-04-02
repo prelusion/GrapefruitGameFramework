@@ -7,17 +7,19 @@ public abstract class Commands {
 
     private static String KEYWORD_LOGIN = "login ";
     private static String KEYWORD_LOGOUT = "logout";
-    private static String KEYWORD_GAMELIST = "get gamelist";
+    private static String KEYWORD_GAME_LIST = "get gamelist";
 
-    public static void login(ServerConnection conn, String name){
-        conn.sendCommand(KEYWORD_LOGIN + name);
+    public static Command login(String name, CommandCallback callback){
+        return new Command(KEYWORD_LOGIN+ name, callback, ServerManager.ResponseType.CONFIRMONLY);
     }
 
-    public static void logout(ServerConnection conn){
-        conn.sendCommand(KEYWORD_LOGOUT);
+    public static Command logout(CommandCallback callback){
+        return new Command(KEYWORD_LOGOUT, callback, ServerManager.ResponseType.CONFIRMONLY);
     }
 
-    public static void getGameList(ServerConnection conn){
-        conn.sendCommand(KEYWORD_GAMELIST);
+    public static Command getGameList(CommandCallback callback){
+        return new Command(KEYWORD_GAME_LIST, callback, ServerManager.ResponseType.LIST);
     }
+
+
 }

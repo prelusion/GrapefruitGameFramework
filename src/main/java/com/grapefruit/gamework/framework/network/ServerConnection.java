@@ -2,6 +2,8 @@ package com.grapefruit.gamework.framework.network;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.List;
 
 public class ServerConnection {
 
@@ -9,9 +11,11 @@ public class ServerConnection {
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
+    private ServerManager manager;
 
-    public ServerConnection(String serverIp) {
+    public ServerConnection(String serverIp, ServerManager manager) {
         this.serverIp = serverIp;
+        this.manager = manager;
     }
 
     public void connect() throws IOException {
@@ -28,7 +32,14 @@ public class ServerConnection {
                     while (socket.isConnected()) {
                         String answer = in.readLine();
                         if (!answer.equals("null")) {
-//                            controller.answer(answer);
+                            if (answer.equals("OK")){
+                                manager.getFirstUnconfirmed().confirm();
+                            } else if (answer.startsWith("ERR")){
+                                manager.getFirstUnconfirmed().confirm();
+                            }
+                            if (answer.contains("SVR") && answer.contains("[")){
+                                List<String> items = Arrays.asList(answer.split("\\s*,\\s*"));
+                            }
                        }
                     }
                 } catch (Exception e){

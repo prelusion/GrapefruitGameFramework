@@ -6,6 +6,7 @@ import java.io.IOException;
 
 public class ConnectionTest {
 
+    /*
     private MessageController controller;
 
     public ConnectionTest() {
@@ -36,4 +37,6 @@ public class ConnectionTest {
             System.out.println("error occured while trying to connect to the server");
         }
     }
+
+     */
 }

@@ -2,6 +2,7 @@ package com.grapefruit.gamework.app.controller;
 
 import com.grapefruit.gamework.app.model.*;
 import com.grapefruit.gamework.app.resources.AppSettings;
+import com.grapefruit.gamework.app.resources.SoundRegistry;
 import com.grapefruit.gamework.app.view.templates.GameTile.GameTileFactory;
 import com.grapefruit.gamework.app.view.templates.SelectedGame.SelectedGameFactory;
 import com.grapefruit.gamework.app.view.templates.SettingsWindow.SettingsWindowFactory;
@@ -17,6 +18,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SelectionModel;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 
 import java.net.URL;
@@ -27,6 +29,7 @@ public class ControllerMainWindow implements IController {
 
     private ModelMainWindow modelMainWindow= null;
     private AppSettings.Server selectedServer;
+    private MediaPlayer buttonMedia;
 
     @FXML
     private URL location;
@@ -92,6 +95,7 @@ public class ControllerMainWindow implements IController {
         modelMainWindow = (ModelMainWindow) model;
         initialize();
         updateSelectionBoxes();
+        buttonMedia = new MediaPlayer(SoundRegistry.BUTTON_PRESS);
     }
 
 
@@ -119,12 +123,14 @@ public class ControllerMainWindow implements IController {
                 if (node.getId() != null) {
                     if (node.getId().equals("gameTile")) {
                         updateGames();
+                        buttonMedia.play();
                     }
                 }
                 if (node.getParent() != null) {
                     if (node.getParent().getId() != null) {
                         if (node.getParent().getId().equals("gameTile")) {
                             updateGames();
+                            buttonMedia.play();
                         }
                     }
                 }

@@ -2,13 +2,14 @@ package com.grapefruit.gamework.app.resources;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
 
-import javax.print.attribute.standard.Media;
+import java.io.File;
 
 public class ResourceLoader {
 
     private static String FXML_LOCATION = "/fxml/";
-    private static String SOUND_LOCATION = "/sounds";
+    private static String SOUND_LOCATION = "/sounds/";
     private static String IMAGE_LOCATION = "/images/";
     private static String CSS_LOCATION = FXML_LOCATION + "css/";
 
@@ -52,8 +53,10 @@ public class ResourceLoader {
         return image;
     }
 
-   // public static Media loadMedia(String mediaName){
-   //     Media media = new Media("");
-   // }
+    public static Media loadMedia(String mediaName){
+        File file = new File(SOUND_LOCATION + mediaName);
+        Media test =  new Media(file.toURI().toString());
+        return test;
+    }
 
 }

@@ -35,7 +35,6 @@ public class ControllerMainWindow implements IController {
 
     private ModelMainWindow modelMainWindow= null;
     private AppSettings.Server selectedServer;
-    private ServerManager serverManager;
     private String[] availableGames;
 
     @FXML
@@ -181,11 +180,11 @@ public class ControllerMainWindow implements IController {
     @FXML
     private void onConnect(){
         InetAddressValidator validator = new InetAddressValidator();
-        if (selectedServer != null &&validator.isValid(selectedServer.getIp()) && serverManager == null){
-            serverManager = new ServerManager();
-            serverManager.connect(selectedServer.getIp());
+        if (selectedServer != null && validator.isValid(selectedServer.getIp()) && modelMainWindow.getServerManager() == null){
+            modelMainWindow.setServerManager(new ServerManager());
+            modelMainWindow.getServerManager().connect(selectedServer.getIp());
             connectionStatus.setText("Connected");
-            serverManager.queueCommand(Commands.getGameList(new CommandCallback() {
+            modelMainWindow.getServerManager().queueCommand(Commands.getGameList(new CommandCallback() {
                 @Override
                 public void onResponse(boolean success, String[] args) {
                     if (success && args != null && args.length > 0)
@@ -199,10 +198,11 @@ public class ControllerMainWindow implements IController {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                while(connectionStatus.getText() == "connected"){
+                while(modelMainWindow.getServerManager().isConnected()){
                     //todo Check connection
                     //Is manager still connected?
                 }
+                connectionStatus.setText("Disconnected");
             }
         });
     }

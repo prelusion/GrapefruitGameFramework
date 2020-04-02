@@ -50,7 +50,7 @@ public class RealAI {
                 continue;
             }
 
-            game.playMove(move.getRow(), move.getCol());
+            game.playMove(move.getRow(), move.getCol(), currentPlayer);
             System.out.println("Row " + move.getRow() + " Col " + move.getCol() + " Player " + currentPlayer.getColor());
             System.out.println(game.getBoard().getGrid()[move.getRow()][move.getCol()].getPlayer());
 

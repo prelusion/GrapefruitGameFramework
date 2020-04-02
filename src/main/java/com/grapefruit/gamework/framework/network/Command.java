@@ -11,10 +11,11 @@ public class Command {
     public Command(String commandString, CommandCallback callback, ServerManager.ResponseType responseType){
         this.commandString = commandString;
         this.callback = callback;
+        this.responseType = responseType;
     }
 
-    public void doCallBack(String[] args){
-        callback.onResponse(args);
+    public void doCallBack(boolean success, String[] args){
+        callback.onResponse(success, args);
     }
 
     public void confirm(){

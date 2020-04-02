@@ -1,5 +1,7 @@
 package com.grapefruit.gamework.framework.network;
 
+import com.google.gson.Gson;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Arrays;
@@ -12,17 +14,22 @@ public class ServerConnection {
     private BufferedReader in;
     private PrintWriter out;
     private ServerManager manager;
+    private boolean connected;
 
-    public ServerConnection(String serverIp, ServerManager manager) {
-        this.serverIp = serverIp;
+    public ServerConnection(ServerManager manager) {
         this.manager = manager;
     }
 
-    public void connect() throws IOException {
+    public void connect(String serverIp) throws IOException {
+        this.serverIp = serverIp;
         socket = new Socket(serverIp, 7789);
         out = new PrintWriter(socket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         listen();
+        startSending();
+        if (socket.isConnected()){
+            connected = true;
+        }
     }
 
     private void listen(){
@@ -31,17 +38,23 @@ public class ServerConnection {
                 try {
                     while (socket.isConnected()) {
                         String answer = in.readLine();
-                        if (!answer.equals("null")) {
+                        if (!answer.equals("null") && manager.commandsInQueue()) {
                             if (answer.equals("OK")){
                                 Command command = manager.getFirstUnconfirmed();
                                 command.confirm();
                                 if (command.getResponseType() == ServerManager.ResponseType.CONFIRMONLY){
                                     manager.removeCommandFromQueue(command);
+                                    command.doCallBack(true,null);
                                 }
                             } else if (answer.startsWith("ERR")){
-                                manager.getFirstUnconfirmed().confirm();
-                            }
-                            if (answer.contains("SVR") && answer.contains("[")){
+                                Command command = manager.getFirstUnconfirmed();
+                                command.confirm();
+                                String[] errors = new String[1];
+                                errors[0] = answer;
+                                command.doCallBack(false, errors);
+                                manager.removeCommandFromQueue(command);
+
+                            } else if (answer.contains("SVR") && answer.contains("[")){
                                 List<String> arguments = Arrays.asList(answer.split("(?<=(['\"])\\b)(?:(?!\\1|\\\\).|\\\\.)*(?=\\1)"));
                                 String[] args = new String[arguments.size()];
                                 int i = 0;
@@ -49,11 +62,26 @@ public class ServerConnection {
                                     args[i] = arg;
                                     i++;
                                 }
-                                manager.findFirstFittingCommand(ServerManager.ResponseType.LIST, true).doCallBack(args);
+                                Command command = manager.findFirstFittingCommand(ServerManager.ResponseType.LIST, true);
+                                command.confirm();
+                                command.doCallBack(true, args);
+                                manager.removeCommandFromQueue(command);
                             }
                        }
+                        if (answer != null){
+                            if (answer.startsWith("SVR GAME CHALLENGE CANCELLED")) {
+
+                            }
+                            if (answer.startsWith("SVR GAME CHALLENGE")){
+                                Gson gson = new Gson();
+                                ResponseChallenge responseChallenge = gson.fromJson(answer.replace("SVR GAME CHALLENGE", ""), ResponseChallenge.class);
+                                //todo do something
+                            }
+                        }
                     }
+                    connected = false;
                 } catch (Exception e){
+                    connected = false;
                     e.printStackTrace();
                 }
             }
@@ -67,13 +95,18 @@ public class ServerConnection {
         out.close();
     }
 
+    public boolean isConnected() {
+        return connected;
+    }
+
     public void startSending() {
         Thread timer = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (!Thread.interrupted()) {
-                    if (manager.getFirstUnconfirmed() != null) {
-                        out.println(manager.getFirstUnconfirmed().getCommandString());
+                    Command command = manager.getFirstUnsent();
+                    if (command != null) {
+                        out.println(command.getCommandString());
                     }
                     try{
                         Thread.sleep(300);
@@ -84,5 +117,40 @@ public class ServerConnection {
             }
         });
         timer.start();
+    }
+
+
+    public class ResponseChallenge{
+
+        private String challenger;
+        private int number;
+        private String gameType;
+
+        public ResponseChallenge() {
+        }
+
+        public String getChallenger() {
+            return challenger;
+        }
+
+        public void setChallenger(String challenger) {
+            this.challenger = challenger;
+        }
+
+        public int getNumber() {
+            return number;
+        }
+
+        public void setNumber(int number) {
+            this.number = number;
+        }
+
+        public String getGametype() {
+            return gameType;
+        }
+
+        public void setGametype(String gametype) {
+            this.gameType = gametype;
+        }
     }
 }

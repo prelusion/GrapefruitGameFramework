@@ -58,6 +58,7 @@ public class MinimaxAlgorithm implements MoveAlgorithm {
             System.out.println("WRONG MOVE!");
             moves.forEach(move ->
                     System.out.println(move.getStrategicValue() + "," + move.getRow()  + "," +  move.getCol()));
+            System.exit(0);
         }
 
         return bestTile;
@@ -102,10 +103,10 @@ public class MinimaxAlgorithm implements MoveAlgorithm {
 
                 maxScore = max(maxScore, currentScore);
 
-                alpha = max(alpha, currentScore);
-                if (beta <= alpha) {
-                    break;
-                }
+//                alpha = max(alpha, currentScore);
+//                if (beta <= alpha) {
+//                    break;
+//                }
             }
 //            System.out.println("maximizing depth:" + depth);
 //            System.out.println("-----");
@@ -143,10 +144,10 @@ public class MinimaxAlgorithm implements MoveAlgorithm {
 
                 minScore = min(minScore, currentScore);
 
-                beta = min(beta, currentScore);
-                if (beta <= alpha) {
-                    break;
-                }
+//                beta = min(beta, currentScore);
+//                if (beta <= alpha) {
+//                    break;
+//                }
             }
 //            System.out.println("minimizing depth:" + depth);
 //            System.out.println("-----");

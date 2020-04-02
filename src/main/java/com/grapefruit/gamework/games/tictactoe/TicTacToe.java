@@ -29,14 +29,14 @@ public class TicTacToe extends Game {
     }
 
     @Override
-    public void calculateGameResult() {
+    public GameResult getGameResult() {
         if (!finished) {
-            gameResult = GameResult.NONE;
-            
-        } else if (Conditions.checkAllAdjacentConditions(getBoard()))
-            gameResult = GameResult.WINNER;
+            return GameResult.NONE;
+        } else if (Conditions.checkAllAdjacentConditions(getBoard())) {
+            return GameResult.WINNER;
         } else {
-            gameResult = GameResult.TIE;
+            return GameResult.TIE;
+        }
     }
 
 
@@ -67,9 +67,9 @@ public class TicTacToe extends Game {
         }
 
         getBoard().setPlayer(row, col, getCurrentPlayer());
-        if (hasGameFinished()) {
+        if (hasFinished()) {
             finished = true;
-            calculateGameResult();
+            getGameResult();
         }
         return true;
     }

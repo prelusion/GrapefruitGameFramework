@@ -9,10 +9,8 @@ public class ServerConnection {
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
-    private MessageController controller;
 
-    public ServerConnection(MessageController controller, String serverIp) throws IOException {
-        this.controller = controller;
+    public ServerConnection(String serverIp) {
         this.serverIp = serverIp;
     }
 

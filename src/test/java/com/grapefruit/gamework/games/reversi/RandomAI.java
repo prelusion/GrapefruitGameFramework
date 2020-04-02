@@ -53,7 +53,5 @@ public class RandomAI {
         if (game.hasWinner()) {
             System.out.println("Winner: " + game.getWinner().getColor().toString());
         }
-
-
     }
 }

@@ -15,7 +15,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
         Player player = new Player("Leon", false);
 
         Button btn = new Button();

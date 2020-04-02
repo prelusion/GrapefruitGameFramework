@@ -16,12 +16,14 @@ public class RealAI {
         int turnTimeout = 10;
         Scanner in = new Scanner(System.in);
         Board board = new ReversiBoard(8);
-        Player playerWhite = new AIPlayer("White", Colors.WHITE, new MinimaxAlgorithm(), 2);
-        Player playerBlack = new AIPlayer("Black", Colors.BLACK, new MinimaxAlgorithm(), 5);
+        Player playerWhite = new AIPlayer("White", Colors.WHITE, new MinimaxAlgorithm(), 3);
+        Player playerBlack = new AIPlayer("Black", Colors.BLACK, new MinimaxAlgorithm(), 2);
         Reversi game = new Reversi(board, playerWhite, playerBlack, turnTimeout);
 
         System.out.println("INIT BOARD:");
         board.printBoard();
+        System.out.println("STRATEGIC VALUES");
+        board.printStrategicValues();
 
         while (!game.hasFinished()) {
 //            Thread.sleep(50);
@@ -58,6 +60,9 @@ public class RealAI {
         if (game.hasWinner()) {
             System.out.println("Winner: " + game.getWinner().getColor().toString());
         }
+
+        System.out.println("STRATEGIC VALUES");
+        board.printStrategicValues();
     }
 }
 

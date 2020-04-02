@@ -17,7 +17,8 @@ public class MinimaxAlgorithm implements MoveAlgorithm {
     }
 
     @Override
-    public int minimax(int depth, Board board, Tile tile, int alpha, int beta, Player player, Player opponentPlayer, boolean maximizingPlayer) {
+    public int minimax(int depth, Board board, Tile tile, int alpha, int beta,
+                       Player player, Player opponentPlayer, boolean maximizingPlayer) {
         return 0;
     }
 
@@ -35,18 +36,44 @@ public class MinimaxAlgorithm implements MoveAlgorithm {
         int maxScore = -9999999;
         Tile bestTile= null;
 
-        for (Tile tile : board.getAvailableMoves(player)) {
-            int score = minimax2(depth, board, maxScore, alpha, beta, player, opponentPlayer, true);
+        List<Tile> moves = board.getAvailableMoves(player);
+        for (Tile tile : moves) {
+            Board newBoard = new ReversiBoard(board.boardSize);
+            newBoard.copyState(board);
+            newBoard.setMove(tile.getRow(), tile.getCol(), player);
+
+            int score = minimax2(
+                    depth - 1,
+                    newBoard,
+                    tile.getStrategicValue(),
+                    alpha,
+                    beta,
+                    player,
+                    opponentPlayer,
+                    false
+            );
+
             if (score > maxScore) {
                 maxScore = score;
                 bestTile = tile;
             }
         }
 
+        if (bestTile == null) return null;
+
+        if (bestTile.getStrategicValue() == -24) {
+            System.out.println("WRONG MOVE!");
+            moves.forEach(move ->
+                    System.out.println(move.getStrategicValue() + "," + move.getRow()  + "," +  move.getCol()));
+        }
+
         return bestTile;
     }
 
-    public int minimax2(int depth, Board board, int score, int alpha, int beta, Player player, Player opponentPlayer, boolean maximizingPlayer) {
+
+    public int minimax2(int depth, Board board, int score, int alpha, int beta,
+                        Player player, Player opponentPlayer, boolean maximizingPlayer) {
+
         List<Tile> moves = board.getAvailableMoves(player);
 
         if (depth == 0 || moves.size() == 0) {
@@ -56,37 +83,62 @@ public class MinimaxAlgorithm implements MoveAlgorithm {
         if (maximizingPlayer) {
             int maxScore = -999;
             for (Tile move : moves) {
+                System.out.println("maximizing set move + " + move.getRow() + ", " + move.getCol());
                 Board newBoard = new ReversiBoard(board.boardSize);
                 newBoard.copyState(board);
                 newBoard.setMove(move.getRow(), move.getCol(), player);
-                score += move.getStrategicValue();
 
-                int currentScore = minimax2(depth - 1, newBoard, score, alpha, beta, player, opponentPlayer, false);
+                int currentScore = minimax2(
+                        depth - 1,
+                        newBoard,
+                        move.getStrategicValue(),
+                        alpha, beta,
+                        player,
+                        opponentPlayer,
+                        false
+                );
+                System.out.println("maximizing current score: " + currentScore);
+
                 maxScore = max(maxScore, currentScore);
 
-                alpha = max(alpha, currentScore);
-                if (beta <= alpha) {
-                    break;
-                }
+//                alpha = max(alpha, currentScore);
+//                if (beta <= alpha) {
+//                    break;
+//                }
             }
+            System.out.println("maximizing depth:" + depth);
+            System.out.println("-----");
             return maxScore;
 
         } else {
             int minScore = 999;
             for (Tile move : moves) {
+                System.out.println("minimizing set move + " + move.getRow() + ", " + move.getCol());
                 Board newBoard = new ReversiBoard(board.boardSize);
                 newBoard.copyState(board);
                 newBoard.setMove(move.getRow(), move.getCol(), opponentPlayer);
-                score += move.getStrategicValue();
 
-                int currentScore = minimax2(depth - 1, newBoard, score, alpha, beta, player, opponentPlayer, true);
+                int currentScore = minimax2(
+                        depth - 1,
+                        newBoard,
+                        move.getStrategicValue(),
+                        alpha,
+                        beta,
+                        player,
+                        opponentPlayer,
+                        true
+                );
+                System.out.println("minimizing current score: " + currentScore);
+
                 minScore = min(minScore, currentScore);
 
-                beta = min(beta, currentScore);
-                if (beta <= alpha) {
-                    break;
-                }
+//                beta = min(beta, currentScore);
+//                if (beta <= alpha) {
+//                    break;
+//                }
             }
+            System.out.println("minimizing depth:" + depth);
+            System.out.println("-----");
             return minScore;
         }
     }

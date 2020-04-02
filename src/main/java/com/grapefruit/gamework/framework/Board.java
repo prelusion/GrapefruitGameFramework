@@ -44,9 +44,9 @@ public abstract class Board {
             }
         }
     }
-    private void initStrat() {
 
-        strat = new int[9][9];
+    private void initStrat() {
+        strat = new int[8][8];
         strat[0][0] = 99;
         strat[0][1] = -8;
         strat[0][2] = 8;
@@ -60,8 +60,8 @@ public abstract class Board {
         strat[1][1] = -24;
         strat[1][2] = -4;
         strat[1][3] = -3;
-        strat[1][4] = -4;
-        strat[1][5] = -3;
+        strat[1][4] = -3;
+        strat[1][5] = -4;
         strat[1][6] = -24;
         strat[1][7] = -8;
 
@@ -105,8 +105,8 @@ public abstract class Board {
         strat[6][1] = -24;
         strat[6][2] = -4;
         strat[6][3] = -3;
-        strat[6][4] = -4;
-        strat[6][5] = -3;
+        strat[6][4] = -3;
+        strat[6][5] = -4;
         strat[6][6] = -24;
         strat[6][7] = -8;
 
@@ -146,7 +146,7 @@ public abstract class Board {
     public abstract List<Tile> getAvailableMoves(Player player);
 
     public void setPlayer(int row, int col, Player player) {
-        grid[row][col] = new Tile(row, col, 1, player);
+        grid[row][col].setPlayer(player);
     }
 
     public Player getPlayer(int row, int col) {
@@ -264,6 +264,26 @@ public abstract class Board {
                     value = String.format("[%s]", positionPlayer.getColor().toString().charAt(0));
                 }
 
+                System.out.print(value + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    /**
+     * Helper function to print the board.
+     */
+    public void printStrategicValues() {
+        System.out.print("  ");
+        for (int m = 0; m < grid.length; m++) {
+            System.out.print(" " + m + "  ");
+        }
+        System.out.println();
+
+        for (int i = 0; i < grid.length; i++) {
+            System.out.print(i + " ");
+            for (int j = 0; j < grid.length; j++) {
+                String value = String.format("[%3s]", grid[i][j].getStrategicValue());
                 System.out.print(value + " ");
             }
             System.out.println();

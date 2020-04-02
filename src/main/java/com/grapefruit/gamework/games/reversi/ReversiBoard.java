@@ -82,9 +82,8 @@ public class ReversiBoard extends Board {
     }
 
     public void setMove(int row, int col, Player player) {
-        Tile tile = new Tile(row, col, 1, player);
-
-        grid[row][col] = tile;
+        Tile tile = grid[row][col];
+        tile.setPlayer(player);
 
         HashSet<Tile> neighbours = getDirectNeighbours(tile);
 
@@ -127,7 +126,7 @@ public class ReversiBoard extends Board {
             return searchOrder;
         }
 
-        searchOrder.add(new Tile(row, col, 1, player));
+        searchOrder.add(grid[row][col]);
 
         return getTilesToTurn(player, row + dRow, col + dCol, dRow, dCol, searchOrder);
     }

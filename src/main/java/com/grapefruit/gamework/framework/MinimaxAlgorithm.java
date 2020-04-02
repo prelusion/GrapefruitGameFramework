@@ -41,7 +41,8 @@ public class MinimaxAlgorithm implements MoveAlgorithm {
             Board newBoard = new ReversiBoard(board.boardSize);
             newBoard.copyState(board);
             newBoard.setMove(tile.getRow(), tile.getCol(), player);
-
+            System.out.println("Maximizing first depth");
+            newBoard.printBoard();
             int score = minimax2(
                     depth - 1,
                     newBoard,
@@ -83,11 +84,13 @@ public class MinimaxAlgorithm implements MoveAlgorithm {
         if (maximizingPlayer) {
             int maxScore = -999;
             for (Tile move : moves) {
-                System.out.println("maximizing set move + " + move.getRow() + ", " + move.getCol());
+                System.out.println("MAXIMIZING");
+
                 Board newBoard = new ReversiBoard(board.boardSize);
                 newBoard.copyState(board);
+                newBoard.printAvailableMoves(player);
                 newBoard.setMove(move.getRow(), move.getCol(), player);
-
+                newBoard.printBoard();
                 int currentScore = minimax2(
                         depth - 1,
                         newBoard,
@@ -113,10 +116,14 @@ public class MinimaxAlgorithm implements MoveAlgorithm {
         } else {
             int minScore = 999;
             for (Tile move : moves) {
-                System.out.println("minimizing set move + " + move.getRow() + ", " + move.getCol());
+                System.out.println("MINIMIZING");
+
                 Board newBoard = new ReversiBoard(board.boardSize);
                 newBoard.copyState(board);
+                newBoard.printAvailableMoves(opponentPlayer);
                 newBoard.setMove(move.getRow(), move.getCol(), opponentPlayer);
+                System.out.println("minimizing set move + " + move.getRow() + ", " + move.getCol());
+                newBoard.printBoard();
 
                 int currentScore = minimax2(
                         depth - 1,

@@ -12,7 +12,7 @@ public class CommandsTest {
      */
     @Test
     public void runTest() {
-        assert  setMove(4, 5, 9) == 42;
+        assert  setMove(4, 5, 9).equals("move 42");
         assert challenge(true).equals("accept");
         assert challenge(false).equals("decline");
     }
@@ -26,9 +26,8 @@ public class CommandsTest {
      * @param boardSize int the board size.
      * @return int the index
      */
-    public static double setMove(int row, int col, int boardSize) {
-        double index = row * boardSize + col + 1;
-        return index;
+    public static String setMove(int row, int col, int boardSize) {
+        return "move " + Integer.toString((int)row * boardSize + col + 1);
     }
 
     /**

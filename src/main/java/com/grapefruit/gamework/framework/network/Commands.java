@@ -73,8 +73,7 @@ public abstract class Commands {
      * @param boardSize int the board size.
      */
     public static void setMove(ServerConnection conn, int row, int col, int boardSize) {
-        double index = row * boardSize + col + 1;
-        conn.sendCommand(KEYWORD_MOVE + index);
+        conn.sendCommand(KEYWORD_MOVE + Integer.toString((int)row * boardSize + col + 1));
     }
 
     /**

@@ -30,9 +30,6 @@ public class ServerManager {
         }
     }
 
-    public void respond(String[] args){
-
-    }
 
     public Command findFirstFittingCommand(ResponseType responseType, boolean isConfirmed){
         for (Command command: commandQueue){

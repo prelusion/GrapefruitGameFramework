@@ -74,17 +74,17 @@ public abstract class Commands {
      * @param boardSize int the board size.
      */
     public static Command setMove(CommandCallback callback, int row, int col, int boardSize) {
-        double index = row * boardSize + col + 1;
+        int index = row * boardSize + col + 1;
         return new Command(KEYWORD_MOVE + index, callback, ServerManager.ResponseType.CONFIRMONLY);
     }
 
     /**
      * Forfeit.
      *
-     * @param conn ServerConnection the object that handles the server connection.
+     * @param callback ServerConnection the object that handles the server connection.
      */
-    public static void forfeit(ServerConnection conn) {
-        conn.sendCommand(KEYWORD_FORFEIT);
+    public static Command forfeit(CommandCallback callback) {
+        return new Command(KEYWORD_FORFEIT, callback, ServerManager.ResponseType.CONFIRMONLY);
     }
 
     /**

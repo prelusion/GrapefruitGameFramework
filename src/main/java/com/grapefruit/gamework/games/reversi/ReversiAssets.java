@@ -8,8 +8,8 @@ import javafx.scene.image.Image;
 
 public class ReversiAssets extends Assets {
 
-    public static Image PIECE_BLACK = ImageRegistry.GAME_PIECE_BLACK;
-    public static Image PIECE_WHITE = ImageRegistry.GAME_PIECE_WHITE;
+    public static Image PIECE_BLACK = ImageRegistry.REVERSI_GAME_PIECE_BLACK;
+    public static Image PIECE_WHITE = ImageRegistry.REVERSI_GAME_PIECE_WHITE;
     private static Image ICON = ImageRegistry.GAME_ICON_OTHELLO;
     private static String DISPLAYNAME = "Reversi";
 
@@ -26,10 +26,10 @@ public class ReversiAssets extends Assets {
     public Image getPieceImageByColor(Colors color){
         switch (color) {
             case BLACK:
-                return ReversiAssets.PIECE_BLACK;
+                return PIECE_BLACK;
 
             case WHITE:
-                return ReversiAssets.PIECE_WHITE;
+                return PIECE_WHITE;
 
             default:
                 return null;

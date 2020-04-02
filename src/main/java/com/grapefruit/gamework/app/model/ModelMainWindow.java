@@ -1,13 +1,14 @@
 package com.grapefruit.gamework.app.model;
 
+import com.grapefruit.gamework.framework.GameWrapper;
+import com.grapefruit.gamework.games.GameRegistry;
 
-import com.grapefruit.gamework.app.GameRegistry;
-import com.grapefruit.gamework.framework.Game;
+import java.util.ArrayList;
 
 public class ModelMainWindow implements IModel {
 
-    private Game[] games = GameRegistry.Games;
-    private Game selectedGame = null;
+    private ArrayList<GameWrapper> gameWrappers = GameRegistry.GAMES;
+    private GameWrapper selectedGameWrapper = null;
 
     public ModelMainWindow(){
     }
@@ -15,23 +16,23 @@ public class ModelMainWindow implements IModel {
     /**
      * @return fetches array of games
      */
-    public Game[] getGames() {
-        return games;
+    public ArrayList<GameWrapper> getGames() {
+        return gameWrappers;
     }
 
     /**
      * @param game
      * Sets currently selected game to specified game.
      */
-    public void setSelectedGame(Game game){
-        this.selectedGame = game;
+    public void setSelectedGame(GameWrapper game){
+        this.selectedGameWrapper = game;
     }
 
     /**
      *
      * @return selected game (Can be null if nothing is selected).
      */
-    public Game getSelectedGame(){
-        return selectedGame;
+    public GameWrapper getSelectedGame(){
+        return selectedGameWrapper;
     }
 }

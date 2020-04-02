@@ -1,6 +1,6 @@
 package com.grapefruit.gamework.framework;
 
-import com.grapefruit.gamework.games.tictactoe.TicTacToe;
+import com.grapefruit.gamework.framework.player.Player;
 
 public abstract class GameFactory {
 

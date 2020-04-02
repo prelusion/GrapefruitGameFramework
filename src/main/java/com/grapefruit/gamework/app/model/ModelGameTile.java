@@ -2,18 +2,19 @@ package com.grapefruit.gamework.app.model;
 
 
 import com.grapefruit.gamework.framework.Game;
+import com.grapefruit.gamework.framework.GameWrapper;
 
 public class ModelGameTile implements IModel {
 
-    private Game game;
+    private GameWrapper game;
     private ModelMainWindow modelMainWindow;
     private boolean selected;
 
-    public ModelGameTile(Game game, ModelMainWindow mainWindow){
+    public ModelGameTile(GameWrapper game, ModelMainWindow mainWindow){
         this.game = game;
         this.modelMainWindow = mainWindow;
         if (modelMainWindow.getSelectedGame() != null){
-            if (modelMainWindow.getSelectedGame().getName() == game.getName()){
+            if (modelMainWindow.getSelectedGame() == game){
                 selected = true;
             }
         }
@@ -23,7 +24,7 @@ public class ModelGameTile implements IModel {
      *
      * @return returns Game
      */
-    public Game getGame() {
+    public GameWrapper getGame() {
         return game;
     }
 

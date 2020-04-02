@@ -3,6 +3,8 @@ package com.grapefruit.gamework.app.controller;
 import com.grapefruit.gamework.app.GameApplication;
 import com.grapefruit.gamework.app.model.IModel;
 import com.grapefruit.gamework.app.model.ModelSelectedGame;
+import com.grapefruit.gamework.framework.player.Player;
+import com.grapefruit.gamework.framework.Colors;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -14,6 +16,8 @@ import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 public class ControllerSelectedGame implements IController {
 
@@ -49,8 +53,8 @@ public class ControllerSelectedGame implements IController {
     @Override
     public void setModel(IModel model) {
         this.model = (ModelSelectedGame) model;
-        gameName.setText(this.model.getSelectedGame().getName());
-//        gameIcon.setImage(this.model.getSelectedGame().getIcon());
+        gameName.setText(this.model.getSelectedGame().getAssets().getDisplayName());
+        gameIcon.setImage(this.model.getSelectedGame().getAssets().getIcon());
         setMainMenuButtons();
     }
 
@@ -86,7 +90,11 @@ public class ControllerSelectedGame implements IController {
         friendButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                GameApplication.playGame(model.getSelectedGame());
+                Player[] players = new Player[2];
+                players[0] = new Player("Player 1", Colors.WHITE, true);
+                players[1] = new Player("Player 2", Colors.BLACK, true);
+                GameApplication.playGame(model.getSelectedGame().getAssets(), model.getSelectedGame().getFactory()
+                        .create(players), players);
             }
         });
 

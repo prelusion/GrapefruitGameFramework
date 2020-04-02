@@ -7,16 +7,21 @@ import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.app.view.templates.Game.GameFactory;
 import com.grapefruit.gamework.app.view.templates.GameTile.GameTileFactory;
 import com.grapefruit.gamework.app.view.templates.MainWindow.MainWindowFactory;
+import com.grapefruit.gamework.framework.Assets;
 import com.grapefruit.gamework.framework.Game;
+import com.grapefruit.gamework.framework.GameWrapper;
+import com.grapefruit.gamework.framework.player.Player;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.util.List;
+
 public class GameApplication extends Application {
 
 
-    private ModelMainWindow modelMainWindow;
+    private static ModelMainWindow modelMainWindow;
     private static Stage primaryStage;
     private static int WINDOW_START_HEIGHT = 600;
     private static int WINDOW_START_WIDTH = 1000;
@@ -41,13 +46,13 @@ public class GameApplication extends Application {
         return primaryStage;
     }
 
-    public static void playGame(Game game){
-        primaryStage.setScene(new Scene(GameFactory.build(new ModelGame(game)).getParent(), 1100, 800));
-        primaryStage.setTitle("Now playing: " + game.getName());
+    public static void playGame(Assets assets, Game game, Player[] localPlayers){
+        primaryStage.setScene(new Scene(GameFactory.build(new ModelGame(game, assets, localPlayers)).getParent(), 1100, 800));
+        primaryStage.setTitle("Now playing: " + assets.getDisplayName());
         primaryStage.show();
     }
 
-    public void openLauncher(){
+    public static void openLauncher(){
         modelMainWindow = new ModelMainWindow();
         primaryStage.setTitle("Grapefruit Gamework");
         primaryStage.setScene(new Scene(MainWindowFactory.build(modelMainWindow).getParent(), WINDOW_START_WIDTH, WINDOW_START_HEIGHT));

@@ -1,16 +1,18 @@
-package com.grapefruit.gamework.framework;
+package com.grapefruit.gamework.framework.player;
+
+import com.grapefruit.gamework.framework.Colors;
 
 public class Player {
 
     private String name;
-    private String color;
+    private Colors color;
     private int score = 0;
-    private boolean hasTurn = false;
-    private int[] availableMoves;
+    private boolean localPlayer;
 
-    public Player(String name, String color) {
+    public Player(String name, Colors color, boolean localPlayer) {
         this.name = name;
         this.color = color;
+        this.localPlayer = localPlayer;
     }
 
     /**
@@ -25,7 +27,7 @@ public class Player {
      * Get color of player.
      * @return color
      */
-    public String getColor() {
+    public Colors getColor() {
         return color;
     }
 
@@ -41,19 +43,7 @@ public class Player {
         return score;
     }
 
-    protected void setTurn(boolean turn) {
-        hasTurn = turn;
-    }
-
-    /**
-     * Check if player has the current turn.
-     * @return boolean of current turn
-     */
-    public boolean hasTurn() {
-        return hasTurn;
-    }
-
     public String toString() {
-        return color;
+        return color.toString();
     }
 }

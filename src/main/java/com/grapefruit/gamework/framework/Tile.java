@@ -1,6 +1,6 @@
 package com.grapefruit.gamework.framework;
 
-import com.grapefruit.gamework.framework.Player;
+import com.grapefruit.gamework.framework.player.Player;
 
 public class Tile {
 
@@ -28,9 +28,9 @@ public class Tile {
     /**
      * Constructor of making an GameSession
      *
-     * @param int row, gives the tile grid[x][] position from the board.
-     * @param int col, gives the tile grid[][y] position from the board.
-     * @param int strategicValue, is the given strategicValue of the Tile.
+     * @param row, gives the tile grid[x][] position from the board.
+     * @param col, gives the tile grid[][y] position from the board.
+     * @param strategicValue, is the given strategicValue of the Tile.
      */
     public Tile(int row, int col, int strategicValue) {
         this.row = row;

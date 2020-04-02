@@ -48,3 +48,4 @@
 .game-board-tile-hover{
     -fx-effect: innershadow(GAUSSIAN, #000000, 60, 0, 0, 0);
 }
+

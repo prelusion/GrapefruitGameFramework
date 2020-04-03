@@ -122,7 +122,7 @@ public class MinimaxAlgorithm implements MoveAlgorithm {
                         depth - 1,
                         newBoard,
                         score - move.getStrategicValue(),
-                        alpha,4
+                        alpha,
                         beta,
                         player,
                         opponent,

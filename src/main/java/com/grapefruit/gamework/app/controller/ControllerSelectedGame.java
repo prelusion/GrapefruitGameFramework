@@ -81,7 +81,11 @@ public class ControllerSelectedGame implements IController {
         cpuButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                Player[] players = new Player[2];
+                players[0] = new Player("Player 1", Colors.WHITE, true);
+                players[1] = new Player("PC 2", Colors.BLACK, true);
+                GameApplication.playGame(model.getSelectedGame().getAssets(), model.getSelectedGame().getFactory()
+                        .create(players), players);
             }
         });
 

@@ -6,11 +6,13 @@ import com.grapefruit.gamework.framework.Player;
 
 import java.util.List;
 
+import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
+
 public class RealAI {
     /* AI vs AI */
     public static void main(String[] args) {
         int turnTimeout = 10;
-        Board board = new ReversiBoard(8);
+        Board board = new ReversiBoard(8, STRATEGIC_VALUES);
         int playerWhiteDepth = 1;
         int playerBlackDepth = 5;
 
@@ -44,7 +46,9 @@ public class RealAI {
                 if (game.hasFinished()) {
                     break;
                 } else {
+                    System.out.println(game.getCurrentPlayer());
                     game.nextPlayer();
+                    System.out.println(game.getCurrentPlayer());
                     continue;
                 }
             }
@@ -52,9 +56,9 @@ public class RealAI {
             Player opponent = currentPlayer == playerWhite ? playerBlack : playerWhite;
             Tile move;
             if (currentPlayer.getColor() == Colors.BLACK) {
-                move = minimax.calculateBestMove(game.getBoard(), currentPlayer, opponent, 1);
+                move = minimax.calculateBestMove(game.getBoard(), currentPlayer, opponent, 7);
             } else {
-                move = minimax.calculateBestMove(game.getBoard(), currentPlayer, opponent, 6);
+                move = minimax.calculateBestMove(game.getBoard(), currentPlayer, opponent, 2);
             }
 
             System.out.println(String.format("play move: %s %s", move.getRow(), move.getCol()));

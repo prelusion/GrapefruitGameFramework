@@ -69,6 +69,11 @@ public abstract class Board {
         return grid[row][col].getPlayer();
     }
 
+    public Tile getTile(int row, int col) {
+        return grid[row][col];
+    }
+
+
     /**
      * @return boolean, Checks if the tile chosen has a piece on it.
      */

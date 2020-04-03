@@ -12,7 +12,7 @@ public class RandomAI {
     public static void main(String[] args) {
         int turnTimeout = 10;
         Scanner in = new Scanner(System.in);
-        Board board = new ReversiBoard(9);
+        Board board = new ReversiBoard(9, ReversiFactory.STRATEGIC_VALUES);
         Player playerWhite = new Player("White", Colors.WHITE, true);
         Player playerBlack = new Player("Black", Colors.BLACK, true);
         Game game = new Reversi(board, playerWhite, playerBlack, turnTimeout);
@@ -50,8 +50,6 @@ public class RandomAI {
             }
         }
 
-        Game.GameResult result = game.getGameResult();
-        System.out.println("Result: " + result);
         if (game.hasWinner()) {
             System.out.println("Winner: " + game.getWinner().getColor().toString());
         }

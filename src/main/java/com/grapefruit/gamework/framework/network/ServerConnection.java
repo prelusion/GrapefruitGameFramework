@@ -62,7 +62,7 @@ public class ServerConnection {
                                 manager.removeCommandFromQueue(command);
 
                             } else if (answer.contains("SVR") && answer.contains("[")){
-                                answer = answer.strip();
+                                answer = answer.trim();
                                 int startArg = answer.indexOf("[");
                                 String[] args = answer.substring(startArg + 1, answer.length() - 1).split(", ");
 

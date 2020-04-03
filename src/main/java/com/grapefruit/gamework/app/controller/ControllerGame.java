@@ -237,7 +237,8 @@ public class ControllerGame implements IController{
                 marker.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        playerDoesMove(tile.getRow(), tile.getCol(), model.getGame().getCurrentPlayer());
+                        model.getGame().playMove(tile.getRow(), tile.getCol(), model.getGame().getCurrentPlayer());
+                        model.getGame().nextPlayer();
                         updateBoard();
                         updateInfoPanel();
                     }
@@ -246,11 +247,6 @@ public class ControllerGame implements IController{
                 marker.setStroke(Color.GREEN);
             }
         }
-    }
-
-
-    private void playerDoesMove(int row, int col, Player player){
-        model.getGame().playMove(row, col, player);
     }
 
     private void updateInfoPanel(){

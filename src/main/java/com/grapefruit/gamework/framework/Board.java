@@ -325,4 +325,52 @@ public abstract class Board {
             System.out.println();
         }
     }
+
+    public void printAvailableMovesWithStrategicValues(List<Tile> moves) {
+        System.out.println("AVAILABLE MOVES IN PRINTER: "+ moves.size());
+        System.out.print("  ");
+        for (int m = 0; m < grid.length; m++) {
+            System.out.print("  " + m + "   ");
+        }
+        System.out.println();
+
+        for (int i = 0; i < grid.length; i++) {
+            System.out.print(i + " ");
+            for (int j = 0; j < grid.length; j++) {
+                Player positionPlayer = grid[i][j].getPlayer();
+                String value;
+
+                Tile tileFound = null;
+
+                for (Tile tile : moves) {
+                    if (tile.getRow() == i && tile.getCol() == j) {
+                        tileFound = tile;
+                    }
+                }
+
+                boolean color = false;
+
+                if (tileFound != null) {
+                    value = String.format("[%3s]", tileFound.getStrategicValue());
+                } else if (positionPlayer == null) {
+                    value = "[   ]";
+                } else {
+                    color = true;
+                    value = String.format("[%3s]", positionPlayer.getColor().toString().charAt(0));
+                }
+
+//                if (color && positionPlayer.getColor() == Colors.BLACK) {
+//                    System.out.print(PrintColor.RED_BOLD);
+//                } else if (color && positionPlayer.getColor() == Colors.WHITE) {
+//                    System.out.print(PrintColor.BLUE_BOLD);
+//                }
+                System.out.print(value + " ");
+//                if (color) {
+//                    System.out.print(PrintColor.RESET);
+//                }
+
+            }
+            System.out.println();
+        }
+    }
 }

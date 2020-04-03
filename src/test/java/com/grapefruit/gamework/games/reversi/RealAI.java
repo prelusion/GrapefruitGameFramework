@@ -15,8 +15,10 @@ public class RealAI {
     public static void main(String[] args) {
         int turnTimeout = 10;
         Board board = new ReversiBoard(8);
-        AIPlayer playerWhite = new AIPlayer("White", Colors.WHITE, new MinimaxAlgorithm(), 1);
-        AIPlayer playerBlack = new AIPlayer("Black", Colors.BLACK, new MinimaxAlgorithm(), 3);
+        int playerWhiteDepth = 1;
+        int playerBlackDepth = 3;
+        AIPlayer playerWhite = new AIPlayer("White", Colors.WHITE, new MinimaxAlgorithm(), playerWhiteDepth);
+        AIPlayer playerBlack = new AIPlayer("Black", Colors.BLACK, new MinimaxAlgorithm(), playerBlackDepth);
         Reversi game = new Reversi(board, playerWhite, playerBlack, turnTimeout);
 
         System.out.println("strategic values:");
@@ -31,6 +33,7 @@ public class RealAI {
 
             Player currentPlayer = game.getCurrentPlayer();
             System.out.println("current player: " + currentPlayer.getColor());
+            System.out.println("minimax depth: " + (currentPlayer == playerWhite ? playerWhiteDepth : playerBlackDepth));
 
             List<Tile> availableMoves = game.getAvailableMoves(currentPlayer);
             System.out.println("available moves: " + availableMoves.size());

@@ -48,26 +48,21 @@ public class MinimaxAlgorithm implements MoveAlgorithm {
             ));
         }
 
-        int bestValue = -9999;
+        int bestScore = -9999;
         for (Map.Entry<Tile, Integer> entry : tiles.entrySet()) {
-            System.out.println("Best value " + bestValue);
-            if(entry.getValue() > bestValue) {
-                System.out.println("Better Move Found!");
-                if(bestTile != null) {
-                    System.out.println("Old Move value: " + bestTile.getRow() + " " + bestTile.getCol() + " score " + bestTile.getStrategicValue());
-                }
-                System.out.println("New Move Value " + entry.getKey().getRow() + entry.getKey().getCol() + " score " + entry.getKey().getStrategicValue());
+            if(entry.getValue() > bestScore) {
+                System.out.println(String.format("new best move: %s,%s - strategic value: %s, score: %s", entry.getKey().getRow(), entry.getKey().getCol(), entry.getKey().getStrategicValue(), entry.getValue()));
                 bestTile = entry.getKey();
-                bestValue = entry.getValue();
+                bestScore = entry.getValue();
             } else {
-                System.out.println("IgnoreMove " + entry.getKey().getRow() + entry.getKey().getCol() + " score " + entry.getKey().getStrategicValue());
+                System.out.println(String.format("not best move: %s,%s - strategic value: %s, score: %s", entry.getKey().getRow(), entry.getKey().getCol(), entry.getKey().getStrategicValue(), entry.getValue()));
             }
         }
 
-
         if(bestTile != null) {
-            System.out.println("RETURNS " + bestTile.getStrategicValue() + " BESTVAL " + bestValue);
+            System.out.println(String.format("best move: %s,%s - strategic value: %s, score: %s", bestTile.getRow(), bestTile.getCol(), bestTile.getStrategicValue(), bestScore));
         }
+
         return bestTile;
     }
 

@@ -12,7 +12,11 @@ import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.ServerManager;
 import com.jfoenix.controls.JFXPopup;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -25,6 +29,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import org.apache.commons.validator.routines.InetAddressValidator;
 
 import java.net.URL;
@@ -184,6 +189,14 @@ public class ControllerMainWindow implements IController {
             modelMainWindow.setServerManager(new ServerManager());
             modelMainWindow.getServerManager().connect(selectedServer.getIp());
             connectionStatus.setText("Connected");
+            connectButton.setText("Disconnect");
+            connectButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    //modelMainWindow.getServerManager().
+                    //todo disconnect
+                }
+            });
             modelMainWindow.getServerManager().queueCommand(Commands.getGameList(new CommandCallback() {
                 @Override
                 public void onResponse(boolean success, String[] args) {
@@ -195,16 +208,21 @@ public class ControllerMainWindow implements IController {
             connectionStatus.setText("Invalid");
         }
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                while(modelMainWindow.getServerManager().isConnected()){
-                    //todo Check connection
-                    //Is manager still connected?
-                }
-                connectionStatus.setText("Disconnected");
-            }
-        });
+
+        new Timeline(new KeyFrame(
+                Duration.millis(10),
+                ae ->
+                        check()
+
+        ))
+                .play();
+    }
+
+    private void check(){
+        if(!modelMainWindow.getServerManager().isConnected()){
+            connectionStatus.setText("Disconnected");
+            connectButton.setText("Connect");
+        }
     }
 
     public String[] getAvailableGames() {

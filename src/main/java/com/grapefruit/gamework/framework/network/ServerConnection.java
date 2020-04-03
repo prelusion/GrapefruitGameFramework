@@ -38,7 +38,7 @@ public class ServerConnection {
                 try {
                     while (socket.isConnected()) {
                         String answer = in.readLine();
-                        if (!answer.equals("null") && manager.commandsInQueue()) {
+                        if (answer != null && !answer.equals("null") && manager.commandsInQueue()) {
                             if (answer.equals("OK")){
                                 Command command = manager.getFirstUnconfirmed();
                                 command.confirm();
@@ -105,7 +105,8 @@ public class ServerConnection {
             public void run() {
                 while (!Thread.interrupted()) {
                     Command command = manager.getFirstUnsent();
-                    if (command != null) {
+                    if (command != null && !command.isSent()) {
+                        command.send();
                         out.println(command.getCommandString());
                     }
                     try{

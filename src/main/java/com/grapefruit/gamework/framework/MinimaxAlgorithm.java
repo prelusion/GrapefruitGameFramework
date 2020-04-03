@@ -13,11 +13,6 @@ public class MinimaxAlgorithm {
 
     public MinimaxAlgorithm() {}
 
-    public static int minimax(int depth, Board board, Tile tile, int alpha, int beta,
-                       Player player, Player opponentPlayer, boolean maximizingPlayer) {
-        return 0;
-    }
-
     public static Tile calculateBestMove(Board board, Player player, Player opponent, int depth) {
         int alpha = -999999;
         int beta = +999999;

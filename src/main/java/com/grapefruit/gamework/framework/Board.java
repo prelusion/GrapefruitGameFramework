@@ -28,6 +28,14 @@ public abstract class Board {
         initGrid();
     }
 
+    public Board(int boardSize) {
+        strategicValues = new int[boardSize][boardSize];
+        for (int[] row : strategicValues) {
+            Arrays.fill(row, 1);
+        }
+        initGrid();
+    }
+
     private void initGrid() {
         grid = new Tile[boardSize][boardSize];
         for (int i = 0; i < grid.length; i++) {

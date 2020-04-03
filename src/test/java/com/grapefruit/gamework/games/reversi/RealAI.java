@@ -40,9 +40,13 @@ public class RealAI {
 
             if (availableMoves.size() == 0) {
                 System.out.println("no moves available");
-                game.checkFinished();
-                game.nextPlayer();
-                continue;
+
+                if (game.hasFinished()) {
+                    break;
+                } else {
+                    game.nextPlayer();
+                    continue;
+                }
             }
 
             Player opponent = currentPlayer == playerWhite ? playerBlack : playerWhite;
@@ -63,14 +67,13 @@ public class RealAI {
         System.out.println("-----------------------------------");
         System.out.println("game finished");
 
-        Game.GameResult result = game.getGameResult();
-        System.out.println("result: " + result);
-
         System.out.println(String.format("white pieces: %s", board.countPieces(playerWhite)));
         System.out.println(String.format("black pieces: %s", board.countPieces(playerBlack)));
 
         if (game.hasWinner()) {
-            System.out.println("Winner: " + game.getWinner().getColor().toString());
+            System.out.println("winner: " + game.getWinner().getColor().toString());
+        } else {
+            System.out.println("tie");
         }
 
         System.out.println("strategic values:");

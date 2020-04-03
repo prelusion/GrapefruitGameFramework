@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
 import static java.lang.Integer.max;
 import static java.lang.Integer.min;
 
@@ -13,6 +14,7 @@ public class MinimaxAlgorithm {
     private Game game;
     private Player player;
     private Player opponent;
+
     public MinimaxAlgorithm(Game game) {
         this.game = game;
     }
@@ -28,7 +30,7 @@ public class MinimaxAlgorithm {
         List<Tile> moves = board.getAvailableMoves(player);
         Map<Tile, Integer> tiles = new HashMap<>();
         for (Tile tile : moves) {
-            Board newBoard = new ReversiBoard(board.boardSize);
+            Board newBoard = new ReversiBoard(board.boardSize, STRATEGIC_VALUES);
             newBoard.copyState(board);
             newBoard.setMove(tile.getRow(), tile.getCol(), player);
 
@@ -72,25 +74,24 @@ public class MinimaxAlgorithm {
 
             if (moves.size() == 0) {
                 System.out.println("hoi");
-                if(board.anyMovesLeft(new Player[]{player, opponent})) {
+                if (board.anyMovesLeft(new Player[]{player, opponent})) {
                     System.out.println("test2");
-                    System.out.println("test2");
-                    if(game.getGameResult() == Game.GameResult.WINNER) {
+
+                    Player winner = game.getWinner();
+                    if (winner != null) {
                         System.out.println("WINNNERERERRR");
-                        System.out.println("WINNNERERERRR");
-                        System.out.println("WINNNERERERRR");
-                        System.out.println("WINNNERERERRR");
-                        if(game.getVirtualWinner() == player) {
-                           return 9999;
+                        if (winner == player) {
+                            return 9999;
+                        } else {
+                            return -9999;
                         }
-                        return -9999;
                     }
                 }
                 return score;
             }
 
             for (Tile move : moves) {
-                Board newBoard = new ReversiBoard(board.boardSize);
+                Board newBoard = new ReversiBoard(board.boardSize, STRATEGIC_VALUES);
                 newBoard.copyState(board);
                 newBoard.setMove(move.getRow(), move.getCol(), player);
 
@@ -109,7 +110,7 @@ public class MinimaxAlgorithm {
                     break;
                 }
 
-                if(move.getStrategicValue() == 99) {
+                if (move.getStrategicValue() == 99) {
                     break;
                 }
             }
@@ -120,23 +121,22 @@ public class MinimaxAlgorithm {
             List<Tile> moves = board.getAvailableMoves(opponent);
 
             if (moves.size() == 0) {
-                if(game.hasFinished(board)) {
-                    if(game.getGameResult() == Game.GameResult.WINNER) {
+                if (board.anyMovesLeft(new Player[]{player, opponent})) {
+                    Player winner = game.getWinner();
+                    if (winner != null) {
                         System.out.println("WINNNERERERRR");
-                        System.out.println("WINNNERERERRR");
-                        System.out.println("WINNNERERERRR");
-                        System.out.println("WINNNERERERRR");
-                        if(game.getVirtualWinner() == player) {
+                        if (winner == player) {
                             return -9999;
+                        } else {
+                            return 9999;
                         }
-                        return 9999;
                     }
                 }
                 return score;
             }
 
             for (Tile move : moves) {
-                Board newBoard = new ReversiBoard(board.boardSize);
+                Board newBoard = new ReversiBoard(board.boardSize, STRATEGIC_VALUES);
                 newBoard.copyState(board);
                 newBoard.setMove(move.getRow(), move.getCol(), opponent);
 
@@ -155,7 +155,7 @@ public class MinimaxAlgorithm {
                 if (beta <= alpha) {
                     break;
                 }
-                if(move.getStrategicValue() == 99) {
+                if (move.getStrategicValue() == 99) {
                     break;
                 }
             }

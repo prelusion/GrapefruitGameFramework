@@ -1,13 +1,8 @@
 package com.grapefruit.gamework.games.reversi;
 
-import com.grapefruit.gamework.framework.Board;
-import com.grapefruit.gamework.framework.Game;
-import com.grapefruit.gamework.framework.Tile;
-import com.grapefruit.gamework.framework.Player;
+import com.grapefruit.gamework.framework.*;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class Reversi extends Game {
 
@@ -21,89 +16,22 @@ public class Reversi extends Game {
 
     @Override
     public boolean isValidMove(int row, int col, Player player) {
-        if (getCurrentPlayer() == player) {
-            List<Tile> validMoves = getBoard().getAvailableMoves(player);
-            for (Tile tile : validMoves) {
-                if (tile.getRow() == row && tile.getCol() == col) return true;
-            }
-            return false;
-        } else {
-            return false;
-        }
-    }
+        List<Tile> validMoves = getBoard().getAvailableMoves(player);
 
-    @Override
-    public GameResult getGameResult() {
-        if (!finished) {
-            return GameResult.NONE;
+        for (Tile tile : validMoves) {
+            if (tile.getRow() == row && tile.getCol() == col) return true;
         }
 
-        Map<Player, Integer> pieces = getBoard().countPieces();
-        int winnerPieces = 0;
-        GameResult result = GameResult.NONE;
-
-        for (Map.Entry<Player, Integer> entry : pieces.entrySet()) {
-            if (entry.getValue() > winnerPieces) {
-                winnerPieces = entry.getValue();
-                setWinner(entry.getKey());
-                result = GameResult.WINNER;
-            } else if (entry.getValue() == winnerPieces) {
-                setWinner(null);
-                result = GameResult.TIE;
-            }
-        }
-
-        return result;
-    }
-
-    @Override
-    public GameResult getGameResult(Board board) {
-        Map<Player, Integer> pieces = board.countPieces();
-        int winnerPieces = 0;
-        GameResult result = GameResult.NONE;
-
-        for (Map.Entry<Player, Integer> entry : pieces.entrySet()) {
-            if (entry.getValue() > winnerPieces) {
-                winnerPieces = entry.getValue();
-                setVirtualWinner(entry.getKey());
-                result = GameResult.WINNER;
-            } else if (entry.getValue() == winnerPieces) {
-                setVirtualWinner(null);
-                result = GameResult.TIE;
-            }
-        }
-
-        return result;
+        return false;
     }
 
     @Override
     public boolean hasFinished() {
-        return Arrays.stream(getPlayers())
-                .noneMatch(player -> (getAvailableMoves(player).size()) > 0);
+        return getBoard().anyMovesLeft(getPlayers());
     }
 
     @Override
-    public List<Tile> getAvailableMoves(Player player) {
-        return getBoard().getAvailableMoves(player);
-    }
-
-
-    @Override
-    public boolean hasFinished(Board board) {
-        System.out.println("testtesttesttesttest");
-        for (Player player : getPlayers()) {
-            List<Tile> tiles = board.getAvailableMoves(player);
-            for (Tile tile: tiles) {
-                System.out.println("Player " + player.getColor() + "Row " + tile.getRow() + " col " + tile.getCol());
-            }
-        }
-
-
-        return Arrays.stream(getPlayers())
-                .noneMatch(player -> (board.getAvailableMoves(player).size()) > 0);
-    }
-
-    public void checkFinished() {
-        if (hasFinished()) finished = true;
+    public Player getWinner() {
+        return Helpers.getWinningPlayer(getBoard());
     }
 }

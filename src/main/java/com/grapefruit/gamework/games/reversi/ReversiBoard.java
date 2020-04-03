@@ -4,7 +4,9 @@ import com.grapefruit.gamework.framework.Board;
 import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.Tile;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 public class ReversiBoard extends Board {
 
@@ -42,7 +44,7 @@ public class ReversiBoard extends Board {
 
                 if (emptyTile == null) continue;
 
-                if(!validMoves.contains(emptyTile))
+                if (!validMoves.contains(emptyTile))
                     validMoves.add(emptyTile);
             }
         }

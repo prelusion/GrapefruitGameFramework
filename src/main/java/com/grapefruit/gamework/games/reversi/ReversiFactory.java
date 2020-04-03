@@ -8,18 +8,20 @@ import com.grapefruit.gamework.framework.Player;
 public class ReversiFactory extends GameFactory {
     static final int DEFAULT_REVERSI_BOARD_SIZE = 8;
 
+    public static final int[][] STRATEGIC_VALUES = getStrategicValues();
+
     @Override
     public Game create(Player[] players) {
         return this.create(players[0], players[1]);
     }
 
     public Reversi create(Player playerWhite, Player playerBlack) {
-        Board board = new ReversiBoard(DEFAULT_REVERSI_BOARD_SIZE, getStrategicValues());
+        Board board = new ReversiBoard(DEFAULT_REVERSI_BOARD_SIZE, STRATEGIC_VALUES);
         int turnTimeout = 10;
         return new Reversi(board, playerWhite, playerBlack, turnTimeout);
     }
 
-    private int[][] getStrategicValues() {
+    private static int[][] getStrategicValues() {
         int[][] strat = new int[8][8];
 
         strat[0][0] = 99;

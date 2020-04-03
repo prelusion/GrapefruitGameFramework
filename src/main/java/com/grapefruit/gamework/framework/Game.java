@@ -115,13 +115,6 @@ public abstract class Game {
     public abstract boolean hasFinished();
 
     /**
-     * This function will check if the game should be ended or not.
-     *
-     * @return boolean, State of the game if its ended or not.
-     */
-    public abstract boolean hasFinished(Board board);
-
-    /**
      * Checks whether the game has a WINNER, a TIE or NONE of those.
      *
      * @return GameResult, The result of the game so WINNER, TIE or NONE

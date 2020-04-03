@@ -88,21 +88,6 @@ public class Reversi extends Game {
     }
 
 
-    @Override
-    public boolean hasFinished(Board board) {
-        System.out.println("testtesttesttesttest");
-        for (Player player : getPlayers()) {
-            List<Tile> tiles = board.getAvailableMoves(player);
-            for (Tile tile: tiles) {
-                System.out.println("Player " + player.getColor() + "Row " + tile.getRow() + " col " + tile.getCol());
-            }
-        }
-
-
-        return Arrays.stream(getPlayers())
-                .noneMatch(player -> (board.getAvailableMoves(player).size()) > 0);
-    }
-
     public void checkFinished() {
         if (hasFinished()) finished = true;
     }

@@ -29,11 +29,6 @@ public class TicTacToe extends Game {
     }
 
     @Override
-    public boolean hasFinished(Board board) {
-        return false;
-    }
-
-    @Override
     public GameResult getGameResult() {
         if (!finished) {
             return GameResult.NONE;

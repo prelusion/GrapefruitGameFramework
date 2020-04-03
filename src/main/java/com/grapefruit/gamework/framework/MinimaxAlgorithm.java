@@ -71,15 +71,8 @@ public class MinimaxAlgorithm {
             List<Tile> moves = board.getAvailableMoves(player);
 
             if (moves.size() == 0) {
-                System.out.println("hoi");
                 if(board.hasFinished(new Player[]{player, opponent})) {
-                    System.out.println("test2");
-                    System.out.println("test2");
                     if(game.getGameResult() == Game.GameResult.WINNER) {
-                        System.out.println("WINNNERERERRR");
-                        System.out.println("WINNNERERERRR");
-                        System.out.println("WINNNERERERRR");
-                        System.out.println("WINNNERERERRR");
                         if(game.getVirtualWinner() == player) {
                            return 9999;
                         }
@@ -120,12 +113,8 @@ public class MinimaxAlgorithm {
             List<Tile> moves = board.getAvailableMoves(opponent);
 
             if (moves.size() == 0) {
-                if(game.hasFinished(board)) {
+                if(board.hasFinished(new Player[]{player, opponent})) {
                     if(game.getGameResult() == Game.GameResult.WINNER) {
-                        System.out.println("WINNNERERERRR");
-                        System.out.println("WINNNERERERRR");
-                        System.out.println("WINNNERERERRR");
-                        System.out.println("WINNNERERERRR");
                         if(game.getVirtualWinner() == player) {
                             return -9999;
                         }

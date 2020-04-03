@@ -348,15 +348,27 @@ public abstract class Board {
                     }
                 }
 
+                boolean color = false;
+
                 if (tileFound != null) {
                     value = String.format("[%3s]", tileFound.getStrategicValue());
                 } else if (positionPlayer == null) {
                     value = "[   ]";
                 } else {
+                    color = true;
                     value = String.format("[%3s]", positionPlayer.getColor().toString().charAt(0));
                 }
 
+                if (color && positionPlayer.getColor() == Colors.BLACK) {
+                    System.out.print(PrintColor.RED_BOLD);
+                } else if (color && positionPlayer.getColor() == Colors.WHITE) {
+                    System.out.print(PrintColor.BLUE_BOLD);
+                }
                 System.out.print(value + " ");
+                if (color) {
+                    System.out.print(PrintColor.RESET);
+                }
+
             }
             System.out.println();
         }

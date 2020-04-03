@@ -1,6 +1,6 @@
-package com.grapefruit.gamework;
+package com.grapefruit.gamework.framework;
 
-enum Color {
+enum PrintColor {
     //Color end string, color reset
     RESET("\033[0m"),
 
@@ -76,7 +76,7 @@ enum Color {
 
     private final String code;
 
-    Color(String code) {
+    PrintColor(String code) {
         this.code = code;
     }
 

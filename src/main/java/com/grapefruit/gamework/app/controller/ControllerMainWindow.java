@@ -100,7 +100,7 @@ public class ControllerMainWindow implements IController {
 
         if (modelMainWindow.getSelectedGame() != null){
             selectedGame.getChildren().removeAll(selectedGame.getChildren());
-            selectedGame.getChildren().add(SelectedGameFactory.build(new ModelSelectedGame(modelMainWindow.getSelectedGame())).getParent());
+            selectedGame.getChildren().add(SelectedGameFactory.build(new ModelSelectedGame(modelMainWindow.getSelectedGame(), modelMainWindow.getServerManager())).getParent());
         }
     }
 

@@ -1,6 +1,7 @@
 package com.grapefruit.gamework.framework.network;
 
 import com.google.gson.Gson;
+import com.grapefruit.gamework.app.controller.ControllerLobbyBrowser;
 
 import java.io.*;
 import java.net.Socket;
@@ -8,6 +9,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ServerConnection {
+
+    private enum ChallengeStatus{
+        CHALLENGE_SENT,
+        CHALLENGE_RECEIVED
+    }
 
     private String serverIp;
     private Socket socket;
@@ -74,8 +80,9 @@ public class ServerConnection {
                             }
                             if (answer.startsWith("SVR GAME CHALLENGE")){
                                 Gson gson = new Gson();
-                                ResponseChallenge responseChallenge = gson.fromJson(answer.replace("SVR GAME CHALLENGE", ""), ResponseChallenge.class);
-                                //todo do something
+                                ResponseChallenge challenge = gson.fromJson(answer.replace("SVR GAME CHALLENGE", ""), ResponseChallenge.class);
+                                challenge.setStatus(ChallengeStatus.CHALLENGE_RECEIVED);
+                                manager.addChallenge(challenge);
                             }
                         }
                     }
@@ -126,6 +133,7 @@ public class ServerConnection {
         private String challenger;
         private int number;
         private String gameType;
+        private ChallengeStatus status;
 
         public ResponseChallenge() {
         }
@@ -152,6 +160,10 @@ public class ServerConnection {
 
         public void setGametype(String gametype) {
             this.gameType = gametype;
+        }
+
+        public void setStatus(ChallengeStatus status) {
+            this.status = status;
         }
     }
 }

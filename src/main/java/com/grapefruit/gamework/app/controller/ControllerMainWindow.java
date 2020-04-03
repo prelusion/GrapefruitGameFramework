@@ -6,28 +6,20 @@ import com.grapefruit.gamework.app.view.templates.GameTile.GameTileFactory;
 import com.grapefruit.gamework.app.view.templates.SelectedGame.SelectedGameFactory;
 import com.grapefruit.gamework.app.view.templates.SettingsWindow.SettingsWindowFactory;
 import com.grapefruit.gamework.app.view.templates.SettingsWindow.TemplateSettingsWindow;
-import com.grapefruit.gamework.framework.Game;
 import com.grapefruit.gamework.framework.GameWrapper;
 import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.ServerManager;
-import com.jfoenix.controls.JFXPopup;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.SelectionModel;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.apache.commons.validator.routines.InetAddressValidator;
@@ -58,7 +50,7 @@ public class ControllerMainWindow implements IController {
     private ComboBox serverSelection;
 
     @FXML
-    private ComboBox userSelection;
+    private TextField userName;
 
     @FXML
     private VBox parent;
@@ -100,7 +92,13 @@ public class ControllerMainWindow implements IController {
 
         if (modelMainWindow.getSelectedGame() != null){
             selectedGame.getChildren().removeAll(selectedGame.getChildren());
-            selectedGame.getChildren().add(SelectedGameFactory.build(new ModelSelectedGame(modelMainWindow.getSelectedGame(), modelMainWindow.getServerManager())).getParent());
+            boolean online = false;
+            for (String game: modelMainWindow.getAvailableGames()){
+                if (game == modelMainWindow.getSelectedGame().getAssets().getServerId()){
+                    online = true;
+                }
+            }
+            selectedGame.getChildren().add(SelectedGameFactory.build(new ModelSelectedGame(modelMainWindow.getSelectedGame(), modelMainWindow.getServerManager(), userName.getText(), online)).getParent());
         }
     }
 
@@ -111,7 +109,7 @@ public class ControllerMainWindow implements IController {
     public void setModel(IModel model) {
         modelMainWindow = (ModelMainWindow) model;
         initialize();
-        updateSelectionBoxes();
+        updateSelectionBox();
     }
 
 
@@ -155,20 +153,13 @@ public class ControllerMainWindow implements IController {
     /**
      * Updates selection boxes by fetching settings from AppSettings.
      */
-    public void updateSelectionBoxes(){
+    public void updateSelectionBox(){
         ArrayList<AppSettings.Server> servers =  AppSettings.getSettings().getServers();
-        ArrayList<AppSettings.User> users =  AppSettings.getSettings().getUsers();
 
         serverSelection.getItems().removeAll(serverSelection.getItems());
 
         for (AppSettings.Server server: servers){
             serverSelection.getItems().add(server);
-        }
-
-        userSelection.getItems().removeAll(userSelection.getItems());
-
-        for (AppSettings.User user: users){
-            userSelection.getItems().add(new Text(user.toString()));
         }
     }
 
@@ -185,11 +176,34 @@ public class ControllerMainWindow implements IController {
     @FXML
     private void onConnect(){
         InetAddressValidator validator = new InetAddressValidator();
-        if (selectedServer != null && validator.isValid(selectedServer.getIp()) && modelMainWindow.getServerManager() == null){
+        if (selectedServer != null && validator.isValid(selectedServer.getIp()) && modelMainWindow.getServerManager() == null) {
+            serverSelection.setDisable(true);
+            userName.setDisable(true);
+            connectButton.setDisable(true);
             modelMainWindow.setServerManager(new ServerManager());
             modelMainWindow.getServerManager().connect(selectedServer.getIp());
+            modelMainWindow.getServerManager().queueCommand(Commands.login(userName.getText(), new CommandCallback() {
+                @Override
+                public void onResponse(boolean success, String[] args) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            onConnected();
+                        }
+                    });
+                }
+            }));
+            connectionStatus.setText("Connecting...");
+        } else {
+            connectionStatus.setText("Invalid");
+        }
+    }
+
+    private void onConnected(){
+        if (modelMainWindow.getServerManager() != null) {
             connectionStatus.setText("Connected");
             connectButton.setText("Disconnect");
+            connectButton.setDisable(false);
             connectButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -201,27 +215,31 @@ public class ControllerMainWindow implements IController {
                 @Override
                 public void onResponse(boolean success, String[] args) {
                     if (success && args != null && args.length > 0)
-                    setAvailableGames(args);
+                        setAvailableGames(args);
                 }
             }));
-        } else {
-            connectionStatus.setText("Invalid");
         }
-
-
         new Timeline(new KeyFrame(
                 Duration.millis(10),
-                ae ->
+                check ->
                         check()
 
         ))
                 .play();
     }
 
+    private void onDisconnected(){
+        connectButton.setText("Connect");
+        connectionStatus.setText("Disconnected");
+        serverSelection.setDisable(false);
+        userName.setDisable(false);
+        setAvailableGames(new String[0]);
+        updateGames();
+    }
+
     private void check(){
         if(!modelMainWindow.getServerManager().isConnected()){
-            connectionStatus.setText("Disconnected");
-            connectButton.setText("Connect");
+            onDisconnected();
         }
     }
 
@@ -232,5 +250,11 @@ public class ControllerMainWindow implements IController {
     public synchronized void setAvailableGames(String[] games){
         availableGames = games;
         modelMainWindow.setAvailableGames(games);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                updateGames();
+            }
+        });
     }
 }

@@ -8,10 +8,14 @@ public class ModelSelectedGame implements IModel {
 
     private GameWrapper selectedGame;
     private ServerManager serverManager;
+    private String onlineName;
+    private boolean online;
 
-    public ModelSelectedGame(GameWrapper game, ServerManager manager){
+    public ModelSelectedGame(GameWrapper game, ServerManager manager, String onlineName, boolean online){
         selectedGame = game;
         serverManager = manager;
+        this.onlineName = onlineName;
+        this.online = online;
     }
 
     public GameWrapper getSelectedGame() {
@@ -20,5 +24,13 @@ public class ModelSelectedGame implements IModel {
 
     public ServerManager getServerManager() {
         return serverManager;
+    }
+
+    public String getOnlineName() {
+        return onlineName;
+    }
+
+    public boolean isOnline() {
+        return online;
     }
 }

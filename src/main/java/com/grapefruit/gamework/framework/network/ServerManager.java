@@ -1,7 +1,9 @@
 package com.grapefruit.gamework.framework.network;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class ServerManager {
@@ -17,10 +19,12 @@ public class ServerManager {
 
     private ServerConnection connection;
     private Queue<Command> commandQueue;
+    private List<ServerConnection.ResponseChallenge> challenges;
 
     public ServerManager(){
         this.connection = new ServerConnection(this);
         this.commandQueue = new LinkedList<>();
+        this.challenges = new ArrayList<>();
     }
 
     public boolean isConnected(){
@@ -79,6 +83,22 @@ public class ServerManager {
 
     public boolean commandsInQueue(){
         return commandQueue.size() > 0;
+    }
+
+    public void addChallenge(ServerConnection.ResponseChallenge challenge){
+        challenges.add(challenge);
+    }
+
+    public void removeChallengeById(int id){
+        for (ServerConnection.ResponseChallenge challenge: challenges){
+            if (challenge.getNumber() == id){
+                challenges.remove(challenge);
+            }
+        }
+    }
+
+    public List<ServerConnection.ResponseChallenge> getChallenges() {
+        return challenges;
     }
 }
 

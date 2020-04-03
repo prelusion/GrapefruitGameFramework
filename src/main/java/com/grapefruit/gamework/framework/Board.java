@@ -325,4 +325,40 @@ public abstract class Board {
             System.out.println();
         }
     }
+
+    public void printAvailableMovesWithStrategicValues(List<Tile> moves) {
+        System.out.println("AVAILABLE MOVES IN PRINTER: "+ moves.size());
+        System.out.print("  ");
+        for (int m = 0; m < grid.length; m++) {
+            System.out.print("  " + m + "   ");
+        }
+        System.out.println();
+
+        for (int i = 0; i < grid.length; i++) {
+            System.out.print(i + " ");
+            for (int j = 0; j < grid.length; j++) {
+                Player positionPlayer = grid[i][j].getPlayer();
+                String value;
+
+                Tile tileFound = null;
+
+                for (Tile tile : moves) {
+                    if (tile.getRow() == i && tile.getCol() == j) {
+                        tileFound = tile;
+                    }
+                }
+
+                if (tileFound != null) {
+                    value = String.format("[%3s]", tileFound.getStrategicValue());
+                } else if (positionPlayer == null) {
+                    value = "[   ]";
+                } else {
+                    value = String.format("[%3s]", positionPlayer.getColor().toString().charAt(0));
+                }
+
+                System.out.print(value + " ");
+            }
+            System.out.println();
+        }
+    }
 }

@@ -34,7 +34,7 @@ public class RealAI {
 
             List<Tile> availableMoves = game.getAvailableMoves(currentPlayer);
             System.out.println("available moves: " + availableMoves.size());
-            board.printAvailableMoves(currentPlayer);
+            board.printAvailableMovesWithStrategicValues(availableMoves);
 
             if (availableMoves.size() == 0) {
                 System.out.println("no moves available");

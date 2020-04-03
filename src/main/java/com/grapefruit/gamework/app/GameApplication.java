@@ -1,11 +1,9 @@
 package com.grapefruit.gamework.app;
 
 import com.grapefruit.gamework.app.model.ModelGame;
-import com.grapefruit.gamework.app.model.ModelGameTile;
 import com.grapefruit.gamework.app.model.ModelMainWindow;
 import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.app.view.templates.Game.GameFactory;
-import com.grapefruit.gamework.app.view.templates.GameTile.GameTileFactory;
 import com.grapefruit.gamework.app.view.templates.MainWindow.MainWindowFactory;
 import com.grapefruit.gamework.framework.Assets;
 import com.grapefruit.gamework.framework.Game;
@@ -15,9 +13,6 @@ import com.grapefruit.gamework.framework.player.Player;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
-import java.util.List;
 
 public class GameApplication extends Application {
 

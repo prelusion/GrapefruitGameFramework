@@ -18,8 +18,6 @@ import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 public class ControllerSelectedGame implements IController {
 

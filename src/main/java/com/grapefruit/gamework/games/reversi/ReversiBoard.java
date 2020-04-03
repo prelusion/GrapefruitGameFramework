@@ -8,8 +8,8 @@ import java.util.*;
 
 public class ReversiBoard extends Board {
 
-    public ReversiBoard(int boardSize) {
-        super(boardSize);
+    public ReversiBoard(int boardSize, int[][] strategicValues) {
+        super(boardSize, strategicValues);
     }
 
     @Override

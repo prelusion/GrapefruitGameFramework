@@ -1,7 +1,7 @@
 package com.grapefruit.gamework.games.tictactoe;
 
 import com.grapefruit.gamework.framework.GameFactory;
-import com.grapefruit.gamework.framework.player.Player;
+import com.grapefruit.gamework.framework.Player;
 
 public class TicTacToeFactory extends GameFactory {
     public TicTacToe create(Player[] players) {

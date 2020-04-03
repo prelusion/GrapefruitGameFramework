@@ -2,7 +2,7 @@ package com.grapefruit.gamework.games.tictactoe;
 
 import com.grapefruit.gamework.framework.Board;
 import com.grapefruit.gamework.framework.Tile;
-import com.grapefruit.gamework.framework.player.Player;
+import com.grapefruit.gamework.framework.Player;
 
 import java.util.ArrayList;
 import java.util.List;

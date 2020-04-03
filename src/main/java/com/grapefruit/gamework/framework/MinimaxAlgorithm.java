@@ -1,6 +1,5 @@
 package com.grapefruit.gamework.framework;
 
-import com.grapefruit.gamework.framework.player.Player;
 import com.grapefruit.gamework.games.reversi.ReversiBoard;
 
 import java.util.HashMap;
@@ -10,18 +9,16 @@ import java.util.Map;
 import static java.lang.Integer.max;
 import static java.lang.Integer.min;
 
-public class MinimaxAlgorithm implements MoveAlgorithm {
+public class MinimaxAlgorithm {
 
     public MinimaxAlgorithm() {}
 
-    @Override
-    public int minimax(int depth, Board board, Tile tile, int alpha, int beta,
+    public static int minimax(int depth, Board board, Tile tile, int alpha, int beta,
                        Player player, Player opponentPlayer, boolean maximizingPlayer) {
         return 0;
     }
 
-    @Override
-    public Tile calculateBestMove(Board board, Player player, Player opponent, int depth) {
+    public static Tile calculateBestMove(Board board, Player player, Player opponent, int depth) {
         int alpha = -999999;
         int beta = +999999;
         int maxScore = -9999999;
@@ -65,7 +62,7 @@ public class MinimaxAlgorithm implements MoveAlgorithm {
     }
 
 
-    public int minimax2(int depth, Board board, int score, int alpha, int beta,
+    public static int minimax2(int depth, Board board, int score, int alpha, int beta,
                         Player player, Player opponent, boolean maximizingPlayer) {
 
         if (depth == 0) {

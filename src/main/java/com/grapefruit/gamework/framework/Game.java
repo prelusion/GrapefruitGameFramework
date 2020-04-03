@@ -1,8 +1,6 @@
 package com.grapefruit.gamework.framework;
 
 
-import com.grapefruit.gamework.framework.player.Player;
-
 import java.util.List;
 
 public abstract class Game {

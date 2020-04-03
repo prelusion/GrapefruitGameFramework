@@ -1,17 +1,15 @@
 package com.grapefruit.gamework.games.reversi;
 
 import com.grapefruit.gamework.framework.Board;
-import com.grapefruit.gamework.framework.Player;
+import com.grapefruit.gamework.framework.player.Player;
 import com.grapefruit.gamework.framework.Tile;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class ReversiBoard extends Board {
 
-    public ReversiBoard(int boardSize, int[][] strategicValues) {
-        super(boardSize, strategicValues);
+    public ReversiBoard(int boardSize) {
+        super(boardSize);
     }
 
     @Override
@@ -44,7 +42,7 @@ public class ReversiBoard extends Board {
 
                 if (emptyTile == null) continue;
 
-                if (!validMoves.contains(emptyTile))
+                if(!validMoves.contains(emptyTile))
                     validMoves.add(emptyTile);
             }
         }

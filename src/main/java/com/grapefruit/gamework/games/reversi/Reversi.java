@@ -1,8 +1,13 @@
 package com.grapefruit.gamework.games.reversi;
 
-import com.grapefruit.gamework.framework.*;
+import com.grapefruit.gamework.framework.Board;
+import com.grapefruit.gamework.framework.Game;
+import com.grapefruit.gamework.framework.Tile;
+import com.grapefruit.gamework.framework.player.Player;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class Reversi extends Game {
 
@@ -16,22 +21,53 @@ public class Reversi extends Game {
 
     @Override
     public boolean isValidMove(int row, int col, Player player) {
-        List<Tile> validMoves = getBoard().getAvailableMoves(player);
+        if (getCurrentPlayer() == player) {
+            List<Tile> validMoves = getBoard().getAvailableMoves(player);
+            for (Tile tile : validMoves) {
+                if (tile.getRow() == row && tile.getCol() == col) return true;
+            }
+            return false;
+        } else {
+            return false;
+        }
+    }
 
-        for (Tile tile : validMoves) {
-            if (tile.getRow() == row && tile.getCol() == col) return true;
+    @Override
+    public GameResult getGameResult() {
+        if (!finished) {
+            return GameResult.NONE;
         }
 
-        return false;
+        Map<Player, Integer> pieces = getBoard().countPieces();
+        int winnerPieces = 0;
+        GameResult result = GameResult.NONE;
+
+        for (Map.Entry<Player, Integer> entry : pieces.entrySet()) {
+            if (entry.getValue() > winnerPieces) {
+                winnerPieces = entry.getValue();
+                setWinner(entry.getKey());
+                result = GameResult.WINNER;
+            } else if (entry.getValue() == winnerPieces) {
+                setWinner(null);
+                result = GameResult.TIE;
+            }
+        }
+
+        return result;
     }
 
     @Override
     public boolean hasFinished() {
-        return getBoard().anyMovesLeft(getPlayers());
+        return Arrays.stream(getPlayers())
+                .noneMatch(player -> (getAvailableMoves(player).size()) > 0);
+    }
+
+    public void checkFinished() {
+        if (hasFinished()) finished = true;
     }
 
     @Override
-    public Player getWinner() {
-        return Helpers.getWinningPlayer(getBoard());
+    public List<Tile> getAvailableMoves(Player player) {
+        return getBoard().getAvailableMoves(player);
     }
 }

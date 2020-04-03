@@ -2,25 +2,21 @@
 package com.grapefruit.gamework.games.reversi;
 
 import com.grapefruit.gamework.framework.*;
-import com.grapefruit.gamework.framework.Player;
+import com.grapefruit.gamework.framework.player.AIPlayer;
+import com.grapefruit.gamework.framework.player.Player;
 
 import java.util.List;
-
-import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
 
 public class RealAI {
     /* AI vs AI */
     public static void main(String[] args) {
         int turnTimeout = 10;
-        Board board = new ReversiBoard(8, STRATEGIC_VALUES);
+        Board board = new ReversiBoard(8);
         int playerWhiteDepth = 1;
         int playerBlackDepth = 5;
-
-
-        Player playerWhite = new Player("White", Colors.WHITE, true);
-        Player playerBlack = new Player("Black", Colors.BLACK, true);
+        AIPlayer playerWhite = new AIPlayer("White", Colors.WHITE, new MinimaxAlgorithm(), playerWhiteDepth);
+        AIPlayer playerBlack = new AIPlayer("Black", Colors.BLACK, new MinimaxAlgorithm(), playerBlackDepth);
         Reversi game = new Reversi(board, playerWhite, playerBlack, turnTimeout);
-        MinimaxAlgorithm minimax = new MinimaxAlgorithm(game);
 
         System.out.println("strategic values:");
         board.printStrategicValues();
@@ -42,24 +38,13 @@ public class RealAI {
 
             if (availableMoves.size() == 0) {
                 System.out.println("no moves available");
-
-                if (game.hasFinished()) {
-                    break;
-                } else {
-                    System.out.println(game.getCurrentPlayer());
-                    game.nextPlayer();
-                    System.out.println(game.getCurrentPlayer());
-                    continue;
-                }
+                game.checkFinished();
+                continue;
             }
 
             Player opponent = currentPlayer == playerWhite ? playerBlack : playerWhite;
-            Tile move;
-            if (currentPlayer.getColor() == Colors.BLACK) {
-                move = minimax.calculateBestMove(game.getBoard(), currentPlayer, opponent, 7);
-            } else {
-                move = minimax.calculateBestMove(game.getBoard(), currentPlayer, opponent, 2);
-            }
+
+            Tile move = ((AIPlayer) currentPlayer).calculateMove(game.getBoard(), opponent);
 
             System.out.println(String.format("play move: %s %s", move.getRow(), move.getCol()));
             game.playMove(move.getRow(), move.getCol(), currentPlayer);
@@ -71,13 +56,14 @@ public class RealAI {
         System.out.println("-----------------------------------");
         System.out.println("game finished");
 
+        Game.GameResult result = game.getGameResult();
+        System.out.println("result: " + result);
+
         System.out.println(String.format("white pieces: %s", board.countPieces(playerWhite)));
         System.out.println(String.format("black pieces: %s", board.countPieces(playerBlack)));
 
         if (game.hasWinner()) {
-            System.out.println("winner: " + game.getWinner().getColor().toString());
-        } else {
-            System.out.println("tie");
+            System.out.println("Winner: " + game.getWinner().getColor().toString());
         }
 
         System.out.println("strategic values:");

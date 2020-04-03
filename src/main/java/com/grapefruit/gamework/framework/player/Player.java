@@ -1,4 +1,4 @@
-package com.grapefruit.gamework.framework;
+package com.grapefruit.gamework.framework.player;
 
 import com.grapefruit.gamework.framework.Colors;
 

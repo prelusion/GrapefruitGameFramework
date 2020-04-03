@@ -136,8 +136,8 @@ public class ControllerGame implements IController{
         showPlayerPieces();
         markPossibleMoves(model.getGame().getAvailableMoves(model.getGame().getCurrentPlayer()), playerLocal);
         currentTurnPlayer.setText(model.getGame().getCurrentPlayer().getName());
-        if (model.getGame().hasFinished()){
-            if (model.getGame().hasWinner()){
+        if (model.getGame().getGameResult() == Game.GameResult.TIE || model.getGame().getGameResult() == Game.GameResult.WINNER){
+            if (model.getGame().getGameResult() == Game.GameResult.WINNER){
                 if (model.getLocalPlayers().contains(model.getGame().getWinner())) {
                     if (model.getLocalPlayers().size() == 1) {
                         createEndDialog("You win!");
@@ -148,7 +148,7 @@ public class ControllerGame implements IController{
                     createEndDialog("You lose!");
                 }
             }
-            if (model.getGame().isTie()) {
+            if (model.getGame().getGameResult() == Game.GameResult.TIE) {
                 if (true) {
                     createEndDialog("Tie!");
                 }

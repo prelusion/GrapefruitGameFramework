@@ -1,27 +1,27 @@
 package com.grapefruit.gamework.framework;
 
+import com.grapefruit.gamework.framework.player.Player;
 import com.grapefruit.gamework.games.reversi.ReversiBoard;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
 import static java.lang.Integer.max;
 import static java.lang.Integer.min;
 
-public class MinimaxAlgorithm {
-    private Game game;
-    private Player player;
-    private Player opponent;
+public class MinimaxAlgorithm implements MoveAlgorithm {
 
-    public MinimaxAlgorithm(Game game) {
-        this.game = game;
+    public MinimaxAlgorithm() {}
+
+    @Override
+    public int minimax(int depth, Board board, Tile tile, int alpha, int beta,
+                       Player player, Player opponentPlayer, boolean maximizingPlayer) {
+        return 0;
     }
 
+    @Override
     public Tile calculateBestMove(Board board, Player player, Player opponent, int depth) {
-        this.player = player;
-        this.opponent = opponent;
         int alpha = -999999;
         int beta = +999999;
         int maxScore = -9999999;
@@ -30,16 +30,18 @@ public class MinimaxAlgorithm {
         List<Tile> moves = board.getAvailableMoves(player);
         Map<Tile, Integer> tiles = new HashMap<>();
         for (Tile tile : moves) {
-            Board newBoard = new ReversiBoard(board.boardSize, STRATEGIC_VALUES);
+            Board newBoard = new ReversiBoard(board.boardSize);
             newBoard.copyState(board);
             newBoard.setMove(tile.getRow(), tile.getCol(), player);
 
-            tiles.put(tile, minimax(
+            tiles.put(tile, minimax2(
                     depth - 1,
                     newBoard,
                     tile.getStrategicValue(),
                     alpha,
                     beta,
+                    player,
+                    opponent,
                     false
             ));
         }
@@ -63,7 +65,9 @@ public class MinimaxAlgorithm {
     }
 
 
-    public int minimax(int depth, Board board, int score, int alpha, int beta, boolean maximizingPlayer) {
+    public int minimax2(int depth, Board board, int score, int alpha, int beta,
+                        Player player, Player opponent, boolean maximizingPlayer) {
+
         if (depth == 0) {
             return score;
         }
@@ -73,30 +77,21 @@ public class MinimaxAlgorithm {
             List<Tile> moves = board.getAvailableMoves(player);
 
             if (moves.size() == 0) {
-                if (board.anyMovesLeft(new Player[]{player, opponent})) {
-
-                    Player winner = game.getWinner();
-                    if (winner != null) {
-                        if (winner == player) {
-                            return 999;
-                        } else {
-                            return -999;
-                        }
-                    }
-                }
                 return score;
             }
 
             for (Tile move : moves) {
-                Board newBoard = new ReversiBoard(board.boardSize, STRATEGIC_VALUES);
+                Board newBoard = new ReversiBoard(board.boardSize);
                 newBoard.copyState(board);
                 newBoard.setMove(move.getRow(), move.getCol(), player);
 
-                int currentScore = minimax(
+                int currentScore = minimax2(
                         depth - 1,
                         newBoard,
                         score + move.getStrategicValue(),
                         alpha, beta,
+                        player,
+                        opponent,
                         false
                 );
 
@@ -104,10 +99,6 @@ public class MinimaxAlgorithm {
 
                 alpha = max(alpha, currentScore);
                 if (beta <= alpha) {
-                    break;
-                }
-
-                if (move.getStrategicValue() == 99) {
                     break;
                 }
             }
@@ -118,30 +109,22 @@ public class MinimaxAlgorithm {
             List<Tile> moves = board.getAvailableMoves(opponent);
 
             if (moves.size() == 0) {
-                if (board.anyMovesLeft(new Player[]{player, opponent})) {
-                    Player winner = game.getWinner();
-                    if (winner != null) {
-                        if (winner == player) {
-                            return -999;
-                        } else {
-                            return 999;
-                        }
-                    }
-                }
                 return score;
             }
 
             for (Tile move : moves) {
-                Board newBoard = new ReversiBoard(board.boardSize, STRATEGIC_VALUES);
+                Board newBoard = new ReversiBoard(board.boardSize);
                 newBoard.copyState(board);
                 newBoard.setMove(move.getRow(), move.getCol(), opponent);
 
-                int currentScore = minimax(
+                int currentScore = minimax2(
                         depth - 1,
                         newBoard,
                         score - move.getStrategicValue(),
                         alpha,
                         beta,
+                        player,
+                        opponent,
                         true
                 );
 
@@ -149,9 +132,6 @@ public class MinimaxAlgorithm {
 
                 beta = min(beta, currentScore);
                 if (beta <= alpha) {
-                    break;
-                }
-                if (move.getStrategicValue() == 99) {
                     break;
                 }
             }

@@ -15,7 +15,6 @@ public class ServerConnection {
     private BufferedReader in;
     private PrintWriter out;
     private ServerManager manager;
-    private boolean connected;
 
     public ServerConnection(ServerManager manager) {
         this.manager = manager;
@@ -28,9 +27,6 @@ public class ServerConnection {
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         listen();
         startSending();
-        if (socket.isConnected()){
-            connected = true;
-        }
     }
 
     private void listen(){
@@ -85,9 +81,7 @@ public class ServerConnection {
                             }
                         }
                     }
-                    connected = false;
                 } catch (Exception e){
-                    connected = false;
                     e.printStackTrace();
                 }
             }
@@ -102,7 +96,7 @@ public class ServerConnection {
     }
 
     public boolean isConnected() {
-        return connected;
+        return socket.isConnected();
     }
 
     public void startSending() {

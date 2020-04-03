@@ -19,6 +19,8 @@ public class ServerConnection {
     private BufferedReader in;
     private PrintWriter out;
     private ServerManager manager;
+    private Thread timer;
+    private Thread listenerThread;
 
     /**
      * Instantiates a new Server connection.
@@ -49,7 +51,7 @@ public class ServerConnection {
      *
      */
     private void listen(){
-        Thread listenerThread = new Thread(new Runnable() {
+        listenerThread = new Thread(new Runnable() {
             public void run() {
                 try {
                     while (socket.isConnected()) {
@@ -100,7 +102,7 @@ public class ServerConnection {
                             }
                         }
                     }
-                } catch (Exception e){
+                } catch (IOException e){
                     e.printStackTrace();
                 }
             }
@@ -114,9 +116,18 @@ public class ServerConnection {
      * @throws IOException the io exception
      */
     public void closeConnection() throws IOException {
-        socket.close();
-        in.close();
-        out.close();
+        listenerThread.interrupt();
+        timer.interrupt();
+        boolean stillconnected = true;
+        while (stillconnected) {
+            if (listenerThread.isInterrupted() && timer.isInterrupted()) {
+                socket.close();
+                in.close();
+                out.close();
+                stillconnected = false;
+            }
+        }
+
     }
 
     /**
@@ -133,7 +144,7 @@ public class ServerConnection {
      *
      */
     public void startSending() {
-        Thread timer = new Thread(new Runnable() {
+        timer = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (!Thread.interrupted()) {
@@ -144,7 +155,7 @@ public class ServerConnection {
                     }
                     try{
                         Thread.sleep(300);
-                    } catch (InterruptedException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -157,7 +168,7 @@ public class ServerConnection {
     /**
      * The type Response challenge.
      */
-    public class ResponseChallenge{
+    public class ResponseChallenge {
 
         private String challenger;
         private int number;

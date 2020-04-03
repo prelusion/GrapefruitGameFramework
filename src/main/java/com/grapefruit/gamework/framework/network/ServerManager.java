@@ -141,5 +141,17 @@ public class ServerManager {
     public boolean commandsInQueue(){
         return commandQueue.size() > 0;
     }
+
+    /**
+     * Tries to disconnect from the server.
+     *
+     */
+    public void disconnect() {
+        try {
+            connection.closeConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
 

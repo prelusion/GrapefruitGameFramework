@@ -21,7 +21,7 @@ public abstract class Commands {
     /**
      * The login function sends a login command from the client to the server.
      *
-     * @param callback callback to execute after response has been received.
+     * @param callback CommandCallback callback to execute after response has been received.
      * @param name String the username of the user to login
      */
     public static Command login(String name, CommandCallback callback){
@@ -31,7 +31,7 @@ public abstract class Commands {
     /**
      * The function logout logs the currently logged in user out.
      *
-     * @param callback callback to execute after response has been received.
+     * @param callback CommandCallback callback to execute after response has been received.
      */
     public static Command logout(CommandCallback callback){
         return new Command(KEYWORD_LOGOUT, callback, ServerManager.ResponseType.CONFIRMONLY);
@@ -40,7 +40,7 @@ public abstract class Commands {
     /**
      * This functions asks the server for a list of available games.
      *
-     * @param callback callback to execute after response has been received.
+     * @param callback CommandCallback callback to execute after response has been received.
      */
     public static Command getGameList(CommandCallback callback){
         return new Command(KEYWORD_GAME_LIST, callback, ServerManager.ResponseType.LIST);
@@ -49,7 +49,7 @@ public abstract class Commands {
     /**
      * This function asks the server for a list of available players.
      *
-     * @param callback callback to execute after response has been received.
+     * @param callback CommandCallback callback to execute after response has been received.
      */
     public static Command getPlayerList(CommandCallback callback) {
         return new Command(KEYWORD_PLAYER_LIST, callback, ServerManager.ResponseType.LIST);
@@ -58,7 +58,7 @@ public abstract class Commands {
     /**
      * This function asks the server for a list of all possible commands.
      *
-     * @param callback callback to execute after response has been received.
+     * @param callback CommandCallback callback to execute after response has been received.
      */
     public static Command getHelp(CommandCallback callback, String command) {
         return new Command(KEYWORD_HELP + command, callback, ServerManager.ResponseType.LIST);
@@ -67,8 +67,7 @@ public abstract class Commands {
     /**
      * This functions asks the server to set a move.
      *
-     *      * @param callback callback to execute after response has been received.
-     * @param callback callback to execute after response has been received.
+     * @param callback  CommandCallback callback to execute after response has been received.
      * @param row       int the row on the board.
      * @param col       int the col on the board.
      * @param boardSize int the board size.
@@ -81,7 +80,7 @@ public abstract class Commands {
     /**
      * Forfeit.
      *
-     * @param callback ServerConnection the object that handles the server connection.
+     * @param callback CommandCallback the object that handles the server connection.
      */
     public static Command forfeit(CommandCallback callback) {
         return new Command(KEYWORD_FORFEIT, callback, ServerManager.ResponseType.CONFIRMONLY);
@@ -90,7 +89,7 @@ public abstract class Commands {
     /**
      * The challenge function is used to indicate if the current logged in player accepts the challenge by passing a boolean value.
      *
-     * @param callback callback to execute after response has been received.
+     * @param callback CommandCallback callback to execute after response has been received.
      * @param accept boolean Flag to indicate if the challenge is accepted or not.
      */
     public static Command challenge(CommandCallback callback, boolean accept) {

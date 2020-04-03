@@ -3,12 +3,16 @@ package com.grapefruit.gamework.framework.network;
 import com.google.gson.Gson;
 import com.grapefruit.gamework.app.controller.ControllerLobbyBrowser;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
+
+/**
+ * The type Server connection.
+ */
 public class ServerConnection {
 
     private enum ChallengeStatus{
@@ -21,12 +25,22 @@ public class ServerConnection {
     private BufferedReader in;
     private PrintWriter out;
     private ServerManager manager;
-    private boolean connected;
 
+    /**
+     * Instantiates a new Server connection.
+     *
+     * @param manager Servermanager the manager for the server connection.
+     */
     public ServerConnection(ServerManager manager) {
         this.manager = manager;
     }
 
+    /**
+     * Tries to connect to the server with ip-address passed in the parameter.
+     *
+     * @param serverIp String the server ip
+     * @throws IOException the io exception
+     */
     public void connect(String serverIp) throws IOException {
         this.serverIp = serverIp;
         socket = new Socket(serverIp, 7789);
@@ -34,11 +48,12 @@ public class ServerConnection {
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         listen();
         startSending();
-        if (socket.isConnected()){
-            connected = true;
-        }
     }
 
+    /**
+     * Starts a Thread that listens to the server for responses or other messages and activates a callback function.
+     *
+     */
     private void listen(){
         Thread listenerThread = new Thread(new Runnable() {
             public void run() {
@@ -62,8 +77,9 @@ public class ServerConnection {
                                 manager.removeCommandFromQueue(command);
 
                             } else if (answer.contains("SVR") && answer.contains("[")){
+                                answer = answer.trim();
                                 int startArg = answer.indexOf("[");
-                                String[] args = answer.substring(startArg + 1, answer.strip().length() - 1).split(", ");
+                                String[] args = answer.substring(startArg + 1, answer.length() - 1).split(", ");
 
                                 String[] result = new String[args.length];
                                 int i = 0;
@@ -91,9 +107,7 @@ public class ServerConnection {
                             }
                         }
                     }
-                    connected = false;
                 } catch (Exception e){
-                    connected = false;
                     e.printStackTrace();
                 }
             }
@@ -101,16 +115,30 @@ public class ServerConnection {
         listenerThread.start();
     }
 
+    /**
+     * Closes the connection with the server.
+     *
+     * @throws IOException the io exception
+     */
     public void closeConnection() throws IOException {
         socket.close();
         in.close();
         out.close();
     }
 
+    /**
+     * Checks wether the client is connected to the server.
+     *
+     * @return boolean if the server is connected.
+     */
     public boolean isConnected() {
-        return connected;
+        return socket.isConnected();
     }
 
+    /**
+     * Starts a Thread that checks the commandqueue for commands waiting to be send.
+     *
+     */
     public void startSending() {
         Thread timer = new Thread(new Runnable() {
             @Override
@@ -133,6 +161,9 @@ public class ServerConnection {
     }
 
 
+    /**
+     * The type Response challenge.
+     */
     public class ResponseChallenge{
 
         private String challenger;
@@ -140,29 +171,62 @@ public class ServerConnection {
         private String gameType;
         private ChallengeStatus status;
 
+        /**
+         * Instantiates a new Response challenge.
+         */
         public ResponseChallenge() {
         }
 
+        /**
+         * Gets challenger.
+         *
+         * @return the challenger
+         */
         public String getChallenger() {
             return challenger;
         }
 
+        /**
+         * Sets challenger.
+         *
+         * @param challenger the challenger
+         */
         public void setChallenger(String challenger) {
             this.challenger = challenger;
         }
 
+        /**
+         * Gets number.
+         *
+         * @return the number
+         */
         public int getNumber() {
             return number;
         }
 
+        /**
+         * Sets number.
+         *
+         * @param number the number
+         */
         public void setNumber(int number) {
             this.number = number;
         }
 
+        /**
+         * Gets gametype.
+         *
+         * @return the gametype
+         */
         public String getGametype() {
             return gameType;
         }
 
+        /**
+         * Sets gametype.
+         *
+         * @param gametype the gametype
+         */
         public void setGametype(String gametype) {
             this.gameType = gametype;
         }

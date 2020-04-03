@@ -43,7 +43,6 @@ public class Reversi extends Game {
         GameResult result = GameResult.NONE;
 
         for (Map.Entry<Player, Integer> entry : pieces.entrySet()) {
-            System.out.println(entry.getKey() + " / " + entry.getValue());
             if (entry.getValue() > winnerPieces) {
                 winnerPieces = entry.getValue();
                 setWinner(entry.getKey());

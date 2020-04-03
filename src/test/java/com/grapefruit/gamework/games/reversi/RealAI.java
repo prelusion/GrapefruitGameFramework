@@ -55,6 +55,9 @@ public class RealAI {
         Game.GameResult result = game.getGameResult();
         System.out.println("result: " + result);
 
+        System.out.println(String.format("white pieces: %s", board.countPieces(playerWhite)));
+        System.out.println(String.format("black pieces: %s", board.countPieces(playerBlack)));
+
         if (game.hasWinner()) {
             System.out.println("Winner: " + game.getWinner().getColor().toString());
         }

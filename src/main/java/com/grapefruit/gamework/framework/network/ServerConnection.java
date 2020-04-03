@@ -14,7 +14,6 @@ import java.net.Socket;
  */
 public class ServerConnection {
 
-    private String serverIp;
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
@@ -38,7 +37,6 @@ public class ServerConnection {
      * @throws IOException the io exception
      */
     public void connect(String serverIp) throws IOException {
-        this.serverIp = serverIp;
         socket = new Socket(serverIp, 7789);
         out = new PrintWriter(socket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));

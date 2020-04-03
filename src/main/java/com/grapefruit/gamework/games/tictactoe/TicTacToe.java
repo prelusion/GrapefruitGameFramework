@@ -29,6 +29,11 @@ public class TicTacToe extends Game {
     }
 
     @Override
+    public boolean hasFinished(Board board) {
+        return false;
+    }
+
+    @Override
     public GameResult getGameResult() {
         if (!finished) {
             return GameResult.NONE;
@@ -37,6 +42,11 @@ public class TicTacToe extends Game {
         } else {
             return GameResult.TIE;
         }
+    }
+
+    @Override
+    public GameResult getGameResult(Board board) {
+        return null;
     }
 
 

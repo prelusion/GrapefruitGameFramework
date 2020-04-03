@@ -14,9 +14,11 @@ public class RealAI {
         int playerWhiteDepth = 1;
         int playerBlackDepth = 5;
 
+
         Player playerWhite = new Player("White", Colors.WHITE, true);
         Player playerBlack = new Player("Black", Colors.BLACK, true);
         Reversi game = new Reversi(board, playerWhite, playerBlack, turnTimeout);
+        MinimaxAlgorithm minimax = new MinimaxAlgorithm(game);
 
         System.out.println("strategic values:");
         board.printStrategicValues();
@@ -46,9 +48,9 @@ public class RealAI {
             Player opponent = currentPlayer == playerWhite ? playerBlack : playerWhite;
             Tile move;
             if (currentPlayer.getColor() == Colors.BLACK) {
-                move = MinimaxAlgorithm.calculateBestMove(game.getBoard(), currentPlayer, opponent, 2);
+                move = minimax.calculateBestMove(game.getBoard(), currentPlayer, opponent, 1);
             } else {
-                move = MinimaxAlgorithm.calculateBestMove(game.getBoard(), currentPlayer, opponent, 6);
+                move = minimax.calculateBestMove(game.getBoard(), currentPlayer, opponent, 6);
             }
 
             System.out.println(String.format("play move: %s %s", move.getRow(), move.getCol()));

@@ -57,17 +57,53 @@ public class Reversi extends Game {
     }
 
     @Override
+    public GameResult getGameResult(Board board) {
+        Map<Player, Integer> pieces = board.countPieces();
+        int winnerPieces = 0;
+        GameResult result = GameResult.NONE;
+
+        for (Map.Entry<Player, Integer> entry : pieces.entrySet()) {
+            if (entry.getValue() > winnerPieces) {
+                winnerPieces = entry.getValue();
+                setVirtualWinner(entry.getKey());
+                result = GameResult.WINNER;
+            } else if (entry.getValue() == winnerPieces) {
+                setVirtualWinner(null);
+                result = GameResult.TIE;
+            }
+        }
+
+        return result;
+    }
+
+    @Override
     public boolean hasFinished() {
         return Arrays.stream(getPlayers())
                 .noneMatch(player -> (getAvailableMoves(player).size()) > 0);
     }
 
-    public void checkFinished() {
-        if (hasFinished()) finished = true;
-    }
-
     @Override
     public List<Tile> getAvailableMoves(Player player) {
         return getBoard().getAvailableMoves(player);
+    }
+
+
+    @Override
+    public boolean hasFinished(Board board) {
+        System.out.println("testtesttesttesttest");
+        for (Player player : getPlayers()) {
+            List<Tile> tiles = board.getAvailableMoves(player);
+            for (Tile tile: tiles) {
+                System.out.println("Player " + player.getColor() + "Row " + tile.getRow() + " col " + tile.getCol());
+            }
+        }
+
+
+        return Arrays.stream(getPlayers())
+                .noneMatch(player -> (board.getAvailableMoves(player).size()) > 0);
+    }
+
+    public void checkFinished() {
+        if (hasFinished()) finished = true;
     }
 }

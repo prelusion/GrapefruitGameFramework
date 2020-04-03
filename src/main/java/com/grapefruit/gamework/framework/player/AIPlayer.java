@@ -11,7 +11,7 @@ public class AIPlayer extends Player {
         this.depth = depth;
     }
 
-    public Tile calculateMove(Board board) {
-        return moveAlgorithm.calculateBestMove(board, this, depth);
+    public Tile calculateMove(Board board, Player opponent) {
+        return moveAlgorithm.calculateBestMove(board, this, opponent, depth);
     }
 }

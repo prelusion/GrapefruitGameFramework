@@ -31,25 +31,100 @@ public abstract class Board {
         initGrid();
     }
 
+    int[][] strat;
     /**
      * Creates a board of given size with strategicValues given from the game implmentation. (TODO)
      */
     private void initGrid() {
+        initStrat();
         grid = new Tile[boardSize][boardSize];
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid.length; j++) {
-                grid[i][j] = new Tile(i, j, /* TODO  */ 0);
+                grid[i][j] = new Tile(i, j, strat[i][j]);
             }
         }
     }
 
-    public void copyState(Board AIBoard, Board board) {
+    private void initStrat() {
+        strat = new int[8][8];
+        strat[0][0] = 99;
+        strat[0][1] = -8;
+        strat[0][2] = 8;
+        strat[0][3] = 6;
+        strat[0][4] = 6;
+        strat[0][5] = 8;
+        strat[0][6] = -8;
+        strat[0][7] = 99;
+
+        strat[1][0] = -8;
+        strat[1][1] = -24;
+        strat[1][2] = -4;
+        strat[1][3] = -3;
+        strat[1][4] = -3;
+        strat[1][5] = -4;
+        strat[1][6] = -24;
+        strat[1][7] = -8;
+
+        strat[2][0] = 8;
+        strat[2][1] = -4;
+        strat[2][2] = 7;
+        strat[2][3] = 4;
+        strat[2][4] = 4;
+        strat[2][5] = 7;
+        strat[2][6] = -4;
+        strat[2][7] = 8;
+
+        strat[3][0] = 6;
+        strat[3][1] = -3;
+        strat[3][2] = 4;
+        strat[3][3] = 0;
+        strat[3][4] = 0;
+        strat[3][5] = 4;
+        strat[3][6] = -3;
+        strat[3][7] = 6;
+
+        strat[4][0] = 6;
+        strat[4][1] = -3;
+        strat[4][2] = 4;
+        strat[4][3] = 0;
+        strat[4][4] = 0;
+        strat[4][5] = 4;
+        strat[4][6] = -3;
+        strat[4][7] = 6;
+
+        strat[5][0] = 8;
+        strat[5][1] = -4;
+        strat[5][2] = 7;
+        strat[5][3] = 4;
+        strat[5][4] = 4;
+        strat[5][5] = 7;
+        strat[5][6] = -4;
+        strat[5][7] = 8;
+
+        strat[6][0] = -8;
+        strat[6][1] = -24;
+        strat[6][2] = -4;
+        strat[6][3] = -3;
+        strat[6][4] = -3;
+        strat[6][5] = -4;
+        strat[6][6] = -24;
+        strat[6][7] = -8;
+
+        strat[7][0] = 99;
+        strat[7][1] = -8;
+        strat[7][2] = 8;
+        strat[7][3] = 6;
+        strat[7][4] = 6;
+        strat[7][5] = 8;
+        strat[7][6] = -8;
+        strat[7][7] = 99;
+
+    }
+
+    public void copyState(Board otherBoard) {
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid.length; j++) {
-                Tile tile = board.getGrid()[i][j];
-                if (tile.getPlayer() != null) {
-                    AIBoard.setMove(i, j, tile.getPlayer());
-                }
+                grid[i][j].setPlayer(otherBoard.getPlayer(i, j));
             }
         }
     }
@@ -71,7 +146,7 @@ public abstract class Board {
     public abstract List<Tile> getAvailableMoves(Player player);
 
     public void setPlayer(int row, int col, Player player) {
-        grid[row][col] = new Tile(row, col, 1, player);
+        grid[row][col].setPlayer(player);
     }
 
     public Player getPlayer(int row, int col) {
@@ -160,7 +235,7 @@ public abstract class Board {
      */
     public void printAvailableMoves(Player player) {
         List<Tile> moves = getAvailableMoves(player);
-
+        System.out.println("AVAILABLE MOVES IN PRINTER: "+ moves.size());
         System.out.print("  ");
         for (int m = 0; m < grid.length; m++) {
             System.out.print(" " + m + "  ");
@@ -190,6 +265,110 @@ public abstract class Board {
                 }
 
                 System.out.print(value + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    /**
+     * Helper function to print the board.
+     */
+    public void printStrategicValues() {
+        System.out.print("  ");
+        for (int m = 0; m < grid.length; m++) {
+            System.out.print(" " + m + "  ");
+        }
+        System.out.println();
+
+        for (int i = 0; i < grid.length; i++) {
+            System.out.print(i + " ");
+            for (int j = 0; j < grid.length; j++) {
+                String value = String.format("[%3s]", grid[i][j].getStrategicValue());
+                System.out.print(value + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public void printAvailableMoves(List<Tile> moves) {
+        System.out.println("AVAILABLE MOVES IN PRINTER: "+ moves.size());
+        System.out.print("  ");
+        for (int m = 0; m < grid.length; m++) {
+            System.out.print(" " + m + "  ");
+        }
+        System.out.println();
+
+        for (int i = 0; i < grid.length; i++) {
+            System.out.print(i + " ");
+            for (int j = 0; j < grid.length; j++) {
+                Player positionPlayer = grid[i][j].getPlayer();
+                String value;
+
+                Tile tileFound = null;
+
+                for (Tile tile : moves) {
+                    if (tile.getRow() == i && tile.getCol() == j) {
+                        tileFound = tile;
+                    }
+                }
+
+                if (tileFound != null) {
+                    value = "[*]";
+                } else if (positionPlayer == null) {
+                    value = "[ ]";
+                } else {
+                    value = String.format("[%s]", positionPlayer.getColor().toString().charAt(0));
+                }
+
+                System.out.print(value + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public void printAvailableMovesWithStrategicValues(List<Tile> moves) {
+        System.out.println("AVAILABLE MOVES IN PRINTER: "+ moves.size());
+        System.out.print("  ");
+        for (int m = 0; m < grid.length; m++) {
+            System.out.print("  " + m + "   ");
+        }
+        System.out.println();
+
+        for (int i = 0; i < grid.length; i++) {
+            System.out.print(i + " ");
+            for (int j = 0; j < grid.length; j++) {
+                Player positionPlayer = grid[i][j].getPlayer();
+                String value;
+
+                Tile tileFound = null;
+
+                for (Tile tile : moves) {
+                    if (tile.getRow() == i && tile.getCol() == j) {
+                        tileFound = tile;
+                    }
+                }
+
+                boolean color = false;
+
+                if (tileFound != null) {
+                    value = String.format("[%3s]", tileFound.getStrategicValue());
+                } else if (positionPlayer == null) {
+                    value = "[   ]";
+                } else {
+                    color = true;
+                    value = String.format("[%3s]", positionPlayer.getColor().toString().charAt(0));
+                }
+
+//                if (color && positionPlayer.getColor() == Colors.BLACK) {
+//                    System.out.print(PrintColor.RED_BOLD);
+//                } else if (color && positionPlayer.getColor() == Colors.WHITE) {
+//                    System.out.print(PrintColor.BLUE_BOLD);
+//                }
+                System.out.print(value + " ");
+//                if (color) {
+//                    System.out.print(PrintColor.RESET);
+//                }
+
             }
             System.out.println();
         }

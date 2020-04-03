@@ -1,0 +1,96 @@
+/*
+This pseudocode implementation does not account for which player starts
+*/
+
+
+
+
+gameChoice = askUser()
+
+if gameChoice == "offline 1v1":
+    offline1v1()
+if gameChoice == "offline vs AI":
+    offlineVsAI()
+if gameChoice == "online 1v1":
+    online1v1()
+if gameChoice == "online AI vs AI":
+    onlineAIvsAI()
+
+
+
+
+
+def offline1v1():
+    game
+    playerA
+    playerB
+
+    gui.setTileClick(e -> {
+        game.playMove(e.row, e.col, game.getCurrentPlayer())
+        game.nextPlayer()
+        gui.setTurn(game.getCurrentPlayer())
+    })
+
+
+def offlineVsAI():
+    game
+    player
+    opponent
+
+    gui.setTileClick(e -> {
+        game.playMove(e.row, e.col, player)
+        game.nextPlayer()
+        gui.setTurn(opponent)
+
+        opponentMove = algorithm.getBestMove(timeout)
+        game.playMove(opponentMove.row, opponentMove.col, opponent)
+
+        game.nextPlayer()
+        gui.setTurn(player)
+    })
+
+
+def online1v1():
+    game
+    player
+    opponent
+
+    gui.setTileClick(e -> {
+        success = server.sendMove()
+
+        if success:
+            game.playMove(e.row, e.col, player)
+
+            game.nextPlayer()
+            gui.setTurn(opponent)
+
+            opponentMove = server.getMove(timeout)
+            game.playMove(opponentMove.row, opponentMove.col, opponent)
+
+            game.nextPlayer()
+            gui.setTurn(player)
+    })
+
+
+def onlineAIvsAI():
+    game
+    player
+    opponent
+
+    while (!game.hasFinished():
+        algorithm.getBestMove(timeout)
+        success = server.sendMove()
+
+        if success:
+            game.playMove(e.row, e.col, player)
+            game.nextPlayer()
+            gui.setTurn(opponent)
+
+            opponentMove = server.getMove(timeout)
+            game.playMove(opponentMove.row, opponentMove.col, opponent)
+            game.nextPlayer()
+            gui.setTurn(player)
+
+
+
+

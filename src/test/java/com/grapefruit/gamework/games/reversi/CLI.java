@@ -11,7 +11,7 @@ public class CLI {
     public static void main(String[] args) {
         int turnTimeout = 10;
         Scanner in = new Scanner(System.in);
-        Board board = new ReversiBoard(9);
+        Board board = new ReversiBoard(8);
         Player playerWhite = new Player("White", Colors.WHITE, true);
         Player playerBlack = new Player("Black", Colors.BLACK, true);
         Game game = new Reversi(board, playerWhite, playerBlack, turnTimeout);
@@ -36,7 +36,7 @@ public class CLI {
                 int col = Character.getNumericValue(line.charAt(1));
                 System.out.println("row: " + row + ", col: " + col);
 
-                success = game.doMove(row, col, currentPlayer);
+                success = game.playMove(row, col, currentPlayer);
                 if (!success) System.out.println("invalid move");
             }
 

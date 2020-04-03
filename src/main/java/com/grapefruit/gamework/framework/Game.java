@@ -52,6 +52,12 @@ public abstract class Game {
         if (currentPlayerIndex == players.length) currentPlayerIndex = 0;
     }
 
+    public Player getOpponentPlayer() {
+        int index = currentPlayerIndex + 1;
+        if (index == players.length) index = 0;
+        return players[index];
+    }
+
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
@@ -87,7 +93,7 @@ public abstract class Game {
      * @param row
      * @param col
      */
-    public boolean doMove(int row, int col, Player player) {
+    public boolean playMove(int row, int col, Player player) {
         if (!isValidMove(row, col, player)) {
             return false;
         }
@@ -100,8 +106,6 @@ public abstract class Game {
 
         return true;
     }
-
-    public abstract boolean playMove(int row, int col, Player player);
 
     /**
      * This function will check if the game should be ended or not.
@@ -121,7 +125,7 @@ public abstract class Game {
      * @return boolean, true if a winner is found
      */
     public boolean hasWinner() {
-        return getGameResult() == GameResult.WINNER;
+        return winner != null;
     }
 
     public boolean isTie() {

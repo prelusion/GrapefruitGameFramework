@@ -9,7 +9,6 @@ import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDia
 import com.grapefruit.gamework.framework.*;
 import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
-import com.grapefruit.gamework.framework.player.Player;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;

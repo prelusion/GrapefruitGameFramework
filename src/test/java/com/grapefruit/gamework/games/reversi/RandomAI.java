@@ -5,7 +5,7 @@ import com.grapefruit.gamework.framework.*;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-import com.grapefruit.gamework.framework.player.Player;
+import com.grapefruit.gamework.framework.Player;
 
 public class RandomAI {
     /* AI vs AI */

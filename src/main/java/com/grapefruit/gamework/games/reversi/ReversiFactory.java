@@ -3,7 +3,7 @@ package com.grapefruit.gamework.games.reversi;
 import com.grapefruit.gamework.framework.Board;
 import com.grapefruit.gamework.framework.Game;
 import com.grapefruit.gamework.framework.GameFactory;
-import com.grapefruit.gamework.framework.player.Player;
+import com.grapefruit.gamework.framework.Player;
 
 public class ReversiFactory extends GameFactory {
     static final int DEFAULT_REVERSI_BOARD_SIZE = 8;

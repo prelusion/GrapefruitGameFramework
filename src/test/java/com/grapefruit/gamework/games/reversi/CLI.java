@@ -2,7 +2,7 @@ package com.grapefruit.gamework.games.reversi;
 
 import com.grapefruit.gamework.framework.Board;
 import com.grapefruit.gamework.framework.Game;
-import com.grapefruit.gamework.framework.player.Player;
+import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.Colors;
 
 import java.util.Scanner;

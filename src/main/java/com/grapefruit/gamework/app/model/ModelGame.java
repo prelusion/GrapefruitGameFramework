@@ -2,9 +2,7 @@ package com.grapefruit.gamework.app.model;
 
 import com.grapefruit.gamework.framework.Assets;
 import com.grapefruit.gamework.framework.Game;
-import com.grapefruit.gamework.framework.GameWrapper;
-import com.grapefruit.gamework.framework.player.LocalPlayer;
-import com.grapefruit.gamework.framework.player.Player;
+import com.grapefruit.gamework.framework.Player;
 
 import java.util.ArrayList;
 import java.util.List;

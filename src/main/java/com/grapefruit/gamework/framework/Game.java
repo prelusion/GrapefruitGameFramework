@@ -1,8 +1,6 @@
 package com.grapefruit.gamework.framework;
 
 
-import com.grapefruit.gamework.framework.player.Player;
-
 import java.util.List;
 
 public abstract class Game {
@@ -27,6 +25,8 @@ public abstract class Game {
     private Player currentPlayer;
 
     private Player winner;
+
+    private Player virtualWinner;
 
     protected boolean finished = false;
 
@@ -115,11 +115,25 @@ public abstract class Game {
     public abstract boolean hasFinished();
 
     /**
+     * This function will check if the game should be ended or not.
+     *
+     * @return boolean, State of the game if its ended or not.
+     */
+    public abstract boolean hasFinished(Board board);
+
+    /**
      * Checks whether the game has a WINNER, a TIE or NONE of those.
      *
      * @return GameResult, The result of the game so WINNER, TIE or NONE
      */
     public abstract GameResult getGameResult();
+
+    /**
+     * Checks whether the game has a WINNER, a TIE or NONE of those.
+     *
+     * @return GameResult, The result of the game so WINNER, TIE or NONE
+     */
+    public abstract GameResult getGameResult(Board board);
 
     /**
      * @return boolean, true if a winner is found
@@ -142,6 +156,19 @@ public abstract class Game {
     protected void setWinner(Player player) {
         winner = player;
     }
+
+
+    /**
+     * @return Player, Get the player if there is a winner. If the game has finished an
+     */
+    public Player getVirtualWinner() {
+        return virtualWinner;
+    }
+
+    protected void setVirtualWinner(Player player) {
+        virtualWinner = player;
+    }
+
 
     /**
      * Uses isValidMove() To check whether moves are available.

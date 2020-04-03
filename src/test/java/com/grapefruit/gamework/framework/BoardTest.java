@@ -1,11 +1,5 @@
 package com.grapefruit.gamework.framework;
 
-import com.grapefruit.gamework.framework.player.AIPlayer;
-import com.grapefruit.gamework.framework.player.Player;
-import com.grapefruit.gamework.games.tictactoe.TicTacToe;
-import com.grapefruit.gamework.games.tictactoe.TicTacToeBoard;
-import org.junit.Test;
-
 public class BoardTest {
 //    @Test
 //    public void printBoard() {

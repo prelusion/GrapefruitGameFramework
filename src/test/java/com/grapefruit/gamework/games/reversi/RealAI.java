@@ -2,8 +2,7 @@
 package com.grapefruit.gamework.games.reversi;
 
 import com.grapefruit.gamework.framework.*;
-import com.grapefruit.gamework.framework.player.AIPlayer;
-import com.grapefruit.gamework.framework.player.Player;
+import com.grapefruit.gamework.framework.Player;
 
 import java.util.List;
 
@@ -14,9 +13,12 @@ public class RealAI {
         Board board = new ReversiBoard(8);
         int playerWhiteDepth = 1;
         int playerBlackDepth = 5;
-        AIPlayer playerWhite = new AIPlayer("White", Colors.WHITE, new MinimaxAlgorithm(), playerWhiteDepth);
-        AIPlayer playerBlack = new AIPlayer("Black", Colors.BLACK, new MinimaxAlgorithm(), playerBlackDepth);
+
+
+        Player playerWhite = new Player("White", Colors.WHITE, true);
+        Player playerBlack = new Player("Black", Colors.BLACK, true);
         Reversi game = new Reversi(board, playerWhite, playerBlack, turnTimeout);
+        MinimaxAlgorithm minimax = new MinimaxAlgorithm(game);
 
         System.out.println("strategic values:");
         board.printStrategicValues();
@@ -39,12 +41,17 @@ public class RealAI {
             if (availableMoves.size() == 0) {
                 System.out.println("no moves available");
                 game.checkFinished();
+                game.nextPlayer();
                 continue;
             }
 
             Player opponent = currentPlayer == playerWhite ? playerBlack : playerWhite;
-
-            Tile move = ((AIPlayer) currentPlayer).calculateMove(game.getBoard(), opponent);
+            Tile move;
+            if (currentPlayer.getColor() == Colors.BLACK) {
+                move = minimax.calculateBestMove(game.getBoard(), currentPlayer, opponent, 1);
+            } else {
+                move = minimax.calculateBestMove(game.getBoard(), currentPlayer, opponent, 6);
+            }
 
             System.out.println(String.format("play move: %s %s", move.getRow(), move.getCol()));
             game.playMove(move.getRow(), move.getCol(), currentPlayer);

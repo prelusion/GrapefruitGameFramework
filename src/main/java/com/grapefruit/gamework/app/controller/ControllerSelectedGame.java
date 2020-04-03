@@ -3,7 +3,7 @@ package com.grapefruit.gamework.app.controller;
 import com.grapefruit.gamework.app.GameApplication;
 import com.grapefruit.gamework.app.model.IModel;
 import com.grapefruit.gamework.app.model.ModelSelectedGame;
-import com.grapefruit.gamework.framework.player.Player;
+import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.Colors;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,8 +16,6 @@ import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 public class ControllerSelectedGame implements IController {
 

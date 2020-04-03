@@ -1,7 +1,5 @@
 package com.grapefruit.gamework.framework;
 
-import com.grapefruit.gamework.framework.player.Player;
-
 public class Tile {
 
     /**

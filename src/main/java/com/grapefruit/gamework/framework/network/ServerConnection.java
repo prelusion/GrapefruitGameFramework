@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -55,16 +56,20 @@ public class ServerConnection {
                                 manager.removeCommandFromQueue(command);
 
                             } else if (answer.contains("SVR") && answer.contains("[")){
-                                List<String> arguments = Arrays.asList(answer.split("(?<=(['\"])\\b)(?:(?!\\1|\\\\).|\\\\.)*(?=\\1)"));
-                                String[] args = new String[arguments.size()];
+                                int startArg = answer.indexOf("[");
+                                String[] args = answer.substring(startArg + 1, answer.strip().length() - 1).split(", ");
+
+                                String[] result = new String[args.length];
                                 int i = 0;
-                                for (String arg: arguments){
-                                    args[i] = arg;
+                                for (String element : args) {
+                                    result[i] = element.substring(1, element.length() - 1);
                                     i++;
                                 }
+
+
                                 Command command = manager.findFirstFittingCommand(ServerManager.ResponseType.LIST, true);
                                 command.confirm();
-                                command.doCallBack(true, args);
+                                command.doCallBack(true, result);
                                 manager.removeCommandFromQueue(command);
                             }
                        }

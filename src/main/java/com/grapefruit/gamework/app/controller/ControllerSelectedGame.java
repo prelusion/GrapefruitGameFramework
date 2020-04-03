@@ -2,7 +2,9 @@ package com.grapefruit.gamework.app.controller;
 
 import com.grapefruit.gamework.app.GameApplication;
 import com.grapefruit.gamework.app.model.IModel;
+import com.grapefruit.gamework.app.model.ModelLobbyBrowser;
 import com.grapefruit.gamework.app.model.ModelSelectedGame;
+import com.grapefruit.gamework.app.view.templates.LobbyBrowser.LobbyBrowserFactory;
 import com.grapefruit.gamework.framework.player.Player;
 import com.grapefruit.gamework.framework.Colors;
 import javafx.event.ActionEvent;
@@ -58,10 +60,22 @@ public class ControllerSelectedGame implements IController {
         setMainMenuButtons();
     }
 
-    private void setMainMenuButtons(){
+    public void setMainMenuButtons(){
         ArrayList<Button> buttons = new ArrayList<>();
         Button onlineButton = new Button("Play online");
         Button offlineButton = new Button("Play offline");
+
+        if (!model.isOnline()){
+            onlineButton.setDisable(true);
+        }
+        ControllerSelectedGame controller = this;
+        onlineButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                buttonBox.getChildren().removeAll(buttonBox.getChildren());
+                buttonBox.getChildren().add(LobbyBrowserFactory.build(new ModelLobbyBrowser(model.getServerManager(), model.getOnlineName(), controller, model.getSelectedGame().getAssets())).getParent());
+            }
+        });
 
         offlineButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -83,7 +97,11 @@ public class ControllerSelectedGame implements IController {
         cpuButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                Player[] players = new Player[2];
+                players[0] = new Player(model.getOnlineName(), Colors.WHITE, true);
+                players[1] = new Player("Player 2", Colors.BLACK, false);
+                GameApplication.playGame(model.getSelectedGame().getAssets(), model.getSelectedGame().getFactory()
+                        .create(players), players, model.getServerManager());
             }
         });
 
@@ -94,7 +112,7 @@ public class ControllerSelectedGame implements IController {
                 players[0] = new Player("Player 1", Colors.WHITE, true);
                 players[1] = new Player("Player 2", Colors.BLACK, true);
                 GameApplication.playGame(model.getSelectedGame().getAssets(), model.getSelectedGame().getFactory()
-                        .create(players), players);
+                        .create(players), players, null);
             }
         });
 

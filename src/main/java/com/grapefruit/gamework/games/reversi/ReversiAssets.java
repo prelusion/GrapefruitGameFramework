@@ -12,10 +12,16 @@ public class ReversiAssets extends Assets {
     public static Image PIECE_WHITE = ImageRegistry.REVERSI_GAME_PIECE_WHITE;
     private static Image ICON = ImageRegistry.GAME_ICON_OTHELLO;
     private static String DISPLAYNAME = "Reversi";
+    private static String SERVER_ID = "Reversi";
 
     @Override
     public String getDisplayName() {
         return DISPLAYNAME;
+    }
+
+    @Override
+    public String getServerId() {
+        return SERVER_ID;
     }
 
     @Override

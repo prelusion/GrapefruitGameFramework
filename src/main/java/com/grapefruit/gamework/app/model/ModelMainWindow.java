@@ -1,6 +1,7 @@
 package com.grapefruit.gamework.app.model;
 
 import com.grapefruit.gamework.framework.GameWrapper;
+import com.grapefruit.gamework.framework.network.ServerManager;
 import com.grapefruit.gamework.games.GameRegistry;
 
 import java.util.ArrayList;
@@ -9,6 +10,9 @@ public class ModelMainWindow implements IModel {
 
     private ArrayList<GameWrapper> gameWrappers = GameRegistry.GAMES;
     private GameWrapper selectedGameWrapper = null;
+    private String[] availableGames;
+    private boolean connected = false;
+    private ServerManager serverManager;
 
     public ModelMainWindow(){
     }
@@ -34,5 +38,22 @@ public class ModelMainWindow implements IModel {
      */
     public GameWrapper getSelectedGame(){
         return selectedGameWrapper;
+    }
+
+
+    public void setAvailableGames(String[] availableGames) {
+        this.availableGames = availableGames;
+    }
+
+    public String[] getAvailableGames() {
+        return availableGames;
+    }
+
+    public ServerManager getServerManager() {
+        return serverManager;
+    }
+
+    public void setServerManager(ServerManager serverManager) {
+        this.serverManager = serverManager;
     }
 }

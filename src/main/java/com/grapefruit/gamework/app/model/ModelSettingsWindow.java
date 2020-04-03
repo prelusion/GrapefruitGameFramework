@@ -27,7 +27,7 @@ public class ModelSettingsWindow implements IModel {
      */
     public void saveSettings(){
         AppSettings.saveSettings(localSettings);
-        controllerMainWindow.updateSelectionBoxes();
+        controllerMainWindow.updateSelectionBox();
     }
 
 }

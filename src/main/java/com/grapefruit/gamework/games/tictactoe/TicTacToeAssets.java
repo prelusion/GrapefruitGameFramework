@@ -11,10 +11,16 @@ public class TicTacToeAssets extends Assets {
     public static Image PIECE_WHITE = ImageRegistry.TICTACTOE_GAME_PIECE_WHITE;
     private static Image ICON = ImageRegistry.GAME_ICON_TICTACTOE;
     private static String DISPLAYNAME = "TicTacToe";
+    private static String SERVER_ID = "Tic-tac-toe";
 
     @Override
     public String getDisplayName() {
         return DISPLAYNAME;
+    }
+
+    @Override
+    public String getServerId() {
+        return SERVER_ID;
     }
 
     @Override

@@ -19,11 +19,6 @@
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Server presets" />
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="90.0" styleClass="menu-item-normal">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="User presets" />
-                     </children>
-                  </HBox>
                </children>
                <padding>
                   <Insets left="5.0" right="5.0" top="5.0" />

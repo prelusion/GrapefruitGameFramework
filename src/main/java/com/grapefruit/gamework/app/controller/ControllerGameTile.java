@@ -3,6 +3,7 @@ package com.grapefruit.gamework.app.controller;
 import com.grapefruit.gamework.app.model.IModel;
 import com.grapefruit.gamework.app.model.ModelGameTile;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 
 import javafx.scene.effect.BlurType;
@@ -11,6 +12,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import java.net.URL;
@@ -21,6 +24,9 @@ public class ControllerGameTile implements IController{
 
     private ModelGameTile model;
 
+
+    @FXML
+    private Circle availableOnServer;
 
     @FXML
     private HBox gameTile;
@@ -108,5 +114,10 @@ public class ControllerGameTile implements IController{
             gameTile.getStyleClass().set(0, "menu-item-normal");
         }
         initialize();
+        if (this.model.isAvailableOnServer()){
+            availableOnServer.setFill(Color.GREEN);
+        } else {
+            availableOnServer.setFill(Color.RED);
+        }
     }
 }

@@ -7,7 +7,9 @@ import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.app.util.ImageHelper;
 import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDialogFactory;
 import com.grapefruit.gamework.framework.*;
-import com.grapefruit.gamework.framework.Player;
+import com.grapefruit.gamework.framework.network.CommandCallback;
+import com.grapefruit.gamework.framework.network.Commands;
+import com.grapefruit.gamework.framework.player.Player;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -246,6 +248,20 @@ public class ControllerGame implements IController{
             } else {
                 marker.setStroke(Color.GREEN);
             }
+        }
+    }
+
+
+    private void playerDoesMove(int row, int col, Player player){
+        model.getGame().playMove(row, col, player);
+        if (model.getServerManager() != null && model.getServerManager().isConnected()){
+            model.getServerManager().queueCommand(Commands.setMove(new CommandCallback() {
+                @Override
+                public void onResponse(boolean success, String[] args) {
+
+                }
+            }
+            ,row, col, model.getGame().getBoard().getBoardSize()));
         }
     }
 

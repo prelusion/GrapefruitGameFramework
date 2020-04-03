@@ -15,8 +15,8 @@ public class RealAI {
     public static void main(String[] args) {
         int turnTimeout = 10;
         Board board = new ReversiBoard(8);
-        AIPlayer playerWhite = new AIPlayer("White", Colors.WHITE, new MinimaxAlgorithm(), 3);
-        AIPlayer playerBlack = new AIPlayer("Black", Colors.BLACK, new MinimaxAlgorithm(), 1);
+        AIPlayer playerWhite = new AIPlayer("White", Colors.WHITE, new MinimaxAlgorithm(), 1);
+        AIPlayer playerBlack = new AIPlayer("Black", Colors.BLACK, new MinimaxAlgorithm(), 3);
         Reversi game = new Reversi(board, playerWhite, playerBlack, turnTimeout);
 
         System.out.println("strategic values:");
@@ -24,7 +24,7 @@ public class RealAI {
 
         int turnCount = 1;
         while (!game.hasFinished()) {
-            System.out.println("current board:");
+            System.out.println("board state:");
             board.printBoard();
 
             System.out.println(String.format("\n\n----------------turn %s--------------------", turnCount));
@@ -47,6 +47,9 @@ public class RealAI {
 
             System.out.println(String.format("play move: %s %s", move.getRow(), move.getCol()));
             game.playMove(move.getRow(), move.getCol(), currentPlayer);
+
+            turnCount++;
+            System.out.println("-----------------------------------");
         }
 
         System.out.println("-----------------------------------");

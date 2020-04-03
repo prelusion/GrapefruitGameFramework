@@ -12,8 +12,7 @@ import static java.lang.Integer.min;
 
 public class MinimaxAlgorithm implements MoveAlgorithm {
 
-    public MinimaxAlgorithm() {
-    }
+    public MinimaxAlgorithm() {}
 
     @Override
     public int minimax(int depth, Board board, Tile tile, int alpha, int beta,

@@ -57,15 +57,6 @@ public class Reversi extends Game {
     }
 
     @Override
-    public boolean playMove(int row, int col, Player player) {
-        if (doMove(row, col, player)) {
-            nextPlayer();
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public boolean hasFinished() {
         return Arrays.stream(getPlayers())
                 .noneMatch(player -> (getAvailableMoves(player).size()) > 0);

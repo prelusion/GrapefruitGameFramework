@@ -48,7 +48,7 @@ public class RealAI {
 
             System.out.println(String.format("play move: %s %s", move.getRow(), move.getCol()));
             game.playMove(move.getRow(), move.getCol(), currentPlayer);
-
+            game.nextPlayer();
             turnCount++;
             System.out.println("-----------------------------------");
         }

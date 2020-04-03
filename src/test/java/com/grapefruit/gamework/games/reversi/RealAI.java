@@ -2,13 +2,10 @@
 package com.grapefruit.gamework.games.reversi;
 
 import com.grapefruit.gamework.framework.*;
-
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
-
 import com.grapefruit.gamework.framework.player.AIPlayer;
 import com.grapefruit.gamework.framework.player.Player;
+
+import java.util.List;
 
 public class RealAI {
     /* AI vs AI */
@@ -16,7 +13,7 @@ public class RealAI {
         int turnTimeout = 10;
         Board board = new ReversiBoard(8);
         int playerWhiteDepth = 1;
-        int playerBlackDepth = 3;
+        int playerBlackDepth = 5;
         AIPlayer playerWhite = new AIPlayer("White", Colors.WHITE, new MinimaxAlgorithm(), playerWhiteDepth);
         AIPlayer playerBlack = new AIPlayer("Black", Colors.BLACK, new MinimaxAlgorithm(), playerBlackDepth);
         Reversi game = new Reversi(board, playerWhite, playerBlack, turnTimeout);
@@ -41,6 +38,7 @@ public class RealAI {
 
             if (availableMoves.size() == 0) {
                 System.out.println("no moves available");
+                game.checkFinished();
                 continue;
             }
 

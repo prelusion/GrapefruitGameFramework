@@ -1,6 +1,5 @@
 package com.grapefruit.gamework.framework;
 
-import com.grapefruit.gamework.framework.player.AIPlayer;
 import com.grapefruit.gamework.framework.player.Player;
 import com.grapefruit.gamework.games.reversi.ReversiBoard;
 
@@ -50,7 +49,7 @@ public class MinimaxAlgorithm implements MoveAlgorithm {
 
         int bestScore = -9999;
         for (Map.Entry<Tile, Integer> entry : tiles.entrySet()) {
-            if(entry.getValue() > bestScore) {
+            if (entry.getValue() > bestScore) {
                 System.out.println(String.format("new best move: %s,%s - strategic value: %s, score: %s", entry.getKey().getRow(), entry.getKey().getCol(), entry.getKey().getStrategicValue(), entry.getValue()));
                 bestTile = entry.getKey();
                 bestScore = entry.getValue();
@@ -59,7 +58,7 @@ public class MinimaxAlgorithm implements MoveAlgorithm {
             }
         }
 
-        if(bestTile != null) {
+        if (bestTile != null) {
             System.out.println(String.format("best move: %s,%s - strategic value: %s, score: %s", bestTile.getRow(), bestTile.getCol(), bestTile.getStrategicValue(), bestScore));
         }
 
@@ -123,7 +122,7 @@ public class MinimaxAlgorithm implements MoveAlgorithm {
                         depth - 1,
                         newBoard,
                         score - move.getStrategicValue(),
-                        alpha,
+                        alpha,4
                         beta,
                         player,
                         opponent,

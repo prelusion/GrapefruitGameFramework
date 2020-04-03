@@ -93,9 +93,11 @@ public class ControllerMainWindow implements IController {
         if (modelMainWindow.getSelectedGame() != null){
             selectedGame.getChildren().removeAll(selectedGame.getChildren());
             boolean online = false;
-            for (String game: modelMainWindow.getAvailableGames()){
-                if (game == modelMainWindow.getSelectedGame().getAssets().getServerId()){
-                    online = true;
+            if (modelMainWindow.getAvailableGames() != null) {
+                for (String game : modelMainWindow.getAvailableGames()) {
+                    if (game.equals(modelMainWindow.getSelectedGame().getAssets().getServerId())) {
+                        online = true;
+                    }
                 }
             }
             selectedGame.getChildren().add(SelectedGameFactory.build(new ModelSelectedGame(modelMainWindow.getSelectedGame(), modelMainWindow.getServerManager(), userName.getText(), online)).getParent());

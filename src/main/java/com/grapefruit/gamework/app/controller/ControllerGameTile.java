@@ -3,6 +3,7 @@ package com.grapefruit.gamework.app.controller;
 import com.grapefruit.gamework.app.model.IModel;
 import com.grapefruit.gamework.app.model.ModelGameTile;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 
 import javafx.scene.effect.BlurType;
@@ -114,7 +115,9 @@ public class ControllerGameTile implements IController{
         }
         initialize();
         if (this.model.isAvailableOnServer()){
-            availableOnServer = new Circle(0, 0, 10, Paint.valueOf("green"));
+            availableOnServer.setFill(Color.GREEN);
+        } else {
+            availableOnServer.setFill(Color.RED);
         }
     }
 }

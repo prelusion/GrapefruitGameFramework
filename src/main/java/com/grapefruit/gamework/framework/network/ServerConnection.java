@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ServerConnection {
 
-    private enum ChallengeStatus{
+    public enum ChallengeStatus{
         CHALLENGE_SENT,
         CHALLENGE_RECEIVED
     }
@@ -86,7 +86,11 @@ public class ServerConnection {
                             }
                             if (answer.startsWith("SVR GAME CHALLENGE")){
                                 Gson gson = new Gson();
-                                ResponseChallenge challenge = gson.fromJson(answer.replace("SVR GAME CHALLENGE", ""), ResponseChallenge.class);
+                                String modifiedAnswer = answer.replace("SVR GAME CHALLENGE", "");
+                                modifiedAnswer = modifiedAnswer.replace("CHALLENGER","challenger");
+                                modifiedAnswer = modifiedAnswer.replace("CHALLENGENUMBER","number");
+                                modifiedAnswer = modifiedAnswer.replace("GAMETYPE","gameType");
+                                ResponseChallenge challenge = gson.fromJson(modifiedAnswer, ResponseChallenge.class);
                                 challenge.setStatus(ChallengeStatus.CHALLENGE_RECEIVED);
                                 manager.addChallenge(challenge);
                             }
@@ -170,6 +174,10 @@ public class ServerConnection {
 
         public void setStatus(ChallengeStatus status) {
             this.status = status;
+        }
+
+        public ChallengeStatus getStatus() {
+            return status;
         }
     }
 }

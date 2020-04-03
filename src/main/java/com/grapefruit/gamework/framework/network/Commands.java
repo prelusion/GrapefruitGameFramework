@@ -93,11 +93,15 @@ public abstract class Commands {
      * @param callback callback to execute after response has been received.
      * @param accept boolean Flag to indicate if the challenge is accepted or not.
      */
-    public static Command challenge(CommandCallback callback, boolean accept) {
+    public static Command challengeRespond(CommandCallback callback, boolean accept) {
         if (accept) {
             return new Command(KEYWORD_CHALLENGE + "accept", callback, ServerManager.ResponseType.CONFIRMONLY);
         } else {
             return new Command(KEYWORD_CHALLENGE + "decline", callback, ServerManager.ResponseType.CONFIRMONLY);
         }
+    }
+
+    public static Command challenge(CommandCallback callback, String playerName, String gameName) {
+        return new Command(KEYWORD_CHALLENGE + "\"" + playerName + "\" \"" + gameName + "\"", callback, ServerManager.ResponseType.CONFIRMONLY);
     }
 }

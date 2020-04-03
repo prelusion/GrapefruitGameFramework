@@ -73,7 +73,7 @@ public class ControllerSelectedGame implements IController {
             @Override
             public void handle(ActionEvent event) {
                 buttonBox.getChildren().removeAll(buttonBox.getChildren());
-                buttonBox.getChildren().add(LobbyBrowserFactory.build(new ModelLobbyBrowser(model.getServerManager(), model.getOnlineName(), controller)).getParent());
+                buttonBox.getChildren().add(LobbyBrowserFactory.build(new ModelLobbyBrowser(model.getServerManager(), model.getOnlineName(), controller, model.getSelectedGame().getAssets())).getParent());
             }
         });
 

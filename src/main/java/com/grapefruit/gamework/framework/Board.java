@@ -1,5 +1,6 @@
 package com.grapefruit.gamework.framework;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -199,6 +200,11 @@ public abstract class Board {
         }
 
         return count;
+    }
+
+    public boolean hasFinished(Player[] players) {
+        return Arrays.stream(players)
+                .noneMatch(player -> (getAvailableMoves(player).size()) > 0);
     }
 
     /**

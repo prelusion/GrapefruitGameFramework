@@ -2,7 +2,7 @@ package com.grapefruit.gamework.framework.network;
 
 import org.junit.Test;
 
-public class CommandTest {
+public class ServerProtocolTest {
 
     @Test
     public void tryCommand(){

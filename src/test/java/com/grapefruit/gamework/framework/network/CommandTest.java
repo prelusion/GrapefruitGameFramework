@@ -42,6 +42,8 @@ public class CommandTest {
         catch(InterruptedException e){
             System.out.println("Interrupted");
         }
+        manager.disconnect();
+        System.out.println("closed");
     }
 
 }

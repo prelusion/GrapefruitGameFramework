@@ -27,7 +27,8 @@ public class ServerConnection {
     private BufferedReader in;
     private PrintWriter out;
     private ServerManager manager;
-    private boolean exit;
+    private Thread timer;
+    private Thread listenerThread;
 
     /**
      * Instantiates a new Server connection.
@@ -45,7 +46,6 @@ public class ServerConnection {
      * @throws IOException the io exception
      */
     public void connect(String serverIp) throws IOException {
-        this.serverIp = serverIp;
         socket = new Socket(serverIp, 7789);
         out = new PrintWriter(socket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -58,10 +58,10 @@ public class ServerConnection {
      *
      */
     private void listen(){
-        Thread listenerThread = new Thread(new Runnable() {
+        listenerThread = new Thread(new Runnable() {
             public void run() {
                 try {
-                    while (socket.isConnected()) {
+                    while (!listenerThread.isInterrupted()) {
                         String answer = in.readLine();
                         if (answer != null && !answer.equals("null") && manager.commandsInQueue()) {
                             if (answer.equals("OK")){
@@ -120,7 +120,8 @@ public class ServerConnection {
                             }
                         }
                     }
-                } catch (Exception e){
+                    Thread.currentThread().interrupt();
+                } catch (IOException e){
                     e.printStackTrace();
                 }
             }
@@ -143,9 +144,17 @@ public class ServerConnection {
      * @throws IOException the io exception
      */
     public void closeConnection() throws IOException {
-        socket.close();
-        in.close();
-        out.close();
+        listenerThread.interrupt();
+        timer.interrupt();
+        boolean stillconnected = true;
+        while (stillconnected) {
+            if (!listenerThread.isAlive() && !timer.isAlive()) {
+                socket.close();
+                in.close();
+                out.close();
+                stillconnected = false;
+            }
+        }
     }
 
     /**
@@ -171,7 +180,7 @@ public class ServerConnection {
      *
      */
     public void startSending() {
-        Thread timer = new Thread(new Runnable() {
+        timer = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (!Thread.interrupted()) {
@@ -182,8 +191,8 @@ public class ServerConnection {
                     }
                     try{
                         Thread.sleep(300);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        Thread.currentThread().interrupt();
                     }
                 }
             }

@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-public class ConnectionTest {
+public class StringManipulationTest {
 
 
     @Test

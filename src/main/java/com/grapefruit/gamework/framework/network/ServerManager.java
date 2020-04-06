@@ -181,5 +181,17 @@ public class ServerManager {
     public void cancelChallenge(ServerConnection.ResponseChallenge challenge){
         challenges.remove(challenge);
     }
+
+    /**
+     * Tries to disconnect from the server.
+     *
+     */
+    public void disconnect() {
+        try {
+            connection.closeConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
 

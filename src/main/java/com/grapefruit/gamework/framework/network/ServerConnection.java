@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -25,6 +27,8 @@ public class ServerConnection {
     private BufferedReader in;
     private PrintWriter out;
     private ServerManager manager;
+    private Thread timer;
+    private Thread listenerThread;
 
     /**
      * Instantiates a new Server connection.
@@ -42,7 +46,6 @@ public class ServerConnection {
      * @throws IOException the io exception
      */
     public void connect(String serverIp) throws IOException {
-        this.serverIp = serverIp;
         socket = new Socket(serverIp, 7789);
         out = new PrintWriter(socket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -55,31 +58,34 @@ public class ServerConnection {
      *
      */
     private void listen(){
-        Thread listenerThread = new Thread(new Runnable() {
+        listenerThread = new Thread(new Runnable() {
             public void run() {
                 try {
-                    while (socket.isConnected()) {
+                    while (!listenerThread.isInterrupted()) {
                         String answer = in.readLine();
                         if (answer != null && !answer.equals("null") && manager.commandsInQueue()) {
                             if (answer.equals("OK")){
                                 Command command = manager.getFirstUnconfirmed();
-                                command.confirm();
-                                if (command.getResponseType() == ServerManager.ResponseType.CONFIRMONLY){
-                                    manager.removeCommandFromQueue(command);
-                                    command.doCallBack(true,null);
+                                if (command != null && command.isSent()) {
+                                    command.confirm();
+                                    if (command.getResponseType() == ServerManager.ResponseType.CONFIRMONLY) {
+                                        manager.removeCommandFromQueue(command);
+                                        command.doCallBack(true, null);
+                                    }
                                 }
                             } else if (answer.startsWith("ERR")){
                                 Command command = manager.getFirstUnconfirmed();
-                                command.confirm();
-                                String[] errors = new String[1];
-                                errors[0] = answer;
-                                command.doCallBack(false, errors);
-                                manager.removeCommandFromQueue(command);
+                                if (command != null && command.isSent()) {
+                                    command.confirm();
+                                    String[] errors = new String[1];
+                                    errors[0] = answer;
+                                    command.doCallBack(false, errors);
+                                    manager.removeCommandFromQueue(command);
+                                }
 
                             } else if (answer.contains("SVR") && answer.contains("[")){
-                                answer = answer.trim();
                                 int startArg = answer.indexOf("[");
-                                String[] args = answer.substring(startArg + 1, answer.length() - 1).split(", ");
+                                String[] args = answer.substring(startArg + 1, answer.trim().length() - 1).split(", ");
 
                                 String[] result = new String[args.length];
                                 int i = 0;
@@ -87,36 +93,48 @@ public class ServerConnection {
                                     result[i] = element.substring(1, element.length() - 1);
                                     i++;
                                 }
-
-
                                 Command command = manager.findFirstFittingCommand(ServerManager.ResponseType.LIST, true);
-                                command.confirm();
-                                command.doCallBack(true, result);
-                                manager.removeCommandFromQueue(command);
+                                if (command != null && command.isSent()) {
+                                    command.confirm();
+                                    command.doCallBack(true, result);
+                                    manager.removeCommandFromQueue(command);
+                                }
                             }
                        }
                         if (answer != null){
                             if (answer.startsWith("SVR GAME CHALLENGE CANCELLED")) {
+                                int number = Integer.valueOf(answer.replace("SVR GAME CHALLENGE CANCELLED {CHALLENGENUMBER: \"", "").replace("\"}", ""));
+                                Iterator<ResponseChallenge> iterator = manager.getChallenges().iterator();
+                                while (iterator.hasNext()){
+                                    ResponseChallenge challenge = iterator.next();
+                                    if (challenge.getNumber() == number) {
+                                        iterator.remove();
+                                    }
+                                }
 
-                            }
-                            if (answer.startsWith("SVR GAME CHALLENGE")){
-                                Gson gson = new Gson();
-                                String modifiedAnswer = answer.replace("SVR GAME CHALLENGE", "");
-                                modifiedAnswer = modifiedAnswer.replace("CHALLENGER","challenger");
-                                modifiedAnswer = modifiedAnswer.replace("CHALLENGENUMBER","number");
-                                modifiedAnswer = modifiedAnswer.replace("GAMETYPE","gameType");
-                                ResponseChallenge challenge = gson.fromJson(modifiedAnswer, ResponseChallenge.class);
+                            } else if (answer.startsWith("SVR GAME CHALLENGE")){
+                                ResponseChallenge challenge = parseChallenge(answer);
                                 challenge.setStatus(ChallengeStatus.CHALLENGE_RECEIVED);
                                 manager.addChallenge(challenge);
                             }
                         }
                     }
-                } catch (Exception e){
+                    Thread.currentThread().interrupt();
+                } catch (IOException e){
                     e.printStackTrace();
                 }
             }
         });
         listenerThread.start();
+    }
+
+    private ResponseChallenge parseChallenge(String challenge){
+        Gson gson = new Gson();
+        String modifiedAnswer = challenge.replace("SVR GAME CHALLENGE", "");
+        modifiedAnswer = modifiedAnswer.replace("CHALLENGER","challenger");
+        modifiedAnswer = modifiedAnswer.replace("CHALLENGENUMBER","number");
+        modifiedAnswer = modifiedAnswer.replace("GAMETYPE","gameType");
+        return gson.fromJson(modifiedAnswer, ResponseChallenge.class);
     }
 
     /**
@@ -125,9 +143,17 @@ public class ServerConnection {
      * @throws IOException the io exception
      */
     public void closeConnection() throws IOException {
-        socket.close();
-        in.close();
-        out.close();
+        listenerThread.interrupt();
+        timer.interrupt();
+        boolean stillconnected = true;
+        while (stillconnected) {
+            if (!listenerThread.isAlive() && !timer.isAlive()) {
+                socket.close();
+                in.close();
+                out.close();
+                stillconnected = false;
+            }
+        }
     }
 
     /**
@@ -144,7 +170,7 @@ public class ServerConnection {
      *
      */
     public void startSending() {
-        Thread timer = new Thread(new Runnable() {
+        timer = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (!Thread.interrupted()) {
@@ -155,8 +181,8 @@ public class ServerConnection {
                     }
                     try{
                         Thread.sleep(300);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        Thread.currentThread().interrupt();
                     }
                 }
             }
@@ -168,8 +194,7 @@ public class ServerConnection {
     /**
      * The type Response challenge.
      */
-    public class ResponseChallenge{
-
+    public static class ResponseChallenge{
         private String challenger;
         private int number;
         private String gameType;
@@ -178,7 +203,11 @@ public class ServerConnection {
         /**
          * Instantiates a new Response challenge.
          */
-        public ResponseChallenge() {
+        public ResponseChallenge(String challenger, int number, String gameType, ChallengeStatus status) {
+            this.challenger = challenger;
+            this.number = number;
+            this.gameType = gameType;
+            this.status = status;
         }
 
         /**

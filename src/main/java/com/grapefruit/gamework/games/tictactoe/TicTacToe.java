@@ -3,7 +3,9 @@ package com.grapefruit.gamework.games.tictactoe;
 import com.grapefruit.gamework.framework.*;
 import com.grapefruit.gamework.framework.Player;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TicTacToe extends Game {
 
@@ -28,5 +30,13 @@ public class TicTacToe extends Game {
             return tile.getPlayer();
         }
         return null;
+    }
+
+    @Override
+    public void calculateScores() {
+        Map<Player, Integer> scores = new HashMap<>();
+        for (Player player: super.getPlayers()){
+            scores.put(player, Helpers.countPiecesForPlayer(getBoard(), player));
+        }
     }
 }

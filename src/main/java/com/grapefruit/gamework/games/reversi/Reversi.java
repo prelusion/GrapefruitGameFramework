@@ -2,7 +2,9 @@ package com.grapefruit.gamework.games.reversi;
 
 import com.grapefruit.gamework.framework.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Reversi extends Game {
 
@@ -33,5 +35,12 @@ public class Reversi extends Game {
     @Override
     public Player getWinner() {
         return Helpers.getWinningPlayer(getBoard());
+    }
+
+    @Override
+    public void calculateScores() {
+        for (Player player: super.getPlayers()){
+            super.scores.put(player, Helpers.countPiecesForPlayer(getBoard(), player));
+        }
     }
 }

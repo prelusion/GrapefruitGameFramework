@@ -7,8 +7,10 @@ import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.ServerConnection;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -58,47 +60,27 @@ public class ControllerLobbyBrowser implements IController{
     public void setModel(IModel model) {
         this.model = (ModelLobbyBrowser) model;
         initialize();
-        updateTable();
-        new Timeline(new KeyFrame(
-                Duration.millis(10),
+        setupTable();
+        Timeline timeline= new Timeline(new KeyFrame(
+                Duration.millis(500),
                 check ->
                         updateTable()
 
-        ))
-                .play();
+        ));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+        updateTable();
     }
 
-    private void updateTable(){
-        model.fetchChallenges();
-        model.fetchPlayers();
-        TableColumn challengers = new TableColumn("Challengers");
+    private void setupTable(){
+        TableColumn challengers = new TableColumn("Player");
         TableColumn status = new TableColumn("Status");
-        TableColumn buttons = new TableColumn("");
-
-        final ObservableList<ChallengeablePlayer> challengeablePlayers = FXCollections.observableArrayList();
-
-        List<ServerConnection.ResponseChallenge> challenges = model.getChallenges();
-        for (String player: model.getPlayerNames()){
-            for (ServerConnection.ResponseChallenge challenge: challenges){
-                if (challenge.getChallenger().equals(player)){
-                    String challengeStatus = "";
-                    if (challenge.getStatus() == ServerConnection.ChallengeStatus.CHALLENGE_RECEIVED){
-                        challengeStatus = "Received";
-                    } else if (challenge.getStatus() == ServerConnection.ChallengeStatus.CHALLENGE_SENT){
-                        challengeStatus = "Sent";
-                    }
-                    challengeablePlayers.add(new ChallengeablePlayer(challenge.getChallenger(), challengeStatus));
-                    continue;
-                }
-                challengeablePlayers.add(new ChallengeablePlayer(challenge.getChallenger(), "Unchallenged"));
-            }
-        }
+        TableColumn buttons = new TableColumn("Action");
 
         //
         // Source: https://stackoverflow.com/questions/29489366/how-to-add-button-in-javafx-table-view
         //
-        TableColumn actionCol = new TableColumn("Action");
-        actionCol.setCellValueFactory(new PropertyValueFactory<>("DUMMY"));
+        buttons.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         Callback<TableColumn<ChallengeablePlayer, String>, TableCell<ChallengeablePlayer, String>> cellFactory
                 = //
@@ -117,27 +99,35 @@ public class ControllerLobbyBrowser implements IController{
                                     setText(null);
                                 } else {
                                     ChallengeablePlayer player = getTableView().getItems().get(getIndex());
-                                    if (player.getStatus().equals("Received")){
+                                    if (player.getStatus().equals("Received")) {
                                         btn.setDisable(false);
                                         btn.setText("Accept");
                                         btn.setOnAction(event -> {
                                             //todo start game
+
                                         });
-                                    } else if (player.getStatus().equals("Sent")){
+                                    } else if (player.getStatus().equals("Sent")) {
                                         btn.setText("Waiting");
                                         btn.setDisable(true);
                                         btn.setOnAction(event -> {
-                                            //todo start game
+                                            //Nothing
                                         });
-                                    } else if (player.getStatus().equals("Unchallenged")){
-                                        btn.setText("Waiting");
-                                        btn.setDisable(true);
+                                    } else if (player.getStatus().equals("Unchallenged")) {
+                                        btn.setText("Send");
+                                        btn.setDisable(false);
                                         btn.setOnAction(event -> {
                                             model.getServerManager().queueCommand(Commands.challenge(new CommandCallback() {
                                                 @Override
                                                 public void onResponse(boolean success, String[] args) {
-                                                    if (success){
-                                                        //Todo start game
+                                                    if (success) {
+                                                        model.getServerManager().addChallenge(new ServerConnection.ResponseChallenge(player.getPlayerName(), -1,model.getGameAssets().getServerId() ,ServerConnection.ChallengeStatus.CHALLENGE_SENT));
+                                                        player.setStatus("Sent");
+                                                        Platform.runLater(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                updateTable();
+                                                            }
+                                                        });
                                                     }
                                                 }
                                             }, player.getPlayerName(), model.getGameAssets().getServerId()));
@@ -157,14 +147,56 @@ public class ControllerLobbyBrowser implements IController{
         // END
         //
 
-        challengers.setCellValueFactory(new PropertyValueFactory<ControllerTableSetting.Setting,String>("challenger"));
-        status.setCellValueFactory(new PropertyValueFactory<ControllerTableSetting.Setting,String>("status"));
+        challengers.setCellValueFactory(new PropertyValueFactory<ControllerTableSetting.Setting, String>("playerName"));
+        status.setCellValueFactory(new PropertyValueFactory<ControllerTableSetting.Setting, String>("status"));
+        buttons.setCellFactory(cellFactory);
+
+        challengeTable.getColumns().addAll(challengers, status, buttons);
+    }
+
+    private void updateTable() {
+        model.fetchChallenges();
+        model.fetchPlayers();
+
+        final ObservableList<ChallengeablePlayer> challengeablePlayers = FXCollections.observableArrayList();
+
+        List<ServerConnection.ResponseChallenge> challenges = model.getChallenges();
+        if (model.getPlayerNames() != null) {
+            for (String player : model.getPlayerNames()) {
+                if (!player.equals(model.getOnlineName())) {
+                for (ServerConnection.ResponseChallenge challenge : challenges) {
+                    if (challenge.getChallenger().equals(player)) {
+                        String challengeStatus = "";
+                        if (challenge.getStatus() == ServerConnection.ChallengeStatus.CHALLENGE_RECEIVED) {
+                            challengeStatus = "Received";
+                        } else if (challenge.getStatus() == ServerConnection.ChallengeStatus.CHALLENGE_SENT) {
+                            challengeStatus = "Sent";
+                        }
+                        challengeablePlayers.add(new ChallengeablePlayer(challenge.getChallenger(), challengeStatus));
+                        continue;
+                    }
+                }
+                boolean found = false;
+                for (ChallengeablePlayer cPlayer: challengeablePlayers){
+                    if (cPlayer.playerName.equals(player)){
+                        found = true;
+                    }
+                }
+                for (ServerConnection.ResponseChallenge challenge: model.getChallenges()){
+                    if (challenge.getChallenger().equals(player)){
+                        found = true;
+                    }
+                }
+                if (!found){
+                    challengeablePlayers.add(new ChallengeablePlayer(player, "Unchallenged"));
+                }
+            }
+            }
 
 
-        challengeTable.getItems().removeAll(challengeTable.getItems());
-        challengeTable.getColumns().removeAll(challengeTable.getColumns());
-        challengeTable.setItems(challengeablePlayers);
-        challengeTable.getColumns().addAll(challengers, status);
+            //challengeTable.getItems().removeAll(challengeTable.getItems());
+            challengeTable.setItems(challengeablePlayers);
+        }
     }
 
     @FXML

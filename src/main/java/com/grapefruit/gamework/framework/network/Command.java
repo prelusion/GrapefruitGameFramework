@@ -46,7 +46,7 @@ public class Command {
      * Sets the sent state to true to indicate that this command has been sent to the server.
      *
      */
-    public void send(){
+    public synchronized void send(){
         sent = true;
     }
 
@@ -55,7 +55,7 @@ public class Command {
      *
      * @return boolean is sent or not.
      */
-    public boolean isSent(){
+    public synchronized boolean isSent(){
         return sent;
     }
 

@@ -3,6 +3,7 @@ package com.grapefruit.gamework.framework;
 import java.util.Map;
 
 public class Helpers {
+
     public static Player getWinningPlayer(Board board) {
         Map<Player, Integer> pieces = board.countPieces();
 
@@ -19,5 +20,10 @@ public class Helpers {
         }
 
         return winner;
+    }
+
+    public static int countPiecesForPlayer(Board board, Player player) {
+        Map<Player, Integer> pieces = board.countPieces();
+        return pieces.get(player);
     }
 }

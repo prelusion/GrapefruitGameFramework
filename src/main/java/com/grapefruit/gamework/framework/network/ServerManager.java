@@ -1,5 +1,8 @@
 package com.grapefruit.gamework.framework.network;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -12,6 +15,7 @@ import java.util.Queue;
 public class ServerManager {
 
     private boolean sending;
+    public BooleanProperty connected = new SimpleBooleanProperty();
 
     /**
      * The enum Response type.
@@ -63,6 +67,7 @@ public class ServerManager {
     public boolean connect(String address){
         try {
             connection.connect(address);
+            connected.setValue(true);
         } catch (IOException e){
             System.out.println(e.getMessage());
             return false;
@@ -119,7 +124,7 @@ public class ServerManager {
      *
      * @return Command the command.
      */
-    public Command getFirstUnsent(){
+    public synchronized Command getFirstUnsent(){
         for (Command command: commandQueue){
             if (!command.isSent()){
                 return command;
@@ -160,6 +165,23 @@ public class ServerManager {
 
     public List<ServerConnection.ResponseChallenge> getChallenges() {
         return challenges;
+    }
+
+    public void cancelChallenge(ServerConnection.ResponseChallenge challenge){
+        challenges.remove(challenge);
+    }
+
+    /**
+     * Tries to disconnect from the server.
+     *
+     */
+    public void disconnect() {
+        try {
+            connection.closeConnection();
+            connected.setValue(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 

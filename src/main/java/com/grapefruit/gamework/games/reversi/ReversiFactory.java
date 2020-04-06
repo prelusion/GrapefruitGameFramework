@@ -15,10 +15,10 @@ public class ReversiFactory extends GameFactory {
         return this.create(players[0], players[1]);
     }
 
-    public Reversi create(Player playerWhite, Player playerBlack) {
+    public Reversi create(Player playerBlack, Player playerWhite) {
         Board board = new ReversiBoard(DEFAULT_REVERSI_BOARD_SIZE, STRATEGIC_VALUES);
         int turnTimeout = 10;
-        return new Reversi(board, playerWhite, playerBlack, turnTimeout);
+        return new Reversi(board, playerBlack, playerWhite, turnTimeout);
     }
 
     private static int[][] getStrategicValues() {

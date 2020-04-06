@@ -6,18 +6,18 @@ import com.grapefruit.gamework.app.model.ModelGameEndDialog;
 import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.app.util.ImageHelper;
 import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDialogFactory;
-import com.grapefruit.gamework.framework.*;
+import com.grapefruit.gamework.framework.Board;
+import com.grapefruit.gamework.framework.Player;
+import com.grapefruit.gamework.framework.Tile;
 import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -29,12 +29,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ControllerGame implements IController{
-
+public class ControllerGame implements IController {
 
     private ModelGame model;
-
-    private GridPane boardPane;
 
     private HBox[][] boardTiles;
 
@@ -71,19 +68,15 @@ public class ControllerGame implements IController{
     /**
      * Required for FXML
      */
-    public ControllerGame()
-    {
+    public ControllerGame() {
     }
 
     /**
      * Required for FXML
      * Sets the displayed icon and name for listed game.
      */
-    private void initialize()
-    {
+    private void initialize() {
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -91,35 +84,25 @@ public class ControllerGame implements IController{
     @Override
     public void setModel(IModel model) {
         this.model = (ModelGame) model;
-        drawBoard(this.model.getGame().getBoard(), false);
+
         gameName.setText(this.model.getAssets().getDisplayName());
         gameIcon.setImage(this.model.getAssets().getIcon());
 
+        drawBoard(this.model.getGame().getBoard());
+
         updateBoard();
-        updateInfoPanel();
+        updateInfo();
+        checkFinished();
     }
 
-    private void drawBoard(Board board, boolean checkered){
+    private void drawBoard(Board board) {
         boardTiles = new HBox[board.getBoardSize()][board.getBoardSize()];
         GridPane gridPane = new GridPane();
         int tileSize = 80;
 
-        boolean toggle = false;
-
         for (int row = 0; row < board.getBoardSize(); row++) {
             for (int col = 0; col < board.getBoardSize(); col++) {
-                HBox hbox;
-                if (checkered) {
-                    if (toggle) {
-                        hbox = createBoardTile(tileSize, Color.rgb(232, 214, 202), board.getTile(row, col));
-                        toggle = false;
-                    } else {
-                        hbox = createBoardTile(tileSize, Color.rgb(59, 41, 29), board.getTile(row, col));
-                        toggle = true;
-                    }
-                } else {
-                    hbox = createBoardTile(tileSize, Color.GREEN, board.getTile(row, col));
-                }
+                HBox hbox = createBoardTile(tileSize, Color.GREEN, board.getTile(row, col));
                 gridPane.add(hbox, row, col, 1, 1);
                 boardTiles[col][row] = hbox;
             }
@@ -127,16 +110,33 @@ public class ControllerGame implements IController{
 
         gameBoard.getChildren().removeAll(gameBoard.getChildren());
         gameBoard.getChildren().add(gridPane);
-        boardPane = gridPane;
     }
 
-    private void updateBoard(){
-        boolean playerLocal = model.getLocalPlayers().contains(model.getGame().getCurrentPlayer());
-        showPlayerPieces();
-        markPossibleMoves(model.getGame().getAvailableMoves(model.getGame().getCurrentPlayer()), playerLocal);
-        currentTurnPlayer.setText(model.getGame().getCurrentPlayer().getName());
-        if (model.getGame().hasFinished()){
-            if (model.getGame().hasWinner()){
+    private void updateBoard() {
+        Player player = model.getGame().getCurrentPlayer();
+        drawPieces();
+        markPossibleMoves(model.getGame().getAvailableMoves(player), true);
+    }
+
+    private void updateInfo() {
+        scorePlayerName.getChildren().removeAll(scorePlayerName.getChildren());
+        scorePlayerScore.getChildren().removeAll(scorePlayerScore.getChildren());
+
+        for (Player ignored : model.getGame().getPlayers()) {
+            scorePlayerName.getChildren().add(new Text("PlayerName"));
+            scorePlayerScore.getChildren().add(new Text("100"));
+        }
+
+        currentTurnPlayer.setText(model.getGame().getCurrentPlayer().getColor().toString());
+
+        timeLeft.setText(String.valueOf(model.getGame().getTurnTimeout()));
+        //Todo implement turn number
+        turnNumber.setText("99");
+    }
+
+    public void checkFinished() {
+        if (model.getGame().hasFinished()) {
+            if (model.getGame().hasWinner()) {
                 if (model.getLocalPlayers().contains(model.getGame().getWinner())) {
                     if (model.getLocalPlayers().size() == 1) {
                         createEndDialog("You win!");
@@ -148,47 +148,12 @@ public class ControllerGame implements IController{
                 }
             }
             if (model.getGame().isTie()) {
-                if (true) {
-                    createEndDialog("Tie!");
-                }
+                createEndDialog("Tie!");
             }
         }
     }
 
-    private void createEndDialog(String message){
-        GameEndDialogFactory.build(new ModelGameEndDialog(message));
-    }
-
-    private HBox createBoardTile(int size, Color color, Tile tile){
-        HBox hbox = new HBox();
-        hbox.setAlignment(Pos.CENTER);
-        hbox.setMinSize(size,size);
-        hbox.setPrefSize(size,size);
-        Image background = ImageHelper.getRandomChunkOfImage(ImageRegistry.GREEN_BACKGROUND, 100, 100);
-        hbox.setBackground(new Background(new BackgroundImage(background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
-        hbox.getStyleClass().add(0, "game-board-tile");
-
-        hbox.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                hbox.getStyleClass().set(0, "game-board-tile-hover");
-            }
-        });
-
-        hbox.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                hbox.getStyleClass().set(0, "game-board-tile");
-            }
-        });
-
-        Image border = ImageHelper.getRandomChunkOfImage(ImageRegistry.WOOD_BACKGROUND, 100, 100);
-        hbox.setBorder(new Border(new BorderImage(border, new BorderWidths(5, 5, 5, 5, false, false, false, false), Insets.EMPTY, BorderWidths.DEFAULT, false, BorderRepeat.REPEAT, BorderRepeat.REPEAT )));
-
-        return hbox;
-    }
-
-    private void showPlayerPieces(){
+    private void drawPieces() {
         for (int row = 0; row < model.getGame().getBoard().getBoardSize(); row++) {
             for (int col = 0; col < model.getGame().getBoard().getBoardSize(); col++) {
 
@@ -211,9 +176,9 @@ public class ControllerGame implements IController{
         }
     }
 
-    private void markPossibleMoves(List<Tile> tiles, boolean locallyAvailable){
-        for (HBox[] column: boardTiles){
-            for (HBox hbox: column) {
+    private void markPossibleMoves(List<Tile> tiles, boolean locallyAvailable) {
+        for (HBox[] column : boardTiles) {
+            for (HBox hbox : column) {
                 ObservableList<Node> nodes = hbox.getChildren();
                 HashSet<Node> nodesToRemove = new HashSet<>();
                 if (nodes.size() > 0) {
@@ -227,7 +192,7 @@ public class ControllerGame implements IController{
             }
         }
 
-        for (Tile tile: tiles) {
+        for (Tile tile : tiles) {
             HBox pane = boardTiles[tile.getRow()][tile.getCol()];
             Circle marker = new Circle(32.5, Paint.valueOf("blue"));
             marker.setFill(Color.rgb(100, 100, 100, 0.5));
@@ -235,14 +200,8 @@ public class ControllerGame implements IController{
 
             if (locallyAvailable) {
                 marker.setStroke(Color.GREEN);
-                marker.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        model.getGame().playMove(tile.getRow(), tile.getCol(), model.getGame().getCurrentPlayer());
-                        model.getGame().nextPlayer();
-                        updateBoard();
-                        updateInfoPanel();
-                    }
+                marker.setOnMouseClicked(event -> {
+                    playMove(tile.getRow(), tile.getCol(), model.getGame().getCurrentPlayer());
                 });
             } else {
                 marker.setStroke(Color.GREEN);
@@ -250,32 +209,51 @@ public class ControllerGame implements IController{
         }
     }
 
-
-    private void playerDoesMove(int row, int col, Player player){
-        model.getGame().playMove(row, col, player);
-        if (model.getServerManager() != null && model.getServerManager().isConnected()){
-            model.getServerManager().queueCommand(Commands.setMove(new CommandCallback() {
-                @Override
-                public void onResponse(boolean success, String[] args) {
-
-                }
-            }
-            ,row, col, model.getGame().getBoard().getBoardSize()));
+    private void playMove(int row, int col, Player player) {
+        if (!model.isOnlineGame()) {
+            updateMove(row, col, player);
+            return;
         }
+
+        if (!model.getServerManager().isConnected()) {
+            System.out.println("SERVER CONNECTION ERROR");
+            return;
+        }
+
+        CommandCallback callback = (success, args) -> updateMove(row, col, player);
+
+        model.getServerManager().queueCommand(
+                Commands.setMove(callback, row, col, model.getGame().getBoard().getBoardSize())
+        );
     }
 
-    private void updateInfoPanel(){
-        scorePlayerName.getChildren().removeAll(scorePlayerName.getChildren());
-        scorePlayerScore.getChildren().removeAll(scorePlayerScore.getChildren());
+    private void updateMove(int row, int col, Player player) {
+        model.getGame().playMove(row, col, player);
+        model.getGame().nextPlayer();
+        updateBoard();
+        updateInfo();
+        checkFinished();
+    }
 
-        for (Player player: model.getGame().getPlayers()){
-            scorePlayerName.getChildren().add(new Text("PlayerName"));
-            scorePlayerScore.getChildren().add(new Text("100"));
-        }
+    private void createEndDialog(String message) {
+        GameEndDialogFactory.build(new ModelGameEndDialog(message));
+    }
 
-        currentTurnPlayer.setText(model.getGame().getCurrentPlayer().toString());
-        timeLeft.setText(String.valueOf(model.getGame().getTurnTimeout()));
-        //Todo implement turn number
-        turnNumber.setText("99");
+    private HBox createBoardTile(int size, Color color, Tile tile) {
+        HBox hbox = new HBox();
+        hbox.setAlignment(Pos.CENTER);
+        hbox.setMinSize(size, size);
+        hbox.setPrefSize(size, size);
+        Image background = ImageHelper.getRandomChunkOfImage(ImageRegistry.GREEN_BACKGROUND, 100, 100);
+        hbox.setBackground(new Background(new BackgroundImage(background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+        hbox.getStyleClass().add(0, "game-board-tile");
+
+        hbox.setOnMouseEntered(event -> hbox.getStyleClass().set(0, "game-board-tile-hover"));
+        hbox.setOnMouseExited(event -> hbox.getStyleClass().set(0, "game-board-tile"));
+
+        Image border = ImageHelper.getRandomChunkOfImage(ImageRegistry.WOOD_BACKGROUND, 100, 100);
+        hbox.setBorder(new Border(new BorderImage(border, new BorderWidths(5, 5, 5, 5, false, false, false, false), Insets.EMPTY, BorderWidths.DEFAULT, false, BorderRepeat.REPEAT, BorderRepeat.REPEAT)));
+
+        return hbox;
     }
 }

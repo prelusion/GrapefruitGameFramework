@@ -1,5 +1,8 @@
 package com.grapefruit.gamework.framework.network;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -12,6 +15,7 @@ import java.util.Queue;
 public class ServerManager {
 
     private boolean sending;
+    public BooleanProperty connected = new SimpleBooleanProperty();
 
     /**
      * The enum Response type.
@@ -63,11 +67,23 @@ public class ServerManager {
     public boolean connect(String address){
         try {
             connection.connect(address);
+            connected.setValue(true);
         } catch (IOException e){
             System.out.println(e.getMessage());
             return false;
         }
         return true;
+    }
+
+    public void disconnect(){
+        ServerManager manager = this;
+        queueCommand(Commands.logout(new CommandCallback() {
+            @Override
+            public void onResponse(boolean success, String[] args) {
+            }
+        }));
+        connection = new ServerConnection(manager);
+        connected.setValue(false);
     }
 
     /**

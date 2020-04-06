@@ -1,5 +1,6 @@
 package com.grapefruit.gamework.app.controller;
 
+import com.grapefruit.gamework.app.GameApplication;
 import com.grapefruit.gamework.app.model.IModel;
 import com.grapefruit.gamework.app.model.ModelGame;
 import com.grapefruit.gamework.app.model.ModelGameEndDialog;
@@ -9,6 +10,7 @@ import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDia
 import com.grapefruit.gamework.framework.*;
 import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -97,6 +99,12 @@ public class ControllerGame implements IController{
 
         updateBoard();
         updateInfoPanel();
+        this.model.getGame().scores.addListener(new MapChangeListener<Player, Integer>() {
+            @Override
+            public void onChanged(Change<? extends Player, ? extends Integer> change) {
+                updateInfoPanel();
+            }
+        });
     }
 
     private void drawBoard(Board board, boolean checkered){
@@ -269,13 +277,18 @@ public class ControllerGame implements IController{
         scorePlayerScore.getChildren().removeAll(scorePlayerScore.getChildren());
 
         for (Player player: model.getGame().getPlayers()){
-            scorePlayerName.getChildren().add(new Text("PlayerName"));
-            scorePlayerScore.getChildren().add(new Text("100"));
+            scorePlayerName.getChildren().add(new Text(player.getName()));
+            scorePlayerScore.getChildren().add(new Text(String.valueOf(model.getGame().getScore(player))));
         }
 
         currentTurnPlayer.setText(model.getGame().getCurrentPlayer().toString());
         timeLeft.setText(String.valueOf(model.getGame().getTurnTimeout()));
         //Todo implement turn number
         turnNumber.setText("99");
+    }
+
+    @FXML
+    private void quitGame(){
+        GameApplication.openLauncher();
     }
 }

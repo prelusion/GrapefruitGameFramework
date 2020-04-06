@@ -27,6 +27,7 @@ public class ServerConnection {
     private BufferedReader in;
     private PrintWriter out;
     private ServerManager manager;
+    private boolean exit;
 
     /**
      * Instantiates a new Server connection.
@@ -154,6 +155,15 @@ public class ServerConnection {
      */
     public boolean isConnected() {
         return socket.isConnected();
+    }
+
+    public void disconnect(){
+        try {
+            exit = true;
+            socket.close();
+        }
+        catch (IOException e){
+        }
     }
 
     /**

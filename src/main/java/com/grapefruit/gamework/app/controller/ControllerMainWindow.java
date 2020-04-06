@@ -13,6 +13,8 @@ import com.grapefruit.gamework.framework.network.ServerManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -183,22 +185,30 @@ public class ControllerMainWindow implements IController {
             userName.setDisable(true);
             connectButton.setDisable(true);
             modelMainWindow.setServerManager(new ServerManager());
-            modelMainWindow.getServerManager().connect(selectedServer.getIp());
-            modelMainWindow.getServerManager().queueCommand(Commands.login(userName.getText(), new CommandCallback() {
-                @Override
-                public void onResponse(boolean success, String[] args) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            onConnected();
-                        }
-                    });
-                }
-            }));
             connectionStatus.setText("Connecting...");
         } else {
             connectionStatus.setText("Invalid");
         }
+        if (modelMainWindow.getServerManager() != null) {
+            modelMainWindow.getServerManager().connected.addListener(new ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                    if (oldValue != newValue) {
+                        if (newValue) {
+                            onConnected();
+                        } else {
+                            onDisconnected();
+                        }
+                    }
+                }
+            });
+        }
+        modelMainWindow.getServerManager().connect(selectedServer.getIp());
+        modelMainWindow.getServerManager().queueCommand(Commands.login(userName.getText(), new CommandCallback() {
+            @Override
+            public void onResponse(boolean success, String[] args) {
+            }
+        }));
     }
 
     private void onConnected(){
@@ -209,8 +219,7 @@ public class ControllerMainWindow implements IController {
             connectButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    //modelMainWindow.getServerManager().
-                    //todo disconnect
+                    modelMainWindow.getServerManager().disconnect();
                 }
             });
             modelMainWindow.getServerManager().queueCommand(Commands.getGameList(new CommandCallback() {
@@ -221,13 +230,6 @@ public class ControllerMainWindow implements IController {
                 }
             }));
         }
-        new Timeline(new KeyFrame(
-                Duration.millis(10),
-                check ->
-                        check()
-
-        ))
-                .play();
     }
 
     private void onDisconnected(){
@@ -237,13 +239,14 @@ public class ControllerMainWindow implements IController {
         userName.setDisable(false);
         setAvailableGames(new String[0]);
         updateGames();
+        connectButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                onConnect();
+            }
+        });
     }
 
-    private void check(){
-        if(!modelMainWindow.getServerManager().isConnected()){
-            onDisconnected();
-        }
-    }
 
     public String[] getAvailableGames() {
         return availableGames;

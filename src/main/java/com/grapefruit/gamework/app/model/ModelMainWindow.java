@@ -11,7 +11,6 @@ public class ModelMainWindow implements IModel {
     private ArrayList<GameWrapper> gameWrappers = GameRegistry.GAMES;
     private GameWrapper selectedGameWrapper = null;
     private String[] availableGames;
-    private boolean connected = false;
     private ServerManager serverManager;
 
     public ModelMainWindow(){

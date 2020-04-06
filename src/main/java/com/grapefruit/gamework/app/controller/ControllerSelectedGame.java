@@ -66,21 +66,19 @@ public class ControllerSelectedGame implements IController {
         if (!model.isOnline()){
             onlineButton.setDisable(true);
         }
+
         ControllerSelectedGame controller = this;
-        onlineButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                buttonBox.getChildren().removeAll(buttonBox.getChildren());
-                buttonBox.getChildren().add(LobbyBrowserFactory.build(new ModelLobbyBrowser(model.getServerManager(), model.getOnlineName(), controller, model.getSelectedGame().getAssets())).getParent());
-            }
+        onlineButton.setOnAction(event -> {
+            buttonBox.getChildren().removeAll(buttonBox.getChildren());
+            buttonBox.getChildren().add(LobbyBrowserFactory.build(new ModelLobbyBrowser(
+                    model.getServerManager(),
+                    model.getOnlineName(),
+                    controller,
+                    model.getSelectedGame().getAssets())).getParent()
+            );
         });
 
-        offlineButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                setOfflineOptions();
-            }
-        });
+        offlineButton.setOnAction(event -> setOfflineOptions());
 
         buttons.add(onlineButton);
         buttons.add(offlineButton);

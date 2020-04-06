@@ -114,6 +114,15 @@ public class ControllerMainWindow implements IController {
         modelMainWindow = (ModelMainWindow) model;
         initialize();
         updateSelectionBox();
+        if (this.modelMainWindow.getServerManager() != null){
+            if (this.modelMainWindow.getServerManager().connected.getValue()) {
+                connectionStatus.setText("Connected");
+            } else {
+                connectionStatus.setText("Disconnected");
+            }
+        } else {
+            connectionStatus.setText("Disconnected");
+        }
     }
 
 

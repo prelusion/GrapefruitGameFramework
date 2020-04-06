@@ -133,7 +133,10 @@ public class ControllerGame implements IController {
         boolean playerLocal = model.getLocalPlayers().contains(model.getGame().getCurrentPlayer());
         showPlayerPieces();
         markPossibleMoves(model.getGame().getAvailableMoves(model.getGame().getCurrentPlayer()), playerLocal);
-        currentTurnPlayer.setText(model.getGame().getCurrentPlayer().getName());
+
+        // This line has no effect
+//        currentTurnPlayer.setText(model.getGame().getCurrentPlayer().getName());
+
         if (model.getGame().hasFinished()) {
             if (model.getGame().hasWinner()) {
                 if (model.getLocalPlayers().contains(model.getGame().getWinner())) {
@@ -272,7 +275,8 @@ public class ControllerGame implements IController {
             scorePlayerScore.getChildren().add(new Text("100"));
         }
 
-        currentTurnPlayer.setText(model.getGame().getCurrentPlayer().toString());
+        currentTurnPlayer.setText(model.getGame().getCurrentPlayer().getColor().toString());
+
         timeLeft.setText(String.valueOf(model.getGame().getTurnTimeout()));
         //Todo implement turn number
         turnNumber.setText("99");

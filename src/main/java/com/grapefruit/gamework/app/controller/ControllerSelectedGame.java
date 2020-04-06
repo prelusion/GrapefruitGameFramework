@@ -93,8 +93,8 @@ public class ControllerSelectedGame implements IController {
         Button friendButton = new Button("Play vs friend");
 
         aiButton.setOnAction(event -> {
-            Player playerWhite = new Player(model.getOnlineName(), Colors.WHITE, true);
-            Player playerBlack = new Player("Player 2", Colors.BLACK, false);
+            Player playerBlack = new Player(model.getOnlineName(), Colors.BLACK, false);
+            Player playerWhite = new Player("Player 2", Colors.WHITE, true);
             Player[] players = new Player[] {playerBlack, playerWhite};
 
             GameApplication.showBoardPage(
@@ -106,8 +106,9 @@ public class ControllerSelectedGame implements IController {
         });
 
         friendButton.setOnAction(event -> {
-            Player playerWhite = new Player("Player 1", Colors.WHITE, true);
-            Player playerBlack = new Player("Player 2", Colors.BLACK, true);
+            Player playerBlack = new Player("Player 1", Colors.BLACK, true);
+            Player playerWhite = new Player("Player 2", Colors.WHITE, true);
+
             Player[] players = new Player[] {playerBlack, playerWhite};
 
             GameApplication.showBoardPage(

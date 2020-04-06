@@ -20,7 +20,6 @@ public abstract class Game {
         this.players = players;
         this.turnTimeout = turnTimeout;
         this.currentPlayer = players[0];
-        nextPlayer();
     }
 
     public Player[] getPlayers() {
@@ -32,9 +31,9 @@ public abstract class Game {
      * If first player needs to be selected randomly, player array in constructor needs to be sorted randomly.
      */
     public void nextPlayer() {
-        currentPlayer = players[currentPlayerIndex];
         currentPlayerIndex++;
         if (currentPlayerIndex == players.length) currentPlayerIndex = 0;
+        currentPlayer = players[currentPlayerIndex];
     }
 
     public Player getOpponentPlayer() {

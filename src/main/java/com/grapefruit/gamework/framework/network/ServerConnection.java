@@ -63,18 +63,22 @@ public class ServerConnection {
                         if (answer != null && !answer.equals("null") && manager.commandsInQueue()) {
                             if (answer.equals("OK")){
                                 Command command = manager.getFirstUnconfirmed();
-                                command.confirm();
-                                if (command.getResponseType() == ServerManager.ResponseType.CONFIRMONLY){
-                                    manager.removeCommandFromQueue(command);
-                                    command.doCallBack(true,null);
+                                if (command != null && command.isSent()) {
+                                    command.confirm();
+                                    if (command.getResponseType() == ServerManager.ResponseType.CONFIRMONLY) {
+                                        manager.removeCommandFromQueue(command);
+                                        command.doCallBack(true, null);
+                                    }
                                 }
                             } else if (answer.startsWith("ERR")){
                                 Command command = manager.getFirstUnconfirmed();
-                                command.confirm();
-                                String[] errors = new String[1];
-                                errors[0] = answer;
-                                command.doCallBack(false, errors);
-                                manager.removeCommandFromQueue(command);
+                                if (command != null && command.isSent()) {
+                                    command.confirm();
+                                    String[] errors = new String[1];
+                                    errors[0] = answer;
+                                    command.doCallBack(false, errors);
+                                    manager.removeCommandFromQueue(command);
+                                }
 
                             } else if (answer.contains("SVR") && answer.contains("[")){
                                 answer = answer.trim();
@@ -87,25 +91,25 @@ public class ServerConnection {
                                     result[i] = element.substring(1, element.length() - 1);
                                     i++;
                                 }
-
-
                                 Command command = manager.findFirstFittingCommand(ServerManager.ResponseType.LIST, true);
-                                command.confirm();
-                                command.doCallBack(true, result);
-                                manager.removeCommandFromQueue(command);
+                                if (command != null && command.isSent()) {
+                                    command.confirm();
+                                    command.doCallBack(true, result);
+                                    manager.removeCommandFromQueue(command);
+                                }
                             }
                        }
                         if (answer != null){
                             if (answer.startsWith("SVR GAME CHALLENGE CANCELLED")) {
-
-                            }
-                            if (answer.startsWith("SVR GAME CHALLENGE")){
-                                Gson gson = new Gson();
-                                String modifiedAnswer = answer.replace("SVR GAME CHALLENGE", "");
-                                modifiedAnswer = modifiedAnswer.replace("CHALLENGER","challenger");
-                                modifiedAnswer = modifiedAnswer.replace("CHALLENGENUMBER","number");
-                                modifiedAnswer = modifiedAnswer.replace("GAMETYPE","gameType");
-                                ResponseChallenge challenge = gson.fromJson(modifiedAnswer, ResponseChallenge.class);
+                                ResponseChallenge challenge = parseChallenge(answer);
+                                challenge.setStatus(ChallengeStatus.CHALLENGE_RECEIVED);
+                                for (ResponseChallenge rChallenge: manager.getChallenges()){
+                                    if (rChallenge.getNumber() == challenge.getNumber()){
+                                        manager.cancelChallenge(rChallenge);
+                                    }
+                                }
+                            } else if (answer.startsWith("SVR GAME CHALLENGE")){
+                                ResponseChallenge challenge = parseChallenge(answer);
                                 challenge.setStatus(ChallengeStatus.CHALLENGE_RECEIVED);
                                 manager.addChallenge(challenge);
                             }
@@ -117,6 +121,15 @@ public class ServerConnection {
             }
         });
         listenerThread.start();
+    }
+
+    private ResponseChallenge parseChallenge(String challenge){
+        Gson gson = new Gson();
+        String modifiedAnswer = challenge.replace("SVR GAME CHALLENGE", "");
+        modifiedAnswer = modifiedAnswer.replace("CHALLENGER","challenger");
+        modifiedAnswer = modifiedAnswer.replace("CHALLENGENUMBER","number");
+        modifiedAnswer = modifiedAnswer.replace("GAMETYPE","gameType");
+        return gson.fromJson(modifiedAnswer, ResponseChallenge.class);
     }
 
     /**
@@ -168,8 +181,7 @@ public class ServerConnection {
     /**
      * The type Response challenge.
      */
-    public class ResponseChallenge{
-
+    public static class ResponseChallenge{
         private String challenger;
         private int number;
         private String gameType;
@@ -178,7 +190,11 @@ public class ServerConnection {
         /**
          * Instantiates a new Response challenge.
          */
-        public ResponseChallenge() {
+        public ResponseChallenge(String challenger, int number, String gameType, ChallengeStatus status) {
+            this.challenger = challenger;
+            this.number = number;
+            this.gameType = gameType;
+            this.status = status;
         }
 
         /**

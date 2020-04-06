@@ -119,7 +119,7 @@ public class ServerManager {
      *
      * @return Command the command.
      */
-    public Command getFirstUnsent(){
+    public synchronized Command getFirstUnsent(){
         for (Command command: commandQueue){
             if (!command.isSent()){
                 return command;
@@ -160,6 +160,10 @@ public class ServerManager {
 
     public List<ServerConnection.ResponseChallenge> getChallenges() {
         return challenges;
+    }
+
+    public void cancelChallenge(ServerConnection.ResponseChallenge challenge){
+        challenges.remove(challenge);
     }
 }
 

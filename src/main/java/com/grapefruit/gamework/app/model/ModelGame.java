@@ -43,4 +43,8 @@ public class ModelGame implements IModel {
     public ServerManager getServerManager() {
         return serverManager;
     }
+
+    public boolean isOnlineGame() {
+        return serverManager != null;
+    }
 }

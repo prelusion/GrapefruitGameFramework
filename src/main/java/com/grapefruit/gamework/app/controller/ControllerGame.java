@@ -210,8 +210,13 @@ public class ControllerGame implements IController {
     }
 
     private void playMove(int row, int col, Player player) {
-        if (model.getServerManager() == null || !model.getServerManager().isConnected()) {
+        if (!model.isOnlineGame()) {
             updateMove(row, col, player);
+            return;
+        }
+
+        if (!model.getServerManager().isConnected()) {
+            System.out.println("SERVER CONNECTION ERROR");
             return;
         }
 

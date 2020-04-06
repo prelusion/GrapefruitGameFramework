@@ -16,14 +16,14 @@ public abstract class Board {
     /**
      * This grid is the board. Size is dynamic so instantiated in the constructor.
      */
-    protected Tile[][] grid;
+    public Tile[][] grid;
 
-    protected int boardSize;
+    protected static int BOARDSIZE;
 
     private int[][] strategicValues;
 
     public Board(int boardSize, int[][] strategicValues) {
-        this.boardSize = boardSize;
+        this.BOARDSIZE = boardSize;
         this.strategicValues = strategicValues;
         initGrid();
     }
@@ -37,7 +37,7 @@ public abstract class Board {
     }
 
     private void initGrid() {
-        grid = new Tile[boardSize][boardSize];
+        grid = new Tile[BOARDSIZE][BOARDSIZE];
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid.length; j++) {
                 grid[i][j] = new Tile(i, j, strategicValues[i][j]);
@@ -54,7 +54,7 @@ public abstract class Board {
     }
 
     public int getBoardSize() {
-        return boardSize;
+        return BOARDSIZE;
     }
 
     public abstract void setMove(int row, int col, Player player);

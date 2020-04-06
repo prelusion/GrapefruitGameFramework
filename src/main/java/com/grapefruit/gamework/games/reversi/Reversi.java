@@ -3,8 +3,12 @@ package com.grapefruit.gamework.games.reversi;
 import com.grapefruit.gamework.framework.*;
 
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Reversi extends Game {
+
 
     public Reversi(Board board, Player playerWhite, Player playerBlack, int turnTimeout) {
         super(board, new Player[]{playerBlack, playerWhite}, turnTimeout);

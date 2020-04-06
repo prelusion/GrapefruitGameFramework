@@ -23,6 +23,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import sun.nio.cs.SingleByte;
 
 import java.net.URL;
 import java.util.HashSet;
@@ -210,7 +211,7 @@ public class ControllerGame implements IController{
             }
         }
     }
-
+    MinimaxAlgorithm minimaxAlgorithm;
     private void markPossibleMoves(List<Tile> tiles, boolean locallyAvailable){
         for (HBox[] column: boardTiles){
             for (HBox hbox: column) {

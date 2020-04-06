@@ -166,15 +166,6 @@ public class ServerConnection {
         return socket.isConnected();
     }
 
-    public void disconnect(){
-        try {
-            exit = true;
-            socket.close();
-        }
-        catch (IOException e){
-        }
-    }
-
     /**
      * Starts a Thread that checks the commandqueue for commands waiting to be send.
      *

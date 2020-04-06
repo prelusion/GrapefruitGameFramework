@@ -75,17 +75,6 @@ public class ServerManager {
         return true;
     }
 
-    public void disconnect(){
-        ServerManager manager = this;
-        queueCommand(Commands.logout(new CommandCallback() {
-            @Override
-            public void onResponse(boolean success, String[] args) {
-            }
-        }));
-        connection = new ServerConnection(manager);
-        connected.setValue(false);
-    }
-
     /**
      * Adds a Command to the queue.
      *
@@ -189,6 +178,7 @@ public class ServerManager {
     public void disconnect() {
         try {
             connection.closeConnection();
+            connected.setValue(false);
         } catch (Exception e) {
             e.printStackTrace();
         }

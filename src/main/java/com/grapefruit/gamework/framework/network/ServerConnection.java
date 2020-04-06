@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -101,13 +103,15 @@ public class ServerConnection {
                        }
                         if (answer != null){
                             if (answer.startsWith("SVR GAME CHALLENGE CANCELLED")) {
-                                ResponseChallenge challenge = parseChallenge(answer);
-                                challenge.setStatus(ChallengeStatus.CHALLENGE_RECEIVED);
-                                for (ResponseChallenge rChallenge: manager.getChallenges()){
-                                    if (rChallenge.getNumber() == challenge.getNumber()){
-                                        manager.cancelChallenge(rChallenge);
+                                int number = Integer.valueOf(answer.replace("SVR GAME CHALLENGE CANCELLED {CHALLENGENUMBER: \"", "").replace("\"}", ""));
+                                Iterator<ResponseChallenge> iterator = manager.getChallenges().iterator();
+                                while (iterator.hasNext()){
+                                    ResponseChallenge challenge = iterator.next();
+                                    if (challenge.getNumber() == number) {
+                                        iterator.remove();
                                     }
                                 }
+
                             } else if (answer.startsWith("SVR GAME CHALLENGE")){
                                 ResponseChallenge challenge = parseChallenge(answer);
                                 challenge.setStatus(ChallengeStatus.CHALLENGE_RECEIVED);

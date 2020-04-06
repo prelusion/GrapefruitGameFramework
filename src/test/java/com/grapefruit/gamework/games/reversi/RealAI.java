@@ -64,9 +64,10 @@ public class RealAI {
             Tile move;
             long startTime = System.currentTimeMillis()/1000;
             if (currentPlayer.getColor() == Colors.BLACK) {
+                System.out.println(" Turn " + turnCount + " Depth " + blackDepth);
                 move = minimax.calculateBestMove(game.getBoard(), currentPlayer, opponent, blackDepth);
                 long endTime = System.currentTimeMillis()/1000;
-                System.out.println("Time " + (endTime-startTime) + " Turn " + turnCount + " Depth " + blackDepth);
+                System.out.println("Time " + (endTime-startTime) + "\n");
                 if(turnCount > 34) {
                     blackDepth++;
                 }

@@ -52,23 +52,25 @@ public class MinimaxAlgorithm {
             }
         }
 
-        if(tiles.size() != moves.size()) {
-            return null;
-        }
-
         int bestScore = MIN_VALUE;
         for (Map.Entry<Tile, Integer> entry : tiles.entrySet()) {
             if (entry.getValue() > bestScore) {
-               // System.out.println(String.format("new best move: %s,%s - strategic value: %s, score: %s", entry.getKey().getRow(), entry.getKey().getCol(), entry.getKey().getStrategicValue(), entry.getValue()));
+//                if (player.getColor() == Colors.BLACK) {
+//                    System.out.println(String.format("new best move: %s,%s - strategic value: %s, score: %s", entry.getKey().getRow(), entry.getKey().getCol(), entry.getKey().getStrategicValue(), entry.getValue()));
+//                }
                 bestTile = entry.getKey();
                 bestScore = entry.getValue();
             } else {
-                //System.out.println(String.format("not best move: %s,%s - strategic value: %s, score: %s", entry.getKey().getRow(), entry.getKey().getCol(), entry.getKey().getStrategicValue(), entry.getValue()));
+//                if (player.getColor() == Colors.BLACK) {
+//                    System.out.println(String.format("not best move: %s,%s - strategic value: %s, score: %s", entry.getKey().getRow(), entry.getKey().getCol(), entry.getKey().getStrategicValue(), entry.getValue()));
+//                }
             }
         }
 
         if (bestTile != null) {
-            //System.out.println(String.format("best move: %s,%s - strategic value: %s, score: %s", bestTile.getRow(), bestTile.getCol(), bestTile.getStrategicValue(), bestScore));
+//            if (player.getColor() == Colors.BLACK) {
+//                System.out.println(String.format("best move: %s,%s - strategic value: %s, score: %s", bestTile.getRow(), bestTile.getCol(), bestTile.getStrategicValue(), bestScore));
+//            }
         }
 
         return bestTile;

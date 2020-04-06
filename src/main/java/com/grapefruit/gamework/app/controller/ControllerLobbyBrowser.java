@@ -106,9 +106,26 @@ public class ControllerLobbyBrowser implements IController{
                                         btn.setDisable(false);
                                         btn.setText("Accept");
                                         btn.setOnAction(event -> {
-                                            //todo start game
+                                            model.getServerManager().setStartGameCallback(new CommandCallback() {
+                                                @Override
+                                                public void onResponse(boolean success, String[] args) {
+                                                    System.out.println("START GAME CALLBACK!!");
+                                                    Platform.runLater(() -> {
+                                                        Player playerBlack = new Player(model.getOnlineName(), Colors.BLACK, false);
+                                                        Player playerWhite = new Player("OTHER PLAYER", Colors.WHITE, true);
+                                                        Player[] players = new Player[] {playerBlack, playerWhite};
+                                                        GameApplication.startGame(
+                                                                model.getSelectedGame().getAssets(),
+                                                                model.getSelectedGame().getFactory().create(players),
+                                                                players
+                                                        );
+                                                    });
+                                                }
+                                            });
 
+                                            model.getServerManager().setMoveCallback((boolean success, String[] args) -> {
 
+                                            });
                                         });
                                     } else if (player.getStatus().equals("Sent")) {
                                         btn.setText("Waiting");
@@ -139,11 +156,22 @@ public class ControllerLobbyBrowser implements IController{
                                             model.getServerManager().setStartGameCallback(new CommandCallback() {
                                                 @Override
                                                 public void onResponse(boolean success, String[] args) {
-                                                    System.out.println("START GAME CALLBACK!!");
+                                                    String firstTurnName = args[0];
+                                                    String opponentName = args[1];
+
+                                                    String currentPlayerName = model.getOnlineName();
+
+                                                    Player[] players = new Player[2];
+
+                                                    if (firstTurnName.equals(currentPlayerName)) {
+                                                        players[0] = new Player(currentPlayerName, Colors.BLACK, true);
+                                                        players[1] = new Player(opponentName, Colors.WHITE, false);
+                                                    } else if (firstTurnName.equals(opponentName)) {
+                                                        players[0] = new Player(opponentName, Colors.BLACK, false);
+                                                        players[1] = new Player(currentPlayerName, Colors.WHITE, false);
+                                                    }
+
                                                     Platform.runLater(() -> {
-                                                        Player playerBlack = new Player(model.getOnlineName(), Colors.BLACK, false);
-                                                        Player playerWhite = new Player("OTHER PLAYER", Colors.WHITE, true);
-                                                        Player[] players = new Player[] {playerBlack, playerWhite};
                                                         GameApplication.startGame(
                                                                 model.getSelectedGame().getAssets(),
                                                                 model.getSelectedGame().getFactory().create(players),

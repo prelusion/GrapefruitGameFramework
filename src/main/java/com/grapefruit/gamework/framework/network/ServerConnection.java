@@ -112,10 +112,10 @@ public class ServerConnection {
                             } else if (answer.startsWith("SVR GAME MATCH")) {
                                 System.out.println("GAME STARRT!");
                                 // SVR GAME MATCH {PLAYERTOMOVE: "jarno", GAMETYPE: "Reversi", OPPONENT: "bob"}
+                                String firstTurnName = answer.split("PLAYERTOMOVE: \"")[1].split("\"")[0];
+                                String opponentName = answer.split("OPPONENT: \"")[1].split("\"")[0];
                                 CommandCallback listener = serverCommandListeners.get("startGame");
-                                if (listener != null) {
-                                    listener.onResponse(true, answer.split(" "));
-                                }
+                                if (listener != null) listener.onResponse(true, new String[]{firstTurnName, opponentName});
                             } else if (answer.startsWith("SVR GAME YOURTURN")) {
                                 // SVR GAME YOURTURN {TURNMESSAGE: ""}
                             }

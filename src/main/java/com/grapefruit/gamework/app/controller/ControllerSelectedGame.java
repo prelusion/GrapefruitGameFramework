@@ -89,32 +89,35 @@ public class ControllerSelectedGame implements IController {
 
     private void setOfflineOptions(){
         ArrayList<Button> buttons = new ArrayList<>();
-        Button cpuButton = new Button("Play versus CPU");
-        Button friendButton = new Button("Play versus friend");
+        Button aiButton = new Button("Play vs AI");
+        Button friendButton = new Button("Play vs friend");
 
-        cpuButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Player[] players = new Player[2];
-                players[0] = new Player(model.getOnlineName(), Colors.WHITE, true);
-                players[1] = new Player("Player 2", Colors.BLACK, false);
-                GameApplication.playGame(model.getSelectedGame().getAssets(), model.getSelectedGame().getFactory()
-                        .create(players), players, model.getServerManager());
-            }
+        aiButton.setOnAction(event -> {
+            Player playerWhite = new Player(model.getOnlineName(), Colors.WHITE, true);
+            Player playerBlack = new Player("Player 2", Colors.BLACK, false);
+            Player[] players = new Player[] {playerBlack, playerWhite};
+
+            GameApplication.showBoardPage(
+                    model.getSelectedGame().getAssets(),
+                    model.getSelectedGame().getFactory().create(players),
+                    players,
+                    model.getServerManager()
+            );
         });
 
-        friendButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Player[] players = new Player[2];
-                players[0] = new Player("Player 1", Colors.WHITE, true);
-                players[1] = new Player("Player 2", Colors.BLACK, true);
-                GameApplication.playGame(model.getSelectedGame().getAssets(), model.getSelectedGame().getFactory()
-                        .create(players), players, null);
-            }
+        friendButton.setOnAction(event -> {
+            Player playerWhite = new Player("Player 1", Colors.WHITE, true);
+            Player playerBlack = new Player("Player 2", Colors.BLACK, true);
+            Player[] players = new Player[] {playerBlack, playerWhite};
+
+            GameApplication.showBoardPage(
+                    model.getSelectedGame().getAssets(),
+                    model.getSelectedGame().getFactory().create(players),
+                    players
+            );
         });
 
-        buttons.add(cpuButton);
+        buttons.add(aiButton);
         buttons.add(friendButton);
         layoutButtons(buttons);
     }

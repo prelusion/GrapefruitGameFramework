@@ -7,6 +7,7 @@ import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.network.ServerManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ModelGame implements IModel {
@@ -20,12 +21,7 @@ public class ModelGame implements IModel {
         this.game = game;
         this.assets = assets;
         this.serverManager = manager;
-
-        List<Player> players = new ArrayList<>();
-        for (Player player: localPlayers){
-            players.add(player);
-        }
-        this.localPlayers = players;
+        this.localPlayers = new ArrayList<>(Arrays.asList(localPlayers));
     }
 
     /**

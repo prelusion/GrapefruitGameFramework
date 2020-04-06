@@ -14,6 +14,7 @@ public class ModelMainWindow implements IModel {
     private ServerManager serverManager;
 
     public ModelMainWindow(){
+        serverManager = new ServerManager();
     }
 
     /**

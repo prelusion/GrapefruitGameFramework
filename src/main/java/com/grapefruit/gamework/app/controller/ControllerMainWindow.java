@@ -193,7 +193,6 @@ public class ControllerMainWindow implements IController {
             serverSelection.setDisable(true);
             userName.setDisable(true);
             connectButton.setDisable(true);
-            modelMainWindow.setServerManager(new ServerManager());
             connectionStatus.setText("Connecting...");
         } else {
             connectionStatus.setText("Invalid");
@@ -212,6 +211,7 @@ public class ControllerMainWindow implements IController {
                 }
             });
         }
+
         modelMainWindow.getServerManager().connect(selectedServer.getIp());
         modelMainWindow.getServerManager().queueCommand(Commands.login(userName.getText(), new CommandCallback() {
             @Override
@@ -228,6 +228,11 @@ public class ControllerMainWindow implements IController {
             connectButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
+                    modelMainWindow.getServerManager().queueCommand(Commands.logout(new CommandCallback() {
+                        @Override
+                        public void onResponse(boolean success, String[] args) {
+                        }
+                    }));
                     modelMainWindow.getServerManager().disconnect();
                 }
             });
@@ -243,6 +248,11 @@ public class ControllerMainWindow implements IController {
 
     private void onDisconnected(){
         connectButton.setText("Connect");
+        modelMainWindow.getServerManager().queueCommand(Commands.logout(new CommandCallback() {
+            @Override
+            public void onResponse(boolean success, String[] args) {
+            }
+        }));
         connectionStatus.setText("Disconnected");
         serverSelection.setDisable(false);
         userName.setDisable(false);

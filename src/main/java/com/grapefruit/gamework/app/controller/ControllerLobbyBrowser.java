@@ -104,6 +104,7 @@ public class ControllerLobbyBrowser implements IController{
                                         btn.setText("Accept");
                                         btn.setOnAction(event -> {
                                             //todo start game
+
                                         });
                                     } else if (player.getStatus().equals("Sent")) {
                                         btn.setText("Waiting");

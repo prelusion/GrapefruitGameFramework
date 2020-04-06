@@ -100,8 +100,7 @@ public class ControllerSelectedGame implements IController {
             GameApplication.showBoardPage(
                     model.getSelectedGame().getAssets(),
                     model.getSelectedGame().getFactory().create(players),
-                    players,
-                    model.getServerManager()
+                    players
             );
         });
 

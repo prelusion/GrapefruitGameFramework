@@ -40,14 +40,14 @@ public class GameApplication extends Application {
         return primaryStage;
     }
 
-    public static void showBoardPage(Assets assets, Game game, Player[] localPlayers, ServerManager manager){
+    public static void startGame(Assets assets, Game game, Player[] localPlayers, ServerManager manager){
         primaryStage.setScene(new Scene(GameFactory.build(new ModelGame(game, assets, localPlayers, manager)).getParent(), 1100, 800));
         primaryStage.setTitle("Now playing: " + assets.getDisplayName());
         primaryStage.show();
     }
 
-    public static void showBoardPage(Assets assets, Game game, Player[] localPlayers){
-        showBoardPage(assets, game, localPlayers, null);
+    public static void startGame(Assets assets, Game game, Player[] localPlayers){
+        startGame(assets, game, localPlayers, null);
     }
 
     public static void openLauncher(){

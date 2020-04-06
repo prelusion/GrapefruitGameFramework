@@ -3,6 +3,7 @@ package com.grapefruit.gamework.app.model;
 import com.grapefruit.gamework.app.controller.ControllerSelectedGame;
 import com.grapefruit.gamework.framework.Assets;
 import com.grapefruit.gamework.framework.Game;
+import com.grapefruit.gamework.framework.GameWrapper;
 import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.ServerConnection;
@@ -22,12 +23,14 @@ public class ModelLobbyBrowser implements IModel {
     private List<String> playerNames;
     private ControllerSelectedGame controllerSelectedGame;
     private Assets gameAssets;
+    private GameWrapper selectedGame;
 
-    public ModelLobbyBrowser(ServerManager serverManager, String onlineName, ControllerSelectedGame controllerSelectedGame, Assets gameAssets){
+    public ModelLobbyBrowser(ServerManager serverManager, String onlineName, ControllerSelectedGame controllerSelectedGame, Assets gameAssets, GameWrapper selectedGame){
         this.serverManager = serverManager;
         this.onlineName = onlineName;
         this.controllerSelectedGame = controllerSelectedGame;
         this.gameAssets = gameAssets;
+        this.selectedGame = selectedGame;
         fetchChallenges();
     }
 
@@ -78,5 +81,9 @@ public class ModelLobbyBrowser implements IModel {
 
     public Assets getGameAssets() {
         return gameAssets;
+    }
+
+    public GameWrapper getSelectedGame() {
+        return selectedGame;
     }
 }

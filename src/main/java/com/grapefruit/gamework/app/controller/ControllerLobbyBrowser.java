@@ -1,7 +1,10 @@
 package com.grapefruit.gamework.app.controller;
 
+import com.grapefruit.gamework.app.GameApplication;
 import com.grapefruit.gamework.app.model.IModel;
 import com.grapefruit.gamework.app.model.ModelLobbyBrowser;
+import com.grapefruit.gamework.framework.Colors;
+import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.ServerConnection;
@@ -105,6 +108,7 @@ public class ControllerLobbyBrowser implements IController{
                                         btn.setOnAction(event -> {
                                             //todo start game
 
+
                                         });
                                     } else if (player.getStatus().equals("Sent")) {
                                         btn.setText("Waiting");
@@ -131,6 +135,27 @@ public class ControllerLobbyBrowser implements IController{
                                                     }
                                                 }
                                             }, player.getPlayerName(), model.getGameAssets().getServerId()));
+
+                                            model.getServerManager().setStartGameCallback(new CommandCallback() {
+                                                @Override
+                                                public void onResponse(boolean success, String[] args) {
+                                                    System.out.println("START GAME CALLBACK!!");
+                                                    Platform.runLater(() -> {
+                                                        Player playerBlack = new Player(model.getOnlineName(), Colors.BLACK, false);
+                                                        Player playerWhite = new Player("OTHER PLAYER", Colors.WHITE, true);
+                                                        Player[] players = new Player[] {playerBlack, playerWhite};
+                                                        GameApplication.startGame(
+                                                                model.getSelectedGame().getAssets(),
+                                                                model.getSelectedGame().getFactory().create(players),
+                                                                players
+                                                        );
+                                                    });
+                                                }
+                                            });
+
+                                            model.getServerManager().setMoveCallback((boolean success, String[] args) -> {
+
+                                            });
                                         });
                                     }
 

@@ -52,7 +52,7 @@ public class ServerConnection {
         listenerThread = new Thread(new Runnable() {
             public void run() {
                 try {
-                    while (socket.isConnected()) {
+                    while (!listenerThread.isInterrupted()) {
                         String answer = in.readLine();
                         if (answer != null && !answer.equals("null") && manager.commandsInQueue()) {
                             if (answer.equals("OK")){
@@ -100,6 +100,7 @@ public class ServerConnection {
                             }
                         }
                     }
+                    Thread.currentThread().interrupt();
                 } catch (IOException e){
                     e.printStackTrace();
                 }
@@ -118,14 +119,13 @@ public class ServerConnection {
         timer.interrupt();
         boolean stillconnected = true;
         while (stillconnected) {
-            if (listenerThread.isInterrupted() && timer.isInterrupted()) {
+            if (!listenerThread.isAlive() && !timer.isAlive()) {
                 socket.close();
                 in.close();
                 out.close();
                 stillconnected = false;
             }
         }
-
     }
 
     /**
@@ -154,7 +154,7 @@ public class ServerConnection {
                     try{
                         Thread.sleep(300);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Thread.currentThread().interrupt();
                     }
                 }
             }

@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class Reversi extends Game {
 
-    public Reversi(Board board, Player playerWhite, Player playerBlack, int turnTimeout) {
+    public Reversi(Board board, Player playerBlack, Player playerWhite, int turnTimeout) {
         super(board, new Player[]{playerBlack, playerWhite}, turnTimeout);
         board.setPlayer(3, 3, playerWhite);
         board.setPlayer(4, 4, playerWhite);

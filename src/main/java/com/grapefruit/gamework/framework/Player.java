@@ -1,18 +1,26 @@
 package com.grapefruit.gamework.framework;
 
-import com.grapefruit.gamework.framework.Colors;
-
 public class Player {
 
     private String name;
     private Colors color;
     private int score = 0;
-    private boolean localPlayer;
+    private boolean isLocal = false;
+    private boolean isAI = false;
 
-    public Player(String name, Colors color, boolean localPlayer) {
+    public Player(String name, Colors color) {
         this.name = name;
         this.color = color;
-        this.localPlayer = localPlayer;
+    }
+
+    public Player(String name, Colors color, boolean isLocal) {
+        this(name, color);
+        this.isLocal = isLocal;
+    }
+
+    public Player(String name, Colors color, boolean isLocal, boolean isAI) {
+        this(name, color, isLocal);
+        this.isAI = isAI;
     }
 
     /**
@@ -48,6 +56,10 @@ public class Player {
     }
 
     public boolean isLocal() {
-        return localPlayer;
+        return isLocal;
+    }
+
+    public boolean isAI() {
+        return isAI;
     }
 }

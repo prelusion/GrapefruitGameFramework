@@ -17,7 +17,7 @@
          </children>
       </HBox>
       <Pane minHeight="-Infinity" prefHeight="10.0" prefWidth="439.0" />
-      <RadioButton mnemonicParsing="false" text="Play as AI" />
+      <RadioButton mnemonicParsing="false" text="Play as AI" fx:id="aiRadioButton" />
       <Pane minHeight="-Infinity" prefHeight="9.0" prefWidth="439.0" />
       <Button fx:id="backButton" mnemonicParsing="false" onAction="#onBack" text="Back" />
    </children>

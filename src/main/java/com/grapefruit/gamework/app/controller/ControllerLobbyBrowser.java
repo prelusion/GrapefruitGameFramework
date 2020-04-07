@@ -16,10 +16,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 import javafx.util.Duration;
@@ -40,6 +37,9 @@ public class ControllerLobbyBrowser implements IController{
 
     @FXML
     private ResourceBundle resources;
+
+    @FXML
+    private RadioButton aiRadioButton;
 
     /**
      * Required for FXML
@@ -180,6 +180,8 @@ public class ControllerLobbyBrowser implements IController{
                                             model.getServerManager().setStartGameCallback(new CommandCallback() {
                                                 @Override
                                                 public void onResponse(boolean success, String[] args) {
+                                                    boolean isPlayingAsAI = aiRadioButton.isSelected();
+
                                                     String firstTurnName = args[0];
                                                     String opponentName = args[1];
 
@@ -188,11 +190,11 @@ public class ControllerLobbyBrowser implements IController{
                                                     Player[] players = new Player[2];
 
                                                     if (firstTurnName.equals(currentPlayerName)) {
-                                                        players[0] = new Player(currentPlayerName, Colors.BLACK, true);
+                                                        players[0] = new Player(currentPlayerName, Colors.BLACK, true, isPlayingAsAI);
                                                         players[1] = new Player(opponentName, Colors.WHITE, false);
                                                     } else if (firstTurnName.equals(opponentName)) {
                                                         players[0] = new Player(opponentName, Colors.BLACK, false);
-                                                        players[1] = new Player(currentPlayerName, Colors.WHITE, true);
+                                                        players[1] = new Player(currentPlayerName, Colors.WHITE, true, isPlayingAsAI);
                                                     }
 
                                                     Platform.runLater(() -> {

@@ -176,15 +176,20 @@ public class ControllerGame implements IController {
                 game.playMove(row, col, player);
                 update();
                 game.startTurnTimer();
-
-                if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
-                    playAI();
-                }
             });
         });
 
         serverManager.setTurnCallback((boolean success, String[] args) -> {
             game.setCurrentPlayer(onlineGameLocalPlayer);
+
+            if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
+                Platform.runLater(() -> {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ignored) {}
+                    playAI();
+                });
+            }
 //            System.out.println("set turn call back, first turn: " + isFirstTurn);
 //            if (isFirstTurn) {
 //                if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
@@ -419,6 +424,8 @@ public class ControllerGame implements IController {
         }
 
         game.resetTurnTimer();
+
+        System.out.println("ai move: " + tile.getRow() + "," + tile.getCol());
         playMove(tile.getRow(), tile.getCol(), game.getCurrentPlayer());
     }
 

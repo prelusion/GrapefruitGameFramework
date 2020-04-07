@@ -19,6 +19,7 @@ public class GameApplication extends Application {
     private static Stage primaryStage;
     private static final int WINDOW_START_HEIGHT = 600;
     private static final int WINDOW_START_WIDTH = 1000;
+    private static final ServerManager SERVER_MANAGER = new ServerManager();
 
     public void startApplication(String[] args){
         launch(args);
@@ -51,7 +52,7 @@ public class GameApplication extends Application {
     }
 
     public static void openLauncher(){
-        ModelMainWindow modelMainWindow = new ModelMainWindow();
+        ModelMainWindow modelMainWindow = new ModelMainWindow(SERVER_MANAGER);
         primaryStage.setTitle("Grapefruit Gamework");
         primaryStage.setScene(new Scene(MainWindowFactory.build(modelMainWindow).getParent(), WINDOW_START_WIDTH, WINDOW_START_HEIGHT));
         //primaryStage.initStyle(StageStyle.UNDECORATED);

@@ -229,47 +229,49 @@ public class ControllerLobbyBrowser implements IController{
     }
 
     private void updateTable() {
-        model.fetchChallenges();
-        model.fetchPlayers();
+        if (challengeTable.isVisible()) {
+            model.fetchChallenges();
+            model.fetchPlayers();
 
-        final ObservableList<ChallengeablePlayer> challengeablePlayers = FXCollections.observableArrayList();
+            final ObservableList<ChallengeablePlayer> challengeablePlayers = FXCollections.observableArrayList();
 
-        List<ServerConnection.ResponseChallenge> challenges = model.getChallenges();
-        if (model.getPlayerNames() != null) {
-            for (String player : model.getPlayerNames()) {
-                if (!player.equals(model.getOnlineName())) {
-                for (ServerConnection.ResponseChallenge challenge : challenges) {
-                    if (challenge.getChallenger().equals(player)) {
-                        String challengeStatus = "";
-                        if (challenge.getStatus() == ServerConnection.ChallengeStatus.CHALLENGE_RECEIVED) {
-                            challengeStatus = "Received";
-                        } else if (challenge.getStatus() == ServerConnection.ChallengeStatus.CHALLENGE_SENT) {
-                            challengeStatus = "Sent";
+            List<ServerConnection.ResponseChallenge> challenges = model.getChallenges();
+            if (model.getPlayerNames() != null) {
+                for (String player : model.getPlayerNames()) {
+                    if (!player.equals(model.getOnlineName())) {
+                        for (ServerConnection.ResponseChallenge challenge : challenges) {
+                            if (challenge.getChallenger().equals(player)) {
+                                String challengeStatus = "";
+                                if (challenge.getStatus() == ServerConnection.ChallengeStatus.CHALLENGE_RECEIVED) {
+                                    challengeStatus = "Received";
+                                } else if (challenge.getStatus() == ServerConnection.ChallengeStatus.CHALLENGE_SENT) {
+                                    challengeStatus = "Sent";
+                                }
+                                challengeablePlayers.add(new ChallengeablePlayer(challenge.getChallenger(), challengeStatus));
+                                continue;
+                            }
                         }
-                        challengeablePlayers.add(new ChallengeablePlayer(challenge.getChallenger(), challengeStatus));
-                        continue;
+                        boolean found = false;
+                        for (ChallengeablePlayer cPlayer : challengeablePlayers) {
+                            if (cPlayer.playerName.equals(player)) {
+                                found = true;
+                            }
+                        }
+                        for (ServerConnection.ResponseChallenge challenge : model.getChallenges()) {
+                            if (challenge.getChallenger().equals(player)) {
+                                found = true;
+                            }
+                        }
+                        if (!found) {
+                            challengeablePlayers.add(new ChallengeablePlayer(player, "Unchallenged"));
+                        }
                     }
                 }
-                boolean found = false;
-                for (ChallengeablePlayer cPlayer: challengeablePlayers){
-                    if (cPlayer.playerName.equals(player)){
-                        found = true;
-                    }
-                }
-                for (ServerConnection.ResponseChallenge challenge: model.getChallenges()){
-                    if (challenge.getChallenger().equals(player)){
-                        found = true;
-                    }
-                }
-                if (!found){
-                    challengeablePlayers.add(new ChallengeablePlayer(player, "Unchallenged"));
-                }
-            }
-            }
 
 
-            //challengeTable.getItems().removeAll(challengeTable.getItems());
-            challengeTable.setItems(challengeablePlayers);
+                //challengeTable.getItems().removeAll(challengeTable.getItems());
+                challengeTable.setItems(challengeablePlayers);
+            }
         }
     }
 

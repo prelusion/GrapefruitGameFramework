@@ -117,12 +117,12 @@ public class ControllerMainWindow implements IController {
         updateSelectionBox();
         if (this.modelMainWindow.getServerManager() != null){
             if (this.modelMainWindow.getServerManager().connected.getValue()) {
-                connectionStatus.setText("Connected");
+                onConnected();
             } else {
-                connectionStatus.setText("Disconnected");
+                onDisconnected();
             }
         } else {
-            connectionStatus.setText("Disconnected");
+            onDisconnected();
         }
     }
 
@@ -236,6 +236,7 @@ public class ControllerMainWindow implements IController {
                         }
                     }));
                     modelMainWindow.getServerManager().disconnect();
+                    onDisconnected();
                 }
             });
             modelMainWindow.getServerManager().queueCommand(Commands.getGameList(new CommandCallback() {
@@ -250,11 +251,6 @@ public class ControllerMainWindow implements IController {
 
     private void onDisconnected(){
         connectButton.setText("Connect");
-        modelMainWindow.getServerManager().queueCommand(Commands.logout(new CommandCallback() {
-            @Override
-            public void onResponse(boolean success, String[] args) {
-            }
-        }));
         connectionStatus.setText("Disconnected");
         serverSelection.setDisable(false);
         userName.setDisable(false);

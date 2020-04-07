@@ -4,8 +4,12 @@ import com.grapefruit.gamework.framework.*;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import java.util.Map;
 public class Reversi extends Game {
 
     public Reversi(Board board, Player playerBlack, Player playerWhite, int turnTimeout) {

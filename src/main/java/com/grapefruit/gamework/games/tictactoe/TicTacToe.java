@@ -1,10 +1,11 @@
 package com.grapefruit.gamework.games.tictactoe;
 
 import com.grapefruit.gamework.framework.*;
-import com.grapefruit.gamework.framework.Player;
 
 import java.util.HashMap;
 import java.util.List;
+
+import java.util.concurrent.Executors;
 import java.util.Map;
 
 public class TicTacToe extends Game {

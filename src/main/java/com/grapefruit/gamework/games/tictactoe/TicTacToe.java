@@ -32,4 +32,14 @@ public class TicTacToe extends Game {
         }
         return null;
     }
+
+    @Override
+    public boolean playMove(int row, int col, Player player) {
+        if (!isValidMove(row, col, player)) {
+            return false;
+        }
+
+        getBoard().setMove(row, col, player);
+        return true;
+    }
 }

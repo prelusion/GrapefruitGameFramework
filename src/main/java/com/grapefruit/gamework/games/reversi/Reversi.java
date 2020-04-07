@@ -40,11 +40,4 @@ public class Reversi extends Game {
     public Player getWinner() {
         return Helpers.getWinningPlayer(getBoard());
     }
-
-    @Override
-    public void calculateScores() {
-        for (Player player: super.getPlayers()){
-            super.scores.put(player, Helpers.countPiecesForPlayer(getBoard(), player));
-        }
-    }
 }

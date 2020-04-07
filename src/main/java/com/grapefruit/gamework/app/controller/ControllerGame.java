@@ -148,8 +148,8 @@ public class ControllerGame implements IController {
             });
         }
 
-        this.model.getGame().scores.addListener(
-                (MapChangeListener<Player, Integer>) change -> Platform.runLater(this::updateInfo));
+        this.model.getGame().getBoard().scores.addListener(
+                (MapChangeListener<Player, Integer>) change -> updateInfo());
 
         this.model.getGame().getTurnTimeProperty().addListener(
                 (observable, oldValue, newValue) -> {

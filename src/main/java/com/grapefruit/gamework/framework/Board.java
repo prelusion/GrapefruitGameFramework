@@ -1,5 +1,8 @@
 package com.grapefruit.gamework.framework;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +24,7 @@ public abstract class Board {
     protected static int BOARDSIZE;
 
     private int[][] strategicValues;
+    public ObservableMap<Player, Integer> scores = FXCollections.observableHashMap();
 
     public Board(int boardSize, int[][] strategicValues) {
         this.BOARDSIZE = boardSize;
@@ -247,5 +251,11 @@ public abstract class Board {
             }
             System.out.println();
         }
+    }
+
+    public abstract void calculateScores(Player[] players);
+
+    public int getScore(Player player){
+        return scores.getOrDefault(player, 0);
     }
 }

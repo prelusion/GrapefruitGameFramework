@@ -15,7 +15,7 @@ public class RealAI {
     public static void main(String[] args) {
         int turnTimeout = 19;
         Board board = new ReversiBoard(8, STRATEGIC_VALUES);
-        int blackDepth = 8;
+        int depth = 12;
 
         Player playerWhite = new Player("White", Colors.WHITE, true);
         Player playerBlack = new Player("Black", Colors.BLACK, true);
@@ -26,17 +26,17 @@ public class RealAI {
         Player opponent = currentPlayer == playerWhite ? playerBlack : playerWhite;
 
         //CALCULATE Benchmark Depth;
-        //ReversiBenchMark BM = new ReversiBenchMark(turnTimeout, minimax, currentPlayer, opponent);
-        //int depth = BM.calculateDepth(1);
+//        ReversiBenchMark BM = new ReversiBenchMark(turnTimeout, minimax, currentPlayer, opponent);
+//        int depth = BM.calculateDepth(1);
 //        System.out.println("Depth " + depth);
 
-//        System.out.println("strategic values:");
-//        board.printStrategicValues();
+        System.out.println("strategic values:");
+        board.printStrategicValues();
 
         int turnCount = 1;
         while (!game.hasFinished()) {
-//            System.out.println("board state:");
-//            board.printBoard();
+            System.out.println("board state:");
+            board.printBoard();
 
 //            System.out.println(String.format("\n\n----------------turn %s--------------------", turnCount));
 
@@ -63,16 +63,22 @@ public class RealAI {
             opponent = currentPlayer == playerWhite ? playerBlack : playerWhite;
             Tile move;
             long startTime = System.currentTimeMillis()/1000;
-            if (currentPlayer.getColor() == Colors.BLACK) {
-                System.out.println(" Turn " + turnCount + " Depth " + blackDepth);
-                move = minimax.calculateBestMove(game.getBoard(), currentPlayer, opponent, blackDepth);
+            if (currentPlayer.getColor() == Colors.WHITE) {
+                System.out.println(" Turn " + turnCount + " Depth " + depth);
+                move = minimax.calculateBestMove(game.getBoard(), currentPlayer, opponent, depth);
                 long endTime = System.currentTimeMillis()/1000;
                 System.out.println("Time " + (endTime-startTime) + "\n");
-                if(turnCount > 34) {
-                    blackDepth++;
+                if(turnCount > 40) {
+                    depth++;
+                } else if( turnCount < 10 && depth > 8) {
+                    depth--;
+                } else if((endTime-startTime) <= 2) {
+                    //depth++;
+                } else if((endTime-startTime) >= 8) {
+                    //depth--;
                 }
             } else {
-                move = minimax.calculateBestMove(game.getBoard(), currentPlayer, opponent, 2);
+                move = minimax.calculateBestMove(game.getBoard(), currentPlayer, opponent, 5);
             }
 
 
@@ -84,14 +90,14 @@ public class RealAI {
 ////            System.out.println("-----------------------------------");
         }
 
-//        System.out.println("-----------------------------------");
-//        System.out.println("game finished");
+        System.out.println("-----------------------------------");
+        System.out.println("game finished");
 
-//        System.out.println(String.format("white pieces: %s", board.countPieces(playerWhite)));
-//        System.out.println(String.format("black pieces: %s", board.countPieces(playerBlack)));
+        System.out.println(String.format("white pieces: %s", board.countPieces(playerWhite)));
+        System.out.println(String.format("black pieces: %s", board.countPieces(playerBlack)));
 
          if (game.hasWinner()) {
-//            System.out.println("winner: " + game.getWinner().getColor().toString());
+            System.out.println("winner: " + game.getWinner().getColor().toString());
         } else {
 //            System.out.println("tie");
         }

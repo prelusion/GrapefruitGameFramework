@@ -32,12 +32,4 @@ public class TicTacToe extends Game {
         }
         return null;
     }
-
-    @Override
-    public void calculateScores() {
-        Map<Player, Integer> scores = new HashMap<>();
-        for (Player player: super.getPlayers()){
-            scores.put(player, Helpers.countPiecesForPlayer(getBoard(), player));
-        }
-    }
 }

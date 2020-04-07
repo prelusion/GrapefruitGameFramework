@@ -139,6 +139,13 @@ public class ControllerGame implements IController {
                     refresh();
                 });
             });
+
+            this.model.getServerManager().setIllegalmoveWinCallback((boolean success, String[] args) -> {
+                Platform.runLater(() -> {
+                    createEndDialog("Opponent illegal move, you win!");
+                    refresh();
+                });
+            });
         }
 
         this.model.getGame().scores.addListener(
@@ -302,6 +309,7 @@ public class ControllerGame implements IController {
         }
 
         CommandCallback callback = (success, args) -> {
+            this.model.getGame().resetTurnTimer();
             Platform.runLater(this::refresh);
         };
 

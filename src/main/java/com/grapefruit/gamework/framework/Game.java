@@ -56,6 +56,10 @@ public abstract class Game {
         return turnTime.get();
     }
 
+    public void resetTurnTimer() {
+        turnTime.set(turnTimeout);
+    }
+
     public SimpleIntegerProperty getTurnTimeProperty() {
         return turnTime;
     }

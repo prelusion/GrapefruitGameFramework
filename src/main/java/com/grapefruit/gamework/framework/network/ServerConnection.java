@@ -150,6 +150,11 @@ public class ServerConnection {
                 if (listener != null) {
                     listener.onResponse(true, new String[]{});
                 }
+            } else if (comment.equals("Illegal move")) {
+                CommandCallback listener = serverCommandListeners.get("onIllegalmoveWin");
+                if (listener != null) {
+                    listener.onResponse(true, new String[]{});
+                }
             }
 
         }
@@ -283,6 +288,10 @@ public class ServerConnection {
 
     public void setTurnTimeoutLoseCallback(CommandCallback callback) {
         serverCommandListeners.put("onTurnTimeoutLose", callback);
+    }
+
+    public void setIllegalmoveWinCallback(CommandCallback callback) {
+        serverCommandListeners.put("onIllegalmoveWin", callback);
     }
 
     /**

@@ -202,4 +202,8 @@ public class ServerManager {
     public void setTurnTimeoutLoseCallback(CommandCallback callback) {
         connection.setTurnTimeoutLoseCallback(callback);
     }
+
+    public void setIllegalmoveWinCallback(CommandCallback callback) {
+        connection.setIllegalmoveWinCallback(callback);
+    }
 }

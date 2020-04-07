@@ -38,7 +38,10 @@ public abstract class Game {
         resetTurnTimer();
 
         turnTimeThread = new Thread(() -> {
-            while (!turnTimeThread.isInterrupted() && turnTime.get() >= 0) {
+            while (turnTimeThread != null && !turnTimeThread.isInterrupted() && turnTime.get() >= 0) {
+                if (turnTimeThread == null) {
+                    break;
+                }
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -46,8 +49,6 @@ public abstract class Game {
                 }
                 turnTime.set(turnTime.get() - 1);
             }
-
-            turnTimeThread = null;
         });
 
         turnTimeThread.start();

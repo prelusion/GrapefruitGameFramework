@@ -122,6 +122,7 @@ public class ControllerGame implements IController {
             });
 
             this.model.getServerManager().setTurnCallback((boolean success, String[] args) -> {
+
                 this.model.getGame().setCurrentPlayer(localPlayer);
                 Platform.runLater(this::refresh);
             });

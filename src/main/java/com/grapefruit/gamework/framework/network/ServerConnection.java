@@ -56,102 +56,109 @@ public class ServerConnection {
      * Starts a Thread that listens to the server for responses or other messages and activates a callback function.
      */
     private void listen() {
-        listenerThread = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    while (!listenerThread.isInterrupted()) {
-                        String answer = in.readLine();
-                        if (answer != null && !answer.equals("null") && manager.commandsInQueue()) {
-                            if (answer.equals("OK")) {
-                                Command command = manager.getFirstUnconfirmed();
-                                if (command != null && command.isSent()) {
-                                    command.confirm();
-                                    if (command.getResponseType() == ServerManager.ResponseType.CONFIRMONLY) {
-                                        manager.removeCommandFromQueue(command);
-                                        command.doCallBack(true, null);
-                                    }
-                                }
-                            } else if (answer.startsWith("ERR")) {
-                                Command command = manager.getFirstUnconfirmed();
-                                if (command != null && command.isSent()) {
-                                    command.confirm();
-                                    String[] errors = new String[1];
-                                    errors[0] = answer;
-                                    command.doCallBack(false, errors);
-                                    manager.removeCommandFromQueue(command);
-                                }
+        new Thread(() -> {
+            try {
+                while (!listenerThread.isInterrupted()) {
+                    String msg = in.readLine();
 
-                            } else if (answer.contains("SVR") && answer.contains("[")) {
-                                int startArg = answer.indexOf("[");
-                                String[] args = answer.substring(startArg + 1, answer.trim().length() - 1).split(", ");
-
-                                String[] result = new String[args.length];
-                                int i = 0;
-                                for (String element : args) {
-                                    result[i] = element.substring(1, element.length() - 1);
-                                    i++;
-                                }
-                                Command command = manager.findFirstFittingCommand(ServerManager.ResponseType.LIST, true);
-                                if (command != null && command.isSent()) {
-                                    command.confirm();
-                                    command.doCallBack(true, result);
-                                    manager.removeCommandFromQueue(command);
-                                }
-                            }
-                        }
-                        if (answer != null) {
-                            if (answer.startsWith("SVR GAME CHALLENGE CANCELLED")) {
-                                int number = Integer.parseInt(answer.replace("SVR GAME CHALLENGE CANCELLED {CHALLENGENUMBER: \"", "").replace("\"}", ""));
-                                manager.getChallenges().removeIf(challenge -> challenge.getNumber() == number);
-
-                            } else if (answer.startsWith("SVR GAME CHALLENGE")) {
-                                ResponseChallenge challenge = parseChallenge(answer);
-                                challenge.setStatus(ChallengeStatus.CHALLENGE_RECEIVED);
-                                manager.addChallenge(challenge);
-
-                            } else if (answer.startsWith("SVR GAME MATCH")) {
-                                // SVR GAME MATCH {PLAYERTOMOVE: "jarno", GAMETYPE: "Reversi", OPPONENT: "bob"}
-                                String firstTurnName = answer.split("PLAYERTOMOVE: \"")[1].split("\"")[0];
-                                String opponentName = answer.split("OPPONENT: \"")[1].split("\"")[0];
-                                CommandCallback listener = serverCommandListeners.get("onStartGame");
-                                if (listener != null) {
-                                    listener.onResponse(true, new String[]{firstTurnName, opponentName});
-                                }
-
-                            } else if (answer.startsWith("SVR GAME YOURTURN")) {
-                                // SVR GAME YOURTURN {TURNMESSAGE: ""}
-                                String message = answer.split("TURNMESSAGE: \"")[1].split("\"")[0];
-                                CommandCallback listener = serverCommandListeners.get("onTurn");
-                                if (listener != null) {
-                                    listener.onResponse(true, new String[]{message});
-                                }
-
-                            } else if (answer.startsWith("SVR GAME MOVE")) {
-                                // SVR GAME MOVE {PLAYER: "alice", MOVE: "26", DETAILS: ""}
-                                String playerName = answer.split("PLAYER: \"")[1].split("\"")[0];
-                                String move = answer.split("MOVE: \"")[1].split("\"")[0];
-                                String details = answer.split("DETAILS: \"")[1].split("\"")[0];
-
-                                CommandCallback listener = serverCommandListeners.get("onMove");
-                                if (listener != null) {
-                                    listener.onResponse(
-                                            true,
-                                            new String[]{playerName, move, details}
-                                    );
-                                }
-                            }
-
-                        }
-
-
+                    if (msg == null || msg.equals("null")) {
+                        continue;
                     }
-                    Thread.currentThread().interrupt();
-                } catch (IOException e) {
-                    e.printStackTrace();
+
+                    handleMessage(msg);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void handleMessage(String msg) {
+        if (manager.commandsInQueue()) {
+            handleCommandResponses(msg);
+        }
+
+        if (msg.startsWith("SVR GAME CHALLENGE CANCELLED")) {
+            int number = Integer.parseInt(msg.replace("SVR GAME CHALLENGE CANCELLED {CHALLENGENUMBER: \"", "").replace("\"}", ""));
+            manager.getChallenges().removeIf(challenge -> challenge.getNumber() == number);
+
+        } else if (msg.startsWith("SVR GAME CHALLENGE")) {
+            ResponseChallenge challenge = parseChallenge(msg);
+            challenge.setStatus(ChallengeStatus.CHALLENGE_RECEIVED);
+            manager.addChallenge(challenge);
+
+        } else if (msg.startsWith("SVR GAME MATCH")) {
+            // SVR GAME MATCH {PLAYERTOMOVE: "jarno", GAMETYPE: "Reversi", OPPONENT: "bob"}
+            String firstTurnName = msg.split("PLAYERTOMOVE: \"")[1].split("\"")[0];
+            String opponentName = msg.split("OPPONENT: \"")[1].split("\"")[0];
+            CommandCallback listener = serverCommandListeners.get("onStartGame");
+            if (listener != null) {
+                listener.onResponse(true, new String[]{firstTurnName, opponentName});
+            }
+
+        } else if (msg.startsWith("SVR GAME YOURTURN")) {
+            // SVR GAME YOURTURN {TURNMESSAGE: ""}
+            String message = msg.split("TURNMESSAGE: \"")[1].split("\"")[0];
+            CommandCallback listener = serverCommandListeners.get("onTurn");
+            if (listener != null) {
+                listener.onResponse(true, new String[]{message});
+            }
+
+        } else if (msg.startsWith("SVR GAME MOVE")) {
+            // SVR GAME MOVE {PLAYER: "alice", MOVE: "26", DETAILS: ""}
+            String playerName = msg.split("PLAYER: \"")[1].split("\"")[0];
+            String move = msg.split("MOVE: \"")[1].split("\"")[0];
+            String details = msg.split("DETAILS: \"")[1].split("\"")[0];
+
+            CommandCallback listener = serverCommandListeners.get("onMove");
+            if (listener != null) {
+                listener.onResponse(
+                        true,
+                        new String[]{playerName, move, details}
+                );
+            }
+        }
+    }
+
+    private void handleCommandResponses(String msg) {
+        if (msg.equals("OK")) {
+            Command command = manager.getFirstUnconfirmed();
+            if (command != null && command.isSent()) {
+                command.confirm();
+                if (command.getResponseType() == ServerManager.ResponseType.CONFIRMONLY) {
+                    manager.removeCommandFromQueue(command);
+                    command.doCallBack(true, null);
                 }
             }
-        });
-        listenerThread.start();
+
+        } else if (msg.startsWith("ERR")) {
+            Command command = manager.getFirstUnconfirmed();
+            if (command != null && command.isSent()) {
+                command.confirm();
+                String[] errors = new String[1];
+                errors[0] = msg;
+                command.doCallBack(false, errors);
+                manager.removeCommandFromQueue(command);
+            }
+
+        } else if (msg.contains("SVR") && msg.contains("[")) {
+            int startArg = msg.indexOf("[");
+            String[] args = msg.substring(startArg + 1, msg.trim().length() - 1).split(", ");
+
+            String[] result = new String[args.length];
+            int i = 0;
+            for (String element : args) {
+                result[i] = element.substring(1, element.length() - 1);
+                i++;
+            }
+            Command command = manager.findFirstFittingCommand(ServerManager.ResponseType.LIST, true);
+            if (command != null && command.isSent()) {
+                command.confirm();
+                command.doCallBack(true, result);
+                manager.removeCommandFromQueue(command);
+            }
+        }
+
     }
 
     private ResponseChallenge parseChallenge(String challenge) {

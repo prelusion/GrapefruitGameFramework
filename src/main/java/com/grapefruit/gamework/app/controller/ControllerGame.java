@@ -8,9 +8,9 @@ import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.app.util.ImageHelper;
 import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDialogFactory;
 import com.grapefruit.gamework.framework.*;
-import com.grapefruit.gamework.framework.network.Command;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.Helpers;
+import com.grapefruit.gamework.framework.network.ServerManager;
 import javafx.application.Platform;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
@@ -34,11 +34,13 @@ import java.util.ResourceBundle;
 public class ControllerGame implements IController {
 
     private ModelGame model;
+    private Game game;
+    private ServerManager serverManager;
 
     private HBox[][] boardTiles;
 
-    private Player localPlayer;
-    private Player opponentPlayer;
+    private Player onlineGameLocalPlayer;
+    private Player onlineGameOnlinePlayer;
 
     @FXML
     private Text turnNumber;
@@ -90,68 +92,37 @@ public class ControllerGame implements IController {
     public void setModel(IModel model) {
         this.model = (ModelGame) model;
 
-        for (Player player : this.model.getGame().getPlayers()) {
-            if (player.isLocal()) localPlayer = player;
-            else opponentPlayer = player;
-        }
+        game = this.model.getGame();
+        serverManager = this.model.getServerManager();
 
-        gameName.setText(this.model.getAssets().getDisplayName());
-        gameIcon.setImage(this.model.getAssets().getIcon());
-
-        drawBoard(this.model.getGame().getBoard());
+        setupAssets();
+        setupObservableListeners();
 
         if (this.model.isOnlineGame()) {
-            this.model.getServerManager().setMoveCallback((boolean success, String[] args) -> {
-                String playerName = args[0];
-                String move = args[1];
+            setupServerEventHandlers();
 
-                int[] rowcol = Helpers.convertMoveString(move, this.model.getGame().getBoard().getBoardSize());
-                int row = rowcol[0];
-                int col = rowcol[1];
-
-                Game game = this.model.getGame();
-                Player player = game.getPlayerByName(playerName);
-
-                if (player != null) {
-                    Platform.runLater(() -> updateMove(row, col, player));
-                }
-            });
-
-            this.model.getServerManager().setTurnCallback((boolean success, String[] args) -> {
-                this.model.getGame().setCurrentPlayer(localPlayer);
-                this.model.getGame().startTurnTimer();
-
-                System.out.println("Waiting for turn...");
-                System.out.println("is AI: " + localPlayer.isAI());
-                Platform.runLater(this::refresh);
-            });
-
-            this.model.getServerManager().setTurnTimeoutWinCallback((boolean success, String[] args) -> {
-                Platform.runLater(() -> {
-                    createEndDialog("Opponent's turn timed out, you win!");
-                    refresh();
-                });
-            });
-
-            this.model.getServerManager().setTurnTimeoutLoseCallback((boolean success, String[] args) -> {
-                Platform.runLater(() -> {
-                    createEndDialog("Turn timed out, you lose!");
-                    refresh();
-                });
-            });
-
-            this.model.getServerManager().setIllegalmoveWinCallback((boolean success, String[] args) -> {
-                Platform.runLater(() -> {
-                    createEndDialog("Opponent illegal move, you win!");
-                    refresh();
-                });
-            });
+            for (Player player : game.getPlayers()) {
+                if (player.isLocal()) onlineGameLocalPlayer = player;
+                else onlineGameOnlinePlayer = player;
+            }
         }
 
-        this.model.getGame().getBoard().scores.addListener(
+        drawBoard();
+        update();
+
+        if (game.getCurrentPlayer().isLocal()) game.startTurnTimer();
+    }
+
+    private void setupAssets() {
+        gameName.setText(this.model.getAssets().getDisplayName());
+        gameIcon.setImage(this.model.getAssets().getIcon());
+    }
+
+    private void setupObservableListeners() {
+        game.getBoard().scores.addListener(
                 (MapChangeListener<Player, Integer>) change -> updateInfo());
 
-        this.model.getGame().getTurnTimeProperty().addListener(
+        game.getTurnTimeProperty().addListener(
                 (observable, oldValue, newValue) -> {
 
                     Platform.runLater(() -> {
@@ -160,7 +131,7 @@ public class ControllerGame implements IController {
 
                             if (!this.model.isOnlineGame()) {
                                 createEndDialog("Turn timed out, you lose!");
-                                refresh();
+                                update();
                             }
 
                         }
@@ -168,18 +139,64 @@ public class ControllerGame implements IController {
                     });
                 }
         );
-
-        Player currentPlayer = this.model.getGame().getCurrentPlayer();
-        if (currentPlayer.isLocal()) {
-            this.model.getGame().startTurnTimer();
-            System.out.println("Waiting for turn...");
-            System.out.println("is AI: " + currentPlayer.isAI());
-        }
-
-        refresh();
     }
 
-    private void drawBoard(Board board) {
+    private void setupServerEventHandlers() {
+        serverManager.setMoveCallback((boolean success, String[] args) -> {
+            String playerName = args[0];
+            String move = args[1];
+
+            int[] rowcol = Helpers.convertMoveString(move, this.model.getGame().getBoard().getBoardSize());
+            int row = rowcol[0];
+            int col = rowcol[1];
+
+            Game game = this.model.getGame();
+            Player player = game.getPlayerByName(playerName);
+
+            Platform.runLater(() -> {
+                game.playMove(row, col, player);
+                update();
+            });
+        });
+
+        serverManager.setTurnCallback((boolean success, String[] args) -> {
+            this.model.getGame().setCurrentPlayer(onlineGameLocalPlayer);
+            this.model.getGame().startTurnTimer();
+            Platform.runLater(this::update);
+        });
+
+        serverManager.setTurnTimeoutWinCallback((boolean success, String[] args) -> {
+            Platform.runLater(() -> {
+                createEndDialog("Opponent's turn timed out, you win!");
+                update();
+            });
+        });
+
+        serverManager.setTurnTimeoutLoseCallback((boolean success, String[] args) -> {
+            Platform.runLater(() -> {
+                createEndDialog("Turn timed out, you lose!");
+                update();
+            });
+        });
+
+        serverManager.setIllegalmoveWinCallback((boolean success, String[] args) -> {
+            Platform.runLater(() -> {
+                createEndDialog("Opponent illegal move, you win!");
+                update();
+            });
+        });
+
+    }
+
+    public void update() {
+        updateBoard();
+        updateInfo();
+        checkFinished();
+    }
+
+    private void drawBoard() {
+        Board board = game.getBoard();
+
         boardTiles = new HBox[board.getBoardSize()][board.getBoardSize()];
         GridPane gridPane = new GridPane();
         int tileSize = 80;
@@ -197,12 +214,13 @@ public class ControllerGame implements IController {
     }
 
     private void updateBoard() {
-        Player player = model.getGame().getCurrentPlayer();
-        drawPieces();
+        Player player = game.getCurrentPlayer();
 
+        drawPieces();
         resetPossibleMoves();
+
         if (player.isLocal() && !player.isAI()) {
-            markPossibleMoves(model.getGame().getAvailableMoves(player), player.isAI());
+            markPossibleMoves(game.getAvailableMoves(player), player.isAI());
         }
     }
 
@@ -210,45 +228,49 @@ public class ControllerGame implements IController {
         scorePlayerName.getChildren().removeAll(scorePlayerName.getChildren());
         scorePlayerScore.getChildren().removeAll(scorePlayerScore.getChildren());
 
-        for (Player ignored : model.getGame().getPlayers()) {
+        for (Player ignored : game.getPlayers()) {
             scorePlayerName.getChildren().add(new Text("PlayerName"));
             scorePlayerScore.getChildren().add(new Text("100"));
         }
 
-        currentTurnPlayer.setText(model.getGame().getCurrentPlayer().getColor().toString());
+        currentTurnPlayer.setText(game.getCurrentPlayer().getColor().toString());
 
-        timeLeft.setText(String.valueOf(model.getGame().getTurnSecondsLeft()));
+        timeLeft.setText(String.valueOf(game.getTurnSecondsLeft()));
         //Todo implement turn number
         turnNumber.setText("99");
     }
 
     public void checkFinished() {
-        if (model.getGame().hasFinished()) {
-            if (model.getGame().hasWinner()) {
-                if (model.getLocalPlayers().contains(model.getGame().getWinner())) {
-                    if (model.getLocalPlayers().size() == 1) {
-                        createEndDialog("You win!");
-                    } else {
-                        createEndDialog(model.getGame().getWinner().getName() + " has won the game!");
-                    }
+        if (!game.hasFinished()) {
+            return;
+        }
+
+        if (game.isTie()) {
+            createEndDialog("Tie!");
+            return;
+        }
+
+        if (game.hasWinner()) {
+            if (model.getLocalPlayers().contains(game.getWinner())) {
+                if (model.getLocalPlayers().size() == 1) {
+                    createEndDialog("You win!");
                 } else {
-                    createEndDialog("You lose!");
+                    createEndDialog(game.getWinner().getName() + " has won the game!");
                 }
-            }
-            if (model.getGame().isTie()) {
-                createEndDialog("Tie!");
+            } else {
+                createEndDialog("You lose!");
             }
         }
     }
 
     private void drawPieces() {
-        for (int row = 0; row < model.getGame().getBoard().getBoardSize(); row++) {
-            for (int col = 0; col < model.getGame().getBoard().getBoardSize(); col++) {
+        for (int row = 0; row < game.getBoard().getBoardSize(); row++) {
+            for (int col = 0; col < game.getBoard().getBoardSize(); col++) {
 
-                Tile tile = model.getGame().getBoard().getTile(row, col);
+                Tile tile = game.getBoard().getTile(row, col);
 
-                if (model.getGame().getBoard().getPlayer(tile.getRow(), tile.getCol()) != null) {
-                    Image pieceImage = model.getAssets().getPieceImageByColor(model.getGame().getBoard().getPlayer(tile.getRow(), tile.getCol()).getColor());
+                if (game.getBoard().getPlayer(tile.getRow(), tile.getCol()) != null) {
+                    Image pieceImage = model.getAssets().getPieceImageByColor(game.getBoard().getPlayer(tile.getRow(), tile.getCol()).getColor());
                     ImageView imageView = new ImageView();
                     imageView.setFitHeight(65);
                     imageView.setFitWidth(65);
@@ -288,6 +310,7 @@ public class ControllerGame implements IController {
             marker.setFill(Color.rgb(100, 100, 100, 0.5));
             pane.getChildren().add(marker);
             marker.setStroke(Color.GREEN);
+
             if (!isAI) {
                 marker.setOnMouseClicked(event -> {
                     playMove(tile.getRow(), tile.getCol(), model.getGame().getCurrentPlayer());
@@ -312,26 +335,24 @@ public class ControllerGame implements IController {
             return;
         }
 
-        this.model.getGame().setCurrentPlayer(opponentPlayer);
-        Platform.runLater(this::refresh);
+        game.setCurrentPlayer(onlineGameOnlinePlayer);
+        Platform.runLater(this::update);
 
-        Command command = Commands.setMove(
+        model.getServerManager().queueCommand(Commands.setMove(
                 (success, args) -> {
                     this.model.getGame().resetTurnTimer();
-                    Platform.runLater(this::refresh);
+                    Platform.runLater(this::update);
                 },
                 row,
                 col,
                 model.getGame().getBoard().getBoardSize()
-        );
-        model.getServerManager().queueCommand(command);
+        ));
     }
 
     private void playOfflineMove(int row, int col, Player player) {
-        updateMove(row, col, player);
+        game.playMove(row, col, player);
+        update();
         nextPlayer();
-
-        Game game = model.getGame();
 
         if (game.getCurrentPlayer().isAI()) {
             playAI();
@@ -363,19 +384,13 @@ public class ControllerGame implements IController {
     }
 
     private void nextPlayer() {
-        Game game = model.getGame();
-
         do {
             game.nextPlayer();
-            refresh();
-            game.startTurnTimer();
+            update();
             if (game.hasFinished()) break;
         } while (game.getAvailableMoves(game.getCurrentPlayer()).size() < 1);
-    }
 
-    private void updateMove(int row, int col, Player player) {
-        model.getGame().playMove(row, col, player);
-        refresh();
+        game.startTurnTimer();
     }
 
     private void createEndDialog(String message) {
@@ -388,14 +403,27 @@ public class ControllerGame implements IController {
         hbox.setMinSize(size, size);
         hbox.setPrefSize(size, size);
         Image background = ImageHelper.getRandomChunkOfImage(ImageRegistry.GREEN_BACKGROUND, 100, 100);
-        hbox.setBackground(new Background(new BackgroundImage(background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+        hbox.setBackground(new Background(new BackgroundImage(
+                background,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                BackgroundSize.DEFAULT
+        )));
         hbox.getStyleClass().add(0, "game-board-tile");
 
         hbox.setOnMouseEntered(event -> hbox.getStyleClass().set(0, "game-board-tile-hover"));
         hbox.setOnMouseExited(event -> hbox.getStyleClass().set(0, "game-board-tile"));
 
         Image border = ImageHelper.getRandomChunkOfImage(ImageRegistry.WOOD_BACKGROUND, 100, 100);
-        hbox.setBorder(new Border(new BorderImage(border, new BorderWidths(5, 5, 5, 5, false, false, false, false), Insets.EMPTY, BorderWidths.DEFAULT, false, BorderRepeat.REPEAT, BorderRepeat.REPEAT)));
+        hbox.setBorder(new Border(new BorderImage(
+                border,
+                new BorderWidths(5, 5, 5, 5, false, false, false, false),
+                Insets.EMPTY, BorderWidths.DEFAULT,
+                false,
+                BorderRepeat.REPEAT,
+                BorderRepeat.REPEAT
+        )));
 
         return hbox;
     }
@@ -403,11 +431,5 @@ public class ControllerGame implements IController {
     @FXML
     private void quitGame() {
         GameApplication.openLauncher();
-    }
-
-    public void refresh() {
-        updateBoard();
-        updateInfo();
-        checkFinished();
     }
 }

@@ -41,13 +41,18 @@ public abstract class Game {
                 }
                 turnTime.set(turnTime.get() - 1);
             }
+
+            turnTimeThread = null;
         });
 
         turnTimeThread.start();
     }
 
     public void stopTurnTimer() {
-        turnTimeThread.interrupt();
+        if (turnTimeThread != null) {
+            turnTimeThread.interrupt();
+        }
+        turnTimeThread = null;
     }
 
     public int getTurnSecondsLeft() {

@@ -26,6 +26,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
@@ -99,6 +100,8 @@ public class ControllerGame implements IController {
         setupObservableListeners();
 
         if (this.model.isOnlineGame()) {
+            game.setTurnTimeout(10);
+
             setupServerEventHandlers();
 
             for (Player player : game.getPlayers()) {
@@ -110,7 +113,16 @@ public class ControllerGame implements IController {
         drawBoard();
         update();
 
-        if (game.getCurrentPlayer().isLocal()) game.startTurnTimer();
+        if (!this.model.isOnlineGame()) {
+            game.setTurnTimeout(60);
+
+            game.startTurnTimer();
+
+            if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
+                playAI();
+            }
+        }
+
     }
 
     private void setupAssets() {
@@ -127,15 +139,15 @@ public class ControllerGame implements IController {
 
                     Platform.runLater(() -> {
                         if ((int) newValue <= 0) {
-                            this.model.getGame().stopTurnTimer();
+                            this.model.getGame().resetTurnTimer();
 
                             if (!this.model.isOnlineGame()) {
                                 createEndDialog("Turn timed out, you lose!");
-                                update();
                             }
-
+                        } else {
+                            updateInfo();
                         }
-                        updateInfo();
+
                     });
                 }
         );
@@ -143,6 +155,8 @@ public class ControllerGame implements IController {
 
     private void setupServerEventHandlers() {
         serverManager.setMoveCallback((boolean success, String[] args) -> {
+            game.resetTurnTimer();
+
             String playerName = args[0];
             String move = args[1];
 
@@ -156,16 +170,22 @@ public class ControllerGame implements IController {
             Platform.runLater(() -> {
                 game.playMove(row, col, player);
                 update();
+                game.startTurnTimer();
+
+                if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
+                    playAI();
+                }
             });
         });
 
         serverManager.setTurnCallback((boolean success, String[] args) -> {
-            this.model.getGame().setCurrentPlayer(onlineGameLocalPlayer);
-            this.model.getGame().startTurnTimer();
+            game.setCurrentPlayer(onlineGameLocalPlayer);
+
             Platform.runLater(this::update);
         });
 
         serverManager.setTurnTimeoutWinCallback((boolean success, String[] args) -> {
+            game.resetTurnTimer();
             Platform.runLater(() -> {
                 createEndDialog("Opponent's turn timed out, you win!");
                 update();
@@ -173,6 +193,7 @@ public class ControllerGame implements IController {
         });
 
         serverManager.setTurnTimeoutLoseCallback((boolean success, String[] args) -> {
+            game.resetTurnTimer();
             Platform.runLater(() -> {
                 createEndDialog("Turn timed out, you lose!");
                 update();
@@ -180,6 +201,7 @@ public class ControllerGame implements IController {
         });
 
         serverManager.setIllegalmoveWinCallback((boolean success, String[] args) -> {
+            game.resetTurnTimer();
             Platform.runLater(() -> {
                 createEndDialog("Opponent illegal move, you win!");
                 update();
@@ -320,7 +342,7 @@ public class ControllerGame implements IController {
     }
 
     private void playMove(int row, int col, Player player) {
-        this.model.getGame().stopTurnTimer();
+        this.model.getGame().resetTurnTimer();
 
         if (model.isOnlineGame()) {
             playOnlineMove(row, col, player);
@@ -340,7 +362,6 @@ public class ControllerGame implements IController {
 
         model.getServerManager().queueCommand(Commands.setMove(
                 (success, args) -> {
-                    this.model.getGame().resetTurnTimer();
                     Platform.runLater(this::update);
                 },
                 row,
@@ -355,7 +376,17 @@ public class ControllerGame implements IController {
         nextPlayer();
 
         if (game.getCurrentPlayer().isAI()) {
-            playAI();
+
+            if (!this.model.isOnlineGame()) {
+                update();
+            }
+
+            Platform.runLater(() -> {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ignored) {}
+                playAI();
+            });
         }
     }
 
@@ -377,8 +408,13 @@ public class ControllerGame implements IController {
             nextPlayer();
             return;
         }
+        game.resetTurnTimer();
+
+
 
         playMove(tile.getRow(), tile.getCol(), game.getCurrentPlayer());
+
+
     }
 
     private void nextPlayer() {

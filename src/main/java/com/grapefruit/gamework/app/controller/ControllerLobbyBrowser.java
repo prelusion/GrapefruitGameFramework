@@ -109,6 +109,8 @@ public class ControllerLobbyBrowser implements IController{
                                             model.getServerManager().setStartGameCallback(new CommandCallback() {
                                                 @Override
                                                 public void onResponse(boolean success, String[] args) {
+                                                    boolean isPlayingAsAI = aiRadioButton.isSelected();
+
                                                     String firstTurnName = args[0];
                                                     String opponentName = args[1];
 
@@ -117,11 +119,11 @@ public class ControllerLobbyBrowser implements IController{
                                                     Player[] players = new Player[2];
 
                                                     if (firstTurnName.equals(currentPlayerName)) {
-                                                        players[0] = new Player(currentPlayerName, Colors.BLACK, true);
+                                                        players[0] = new Player(currentPlayerName, Colors.BLACK, true, isPlayingAsAI);
                                                         players[1] = new Player(opponentName, Colors.WHITE, false);
                                                     } else if (firstTurnName.equals(opponentName)) {
                                                         players[0] = new Player(opponentName, Colors.BLACK, false);
-                                                        players[1] = new Player(currentPlayerName, Colors.WHITE, true);
+                                                        players[1] = new Player(currentPlayerName, Colors.WHITE, true, isPlayingAsAI);
                                                     }
 
                                                     Platform.runLater(() -> {

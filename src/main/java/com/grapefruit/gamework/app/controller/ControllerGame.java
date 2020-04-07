@@ -112,11 +112,16 @@ public class ControllerGame implements IController {
         drawBoard();
         update();
 
-        game.startTurnTimer();
+        if (!this.model.isOnlineGame()) {
+            game.setTurnTimeout(60);
 
-        if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
-            playAI();
+            game.startTurnTimer();
+
+            if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
+                playAI();
+            }
         }
+
     }
 
     private void setupAssets() {
@@ -133,7 +138,7 @@ public class ControllerGame implements IController {
 
                     Platform.runLater(() -> {
                         if ((int) newValue <= 0) {
-                            this.model.getGame().stopTurnTimer();
+                            this.model.getGame().resetTurnTimer();
 
                             if (!this.model.isOnlineGame()) {
                                 createEndDialog("Turn timed out, you lose!");
@@ -330,14 +335,13 @@ public class ControllerGame implements IController {
             if (!isAI) {
                 marker.setOnMouseClicked(event -> {
                     playMove(tile.getRow(), tile.getCol(), model.getGame().getCurrentPlayer());
-                    game.startTurnTimer();
                 });
             }
         }
     }
 
     private void playMove(int row, int col, Player player) {
-        this.model.getGame().stopTurnTimer();
+        this.model.getGame().resetTurnTimer();
 
         if (model.isOnlineGame()) {
             playOnlineMove(row, col, player);
@@ -393,7 +397,7 @@ public class ControllerGame implements IController {
             nextPlayer();
             return;
         }
-
+        game.resetTurnTimer();
         playMove(tile.getRow(), tile.getCol(), game.getCurrentPlayer());
     }
 

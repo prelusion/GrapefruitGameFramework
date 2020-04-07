@@ -360,8 +360,6 @@ public class ControllerGame implements IController {
     }
 
     private void playAI() {
-        Game game = model.getGame();
-
         if (game.hasFinished()) {
             return;
         }
@@ -384,6 +382,10 @@ public class ControllerGame implements IController {
     }
 
     private void nextPlayer() {
+        if (game.hasFinished()) {
+            return;
+        }
+
         do {
             game.nextPlayer();
             update();

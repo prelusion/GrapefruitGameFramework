@@ -160,12 +160,12 @@ public class ControllerGame implements IController {
             Platform.runLater(() -> {
                 game.playMove(row, col, player);
                 update();
+                game.startTurnTimer();
             });
         });
 
         serverManager.setTurnCallback((boolean success, String[] args) -> {
             game.setCurrentPlayer(onlineGameLocalPlayer);
-            game.startTurnTimer();
             Platform.runLater(this::update);
         });
 

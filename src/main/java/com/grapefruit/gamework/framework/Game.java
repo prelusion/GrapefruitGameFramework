@@ -29,11 +29,16 @@ public abstract class Game {
         this.currentPlayer = players[0];
     }
 
+    public void setTurnTimeout(int seconds) {
+        turnTimeout = seconds;
+    }
+
     public void startTurnTimer() {
-        turnTime.set(turnTimeout);
+        System.out.println("Start turn timer!");
+        resetTurnTimer();
 
         turnTimeThread = new Thread(() -> {
-            while (!turnTimeThread.isInterrupted()) {
+            while (!turnTimeThread.isInterrupted() && turnTime.get() >= 0) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -52,7 +57,6 @@ public abstract class Game {
         if (turnTimeThread != null) {
             turnTimeThread.interrupt();
         }
-        turnTimeThread = null;
     }
 
     public int getTurnSecondsLeft() {
@@ -60,6 +64,7 @@ public abstract class Game {
     }
 
     public void resetTurnTimer() {
+        stopTurnTimer();
         turnTime.set(turnTimeout);
     }
 

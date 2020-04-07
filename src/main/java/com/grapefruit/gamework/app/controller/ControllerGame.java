@@ -99,6 +99,8 @@ public class ControllerGame implements IController {
         setupObservableListeners();
 
         if (this.model.isOnlineGame()) {
+            game.setTurnTimeout(10);
+
             setupServerEventHandlers();
 
             for (Player player : game.getPlayers()) {
@@ -110,7 +112,7 @@ public class ControllerGame implements IController {
         drawBoard();
         update();
 
-        if (game.getCurrentPlayer().isLocal()) game.startTurnTimer();
+        game.startTurnTimer();
     }
 
     private void setupAssets() {
@@ -131,11 +133,11 @@ public class ControllerGame implements IController {
 
                             if (!this.model.isOnlineGame()) {
                                 createEndDialog("Turn timed out, you lose!");
-                                update();
                             }
-
+                        } else {
+                            updateInfo();
                         }
-                        updateInfo();
+
                     });
                 }
         );
@@ -143,6 +145,8 @@ public class ControllerGame implements IController {
 
     private void setupServerEventHandlers() {
         serverManager.setMoveCallback((boolean success, String[] args) -> {
+            game.resetTurnTimer();
+
             String playerName = args[0];
             String move = args[1];
 
@@ -160,12 +164,13 @@ public class ControllerGame implements IController {
         });
 
         serverManager.setTurnCallback((boolean success, String[] args) -> {
-            this.model.getGame().setCurrentPlayer(onlineGameLocalPlayer);
-            this.model.getGame().startTurnTimer();
+            game.setCurrentPlayer(onlineGameLocalPlayer);
+            game.startTurnTimer();
             Platform.runLater(this::update);
         });
 
         serverManager.setTurnTimeoutWinCallback((boolean success, String[] args) -> {
+            game.resetTurnTimer();
             Platform.runLater(() -> {
                 createEndDialog("Opponent's turn timed out, you win!");
                 update();
@@ -173,6 +178,7 @@ public class ControllerGame implements IController {
         });
 
         serverManager.setTurnTimeoutLoseCallback((boolean success, String[] args) -> {
+            game.resetTurnTimer();
             Platform.runLater(() -> {
                 createEndDialog("Turn timed out, you lose!");
                 update();
@@ -180,6 +186,7 @@ public class ControllerGame implements IController {
         });
 
         serverManager.setIllegalmoveWinCallback((boolean success, String[] args) -> {
+            game.resetTurnTimer();
             Platform.runLater(() -> {
                 createEndDialog("Opponent illegal move, you win!");
                 update();
@@ -314,6 +321,7 @@ public class ControllerGame implements IController {
             if (!isAI) {
                 marker.setOnMouseClicked(event -> {
                     playMove(tile.getRow(), tile.getCol(), model.getGame().getCurrentPlayer());
+                    game.startTurnTimer();
                 });
             }
         }
@@ -340,7 +348,6 @@ public class ControllerGame implements IController {
 
         model.getServerManager().queueCommand(Commands.setMove(
                 (success, args) -> {
-                    this.model.getGame().resetTurnTimer();
                     Platform.runLater(this::update);
                 },
                 row,

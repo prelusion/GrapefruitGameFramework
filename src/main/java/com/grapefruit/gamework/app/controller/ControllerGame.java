@@ -8,11 +8,10 @@ import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.app.util.ImageHelper;
 import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDialogFactory;
 import com.grapefruit.gamework.framework.*;
-import com.grapefruit.gamework.framework.network.CommandCallback;
+import com.grapefruit.gamework.framework.network.Command;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.Helpers;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -26,6 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+
 import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
@@ -299,47 +299,78 @@ public class ControllerGame implements IController {
     private void playMove(int row, int col, Player player) {
         this.model.getGame().stopTurnTimer();
 
-        if (!model.isOnlineGame()) {
-            updateMove(row, col, player);
-            model.getGame().nextPlayer();
-            refresh();
-            this.model.getGame().startTurnTimer();
-            Player currentPlayer = model.getGame().getCurrentPlayer();
-
-            if (currentPlayer.isAI()) {
-                System.out.println("Waiting for AI to set turn...");
-                Game game = model.getGame();
-
-                MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm();
-                Tile tile = minimaxAlgorithm.calculateBestMove(game.getBoard(), currentPlayer, game.getOpponentPlayer(), 8);
-
-                if (tile == null) {
-                    model.getGame().nextPlayer();
-                    refresh();
-                    this.model.getGame().startTurnTimer();
-                    return;
-                }
-
-                playMove(tile.getRow(), tile.getCol(), currentPlayer);
-            }
-            return;
+        if (model.isOnlineGame()) {
+            playOnlineMove(row, col, player);
+        } else {
+            playOfflineMove(row, col, player);
         }
+    }
 
+    private void playOnlineMove(int row, int col, Player player) {
         if (!model.getServerManager().isConnected()) {
+            createEndDialog("Server connection error");
             return;
         }
-
-        CommandCallback callback = (success, args) -> {
-            this.model.getGame().resetTurnTimer();
-            Platform.runLater(this::refresh);
-        };
 
         this.model.getGame().setCurrentPlayer(opponentPlayer);
         Platform.runLater(this::refresh);
 
-        model.getServerManager().queueCommand(
-                Commands.setMove(callback, row, col, model.getGame().getBoard().getBoardSize())
+        Command command = Commands.setMove(
+                (success, args) -> {
+                    this.model.getGame().resetTurnTimer();
+                    Platform.runLater(this::refresh);
+                },
+                row,
+                col,
+                model.getGame().getBoard().getBoardSize()
         );
+        model.getServerManager().queueCommand(command);
+    }
+
+    private void playOfflineMove(int row, int col, Player player) {
+        updateMove(row, col, player);
+        nextPlayer();
+
+        Game game = model.getGame();
+
+        if (game.getCurrentPlayer().isAI()) {
+            playAI();
+        }
+    }
+
+    private void playAI() {
+        Game game = model.getGame();
+
+        if (game.hasFinished()) {
+            return;
+        }
+
+        MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm();
+
+        Tile tile = minimaxAlgorithm.calculateBestMove(
+                game.getBoard(),
+                game.getCurrentPlayer(),
+                game.getOpponentPlayer(),
+                6
+        );
+
+        if (tile == null) {
+            nextPlayer();
+            return;
+        }
+
+        playMove(tile.getRow(), tile.getCol(), game.getCurrentPlayer());
+    }
+
+    private void nextPlayer() {
+        Game game = model.getGame();
+
+        do {
+            game.nextPlayer();
+            refresh();
+            game.startTurnTimer();
+            if (game.hasFinished()) break;
+        } while (game.getAvailableMoves(game.getCurrentPlayer()).size() < 1);
     }
 
     private void updateMove(int row, int col, Player player) {

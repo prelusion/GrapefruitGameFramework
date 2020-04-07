@@ -123,7 +123,9 @@ public class ServerManager {
      * @return Command the command.
      */
     public synchronized Command getFirstUnsent(){
-        for (Command command: commandQueue){
+        Iterator<Command> i = commandQueue.iterator();
+        while(i.hasNext()) {
+            Command command = i.next();
             if (!command.isSent()){
                 return command;
             }
@@ -188,5 +190,9 @@ public class ServerManager {
 
     public void setMoveCallback(CommandCallback callback) {
         connection.setMoveCallback(callback);
+    }
+
+    public void setTurnCallback(CommandCallback callback) {
+        connection.setTurnCallback(callback);
     }
 }

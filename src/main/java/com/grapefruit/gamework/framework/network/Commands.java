@@ -73,7 +73,8 @@ public abstract class Commands {
      * @param boardSize int the board size.
      */
     public static Command setMove(CommandCallback callback, int row, int col, int boardSize) {
-        int index = row * boardSize + col + 1;
+        int index = row  * boardSize + col;
+        System.out.println("SEND INDEX: " + index);
         return new Command(KEYWORD_MOVE + index, callback, ServerManager.ResponseType.CONFIRMONLY);
     }
 
@@ -92,11 +93,11 @@ public abstract class Commands {
      * @param callback CommandCallback callback to execute after response has been received.
      * @param accept boolean Flag to indicate if the challenge is accepted or not.
      */
-    public static Command challengeRespond(CommandCallback callback, boolean accept) {
+    public static Command challengeRespond(CommandCallback callback, boolean accept, int challengeNumber) {
         if (accept) {
-            return new Command(KEYWORD_CHALLENGE + "accept", callback, ServerManager.ResponseType.CONFIRMONLY);
+            return new Command(KEYWORD_CHALLENGE + "accept" + " " + challengeNumber, callback, ServerManager.ResponseType.CONFIRMONLY);
         } else {
-            return new Command(KEYWORD_CHALLENGE + "decline", callback, ServerManager.ResponseType.CONFIRMONLY);
+            return new Command(KEYWORD_CHALLENGE + "decline" + " " + challengeNumber, callback, ServerManager.ResponseType.CONFIRMONLY);
         }
     }
 

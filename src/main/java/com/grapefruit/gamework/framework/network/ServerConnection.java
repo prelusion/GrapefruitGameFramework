@@ -56,7 +56,7 @@ public class ServerConnection {
      * Starts a Thread that listens to the server for responses or other messages and activates a callback function.
      */
     private void listen() {
-        new Thread(() -> {
+        listenerThread = new Thread(() -> {
             try {
                 while (!listenerThread.isInterrupted()) {
                     String msg = in.readLine();
@@ -70,7 +70,8 @@ public class ServerConnection {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }).start();
+        });
+        listenerThread.start();
     }
 
     private void handleMessage(String msg) {
@@ -89,8 +90,8 @@ public class ServerConnection {
 
         } else if (msg.startsWith("SVR GAME MATCH")) {
             // SVR GAME MATCH {PLAYERTOMOVE: "jarno", GAMETYPE: "Reversi", OPPONENT: "bob"}
-            String firstTurnName = msg.split("PLAYERTOMOVE: \"")[1].split("\"")[0];
-            String opponentName = msg.split("OPPONENT: \"")[1].split("\"")[0];
+            String firstTurnName = parseCommandArg(msg, "PLATERTOMOVE");
+            String opponentName = parseCommandArg(msg, "OPPONENT");
             CommandCallback listener = serverCommandListeners.get("onStartGame");
             if (listener != null) {
                 listener.onResponse(true, new String[]{firstTurnName, opponentName});
@@ -98,7 +99,7 @@ public class ServerConnection {
 
         } else if (msg.startsWith("SVR GAME YOURTURN")) {
             // SVR GAME YOURTURN {TURNMESSAGE: ""}
-            String message = msg.split("TURNMESSAGE: \"")[1].split("\"")[0];
+            String message = parseCommandArg(msg, "TURNMESSAGE");
             CommandCallback listener = serverCommandListeners.get("onTurn");
             if (listener != null) {
                 listener.onResponse(true, new String[]{message});
@@ -106,9 +107,9 @@ public class ServerConnection {
 
         } else if (msg.startsWith("SVR GAME MOVE")) {
             // SVR GAME MOVE {PLAYER: "alice", MOVE: "26", DETAILS: ""}
-            String playerName = msg.split("PLAYER: \"")[1].split("\"")[0];
-            String move = msg.split("MOVE: \"")[1].split("\"")[0];
-            String details = msg.split("DETAILS: \"")[1].split("\"")[0];
+            String playerName = parseCommandArg(msg, "PLAYER");
+            String move = parseCommandArg(msg, "MOVE");
+            String details = parseCommandArg(msg, "DETAILS");
 
             CommandCallback listener = serverCommandListeners.get("onMove");
             if (listener != null) {
@@ -159,6 +160,10 @@ public class ServerConnection {
             }
         }
 
+    }
+
+    private String parseCommandArg(String msg, String fieldname) {
+        return msg.split(fieldname + ": \"")[1].split("\"")[0];
     }
 
     private ResponseChallenge parseChallenge(String challenge) {

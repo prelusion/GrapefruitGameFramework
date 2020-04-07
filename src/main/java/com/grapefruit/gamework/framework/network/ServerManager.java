@@ -189,4 +189,8 @@ public class ServerManager {
     public void setMoveCallback(CommandCallback callback) {
         connection.setMoveCallback(callback);
     }
+
+    public void setTurnCallback(CommandCallback callback) {
+        connection.setTurnCallback(callback);
+    }
 }

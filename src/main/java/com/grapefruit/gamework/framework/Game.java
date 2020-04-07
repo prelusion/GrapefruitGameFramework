@@ -50,8 +50,18 @@ public abstract class Game {
         return currentPlayer;
     }
 
-    public void setCurrentPlayer(Player currentPlayerTurn) {
-        this.currentPlayer = currentPlayerTurn;
+    public void setCurrentPlayer(Player player) {
+        currentPlayer = player;
+        for (int i = 0; i < players.length; i++) {
+            if (players[i] == player) currentPlayerIndex = i;
+        }
+    }
+
+    public Player getPlayerByName(String name) {
+        for (Player player : players) {
+            if (player.getName().equals(name)) return player;
+        }
+        return null;
     }
 
     /**

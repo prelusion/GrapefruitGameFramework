@@ -15,6 +15,7 @@ import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.Helpers;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -120,14 +121,55 @@ public class ControllerGame implements IController {
             });
 
             this.model.getServerManager().setTurnCallback((boolean success, String[] args) -> {
-
                 this.model.getGame().setCurrentPlayer(localPlayer);
+                this.model.getGame().startTurnTimer();
                 Platform.runLater(this::refresh);
+            });
+
+            this.model.getServerManager().setTurnTimeoutWinCallback((boolean success, String[] args) -> {
+                Platform.runLater(() -> {
+                    createEndDialog("Opponent's turn timed out, you win!");
+                    refresh();
+                });
+            });
+
+            this.model.getServerManager().setTurnTimeoutLoseCallback((boolean success, String[] args) -> {
+                Platform.runLater(() -> {
+                    createEndDialog("Turn timed out, you lose!");
+                    refresh();
+                });
+            });
+
+            this.model.getServerManager().setIllegalmoveWinCallback((boolean success, String[] args) -> {
+                Platform.runLater(() -> {
+                    createEndDialog("Opponent illegal move, you win!");
+                    refresh();
+                });
             });
         }
 
         this.model.getGame().getBoard().scores.addListener(
                 (MapChangeListener<Player, Integer>) change -> updateInfo());
+
+        this.model.getGame().getTurnTimeProperty().addListener(
+                (observable, oldValue, newValue) -> {
+
+                    Platform.runLater(() -> {
+                        if ((int) newValue <= 0) {
+                            this.model.getGame().stopTurnTimer();
+
+                            if (!this.model.isOnlineGame()) {
+                                createEndDialog("Turn timed out, you lose!");
+                                refresh();
+                            }
+
+                        }
+                        updateInfo();
+                    });
+                }
+        );
+
+        this.model.getGame().startTurnTimer();
 
         refresh();
     }
@@ -171,7 +213,7 @@ public class ControllerGame implements IController {
 
         currentTurnPlayer.setText(model.getGame().getCurrentPlayer().getColor().toString());
 
-        timeLeft.setText(String.valueOf(model.getGame().getTurnTimeout()));
+        timeLeft.setText(String.valueOf(model.getGame().getTurnSecondsLeft()));
         //Todo implement turn number
         turnNumber.setText("99");
     }
@@ -252,10 +294,13 @@ public class ControllerGame implements IController {
     }
 
     private void playMove(int row, int col, Player player) {
+        this.model.getGame().stopTurnTimer();
+
         if (!model.isOnlineGame()) {
             updateMove(row, col, player);
             model.getGame().nextPlayer();
             refresh();
+            this.model.getGame().startTurnTimer();
             return;
         }
 
@@ -264,6 +309,7 @@ public class ControllerGame implements IController {
         }
 
         CommandCallback callback = (success, args) -> {
+            this.model.getGame().resetTurnTimer();
             Platform.runLater(this::refresh);
         };
 

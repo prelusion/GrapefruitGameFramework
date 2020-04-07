@@ -13,8 +13,8 @@ public class ModelMainWindow implements IModel {
     private String[] availableGames;
     private ServerManager serverManager;
 
-    public ModelMainWindow(){
-        serverManager = new ServerManager();
+    public ModelMainWindow(ServerManager serverManager){
+        this.serverManager = serverManager;
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.grapefruit.gamework.app.controller;
 
+import com.grapefruit.gamework.app.GameApplication;
 import com.grapefruit.gamework.app.model.IModel;
 import com.grapefruit.gamework.app.model.ModelGame;
 import com.grapefruit.gamework.app.model.ModelGameEndDialog;
@@ -11,6 +12,7 @@ import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.Tile;
 import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -94,6 +96,13 @@ public class ControllerGame implements IController {
         updateBoard();
         updateInfo();
         checkFinished();
+        this.model.getGame().scores.addListener(new MapChangeListener<Player, Integer>() {
+            @Override
+            public void onChanged(Change<? extends Player, ? extends Integer> change) {
+                updateInfo();
+            }
+        });
+
     }
 
     private void drawBoard(Board board) {
@@ -256,5 +265,10 @@ public class ControllerGame implements IController {
         hbox.setBorder(new Border(new BorderImage(border, new BorderWidths(5, 5, 5, 5, false, false, false, false), Insets.EMPTY, BorderWidths.DEFAULT, false, BorderRepeat.REPEAT, BorderRepeat.REPEAT)));
 
         return hbox;
+    }
+
+    @FXML
+    private void quitGame(){
+        GameApplication.openLauncher();
     }
 }

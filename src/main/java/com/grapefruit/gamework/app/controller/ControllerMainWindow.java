@@ -1,5 +1,6 @@
 package com.grapefruit.gamework.app.controller;
 
+import com.grapefruit.gamework.app.GameApplication;
 import com.grapefruit.gamework.app.model.*;
 import com.grapefruit.gamework.app.resources.AppSettings;
 import com.grapefruit.gamework.app.view.templates.GameTile.GameTileFactory;
@@ -13,6 +14,8 @@ import com.grapefruit.gamework.framework.network.ServerManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -112,6 +115,15 @@ public class ControllerMainWindow implements IController {
         modelMainWindow = (ModelMainWindow) model;
         initialize();
         updateSelectionBox();
+        if (this.modelMainWindow.getServerManager() != null){
+            if (this.modelMainWindow.getServerManager().connected.getValue()) {
+                connectionStatus.setText("Connected");
+            } else {
+                connectionStatus.setText("Disconnected");
+            }
+        } else {
+            connectionStatus.setText("Disconnected");
+        }
     }
 
 
@@ -182,23 +194,31 @@ public class ControllerMainWindow implements IController {
             serverSelection.setDisable(true);
             userName.setDisable(true);
             connectButton.setDisable(true);
-            modelMainWindow.setServerManager(new ServerManager());
-            modelMainWindow.getServerManager().connect(selectedServer.getIp());
-            modelMainWindow.getServerManager().queueCommand(Commands.login(userName.getText(), new CommandCallback() {
-                @Override
-                public void onResponse(boolean success, String[] args) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            onConnected();
-                        }
-                    });
-                }
-            }));
             connectionStatus.setText("Connecting...");
         } else {
             connectionStatus.setText("Invalid");
         }
+        if (modelMainWindow.getServerManager() != null) {
+            modelMainWindow.getServerManager().connected.addListener(new ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                    if (oldValue != newValue) {
+                        if (newValue) {
+                            onConnected();
+                        } else {
+                            onDisconnected();
+                        }
+                    }
+                }
+            });
+        }
+
+        modelMainWindow.getServerManager().connect(selectedServer.getIp());
+        modelMainWindow.getServerManager().queueCommand(Commands.login(userName.getText(), new CommandCallback() {
+            @Override
+            public void onResponse(boolean success, String[] args) {
+            }
+        }));
     }
 
     private void onConnected(){
@@ -209,8 +229,12 @@ public class ControllerMainWindow implements IController {
             connectButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    //modelMainWindow.getServerManager().
-                    //todo disconnect
+                    modelMainWindow.getServerManager().queueCommand(Commands.logout(new CommandCallback() {
+                        @Override
+                        public void onResponse(boolean success, String[] args) {
+                        }
+                    }));
+                    modelMainWindow.getServerManager().disconnect();
                 }
             });
             modelMainWindow.getServerManager().queueCommand(Commands.getGameList(new CommandCallback() {
@@ -221,29 +245,28 @@ public class ControllerMainWindow implements IController {
                 }
             }));
         }
-        new Timeline(new KeyFrame(
-                Duration.millis(10),
-                check ->
-                        check()
-
-        ))
-                .play();
     }
 
     private void onDisconnected(){
         connectButton.setText("Connect");
+        modelMainWindow.getServerManager().queueCommand(Commands.logout(new CommandCallback() {
+            @Override
+            public void onResponse(boolean success, String[] args) {
+            }
+        }));
         connectionStatus.setText("Disconnected");
         serverSelection.setDisable(false);
         userName.setDisable(false);
         setAvailableGames(new String[0]);
         updateGames();
+        connectButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                onConnect();
+            }
+        });
     }
 
-    private void check(){
-        if(!modelMainWindow.getServerManager().isConnected()){
-            onDisconnected();
-        }
-    }
 
     public String[] getAvailableGames() {
         return availableGames;

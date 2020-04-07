@@ -2,7 +2,7 @@ package com.grapefruit.gamework.framework.network;
 
 import org.junit.Test;
 
-public class CommandTest {
+public class ServerProtocolTest {
 
     @Test
     public void tryCommand(){
@@ -42,6 +42,8 @@ public class CommandTest {
         catch(InterruptedException e){
             System.out.println("Interrupted");
         }
+        manager.disconnect();
+        System.out.println("closed");
     }
 
 }

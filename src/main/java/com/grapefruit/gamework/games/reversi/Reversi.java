@@ -2,11 +2,14 @@ package com.grapefruit.gamework.games.reversi;
 
 import com.grapefruit.gamework.framework.*;
 
+import java.util.HashMap;
 import java.util.List;
+
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import java.util.Map;
 public class Reversi extends Game {
 
     public Reversi(Board board, Player playerBlack, Player playerWhite, int turnTimeout) {
@@ -36,5 +39,12 @@ public class Reversi extends Game {
     @Override
     public Player getWinner() {
         return Helpers.getWinningPlayer(getBoard());
+    }
+
+    @Override
+    public void calculateScores() {
+        for (Player player: super.getPlayers()){
+            super.scores.put(player, Helpers.countPiecesForPlayer(getBoard(), player));
+        }
     }
 }

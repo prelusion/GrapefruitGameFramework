@@ -177,7 +177,6 @@ public class ControllerGame implements IController {
                 update();
                 game.startTurnTimer();
 
-
                 if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
                     playAI();
                 }
@@ -367,11 +366,9 @@ public class ControllerGame implements IController {
             return;
         }
 
-        game.setCurrentPlayer(onlineGameOnlinePlayer);
-        Platform.runLater(this::update);
-
         model.getServerManager().queueCommand(Commands.setMove(
                 (success, args) -> {
+                    game.setCurrentPlayer(onlineGameOnlinePlayer);
                     Platform.runLater(this::update);
                 },
                 row,
@@ -420,12 +417,9 @@ public class ControllerGame implements IController {
             nextPlayer();
             return;
         }
+
         game.resetTurnTimer();
-
-
         playMove(tile.getRow(), tile.getCol(), game.getCurrentPlayer());
-
-
     }
 
     private void nextPlayer() {

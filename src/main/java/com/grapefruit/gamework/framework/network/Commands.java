@@ -73,7 +73,8 @@ public abstract class Commands {
      * @param boardSize int the board size.
      */
     public static Command setMove(CommandCallback callback, int row, int col, int boardSize) {
-        int index = row * boardSize + col + 1;
+        int index = row  * boardSize + col;
+        System.out.println("SEND INDEX: " + index);
         return new Command(KEYWORD_MOVE + index, callback, ServerManager.ResponseType.CONFIRMONLY);
     }
 

@@ -8,10 +8,13 @@ import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.app.util.ImageHelper;
 import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDialogFactory;
 import com.grapefruit.gamework.framework.Board;
+import com.grapefruit.gamework.framework.Game;
 import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.Tile;
 import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
+import com.grapefruit.gamework.framework.network.Helpers;
+import javafx.application.Platform;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -35,6 +38,9 @@ public class ControllerGame implements IController {
     private ModelGame model;
 
     private HBox[][] boardTiles;
+
+    private Player localPlayer;
+    private Player opponentPlayer;
 
     @FXML
     private Text turnNumber;
@@ -86,21 +92,45 @@ public class ControllerGame implements IController {
     public void setModel(IModel model) {
         this.model = (ModelGame) model;
 
+        for (Player player : this.model.getGame().getPlayers()) {
+            if (player.isLocal()) localPlayer = player;
+            else opponentPlayer = player;
+        }
+
         gameName.setText(this.model.getAssets().getDisplayName());
         gameIcon.setImage(this.model.getAssets().getIcon());
 
         drawBoard(this.model.getGame().getBoard());
 
-        updateBoard();
-        updateInfo();
-        checkFinished();
-        this.model.getGame().scores.addListener(new MapChangeListener<Player, Integer>() {
-            @Override
-            public void onChanged(Change<? extends Player, ? extends Integer> change) {
-                updateInfo();
-            }
-        });
+        if (this.model.isOnlineGame()) {
+            this.model.getServerManager().setMoveCallback((boolean success, String[] args) -> {
+                String playerName = args[0];
+                String move = args[1];
+                String details = args[2];
+                System.out.println("RECEIVE INDEX: " + move);
+                int[] rowcol = Helpers.convertMoveString(move, this.model.getGame().getBoard().getBoardSize());
+                int row = rowcol[0];
+                int col = rowcol[1];
 
+                System.out.println("NEW MOVE: " + row + "," + col);
+                Game game = this.model.getGame();
+                Player player = game.getPlayerByName(playerName);
+
+                if (player != null) {
+                    Platform.runLater(() -> updateMove(row, col, player));
+                }
+            });
+
+            this.model.getServerManager().setTurnCallback((boolean success, String[] args) -> {
+                this.model.getGame().setCurrentPlayer(localPlayer);
+                Platform.runLater(this::refresh);
+            });
+        }
+
+        this.model.getGame().scores.addListener(
+                (MapChangeListener<Player, Integer>) change -> updateInfo());
+
+        refresh();
     }
 
     private void drawBoard(Board board) {
@@ -123,7 +153,12 @@ public class ControllerGame implements IController {
     private void updateBoard() {
         Player player = model.getGame().getCurrentPlayer();
         drawPieces();
-        markPossibleMoves(model.getGame().getAvailableMoves(player), true);
+
+        resetPossibleMoves();
+        if (player.isLocal()) {
+            markPossibleMoves(model.getGame().getAvailableMoves(player), player.isLocal());
+        }
+
     }
 
     private void updateInfo() {
@@ -184,7 +219,7 @@ public class ControllerGame implements IController {
         }
     }
 
-    private void markPossibleMoves(List<Tile> tiles, boolean locallyAvailable) {
+    private void resetPossibleMoves() {
         for (HBox[] column : boardTiles) {
             for (HBox hbox : column) {
                 ObservableList<Node> nodes = hbox.getChildren();
@@ -199,7 +234,9 @@ public class ControllerGame implements IController {
                 }
             }
         }
+    }
 
+    private void markPossibleMoves(List<Tile> tiles, boolean locallyAvailable) {
         for (Tile tile : tiles) {
             HBox pane = boardTiles[tile.getRow()][tile.getCol()];
             Circle marker = new Circle(32.5, Paint.valueOf("blue"));
@@ -211,8 +248,6 @@ public class ControllerGame implements IController {
                 marker.setOnMouseClicked(event -> {
                     playMove(tile.getRow(), tile.getCol(), model.getGame().getCurrentPlayer());
                 });
-            } else {
-                marker.setStroke(Color.GREEN);
             }
         }
     }
@@ -228,8 +263,15 @@ public class ControllerGame implements IController {
             return;
         }
 
-        CommandCallback callback = (success, args) -> updateMove(row, col, player);
+        CommandCallback callback = (success, args) -> {
+            Platform.runLater(this::refresh);
+        };
 
+        this.model.getGame().setCurrentPlayer(opponentPlayer);
+        Platform.runLater(this::refresh);
+
+        System.out.println("LOCAL SET MOVE: " + row + "," + col);
+        System.out.println("Boardsize: " + model.getGame().getBoard().getBoardSize());
         model.getServerManager().queueCommand(
                 Commands.setMove(callback, row, col, model.getGame().getBoard().getBoardSize())
         );
@@ -237,10 +279,7 @@ public class ControllerGame implements IController {
 
     private void updateMove(int row, int col, Player player) {
         model.getGame().playMove(row, col, player);
-        model.getGame().nextPlayer();
-        updateBoard();
-        updateInfo();
-        checkFinished();
+        refresh();
     }
 
     private void createEndDialog(String message) {
@@ -266,7 +305,13 @@ public class ControllerGame implements IController {
     }
 
     @FXML
-    private void quitGame(){
+    private void quitGame() {
         GameApplication.openLauncher();
+    }
+
+    public void refresh() {
+        updateBoard();
+        updateInfo();
+        checkFinished();
     }
 }

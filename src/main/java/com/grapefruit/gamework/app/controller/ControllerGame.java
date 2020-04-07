@@ -416,8 +416,10 @@ public class ControllerGame implements IController {
                     game.getBoard(),
                     game.getCurrentPlayer(),
                     game.getOpponentPlayer(),
-                    8
+                    10
             );
+
+            minimaxAlgorithm.startTimeout(4000);
 
             Platform.runLater(() -> onFinishAI(tile));
         }).start();

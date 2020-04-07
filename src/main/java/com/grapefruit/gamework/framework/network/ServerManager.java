@@ -4,10 +4,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * The type Server manager.
@@ -39,6 +36,7 @@ public class ServerManager {
     private ServerConnection connection;
     private Queue<Command> commandQueue;
     private List<ServerConnection.ResponseChallenge> challenges;
+
 
     /**
      * Instantiates a new Server manager.
@@ -183,5 +181,12 @@ public class ServerManager {
             e.printStackTrace();
         }
     }
-}
 
+    public void setStartGameCallback(CommandCallback callback) {
+        connection.setStartGameCallback(callback);
+    }
+
+    public void setMoveCallback(CommandCallback callback) {
+        connection.setMoveCallback(callback);
+    }
+}

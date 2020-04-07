@@ -108,10 +108,6 @@ public abstract class Game {
     public abstract void calculateScores();
 
     public int getScore(Player player){
-        if (scores.containsKey(player)) {
-            return scores.get(player);
-        } else {
-            return 0;
-        }
+        return scores.getOrDefault(player, 0);
     }
 }

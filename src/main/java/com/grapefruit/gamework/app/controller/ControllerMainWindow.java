@@ -1,5 +1,6 @@
 package com.grapefruit.gamework.app.controller;
 
+import com.grapefruit.gamework.app.GameApplication;
 import com.grapefruit.gamework.app.model.*;
 import com.grapefruit.gamework.app.resources.AppSettings;
 import com.grapefruit.gamework.app.view.templates.GameTile.GameTileFactory;

@@ -8,8 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -29,6 +28,7 @@ public class ServerConnection {
     private ServerManager manager;
     private Thread timer;
     private Thread listenerThread;
+    private HashMap<String, CommandCallback> serverCommandListeners = new HashMap<>();
 
     /**
      * Instantiates a new Server connection.
@@ -103,21 +103,27 @@ public class ServerConnection {
                        }
                         if (answer != null){
                             if (answer.startsWith("SVR GAME CHALLENGE CANCELLED")) {
-                                int number = Integer.valueOf(answer.replace("SVR GAME CHALLENGE CANCELLED {CHALLENGENUMBER: \"", "").replace("\"}", ""));
-                                Iterator<ResponseChallenge> iterator = manager.getChallenges().iterator();
-                                while (iterator.hasNext()){
-                                    ResponseChallenge challenge = iterator.next();
-                                    if (challenge.getNumber() == number) {
-                                        iterator.remove();
-                                    }
-                                }
-
+                                int number = Integer.parseInt(answer.replace("SVR GAME CHALLENGE CANCELLED {CHALLENGENUMBER: \"", "").replace("\"}", ""));
+                                manager.getChallenges().removeIf(challenge -> challenge.getNumber() == number);
                             } else if (answer.startsWith("SVR GAME CHALLENGE")){
                                 ResponseChallenge challenge = parseChallenge(answer);
                                 challenge.setStatus(ChallengeStatus.CHALLENGE_RECEIVED);
                                 manager.addChallenge(challenge);
+                            } else if (answer.startsWith("SVR GAME MATCH")) {
+                                System.out.println("GAME STARRT!");
+                                // SVR GAME MATCH {PLAYERTOMOVE: "jarno", GAMETYPE: "Reversi", OPPONENT: "bob"}
+                                String firstTurnName = answer.split("PLAYERTOMOVE: \"")[1].split("\"")[0];
+                                String opponentName = answer.split("OPPONENT: \"")[1].split("\"")[0];
+                                CommandCallback listener = serverCommandListeners.get("startGame");
+                                if (listener != null) listener.onResponse(true, new String[]{firstTurnName, opponentName});
+                            } else if (answer.startsWith("SVR GAME YOURTURN")) {
+                                // SVR GAME YOURTURN {TURNMESSAGE: ""}
                             }
                         }
+
+
+
+
                     }
                     Thread.currentThread().interrupt();
                 } catch (IOException e){
@@ -190,6 +196,13 @@ public class ServerConnection {
         timer.start();
     }
 
+    public void setStartGameCallback(CommandCallback callback) {
+        serverCommandListeners.put("startGame", callback);
+    }
+
+    public void setMoveCallback(CommandCallback callback) {
+        serverCommandListeners.put("move", callback);
+    }
 
     /**
      * The type Response challenge.

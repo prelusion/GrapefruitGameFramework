@@ -26,7 +26,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
@@ -42,6 +41,8 @@ public class ControllerGame implements IController {
 
     private Player onlineGameLocalPlayer;
     private Player onlineGameOnlinePlayer;
+
+    private boolean isFirstTurn = true;
 
     @FXML
     private Text turnNumber;
@@ -121,8 +122,12 @@ public class ControllerGame implements IController {
             if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
                 playAI();
             }
+        } else {
+            if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
+                game.startTurnTimer();
+                playAI();
+            }
         }
-
     }
 
     private void setupAssets() {
@@ -147,7 +152,6 @@ public class ControllerGame implements IController {
                         } else {
                             updateInfo();
                         }
-
                     });
                 }
         );
@@ -155,6 +159,7 @@ public class ControllerGame implements IController {
 
     private void setupServerEventHandlers() {
         serverManager.setMoveCallback((boolean success, String[] args) -> {
+            System.out.println("On move callback");
             game.resetTurnTimer();
 
             String playerName = args[0];
@@ -172,6 +177,7 @@ public class ControllerGame implements IController {
                 update();
                 game.startTurnTimer();
 
+
                 if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
                     playAI();
                 }
@@ -180,8 +186,12 @@ public class ControllerGame implements IController {
 
         serverManager.setTurnCallback((boolean success, String[] args) -> {
             game.setCurrentPlayer(onlineGameLocalPlayer);
-
-            Platform.runLater(this::update);
+//            System.out.println("set turn call back, first turn: " + isFirstTurn);
+//            if (isFirstTurn) {
+//                if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
+//                    Platform.runLater(this::playAI);
+//                }
+//            }
         });
 
         serverManager.setTurnTimeoutWinCallback((boolean success, String[] args) -> {
@@ -384,13 +394,15 @@ public class ControllerGame implements IController {
             Platform.runLater(() -> {
                 try {
                     Thread.sleep(1000);
-                } catch (InterruptedException ignored) {}
+                } catch (InterruptedException ignored) {
+                }
                 playAI();
             });
         }
     }
 
     private void playAI() {
+        System.out.println("Play AI");
         if (game.hasFinished()) {
             return;
         }
@@ -409,7 +421,6 @@ public class ControllerGame implements IController {
             return;
         }
         game.resetTurnTimer();
-
 
 
         playMove(tile.getRow(), tile.getCol(), game.getCurrentPlayer());

@@ -165,6 +165,10 @@ public class ControllerGame implements IController {
                 game.playMove(row, col, player);
                 update();
                 game.startTurnTimer();
+
+                if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
+                    playAI();
+                }
             });
         });
 
@@ -172,10 +176,6 @@ public class ControllerGame implements IController {
             game.setCurrentPlayer(onlineGameLocalPlayer);
 
             Platform.runLater(this::update);
-
-            if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
-                playAI();
-            }
         });
 
         serverManager.setTurnTimeoutWinCallback((boolean success, String[] args) -> {

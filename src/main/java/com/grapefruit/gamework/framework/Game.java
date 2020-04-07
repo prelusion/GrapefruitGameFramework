@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 import javafx.beans.property.MapProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 
@@ -15,9 +16,12 @@ public abstract class Game {
     private Player[] players;
     private int currentPlayerIndex = 0;
     private int turnTimeout;
+    private SimpleIntegerProperty turnTime = new SimpleIntegerProperty();
+    private Thread turnTimeThread;
     private Board board;
     private Player currentPlayer;
     public ObservableMap<Player, Integer> scores;
+
 
     public Game(Board board, Player[] players, int turnTimeout) {
         this.board = board;
@@ -25,6 +29,36 @@ public abstract class Game {
         this.turnTimeout = turnTimeout;
         this.currentPlayer = players[0];
         this.scores = FXCollections.observableHashMap();
+    }
+
+    public void startTurnTimer() {
+        turnTime.set(turnTimeout);
+
+        turnTimeThread = new Thread(() -> {
+            while (!turnTimeThread.isInterrupted()) {
+                turnTime.set(turnTime.get() - 1);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    break;
+                }
+            }
+        });
+
+        turnTimeThread.start();
+    }
+
+    public void stopTurnTimer() {
+        turnTimeThread.interrupt();
+    }
+
+    public int getTurnSecondsLeft() {
+        return turnTime.get();
+    }
+
+    public SimpleIntegerProperty getTurnTimeProperty() {
+        return turnTime;
     }
 
     public Player[] getPlayers() {

@@ -15,6 +15,7 @@ import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.Helpers;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -120,7 +121,6 @@ public class ControllerGame implements IController {
             });
 
             this.model.getServerManager().setTurnCallback((boolean success, String[] args) -> {
-
                 this.model.getGame().setCurrentPlayer(localPlayer);
                 Platform.runLater(this::refresh);
             });
@@ -141,8 +141,13 @@ public class ControllerGame implements IController {
         }
 
         this.model.getGame().scores.addListener(
-                (MapChangeListener<Player, Integer>) change -> updateInfo());
+                (MapChangeListener<Player, Integer>) change -> Platform.runLater(this::updateInfo));
 
+        this.model.getGame().getTurnTimeProperty().addListener(
+                (observable, oldValue, newValue) -> Platform.runLater(this::updateInfo)
+        );
+
+        this.model.getGame().startTurnTimer();
         refresh();
     }
 
@@ -185,7 +190,7 @@ public class ControllerGame implements IController {
 
         currentTurnPlayer.setText(model.getGame().getCurrentPlayer().getColor().toString());
 
-        timeLeft.setText(String.valueOf(model.getGame().getTurnTimeout()));
+        timeLeft.setText(String.valueOf(model.getGame().getTurnSecondsLeft()));
         //Todo implement turn number
         turnNumber.setText("99");
     }

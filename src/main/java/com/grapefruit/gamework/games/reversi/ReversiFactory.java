@@ -17,7 +17,7 @@ public class ReversiFactory extends GameFactory {
 
     public Reversi create(Player playerBlack, Player playerWhite) {
         Board board = new ReversiBoard(DEFAULT_REVERSI_BOARD_SIZE, STRATEGIC_VALUES);
-        int turnTimeout = 10;
+        int turnTimeout = 60;
         return new Reversi(board, playerBlack, playerWhite, turnTimeout);
     }
 

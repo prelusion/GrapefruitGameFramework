@@ -182,6 +182,7 @@ public class ControllerMainWindow implements IController {
      */
     @FXML
     private void onServerSelectionChange(){
+
         if (serverSelection.getValue() instanceof AppSettings.Server) {
             selectedServer = (AppSettings.Server) serverSelection.getValue();
         }
@@ -190,35 +191,35 @@ public class ControllerMainWindow implements IController {
     @FXML
     private void onConnect(){
         InetAddressValidator validator = new InetAddressValidator();
-        if (selectedServer != null && validator.isValid(selectedServer.getIp()) && modelMainWindow.getServerManager() == null) {
+        if (selectedServer != null && validator.isValid(selectedServer.getIp()) && modelMainWindow.getServerManager() != null) {
             serverSelection.setDisable(true);
             userName.setDisable(true);
             connectButton.setDisable(true);
             connectionStatus.setText("Connecting...");
+            if (modelMainWindow.getServerManager() != null) {
+                modelMainWindow.getServerManager().connected.addListener(new ChangeListener<Boolean>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                        if (oldValue != newValue) {
+                            if (newValue) {
+                                onConnected();
+                            } else {
+                                onDisconnected();
+                            }
+                        }
+                    }
+                });
+            }
+
+            modelMainWindow.getServerManager().connect(selectedServer.getIp());
+            modelMainWindow.getServerManager().queueCommand(Commands.login(userName.getText(), new CommandCallback() {
+                @Override
+                public void onResponse(boolean success, String[] args) {
+                }
+            }));
         } else {
             connectionStatus.setText("Invalid");
         }
-        if (modelMainWindow.getServerManager() != null) {
-            modelMainWindow.getServerManager().connected.addListener(new ChangeListener<Boolean>() {
-                @Override
-                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                    if (oldValue != newValue) {
-                        if (newValue) {
-                            onConnected();
-                        } else {
-                            onDisconnected();
-                        }
-                    }
-                }
-            });
-        }
-
-        modelMainWindow.getServerManager().connect(selectedServer.getIp());
-        modelMainWindow.getServerManager().queueCommand(Commands.login(userName.getText(), new CommandCallback() {
-            @Override
-            public void onResponse(boolean success, String[] args) {
-            }
-        }));
     }
 
     private void onConnected(){

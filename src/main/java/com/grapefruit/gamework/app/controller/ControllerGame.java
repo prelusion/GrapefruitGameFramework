@@ -26,6 +26,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
@@ -375,7 +376,17 @@ public class ControllerGame implements IController {
         nextPlayer();
 
         if (game.getCurrentPlayer().isAI()) {
-            playAI();
+
+            if (!this.model.isOnlineGame()) {
+                update();
+            }
+
+            Platform.runLater(() -> {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ignored) {}
+                playAI();
+            });
         }
     }
 
@@ -398,7 +409,12 @@ public class ControllerGame implements IController {
             return;
         }
         game.resetTurnTimer();
+
+
+
         playMove(tile.getRow(), tile.getCol(), game.getCurrentPlayer());
+
+
     }
 
     private void nextPlayer() {

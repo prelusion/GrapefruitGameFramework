@@ -106,13 +106,11 @@ public class ControllerGame implements IController {
             this.model.getServerManager().setMoveCallback((boolean success, String[] args) -> {
                 String playerName = args[0];
                 String move = args[1];
-                String details = args[2];
-                System.out.println("RECEIVE INDEX: " + move);
+
                 int[] rowcol = Helpers.convertMoveString(move, this.model.getGame().getBoard().getBoardSize());
                 int row = rowcol[0];
                 int col = rowcol[1];
 
-                System.out.println("NEW MOVE: " + row + "," + col);
                 Game game = this.model.getGame();
                 Player player = game.getPlayerByName(playerName);
 
@@ -256,11 +254,12 @@ public class ControllerGame implements IController {
     private void playMove(int row, int col, Player player) {
         if (!model.isOnlineGame()) {
             updateMove(row, col, player);
+            model.getGame().nextPlayer();
+            refresh();
             return;
         }
 
         if (!model.getServerManager().isConnected()) {
-            System.out.println("SERVER CONNECTION ERROR");
             return;
         }
 
@@ -271,8 +270,6 @@ public class ControllerGame implements IController {
         this.model.getGame().setCurrentPlayer(opponentPlayer);
         Platform.runLater(this::refresh);
 
-        System.out.println("LOCAL SET MOVE: " + row + "," + col);
-        System.out.println("Boardsize: " + model.getGame().getBoard().getBoardSize());
         model.getServerManager().queueCommand(
                 Commands.setMove(callback, row, col, model.getGame().getBoard().getBoardSize())
         );

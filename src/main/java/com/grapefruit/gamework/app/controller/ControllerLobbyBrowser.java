@@ -135,8 +135,21 @@ public class ControllerLobbyBrowser implements IController{
                                                 }
                                             });
 
+                                            int challengeNumber = -1;
+
+                                            List<ServerConnection.ResponseChallenge> challenges = model.getChallenges();
+                                            for (ServerConnection.ResponseChallenge challenge : challenges) {
+                                                 if (challenge.getChallenger().equals(player.getPlayerName())) {
+                                                     challengeNumber = challenge.getNumber();
+                                                 }
+                                            }
+
+                                            if (challengeNumber < 0) {
+                                                return;
+                                            }
+
                                             model.getServerManager().queueCommand(
-                                                    Commands.challengeRespond((success, args) -> {}, true));
+                                                    Commands.challengeRespond((success, args) -> {}, true, challengeNumber));
                                         });
                                     } else if (player.getStatus().equals("Sent")) {
                                         btn.setText("Waiting");

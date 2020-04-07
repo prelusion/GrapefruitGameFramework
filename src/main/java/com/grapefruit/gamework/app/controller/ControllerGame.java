@@ -113,6 +113,10 @@ public class ControllerGame implements IController {
         update();
 
         game.startTurnTimer();
+
+        if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
+            playAI();
+        }
     }
 
     private void setupAssets() {
@@ -166,7 +170,12 @@ public class ControllerGame implements IController {
 
         serverManager.setTurnCallback((boolean success, String[] args) -> {
             game.setCurrentPlayer(onlineGameLocalPlayer);
+
             Platform.runLater(this::update);
+
+            if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
+                playAI();
+            }
         });
 
         serverManager.setTurnTimeoutWinCallback((boolean success, String[] args) -> {

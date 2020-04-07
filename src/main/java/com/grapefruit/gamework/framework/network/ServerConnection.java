@@ -90,7 +90,7 @@ public class ServerConnection {
 
         } else if (msg.startsWith("SVR GAME MATCH")) {
             // SVR GAME MATCH {PLAYERTOMOVE: "jarno", GAMETYPE: "Reversi", OPPONENT: "bob"}
-            String firstTurnName = parseCommandArg(msg, "PLATERTOMOVE");
+            String firstTurnName = parseCommandArg(msg, "PLAYERTOMOVE");
             String opponentName = parseCommandArg(msg, "OPPONENT");
             CommandCallback listener = serverCommandListeners.get("onStartGame");
             if (listener != null) {
@@ -163,7 +163,10 @@ public class ServerConnection {
     }
 
     private String parseCommandArg(String msg, String fieldname) {
-        return msg.split(fieldname + ": \"")[1].split("\"")[0];
+        System.out.println(fieldname + ": \"");
+        String a = msg.split(fieldname + ": \"")[1];
+        String b = a.split("\"")[0];
+        return b;
     }
 
     private ResponseChallenge parseChallenge(String challenge) {

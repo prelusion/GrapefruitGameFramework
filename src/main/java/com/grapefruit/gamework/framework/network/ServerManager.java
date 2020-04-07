@@ -17,7 +17,7 @@ public class ServerManager {
     /**
      * The enum Response type.
      */
-    public enum ResponseType{
+    public enum ResponseType {
         /**
          * List response type.
          */
@@ -41,7 +41,7 @@ public class ServerManager {
     /**
      * Instantiates a new Server manager.
      */
-    public ServerManager(){
+    public ServerManager() {
         this.connection = new ServerConnection(this);
         this.commandQueue = new LinkedList<>();
         this.challenges = new ArrayList<>();
@@ -52,7 +52,7 @@ public class ServerManager {
      *
      * @return boolean if connected.
      */
-    public boolean isConnected(){
+    public boolean isConnected() {
         return connection.isConnected();
     }
 
@@ -62,11 +62,11 @@ public class ServerManager {
      * @param address String the address.
      * @return boolean if connected.
      */
-    public boolean connect(String address){
+    public boolean connect(String address) {
         try {
             connection.connect(address);
             connected.setValue(true);
-        } catch (IOException e){
+        } catch (IOException e) {
             System.out.println(e.getMessage());
             return false;
         }
@@ -78,7 +78,7 @@ public class ServerManager {
      *
      * @param command Command the command
      */
-    public void queueCommand(Command command){
+    public void queueCommand(Command command) {
         commandQueue.add(command);
         if (!sending) {
             connection.startSending();
@@ -94,9 +94,9 @@ public class ServerManager {
      * @param isConfirmed  boolean is confirmed.
      * @return Command the command.
      */
-    public Command findFirstFittingCommand(ResponseType responseType, boolean isConfirmed){
-        for (Command command: commandQueue){
-            if (command.getResponseType() == responseType && command.isConfirmed() == isConfirmed){
+    public Command findFirstFittingCommand(ResponseType responseType, boolean isConfirmed) {
+        for (Command command : commandQueue) {
+            if (command.getResponseType() == responseType && command.isConfirmed() == isConfirmed) {
                 return command;
             }
         }
@@ -108,9 +108,9 @@ public class ServerManager {
      *
      * @return Command the command.
      */
-    public Command getFirstUnconfirmed(){
-        for (Command command: commandQueue){
-            if (!command.isConfirmed()){
+    public Command getFirstUnconfirmed() {
+        for (Command command : commandQueue) {
+            if (!command.isConfirmed()) {
                 return command;
             }
         }
@@ -122,11 +122,11 @@ public class ServerManager {
      *
      * @return Command the command.
      */
-    public synchronized Command getFirstUnsent(){
+    public synchronized Command getFirstUnsent() {
         Iterator<Command> i = commandQueue.iterator();
-        while(i.hasNext()) {
+        while (i.hasNext()) {
             Command command = i.next();
-            if (!command.isSent()){
+            if (!command.isSent()) {
                 return command;
             }
         }
@@ -138,7 +138,7 @@ public class ServerManager {
      *
      * @param command Command the command to be removed.
      */
-    public void removeCommandFromQueue(Command command){
+    public void removeCommandFromQueue(Command command) {
         commandQueue.remove(command);
     }
 
@@ -147,17 +147,17 @@ public class ServerManager {
      *
      * @return the boolean
      */
-    public boolean commandsInQueue(){
+    public boolean commandsInQueue() {
         return commandQueue.size() > 0;
     }
 
-    public void addChallenge(ServerConnection.ResponseChallenge challenge){
+    public void addChallenge(ServerConnection.ResponseChallenge challenge) {
         challenges.add(challenge);
     }
 
-    public void removeChallengeById(int id){
-        for (ServerConnection.ResponseChallenge challenge: challenges){
-            if (challenge.getNumber() == id){
+    public void removeChallengeById(int id) {
+        for (ServerConnection.ResponseChallenge challenge : challenges) {
+            if (challenge.getNumber() == id) {
                 challenges.remove(challenge);
             }
         }
@@ -167,13 +167,12 @@ public class ServerManager {
         return challenges;
     }
 
-    public void cancelChallenge(ServerConnection.ResponseChallenge challenge){
+    public void cancelChallenge(ServerConnection.ResponseChallenge challenge) {
         challenges.remove(challenge);
     }
 
     /**
      * Tries to disconnect from the server.
-     *
      */
     public void disconnect() {
         try {
@@ -194,5 +193,17 @@ public class ServerManager {
 
     public void setTurnCallback(CommandCallback callback) {
         connection.setTurnCallback(callback);
+    }
+
+    public void setTurnTimeoutWinCallback(CommandCallback callback) {
+        connection.setTurnTimeoutWinCallback(callback);
+    }
+
+    public void setTurnTimeoutLoseCallback(CommandCallback callback) {
+        connection.setTurnTimeoutLoseCallback(callback);
+    }
+
+    public void setIllegalmoveWinCallback(CommandCallback callback) {
+        connection.setIllegalmoveWinCallback(callback);
     }
 }

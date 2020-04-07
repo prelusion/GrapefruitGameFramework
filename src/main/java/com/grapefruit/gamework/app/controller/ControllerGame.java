@@ -411,13 +411,19 @@ public class ControllerGame implements IController {
 
         MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm();
 
-        Tile tile = minimaxAlgorithm.calculateBestMove(
-                game.getBoard(),
-                game.getCurrentPlayer(),
-                game.getOpponentPlayer(),
-                6
-        );
+        new Thread(() -> {
+            Tile tile = minimaxAlgorithm.calculateBestMove(
+                    game.getBoard(),
+                    game.getCurrentPlayer(),
+                    game.getOpponentPlayer(),
+                    8
+            );
 
+            Platform.runLater(() -> onFinishAI(tile));
+        }).start();
+    }
+
+    private void onFinishAI(Tile tile) {
         if (tile == null) {
             nextPlayer();
             return;

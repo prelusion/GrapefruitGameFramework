@@ -17,14 +17,12 @@ public abstract class Game {
     private int turnTimeout;
     private Board board;
     private Player currentPlayer;
-    public ObservableMap<Player, Integer> scores;
 
     public Game(Board board, Player[] players, int turnTimeout) {
         this.board = board;
         this.players = players;
         this.turnTimeout = turnTimeout;
         this.currentPlayer = players[0];
-        this.scores = FXCollections.observableHashMap();
     }
 
     public Player[] getPlayers() {
@@ -78,7 +76,7 @@ public abstract class Game {
         }
 
         board.setMove(row, col, player);
-        calculateScores();
+        board.calculateScores(getPlayers());
         return true;
     }
 
@@ -104,11 +102,5 @@ public abstract class Game {
 
     public List<Tile> getAvailableMoves(Player player) {
         return getBoard().getAvailableMoves(player);
-    }
-
-    public abstract void calculateScores();
-
-    public int getScore(Player player){
-        return scores.getOrDefault(player, 0);
     }
 }

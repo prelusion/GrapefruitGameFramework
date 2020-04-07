@@ -1,6 +1,7 @@
 package com.grapefruit.gamework.games.tictactoe;
 
 import com.grapefruit.gamework.framework.Board;
+import com.grapefruit.gamework.framework.Helpers;
 import com.grapefruit.gamework.framework.Tile;
 import com.grapefruit.gamework.framework.Player;
 
@@ -40,5 +41,13 @@ public class TicTacToeBoard extends Board {
     @Override
     public Map<Player, Integer> countPieces() {
         return null;
+    }
+
+
+    @Override
+    public void calculateScores(Player[] players) {
+        for (Player player: players){
+            scores.put(player, Helpers.countPiecesForPlayer(this, player));
+        }
     }
 }

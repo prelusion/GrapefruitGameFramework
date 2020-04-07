@@ -96,7 +96,7 @@ public class ControllerGame implements IController {
         updateBoard();
         updateInfo();
         checkFinished();
-        this.model.getGame().scores.addListener(new MapChangeListener<Player, Integer>() {
+        this.model.getGame().getBoard().scores.addListener(new MapChangeListener<Player, Integer>() {
             @Override
             public void onChanged(Change<? extends Player, ? extends Integer> change) {
                 updateInfo();

@@ -1,6 +1,7 @@
 package com.grapefruit.gamework.games.reversi;
 
 import com.grapefruit.gamework.framework.Board;
+import com.grapefruit.gamework.framework.Helpers;
 import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.Tile;
 
@@ -133,5 +134,12 @@ public class ReversiBoard extends Board {
         searchOrder.add(new Tile(tile.getRow(), tile.getCol(), tile.getStrategicValue(), player));
 
         return getTilesToTurn(player, row + dRow, col + dCol, dRow, dCol, searchOrder);
+    }
+
+    @Override
+    public void calculateScores(Player[] players) {
+        for (Player player: players){
+            scores.put(player, Helpers.countPiecesForPlayer(this, player));
+        }
     }
 }

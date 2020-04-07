@@ -38,40 +38,46 @@ public class ReversiBenchMark {
     }
 
     public void initWorstCaseBoard() {
-        board.grid[1][1].setPlayer(opponent);
-        board.grid[1][4].setPlayer(opponent);
 
-        board.grid[2][0].setPlayer(player);
-        board.grid[2][1].setPlayer(opponent);
-        board.grid[2][2].setPlayer(opponent);
-        board.grid[2][3].setPlayer(player);
-        board.grid[2][4].setPlayer(opponent);
-        board.grid[2][5].setPlayer(opponent);
-
-
-        board.grid[3][1].setPlayer(opponent);
-        board.grid[3][2].setPlayer(opponent);
-        board.grid[3][3].setPlayer(opponent);
+        board.grid[3][3].setPlayer(player);
         board.grid[3][4].setPlayer(opponent);
-        board.grid[3][5].setPlayer(player);
-        board.grid[3][6].setPlayer(opponent);
-
-        board.grid[4][1].setPlayer(opponent);
-        board.grid[4][2].setPlayer(player);
-        board.grid[4][3].setPlayer(player);
+        board.grid[4][3].setPlayer(opponent);
         board.grid[4][4].setPlayer(player);
-        board.grid[4][5].setPlayer(opponent);
 
-        board.grid[5][1].setPlayer(opponent);
-        board.grid[5][2].setPlayer(opponent);
-        board.grid[5][3].setPlayer(player);
-        board.grid[5][4].setPlayer(opponent);
-        board.grid[5][5].setPlayer(opponent);
+//        board.grid[1][1].setPlayer(opponent);
+//        board.grid[1][4].setPlayer(opponent);
 
-        board.grid[6][3].setPlayer(player);
-
-        board.grid[7][2].setPlayer(opponent);
-        board.grid[7][3].setPlayer(player);
+//        board.grid[2][0].setPlayer(player);
+//        board.grid[2][1].setPlayer(opponent);
+//        board.grid[2][2].setPlayer(opponent);
+//        board.grid[2][3].setPlayer(player);
+//        board.grid[2][4].setPlayer(opponent);
+//        board.grid[2][5].setPlayer(opponent);
+//
+//
+//        board.grid[3][1].setPlayer(opponent);
+//        board.grid[3][2].setPlayer(opponent);
+//        board.grid[3][3].setPlayer(opponent);
+//        board.grid[3][4].setPlayer(opponent);
+//        board.grid[3][5].setPlayer(player);
+//        board.grid[3][6].setPlayer(opponent);
+//
+//        board.grid[4][1].setPlayer(opponent);
+//        board.grid[4][2].setPlayer(player);
+//        board.grid[4][3].setPlayer(player);
+//        board.grid[4][4].setPlayer(player);
+//        board.grid[4][5].setPlayer(opponent);
+//
+//        board.grid[5][1].setPlayer(opponent);
+//        board.grid[5][2].setPlayer(opponent);
+//        board.grid[5][3].setPlayer(player);
+//        board.grid[5][4].setPlayer(opponent);
+//        board.grid[5][5].setPlayer(opponent);
+//
+//        board.grid[6][3].setPlayer(player);
+//
+//        board.grid[7][2].setPlayer(opponent);
+//        board.grid[7][3].setPlayer(player);
     }
 
 

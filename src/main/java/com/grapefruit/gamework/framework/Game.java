@@ -36,13 +36,12 @@ public abstract class Game {
 
         turnTimeThread = new Thread(() -> {
             while (!turnTimeThread.isInterrupted()) {
-                turnTime.set(turnTime.get() - 1);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
                     break;
                 }
+                turnTime.set(turnTime.get() - 1);
             }
         });
 

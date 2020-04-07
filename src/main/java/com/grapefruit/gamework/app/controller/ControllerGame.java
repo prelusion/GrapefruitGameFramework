@@ -122,6 +122,7 @@ public class ControllerGame implements IController {
 
             this.model.getServerManager().setTurnCallback((boolean success, String[] args) -> {
                 this.model.getGame().setCurrentPlayer(localPlayer);
+                this.model.getGame().startTurnTimer();
                 Platform.runLater(this::refresh);
             });
 
@@ -144,10 +145,25 @@ public class ControllerGame implements IController {
                 (MapChangeListener<Player, Integer>) change -> Platform.runLater(this::updateInfo));
 
         this.model.getGame().getTurnTimeProperty().addListener(
-                (observable, oldValue, newValue) -> Platform.runLater(this::updateInfo)
+                (observable, oldValue, newValue) -> {
+
+                    Platform.runLater(() -> {
+                        if ((int) newValue <= 0) {
+                            this.model.getGame().stopTurnTimer();
+
+                            if (!this.model.isOnlineGame()) {
+                                createEndDialog("Turn timed out, you lose!");
+                                refresh();
+                            }
+
+                        }
+                        updateInfo();
+                    });
+                }
         );
 
         this.model.getGame().startTurnTimer();
+
         refresh();
     }
 
@@ -271,10 +287,13 @@ public class ControllerGame implements IController {
     }
 
     private void playMove(int row, int col, Player player) {
+        this.model.getGame().stopTurnTimer();
+
         if (!model.isOnlineGame()) {
             updateMove(row, col, player);
             model.getGame().nextPlayer();
             refresh();
+            this.model.getGame().startTurnTimer();
             return;
         }
 

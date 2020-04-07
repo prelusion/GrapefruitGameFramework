@@ -7,10 +7,7 @@ import com.grapefruit.gamework.app.model.ModelGameEndDialog;
 import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.app.util.ImageHelper;
 import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDialogFactory;
-import com.grapefruit.gamework.framework.Board;
-import com.grapefruit.gamework.framework.Game;
-import com.grapefruit.gamework.framework.Player;
-import com.grapefruit.gamework.framework.Tile;
+import com.grapefruit.gamework.framework.*;
 import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.Helpers;
@@ -123,6 +120,9 @@ public class ControllerGame implements IController {
             this.model.getServerManager().setTurnCallback((boolean success, String[] args) -> {
                 this.model.getGame().setCurrentPlayer(localPlayer);
                 this.model.getGame().startTurnTimer();
+
+                System.out.println("Waiting for turn...");
+                System.out.println("is AI: " + localPlayer.isAI());
                 Platform.runLater(this::refresh);
             });
 
@@ -169,7 +169,12 @@ public class ControllerGame implements IController {
                 }
         );
 
-        this.model.getGame().startTurnTimer();
+        Player currentPlayer = this.model.getGame().getCurrentPlayer();
+        if (currentPlayer.isLocal()) {
+            this.model.getGame().startTurnTimer();
+            System.out.println("Waiting for turn...");
+            System.out.println("is AI: " + currentPlayer.isAI());
+        }
 
         refresh();
     }
@@ -196,10 +201,9 @@ public class ControllerGame implements IController {
         drawPieces();
 
         resetPossibleMoves();
-        if (player.isLocal()) {
-            markPossibleMoves(model.getGame().getAvailableMoves(player), player.isLocal());
+        if (player.isLocal() && !player.isAI()) {
+            markPossibleMoves(model.getGame().getAvailableMoves(player), player.isAI());
         }
-
     }
 
     private void updateInfo() {
@@ -277,15 +281,14 @@ public class ControllerGame implements IController {
         }
     }
 
-    private void markPossibleMoves(List<Tile> tiles, boolean locallyAvailable) {
+    private void markPossibleMoves(List<Tile> tiles, boolean isAI) {
         for (Tile tile : tiles) {
             HBox pane = boardTiles[tile.getRow()][tile.getCol()];
             Circle marker = new Circle(32.5, Paint.valueOf("blue"));
             marker.setFill(Color.rgb(100, 100, 100, 0.5));
             pane.getChildren().add(marker);
-
-            if (locallyAvailable) {
-                marker.setStroke(Color.GREEN);
+            marker.setStroke(Color.GREEN);
+            if (!isAI) {
                 marker.setOnMouseClicked(event -> {
                     playMove(tile.getRow(), tile.getCol(), model.getGame().getCurrentPlayer());
                 });
@@ -301,6 +304,24 @@ public class ControllerGame implements IController {
             model.getGame().nextPlayer();
             refresh();
             this.model.getGame().startTurnTimer();
+            Player currentPlayer = model.getGame().getCurrentPlayer();
+
+            if (currentPlayer.isAI()) {
+                System.out.println("Waiting for AI to set turn...");
+                Game game = model.getGame();
+
+                MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm();
+                Tile tile = minimaxAlgorithm.calculateBestMove(game.getBoard(), currentPlayer, game.getOpponentPlayer(), 8);
+
+                if (tile == null) {
+                    model.getGame().nextPlayer();
+                    refresh();
+                    this.model.getGame().startTurnTimer();
+                    return;
+                }
+
+                playMove(tile.getRow(), tile.getCol(), currentPlayer);
+            }
             return;
         }
 

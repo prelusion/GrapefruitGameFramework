@@ -124,6 +124,20 @@ public class ControllerGame implements IController {
                 this.model.getGame().setCurrentPlayer(localPlayer);
                 Platform.runLater(this::refresh);
             });
+
+            this.model.getServerManager().setTurnTimeoutWinCallback((boolean success, String[] args) -> {
+                Platform.runLater(() -> {
+                    createEndDialog("Opponent's turn timed out, you win!");
+                    refresh();
+                });
+            });
+
+            this.model.getServerManager().setTurnTimeoutLoseCallback((boolean success, String[] args) -> {
+                Platform.runLater(() -> {
+                    createEndDialog("Turn timed out, you lose!");
+                    refresh();
+                });
+            });
         }
 
         this.model.getGame().scores.addListener(

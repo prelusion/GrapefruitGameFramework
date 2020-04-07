@@ -118,7 +118,42 @@ public class ServerConnection {
                         new String[]{playerName, move, details}
                 );
             }
+        } else if (msg.startsWith("SVR GAME LOSS")) {
+            // SVR GAME LOSS {PLAYERONESCORE: "0", PLAYERTWOSCORE: "0", COMMENT: "Turn timelimit reached"}
+            String playerOneScore = parseCommandArg(msg, "PLAYERONESCORE");
+            String playerTwoScore = parseCommandArg(msg, "PLAYERTWOSCORE");
+            String comment = parseCommandArg(msg, "COMMENT");
+
+            System.out.println("SVR GAME LOSS");
+            System.out.println("Comment: " + comment);
+
+            if (comment.equals("Turn timelimit reached")) {
+                CommandCallback listener = serverCommandListeners.get("onTurnTimeoutLose");
+                if (listener != null) {
+                    listener.onResponse(true, new String[]{});
+                }
+            }
+
+        } else if (msg.startsWith("SVR GAME WIN")) {
+            System.out.println("GAME WIN");
+            System.out.println(msg);
+            // SVR GAME LOSS {PLAYERONESCORE: "0", PLAYERTWOSCORE: "0", COMMENT: "Turn timelimit reached"}
+            String playerOneScore = parseCommandArg(msg, "PLAYERONESCORE");
+            String playerTwoScore = parseCommandArg(msg, "PLAYERTWOSCORE");
+            String comment = parseCommandArg(msg, "COMMENT");
+
+            System.out.println("SVR GAME LOSS");
+            System.out.println("Comment: " + comment);
+
+            if (comment.equals("Turn timelimit reached")) {
+                CommandCallback listener = serverCommandListeners.get("onTurnTimeoutWin");
+                if (listener != null) {
+                    listener.onResponse(true, new String[]{});
+                }
+            }
+
         }
+
     }
 
     private void handleCommandResponses(String msg) {
@@ -240,6 +275,14 @@ public class ServerConnection {
 
     public void setTurnCallback(CommandCallback callback) {
         serverCommandListeners.put("onTurn", callback);
+    }
+
+    public void setTurnTimeoutWinCallback(CommandCallback callback) {
+        serverCommandListeners.put("onTurnTimeoutWin", callback);
+    }
+
+    public void setTurnTimeoutLoseCallback(CommandCallback callback) {
+        serverCommandListeners.put("onTurnTimeoutLose", callback);
     }
 
     /**

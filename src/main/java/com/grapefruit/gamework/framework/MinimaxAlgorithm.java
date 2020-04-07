@@ -6,6 +6,7 @@ import java.util.*;
 
 import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
 import static java.lang.Integer.*;
+import static java.lang.Thread.MAX_PRIORITY;
 
 public class MinimaxAlgorithm {
     private Player player;
@@ -54,20 +55,26 @@ public class MinimaxAlgorithm {
         int bestScore = MIN_VALUE;
         for (Map.Entry<Tile, Integer> entry : tiles.entrySet()) {
             if (entry.getValue() > bestScore) {
-                if (player.getColor() == Colors.BLACK) {
+                if (player.getColor() == Colors.WHITE) {
+                    System.out.println(String.format("new best move: %s,%s - strategic value: %s, score: %s", entry.getKey().getRow(), entry.getKey().getCol(), entry.getKey().getStrategicValue(), entry.getValue()));
+                }
+                bestTile = entry.getKey();
+                bestScore = entry.getValue();
+            } else if(entry.getKey().getStrategicValue() > bestTile.getStrategicValue() && entry.getValue() == bestScore) {
+                if (player.getColor() == Colors.WHITE) {
                     System.out.println(String.format("new best move: %s,%s - strategic value: %s, score: %s", entry.getKey().getRow(), entry.getKey().getCol(), entry.getKey().getStrategicValue(), entry.getValue()));
                 }
                 bestTile = entry.getKey();
                 bestScore = entry.getValue();
             } else {
-                if (player.getColor() == Colors.BLACK) {
+                if (player.getColor() == Colors.WHITE) {
                     System.out.println(String.format("not best move: %s,%s - strategic value: %s, score: %s", entry.getKey().getRow(), entry.getKey().getCol(), entry.getKey().getStrategicValue(), entry.getValue()));
                 }
             }
         }
 
         if (bestTile != null) {
-            if (player.getColor() == Colors.BLACK) {
+            if (player.getColor() == Colors.WHITE) {
                 System.out.println(String.format("best move: %s,%s - strategic value: %s, score: %s", bestTile.getRow(), bestTile.getCol(), bestTile.getStrategicValue(), bestScore));
             }
         }

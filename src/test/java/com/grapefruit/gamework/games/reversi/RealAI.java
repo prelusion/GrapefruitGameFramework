@@ -73,9 +73,9 @@ public class RealAI {
                 } else if( turnCount < 10 && depth > 8) {
                     depth--;
                 } else if((endTime-startTime) <= 2) {
-                    depth++;
+                    //depth++;
                 } else if((endTime-startTime) >= 8) {
-                    depth--;
+                    //depth--;
                 }
             } else {
                 move = minimax.calculateBestMove(game.getBoard(), currentPlayer, opponent, 5);

@@ -44,6 +44,8 @@ public class ControllerGame implements IController {
 
     private boolean isFirstTurn = true;
 
+    MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm(10);
+
     @FXML
     private Text turnNumber;
 
@@ -409,17 +411,17 @@ public class ControllerGame implements IController {
             return;
         }
 
-        MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm();
+
 
         new Thread(() -> {
+            minimaxAlgorithm.startTimeout(9000);
+
             Tile tile = minimaxAlgorithm.calculateBestMove(
                     game.getBoard(),
                     game.getCurrentPlayer(),
                     game.getOpponentPlayer(),
-                    10
+                    game.getTurnCount()
             );
-
-            minimaxAlgorithm.startTimeout(4000);
 
             Platform.runLater(() -> onFinishAI(tile));
         }).start();

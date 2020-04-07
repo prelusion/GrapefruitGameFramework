@@ -20,7 +20,7 @@ public class RealAI {
         Player playerWhite = new Player("White", Colors.WHITE, true);
         Player playerBlack = new Player("Black", Colors.BLACK, true);
         Reversi game = new Reversi(board, playerWhite, playerBlack, turnTimeout);
-        MinimaxAlgorithm minimax = new MinimaxAlgorithm();
+        MinimaxAlgorithm minimax = new MinimaxAlgorithm(9);
 
         Player currentPlayer = game.getCurrentPlayer();
         Player opponent = currentPlayer == playerWhite ? playerBlack : playerWhite;
@@ -65,7 +65,7 @@ public class RealAI {
             long startTime = System.currentTimeMillis()/1000;
             if (currentPlayer.getColor() == Colors.WHITE) {
                 System.out.println(" Turn " + turnCount + " Depth " + depth);
-                move = minimax.calculateBestMove(game.getBoard(), currentPlayer, opponent, depth);
+                move = minimax.calculateBestMove(game.getBoard(), currentPlayer, opponent, 5);
                 long endTime = System.currentTimeMillis()/1000;
                 System.out.println("Time " + (endTime-startTime) + "\n");
                 if(turnCount > 40) {

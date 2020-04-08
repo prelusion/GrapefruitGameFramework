@@ -44,7 +44,7 @@ public class ControllerGame implements IController {
 
     private boolean isFirstTurn = true;
 
-    MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm(9);
+    MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm(7);
 
     @FXML
     private Text turnNumber;

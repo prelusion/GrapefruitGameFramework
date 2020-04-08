@@ -20,7 +20,7 @@ public abstract class Game {
     private Thread turnTimeThread;
     private Board board;
     private Player currentPlayer;
-    private int turnCount;
+    public int turnCount;
 
 
     public Game(Board board, Player[] players, int turnTimeout) {
@@ -133,17 +133,7 @@ public abstract class Game {
 
     public abstract boolean isValidMove(int row, int col, Player player);
 
-    public boolean playMove(int row, int col, Player player) {
-        if (!isValidMove(row, col, player)) {
-            return false;
-        }
-
-        turnCount++;
-
-        board.setMove(row, col, player);
-        board.calculateScores(getPlayers());
-        return true;
-    }
+    public abstract boolean playMove(int row, int col, Player player);
 
     /**
      * This function will check if the game should be ended or not.

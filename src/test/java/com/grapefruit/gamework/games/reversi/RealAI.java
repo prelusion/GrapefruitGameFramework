@@ -3,6 +3,7 @@ package com.grapefruit.gamework.games.reversi;
 
 import com.grapefruit.gamework.framework.*;
 import com.grapefruit.gamework.framework.Player;
+import com.grapefruit.gamework.games.tictactoe.TicTacToeBoard;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -14,6 +15,7 @@ public class RealAI {
     /* AI vs AI */
     public static void main(String[] args) {
         int turnTimeout = 19;
+        //Board board = new TicTacToeBoard(8, STRATEGIC_VALUES);
         Board board = new ReversiBoard(8, STRATEGIC_VALUES);
         int depth = 12;
 

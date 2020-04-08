@@ -33,6 +33,7 @@ public abstract class Board {
     }
 
     public Board(int boardSize) {
+        this.BOARDSIZE = boardSize;
         strategicValues = new int[boardSize][boardSize];
         for (int[] row : strategicValues) {
             Arrays.fill(row, 1);

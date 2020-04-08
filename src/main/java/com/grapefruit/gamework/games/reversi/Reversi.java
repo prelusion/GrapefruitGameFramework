@@ -40,4 +40,17 @@ public class Reversi extends Game {
     public Player getWinner() {
         return Helpers.getWinningPlayer(getBoard());
     }
+
+    @Override
+    public boolean playMove(int row, int col, Player player) {
+        if (!isValidMove(row, col, player)) {
+            return false;
+        }
+
+        turnCount++;
+
+        getBoard().setMove(row, col, player);
+        getBoard().calculateScores(getPlayers());
+        return true;
+    }
 }

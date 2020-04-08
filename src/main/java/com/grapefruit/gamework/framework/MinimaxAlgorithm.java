@@ -6,23 +6,37 @@ import java.util.*;
 
 import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
 import static java.lang.Integer.*;
-import static java.lang.Thread.MAX_PRIORITY;
 
 public class MinimaxAlgorithm {
     private Player player;
     private Player opponent;
     ArrayList<Thread> threads;
-    private boolean isInterrupted = false;
+    private boolean timedOut = false;
+    private int currentDepth;
+    private Thread timeoutThread;
 
-    public MinimaxAlgorithm() {  }
+    public MinimaxAlgorithm(int depth) {
+        currentDepth = depth;
+    }
 
-    public Tile calculateBestMove(Board board, Player player, Player opponent, int depth) {
+    public Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount) {
         this.player = player;
         this.opponent = opponent;
         threads = new ArrayList<>();
         int alpha = MIN_VALUE;
         int beta = MAX_VALUE;
+        timedOut = false;
+
         Tile bestTile = null;
+
+        long startTime = System.currentTimeMillis() / 1000;
+
+        if (turnCount > 44) {
+            System.out.println("INCREASE BECAUSE OF HIGH TURN");
+            currentDepth++;
+        }
+
+        System.out.println("Starting minimax with depth: " + currentDepth);
 
         List<Tile> moves = board.getAvailableMoves(player);
         Map<Tile, Integer> tiles = new HashMap<>();
@@ -32,7 +46,7 @@ public class MinimaxAlgorithm {
             newBoard.setMove(tile.getRow(), tile.getCol(), player);
             Thread thread = new Thread(() -> {
                 tiles.put(tile, minimax(
-                        depth - 1,
+                        currentDepth - 1,
                         newBoard,
                         tile.getStrategicValue(),
                         alpha,
@@ -80,21 +94,45 @@ public class MinimaxAlgorithm {
         }
 
         //System.out.println(tiles.size() + " | " + moves.size());
-        isInterrupted = false;
+
+        if (timeoutThread != null) {
+            timeoutThread.interrupt();
+        }
+
+        if (!timedOut && startTime - (System.currentTimeMillis() / 1000) < 2000) {
+            System.out.println("INCREASING DEPTH!!");
+            currentDepth++;
+        }
+
         return bestTile;
     }
 
     public void startTimeout(int timeout) {
-        try {
-            Thread.sleep(timeout);
-        } catch (InterruptedException e) {
-            isInterrupted = true;
-        }
+        System.out.println("START TIMEOUT");
+
+        timeoutThread = new Thread(() -> {
+            try {
+                Thread.sleep(timeout);
+            } catch (InterruptedException ignored) {}
+
+            if (timeoutThread.isInterrupted()) {
+                timeoutThread = null;
+                return;
+            }
+
+            timedOut = true;
+            System.out.println("DEREASING DEPTH!!");
+            currentDepth--;
+            System.out.println("STOP RECURSIONS!");
+            timeoutThread = null;
+        });
+
+        timeoutThread.start();
     }
 
 
     public int minimax(int depth, Board board, int score, int alpha, int beta, boolean maximizingPlayer) {
-        if (depth == 0 || isInterrupted) {
+        if (depth == 0 || timedOut) {
             return score + board.countPieces(player);
         }
 
@@ -129,6 +167,8 @@ public class MinimaxAlgorithm {
                 if (move.getStrategicValue() == 99) {
                     break;
                 }
+
+//                if (isInterrupted) break;
             }
             return maxScore;
 
@@ -163,6 +203,8 @@ public class MinimaxAlgorithm {
                 if (move.getStrategicValue() == 99) {
                     break;
                 }
+
+//                if (isInterrupted) break;
             }
             return minScore;
         }

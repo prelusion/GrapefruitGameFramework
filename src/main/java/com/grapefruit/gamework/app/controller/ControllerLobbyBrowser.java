@@ -73,6 +73,8 @@ public class ControllerLobbyBrowser implements IController{
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
         updateTable();
+
+        aiRadioButton.setSelected(true);
     }
 
     private void setupTable(){

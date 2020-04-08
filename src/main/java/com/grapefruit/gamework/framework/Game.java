@@ -20,6 +20,7 @@ public abstract class Game {
     private Thread turnTimeThread;
     private Board board;
     private Player currentPlayer;
+    public int turnCount;
 
 
     public Game(Board board, Player[] players, int turnTimeout) {
@@ -58,6 +59,10 @@ public abstract class Game {
         if (turnTimeThread != null) {
             turnTimeThread.interrupt();
         }
+    }
+
+    public int getTurnCount() {
+        return turnCount;
     }
 
     public int getTurnSecondsLeft() {

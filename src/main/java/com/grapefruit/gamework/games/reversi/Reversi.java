@@ -47,6 +47,8 @@ public class Reversi extends Game {
             return false;
         }
 
+        turnCount++;
+
         getBoard().setMove(row, col, player);
         getBoard().calculateScores(getPlayers());
         return true;

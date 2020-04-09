@@ -55,12 +55,8 @@ public class GameApplication extends Application {
 
     public static void openLauncher(){
         ModelMainWindow modelMainWindow = new ModelMainWindow(SERVER_MANAGER);
-        JFXDecorator decorator = new JFXDecorator(primaryStage, MainWindowFactory.build(modelMainWindow).getParent());
-        Scene scene = new Scene(decorator, WINDOW_START_WIDTH, WINDOW_START_HEIGHT);
-        scene.getStylesheets().add(new ResourceLoader().loadStyleSheet("mainwindow"));
         primaryStage.setTitle("Grapefruit Gamework");
-        primaryStage.setScene(scene);
-        //primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.setScene(new Scene(MainWindowFactory.build(modelMainWindow).getParent(), WINDOW_START_WIDTH, WINDOW_START_HEIGHT));
         primaryStage.getIcons().add(ImageRegistry.GAMEWORK_ICON);
         primaryStage.show();
     }

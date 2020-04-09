@@ -2,10 +2,7 @@ package com.grapefruit.gamework.framework;
 
 import com.grapefruit.gamework.games.reversi.ReversiBoard;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
 import static java.lang.Integer.*;
@@ -19,13 +16,19 @@ public class MinimaxAlgorithm {
     private int currentDepth;
     private Thread timeoutThread;
     private long startTime;
+    private Stack<Boolean> timeoutStack;
+    boolean flag;
 
     public MinimaxAlgorithm(int depth) {
         currentDepth = depth;
     }
 
     public Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount) {
+        System.out.println("--------------------- TURN " + turnCount + " ---------------------");
         timedOut = false;
+        timeoutThread = null;
+        timeoutStack = new Stack<>();
+        flag = false;
         return realCalculateBestMove(board, player, opponent, turnCount, true, currentDepth);
     }
 
@@ -46,7 +49,7 @@ public class MinimaxAlgorithm {
 
         Tile bestTile = null;
 
-        if (turnCount > 44) {
+        if (firstTurn && turnCount > 44) {
             System.out.println("INCREASE BECAUSE OF HIGH TURN");
             currentDepth++;
         }
@@ -110,30 +113,43 @@ public class MinimaxAlgorithm {
 
         //System.out.println(tiles.size() + " | " + moves.size());
 
-        if (timeoutThread != null) {
-            timeoutThread.interrupt();
-        }
-
-        long endTime = getCurrentSeconds();
-
-        System.out.println("Timedout " + timedOut + " Time " + (endTime - startTime));
-
+        System.out.println("timed out:" + timedOut);
         System.out.println("seconds left: " + secondsLeft());
 
-        if (!timedOut && secondsLeft() >= 8) {
-            if (firstTurn) {
-                currentDepth++;
+
+
+
+        if (depth < 50) {
+            if (!timedOut) {
+                if (firstTurn && secondsLeft() >= 8) {
+                    currentDepth++;
+                }
+
+                System.out.println("INCREASING DEPTH!!");
+
+                System.out.println("TRYING WITH RECURSION");
+                timeoutStack.push(timedOut);
+
+                Tile newTile = realCalculateBestMove(board, player, opponent, turnCount, false, depth + 1);
+
+                if (!flag && !timeoutStack.pop()) {
+                    flag = true;
+                    System.out.println("New best tile, YAY! DEO!");
+                    bestTile = newTile;
+                }
+
+//                if (!firstTurn && timedOut) {
+//                    System.out.println("Corrupt tile, returning null..");
+//                    return null;
+//                }
+            } else if (firstTurn && secondsLeft() <= 2) {
+                System.out.println("DECREASING DEPTH!!");
+                currentDepth--;
             }
-
-            System.out.println("INCREASING DEPTH!!");
-            System.out.println("TRYING WITH RECURSION");
-            Tile newTile = realCalculateBestMove(board, player, opponent, turnCount, false, depth + 1);
-            if (newTile != null) bestTile = newTile;
-        } else if (timedOut && firstTurn && secondsLeft() <= 2) {
-            System.out.println("DECREASING DEPTH!!");
-            currentDepth--;
         }
-
+        timeoutStack.push(timedOut);
+//        long endTime = getCurrentSeconds();
+//        System.out.println("Timedout " + timedOut + " Time " + (endTime - startTime));
 //        if (firstTurn && (endTime - startTime) <= 2) {
 //            System.out.println("INCREASING DEPTH!!");
 //            currentDepth++;
@@ -153,6 +169,10 @@ public class MinimaxAlgorithm {
 //            currentDepth--;
 //        }
 
+        if (timeoutThread != null) {
+            timeoutThread.interrupt();
+        }
+
         return bestTile;
     }
 
@@ -164,17 +184,10 @@ public class MinimaxAlgorithm {
         timeoutThread = new Thread(() -> {
             try {
                 Thread.sleep(timeout);
+                timedOut = true;
+                System.out.println("STOP RECURSIONS!");
             } catch (InterruptedException ignored) {
             }
-
-            if (timeoutThread.isInterrupted()) {
-                timeoutThread = null;
-                return;
-            }
-
-            timedOut = true;
-            System.out.println("STOP RECURSIONS!");
-            timeoutThread = null;
         });
 
         timeoutThread.start();

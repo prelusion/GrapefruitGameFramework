@@ -121,23 +121,23 @@ public class MinimaxAlgorithm {
 
         if (depth < 50) {
             if (!timedOut) {
-                if (firstTurn && secondsLeft() >= 8) {
-                    currentDepth++;
+                if (firstTurn && secondsLeft() >= 5) {
+                    if (secondsLeft() >= 8) {
+                        currentDepth++;
+                    }
+
+                    System.out.println("INCREASING DEPTH!!");
+                    System.out.println("TRYING WITH RECURSION");
+
+                    Tile newTile = realCalculateBestMove(board, player, opponent, turnCount, false, depth + 1);
+
+                    if (!timedOut && newTile != null) {
+                        System.out.println("New best tile, YAY! DEO!");
+                        bestTile = newTile;
+                    } else {
+                        System.out.println("Corrupt tile, ignoring..");
+                    }
                 }
-
-                System.out.println("INCREASING DEPTH!!");
-
-                System.out.println("TRYING WITH RECURSION");
-                timeoutStack.push(timedOut);
-
-                Tile newTile = realCalculateBestMove(board, player, opponent, turnCount, false, depth + 1);
-
-                if (!flag && !timeoutStack.pop()) {
-                    flag = true;
-                    System.out.println("New best tile, YAY! DEO!");
-                    bestTile = newTile;
-                }
-
 //                if (!firstTurn && timedOut) {
 //                    System.out.println("Corrupt tile, returning null..");
 //                    return null;
@@ -147,7 +147,7 @@ public class MinimaxAlgorithm {
                 currentDepth--;
             }
         }
-        timeoutStack.push(timedOut);
+
 //        long endTime = getCurrentSeconds();
 //        System.out.println("Timedout " + timedOut + " Time " + (endTime - startTime));
 //        if (firstTurn && (endTime - startTime) <= 2) {

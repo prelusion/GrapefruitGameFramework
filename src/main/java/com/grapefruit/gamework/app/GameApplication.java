@@ -3,12 +3,14 @@ package com.grapefruit.gamework.app;
 import com.grapefruit.gamework.app.model.ModelGame;
 import com.grapefruit.gamework.app.model.ModelMainWindow;
 import com.grapefruit.gamework.app.resources.ImageRegistry;
+import com.grapefruit.gamework.app.resources.ResourceLoader;
 import com.grapefruit.gamework.app.view.templates.Game.GameFactory;
 import com.grapefruit.gamework.app.view.templates.MainWindow.MainWindowFactory;
 import com.grapefruit.gamework.framework.Assets;
 import com.grapefruit.gamework.framework.Game;
 import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.network.ServerManager;
+import com.jfoenix.controls.JFXDecorator;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -42,7 +44,7 @@ public class GameApplication extends Application {
     }
 
     public static void startGame(Assets assets, Game game, Player[] localPlayers, ServerManager serverManager){
-        primaryStage.setScene(new Scene(GameFactory.build(new ModelGame(game, assets, localPlayers, SERVER_MANAGER)).getParent(), 1100, 800));
+        primaryStage.setScene(new Scene(GameFactory.build(new ModelGame(game, assets, localPlayers, serverManager)).getParent(), 1100, 800));
         primaryStage.setTitle("Now playing: " + assets.getDisplayName());
         primaryStage.show();
     }
@@ -53,8 +55,11 @@ public class GameApplication extends Application {
 
     public static void openLauncher(){
         ModelMainWindow modelMainWindow = new ModelMainWindow(SERVER_MANAGER);
+        JFXDecorator decorator = new JFXDecorator(primaryStage, MainWindowFactory.build(modelMainWindow).getParent());
+        Scene scene = new Scene(decorator, WINDOW_START_WIDTH, WINDOW_START_HEIGHT);
+        scene.getStylesheets().add(new ResourceLoader().loadStyleSheet("mainwindow"));
         primaryStage.setTitle("Grapefruit Gamework");
-        primaryStage.setScene(new Scene(MainWindowFactory.build(modelMainWindow).getParent(), WINDOW_START_WIDTH, WINDOW_START_HEIGHT));
+        primaryStage.setScene(scene);
         //primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.getIcons().add(ImageRegistry.GAMEWORK_ICON);
         primaryStage.show();

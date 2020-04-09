@@ -29,6 +29,7 @@ public class MinimaxAlgorithm {
         timeoutThread = null;
         timeoutStack = new Stack<>();
         flag = false;
+        currentDepth = 7;
         return realCalculateBestMove(board, player, opponent, turnCount, true, currentDepth);
     }
 
@@ -123,7 +124,7 @@ public class MinimaxAlgorithm {
             if (!timedOut) {
                 if (firstTurn && secondsLeft() >= 5) {
                     if (secondsLeft() >= 8) {
-                        currentDepth++;
+//                        currentDepth++;
                     }
 
                     System.out.println("INCREASING DEPTH!!");
@@ -142,7 +143,7 @@ public class MinimaxAlgorithm {
 //                    System.out.println("Corrupt tile, returning null..");
 //                    return null;
 //                }
-            } else if (firstTurn && secondsLeft() <= 2) {
+            } else if (firstTurn && secondsLeft() <= 1) {
                 System.out.println("DECREASING DEPTH!!");
                 currentDepth--;
             }

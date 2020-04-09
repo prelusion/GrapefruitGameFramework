@@ -14,7 +14,7 @@
   <children>
       <Pane prefHeight="42.0" prefWidth="710.0" style="-fx-view-order: -10;" styleClass="primary-background">
          <children>
-            <HBox alignment="CENTER" layoutX="4.0" layoutY="4.0" prefHeight="34.0" prefWidth="739.0" styleClass="secondary-background" stylesheets="@css/mainwindow.css">
+            <HBox alignment="CENTER" layoutX="4.0" layoutY="4.0" prefHeight="34.0" prefWidth="739.0" styleClass="primary-background" stylesheets="@css/mainwindow.css">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select server:" />
                   <Pane prefHeight="34.0" prefWidth="10.0" />
@@ -38,7 +38,7 @@
                <children>
                 <AnchorPane minWidth="-Infinity" prefHeight="474.0" prefWidth="284.0" style="-fx-background-color: linear-gradient(to right bottom, #030A30 49%, #1D244D 100%); -fx-view-order: 10;">
                      <children>
-                        <ScrollPane hbarPolicy="NEVER" minWidth="-Infinity" prefHeight="474.4" prefWidth="202.4" style="-fx-view-order: 10;" styleClass="secondary-background" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <ScrollPane hbarPolicy="NEVER" minWidth="-Infinity" prefHeight="474.4" prefWidth="202.4" style="-fx-view-order: 10; -fx-background: #A48369;;" styleClass="secondary-background" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <content>
                             <AnchorPane minWidth="-Infinity" style="-fx-background-color: linear-gradient(to right bottom, #030A30 49%, #1D244D 100%);;">
                                  <children>

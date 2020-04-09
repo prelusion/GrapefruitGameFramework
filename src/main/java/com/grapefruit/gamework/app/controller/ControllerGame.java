@@ -8,6 +8,7 @@ import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.app.util.ImageHelper;
 import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDialogFactory;
 import com.grapefruit.gamework.framework.*;
+import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.Helpers;
 import com.grapefruit.gamework.framework.network.ServerManager;
@@ -490,6 +491,20 @@ public class ControllerGame implements IController {
 
     @FXML
     private void quitGame() {
-        GameApplication.openLauncher();
+        if (model.isOnlineGame()) {
+            model.getServerManager().queueCommand(Commands.forfeit(new CommandCallback() {
+                @Override
+                public void onResponse(boolean success, String[] args) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            GameApplication.openLauncher();
+                        }
+                    });
+                }
+            }));
+        } else {
+            GameApplication.openLauncher();
+        }
     }
 }

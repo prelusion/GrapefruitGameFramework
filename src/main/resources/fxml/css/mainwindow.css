@@ -61,12 +61,12 @@
 
 .jfx-decorator .jfx-decorator-buttons-container {
     -fx-decorator-color: #DCCEB7;
-    -fx-background-color: #242A18;
+    -fx-background-color: #A48369;
 }
 
 .jfx-decorator .resize-border {
-    -fx-decorator-color: #242A18;
-    -fx-border-color: #242A18;;
+    -fx-decorator-color: #A48369;
+    -fx-border-color: #A48369;;
 }
 
 .jfx-button{

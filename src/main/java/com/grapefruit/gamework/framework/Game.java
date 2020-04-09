@@ -20,7 +20,7 @@ public abstract class Game {
     private Thread turnTimeThread;
     private Board board;
     private Player currentPlayer;
-    public int turnCount;
+    public int turnCount = 1;
 
 
     public Game(Board board, Player[] players, int turnTimeout) {

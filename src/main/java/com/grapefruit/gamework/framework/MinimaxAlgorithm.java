@@ -129,14 +129,14 @@ public class MinimaxAlgorithm {
                     System.out.println("INCREASING DEPTH!!");
                     System.out.println("TRYING WITH RECURSION");
 
-                    Tile newTile = realCalculateBestMove(board, player, opponent, turnCount, false, depth + 1);
+                    //Tile newTile = realCalculateBestMove(board, player, opponent, turnCount, false, depth + 1);
 
-                    if (!timedOut && newTile != null) {
-                        System.out.println("New best tile, YAY! DEO!");
-                        bestTile = newTile;
-                    } else {
-                        System.out.println("Corrupt tile, ignoring..");
-                    }
+//                    if (!timedOut && newTile != null) {
+//                        System.out.println("New best tile, YAY! DEO!");
+//                        bestTile = newTile;
+//                    } else {
+//                        System.out.println("Corrupt tile, ignoring..");
+//                    }
                 }
 //                if (!firstTurn && timedOut) {
 //                    System.out.println("Corrupt tile, returning null..");

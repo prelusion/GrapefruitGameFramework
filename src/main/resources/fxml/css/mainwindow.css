@@ -59,3 +59,18 @@
     -fx-effect: innershadow(GAUSSIAN, #000000, 60, 0, 0, 0);
 }
 
+.jfx-decorator .jfx-decorator-buttons-container {
+    -fx-decorator-color: #DCCEB7;
+    -fx-background-color: #242A18;
+}
+
+.jfx-decorator .resize-border {
+    -fx-decorator-color: #242A18;
+    -fx-border-color: #242A18;;
+}
+
+.jfx-button{
+    -jfx-button-type: RAISED;
+    -fx-background-color: #6E4D43;
+    -fx-text-fill: #A48369;
+}

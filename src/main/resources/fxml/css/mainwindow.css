@@ -42,8 +42,9 @@
 }
 
 .menu-item-selected{
-    -fx-background-color: linear-gradient(to right bottom, #FF6600 0%, #946B6B 64%);
+    /*-fx-background-color: linear-gradient(to right bottom, #FF6600 0%, #946B6B 64%);*/
     /*-fx-effect: innershadow(GAUSSIAN, #FFFFFF, 120, 0, 0, 0);*/
+    -fx-background-color: #475445;
 }
 
 .game-board-tile{

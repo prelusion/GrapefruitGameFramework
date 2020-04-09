@@ -433,8 +433,7 @@ public class ControllerGame implements IController {
                     game.getBoard(),
                     game.getCurrentPlayer(),
                     game.getOpponentPlayer(),
-                    game.getTurnCount(),
-                    true
+                    game.getTurnCount()
             );
             Platform.runLater(() -> onFinishAI(tile));
         }).start();

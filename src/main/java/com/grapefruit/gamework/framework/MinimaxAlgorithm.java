@@ -19,13 +19,17 @@ public class MinimaxAlgorithm {
         currentDepth = depth;
     }
 
-    public Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount, boolean firstTurn) {
+    public Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount) {
+        timedOut = false;
+        return realCalculateBestMove(board, player, opponent, turnCount, true);
+    }
+
+    private Tile realCalculateBestMove(Board board, Player player, Player opponent, int turnCount, boolean firstTurn) {
         this.player = player;
         this.opponent = opponent;
         threads = new ArrayList<>();
         int alpha = MIN_VALUE;
         int beta = MAX_VALUE;
-        timedOut = false;
 
         Tile bestTile = null;
 
@@ -105,7 +109,7 @@ public class MinimaxAlgorithm {
             System.out.println("INCREASING DEPTH!!");
             currentDepth++;
             System.out.println("TRYING BETTER VALUE!");
-            Tile newTile = this.calculateBestMove(board, player, opponent, turnCount, false);
+            Tile newTile = this.realCalculateBestMove(board, player, opponent, turnCount, false);
             if(((System.currentTimeMillis() / 1000) - startTime) <= 8) {
                 System.out.println("LETS GO BETTER VALUE!");
                 if(newTile != null) {

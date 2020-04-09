@@ -41,8 +41,8 @@ public class GameApplication extends Application {
         return primaryStage;
     }
 
-    public static void startGame(Assets assets, Game game, Player[] localPlayers, ServerManager manager){
-        primaryStage.setScene(new Scene(GameFactory.build(new ModelGame(game, assets, localPlayers, manager)).getParent(), 1100, 800));
+    public static void startGame(Assets assets, Game game, Player[] localPlayers, ServerManager serverManager){
+        primaryStage.setScene(new Scene(GameFactory.build(new ModelGame(game, assets, localPlayers, SERVER_MANAGER)).getParent(), 1100, 800));
         primaryStage.setTitle("Now playing: " + assets.getDisplayName());
         primaryStage.show();
     }

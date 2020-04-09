@@ -64,10 +64,17 @@ public class ControllerLobbyBrowser implements IController{
         this.model = (ModelLobbyBrowser) model;
         initialize();
         setupTable();
-        Timeline timeline= new Timeline(new KeyFrame(
+        Timeline timeline = new Timeline();
+        timeline.getKeyFrames().add(new KeyFrame(
                 Duration.millis(500),
-                check ->
-                        updateTable()
+                check -> {
+                    updateTable();
+                    challengeTable.sceneProperty().addListener((obs, oldScene, newScene) -> {
+                        if (newScene == null) {
+                            timeline.stop();
+                        }
+                    });
+                }
 
         ));
         timeline.setCycleCount(Timeline.INDEFINITE);

@@ -49,4 +49,8 @@ public class ResourceLoader {
         return image;
     }
 
+    public String loadStyleSheet(String styleSheetName){
+        return getClass().getResource(CSS_LOCATION + styleSheetName + ".css").toExternalForm();
+    }
+
 }

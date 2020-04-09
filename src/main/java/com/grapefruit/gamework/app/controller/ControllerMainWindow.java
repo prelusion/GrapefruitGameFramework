@@ -121,6 +121,9 @@ public class ControllerMainWindow implements IController {
             } else {
                 onDisconnected();
             }
+            if (this.modelMainWindow.getServerManager().getConnectedName() != null){
+                userName.setText(this.modelMainWindow.getServerManager().getConnectedName());
+            }
         } else {
             onDisconnected();
         }
@@ -196,6 +199,7 @@ public class ControllerMainWindow implements IController {
             userName.setDisable(true);
             connectButton.setDisable(true);
             connectionStatus.setText("Connecting...");
+            modelMainWindow.getServerManager().setConnectedName(userName.getText());
             if (modelMainWindow.getServerManager() != null) {
                 modelMainWindow.getServerManager().connected.addListener(new ChangeListener<Boolean>() {
                     @Override
@@ -226,6 +230,8 @@ public class ControllerMainWindow implements IController {
         if (modelMainWindow.getServerManager() != null) {
             connectionStatus.setText("Connected");
             connectButton.setText("Disconnect");
+            serverSelection.setDisable(true);
+            userName.setDisable(true);
             connectButton.setDisable(false);
             connectButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
@@ -242,8 +248,10 @@ public class ControllerMainWindow implements IController {
             modelMainWindow.getServerManager().queueCommand(Commands.getGameList(new CommandCallback() {
                 @Override
                 public void onResponse(boolean success, String[] args) {
-                    if (success && args != null && args.length > 0)
+                    if (success && args != null && args.length > 0) {
                         setAvailableGames(args);
+                    }
+
                 }
             }));
         }

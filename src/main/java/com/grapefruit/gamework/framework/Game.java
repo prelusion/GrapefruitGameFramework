@@ -35,7 +35,7 @@ public abstract class Game {
     }
 
     public void startTurnTimer() {
-        System.out.println("Start turn timer!");
+        //System.out.println("Start turn timer!");
         resetTurnTimer();
 
         turnTimeThread = new Thread(() -> {

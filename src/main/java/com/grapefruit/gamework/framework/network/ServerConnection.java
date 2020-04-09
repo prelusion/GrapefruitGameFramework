@@ -124,8 +124,8 @@ public class ServerConnection {
             String playerTwoScore = parseCommandArg(msg, "PLAYERTWOSCORE");
             String comment = parseCommandArg(msg, "COMMENT");
 
-            System.out.println("SVR GAME LOSS");
-            System.out.println("Comment: " + comment);
+//            System.out.println("SVR GAME LOSS");
+//            System.out.println("Comment: " + comment);
 
             if (comment.equals("Turn timelimit reached")) {
                 CommandCallback listener = serverCommandListeners.get("onTurnTimeoutLose");
@@ -135,15 +135,15 @@ public class ServerConnection {
             }
 
         } else if (msg.startsWith("SVR GAME WIN")) {
-            System.out.println("GAME WIN");
-            System.out.println(msg);
+//            System.out.println("GAME WIN");
+//            System.out.println(msg);
             // SVR GAME LOSS {PLAYERONESCORE: "0", PLAYERTWOSCORE: "0", COMMENT: "Turn timelimit reached"}
             String playerOneScore = parseCommandArg(msg, "PLAYERONESCORE");
             String playerTwoScore = parseCommandArg(msg, "PLAYERTWOSCORE");
             String comment = parseCommandArg(msg, "COMMENT");
 
-            System.out.println("SVR GAME LOSS");
-            System.out.println("Comment: " + comment);
+//            System.out.println("SVR GAME LOSS");
+//            System.out.println("Comment: " + comment);
 
             if (comment.equals("Turn timelimit reached")) {
                 CommandCallback listener = serverCommandListeners.get("onTurnTimeoutWin");
@@ -203,7 +203,7 @@ public class ServerConnection {
     }
 
     private String parseCommandArg(String msg, String fieldname) {
-        System.out.println(fieldname + ": \"");
+//        System.out.println(fieldname + ": \"");
         String a = msg.split(fieldname + ": \"")[1];
         String b = a.split("\"")[0];
         return b;

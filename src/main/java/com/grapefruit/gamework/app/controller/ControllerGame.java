@@ -26,10 +26,9 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
+import java.lang.reflect.Array;
 import java.net.URL;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ControllerGame implements IController {
 
@@ -44,7 +43,7 @@ public class ControllerGame implements IController {
 
     private boolean isFirstTurn = true;
 
-    MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm(7);
+    MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm(10);
 
     @FXML
     private Text turnNumber;
@@ -161,7 +160,7 @@ public class ControllerGame implements IController {
 
     private void setupServerEventHandlers() {
         serverManager.setMoveCallback((boolean success, String[] args) -> {
-            System.out.println("On move callback");
+////            System.out.println("On move callback");
             game.resetTurnTimer();
 
             String playerName = args[0];
@@ -192,7 +191,7 @@ public class ControllerGame implements IController {
                     playAI();
                 });
             }
-//            System.out.println("set turn call back, first turn: " + isFirstTurn);
+////            System.out.println("set turn call back, first turn: " + isFirstTurn);
 //            if (isFirstTurn) {
 //                if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
 //                    Platform.runLater(this::playAI);
@@ -411,18 +410,15 @@ public class ControllerGame implements IController {
             return;
         }
 
-
-
         new Thread(() -> {
             minimaxAlgorithm.startTimeout(9000);
-
             Tile tile = minimaxAlgorithm.calculateBestMove(
                     game.getBoard(),
                     game.getCurrentPlayer(),
                     game.getOpponentPlayer(),
-                    game.getTurnCount()
+                    game.getTurnCount(),
+                    true
             );
-
             Platform.runLater(() -> onFinishAI(tile));
         }).start();
     }
@@ -435,7 +431,7 @@ public class ControllerGame implements IController {
 
         game.resetTurnTimer();
 
-        System.out.println("ai move: " + tile.getRow() + "," + tile.getCol());
+//        System.out.println("ai move: " + tile.getRow() + "," + tile.getCol());
         playMove(tile.getRow(), tile.getCol(), game.getCurrentPlayer());
     }
 

@@ -19,7 +19,7 @@ public class MinimaxAlgorithm {
         currentDepth = depth;
     }
 
-    public Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount) {
+    public Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount, boolean firstTurn) {
         this.player = player;
         this.opponent = opponent;
         threads = new ArrayList<>();
@@ -69,27 +69,27 @@ public class MinimaxAlgorithm {
         int bestScore = MIN_VALUE;
         for (Map.Entry<Tile, Integer> entry : tiles.entrySet()) {
             if (entry.getValue() > bestScore) {
-                if (player.getColor() == Colors.WHITE) {
-                    System.out.println(String.format("new best move: %s,%s - strategic value: %s, score: %s", entry.getKey().getRow(), entry.getKey().getCol(), entry.getKey().getStrategicValue(), entry.getValue()));
-                }
+//                if (player.getColor() == Colors.WHITE) {
+//                    System.out.println(String.format("new best move: %s,%s - strategic value: %s, score: %s", entry.getKey().getRow(), entry.getKey().getCol(), entry.getKey().getStrategicValue(), entry.getValue()));
+//                }
                 bestTile = entry.getKey();
                 bestScore = entry.getValue();
             } else if(entry.getKey().getStrategicValue() > bestTile.getStrategicValue() && entry.getValue() == bestScore) {
-                if (player.getColor() == Colors.WHITE) {
-                    System.out.println(String.format("new best move: %s,%s - strategic value: %s, score: %s", entry.getKey().getRow(), entry.getKey().getCol(), entry.getKey().getStrategicValue(), entry.getValue()));
-                }
+//                if (player.getColor() == Colors.WHITE) {
+//                    System.out.println(String.format("new best move: %s,%s - strategic value: %s, score: %s", entry.getKey().getRow(), entry.getKey().getCol(), entry.getKey().getStrategicValue(), entry.getValue()));
+//                }
                 bestTile = entry.getKey();
                 bestScore = entry.getValue();
             } else {
-                if (player.getColor() == Colors.WHITE) {
-                    System.out.println(String.format("not best move: %s,%s - strategic value: %s, score: %s", entry.getKey().getRow(), entry.getKey().getCol(), entry.getKey().getStrategicValue(), entry.getValue()));
-                }
+//                if (player.getColor() == Colors.WHITE) {
+//                    System.out.println(String.format("not best move: %s,%s - strategic value: %s, score: %s", entry.getKey().getRow(), entry.getKey().getCol(), entry.getKey().getStrategicValue(), entry.getValue()));
+//                }
             }
         }
 
         if (bestTile != null) {
             if (player.getColor() == Colors.WHITE) {
-                System.out.println(String.format("best move: %s,%s - strategic value: %s, score: %s", bestTile.getRow(), bestTile.getCol(), bestTile.getStrategicValue(), bestScore));
+            //    System.out.println(String.format("best move: %s,%s - strategic value: %s, score: %s", bestTile.getRow(), bestTile.getCol(), bestTile.getStrategicValue(), bestScore));
             }
         }
 
@@ -99,9 +99,21 @@ public class MinimaxAlgorithm {
             timeoutThread.interrupt();
         }
 
-        if (!timedOut && startTime - (System.currentTimeMillis() / 1000) < 2000) {
+        long endTime = (System.currentTimeMillis() / 1000);
+        System.out.println("Timedout " + timedOut + " Time " + (endTime - startTime));
+        if (firstTurn && (endTime - startTime) <= 2) {
             System.out.println("INCREASING DEPTH!!");
             currentDepth++;
+            System.out.println("TRYING BETTER VALUE!");
+            Tile newTile = this.calculateBestMove(board, player, opponent, turnCount, false);
+            if(((System.currentTimeMillis() / 1000) - startTime) <= 8) {
+                System.out.println("LETS GO BETTER VALUE!");
+                bestTile = newTile;
+            }
+
+        } else if(firstTurn && (endTime - startTime) >= 9) {
+            System.out.println("DECREASING DEPTH!!");
+            currentDepth--;
         }
 
         return bestTile;
@@ -121,8 +133,6 @@ public class MinimaxAlgorithm {
             }
 
             timedOut = true;
-            System.out.println("DEREASING DEPTH!!");
-            currentDepth--;
             System.out.println("STOP RECURSIONS!");
             timeoutThread = null;
         });

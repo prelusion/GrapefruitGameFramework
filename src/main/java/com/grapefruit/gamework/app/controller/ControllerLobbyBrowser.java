@@ -259,7 +259,7 @@ public class ControllerLobbyBrowser implements IController {
             setText(null);
 
             ChallengeablePlayer player = getTableView().getItems().get(getIndex());
-            
+
             switch (player.getStatus()) {
                 case "Received":
                     btn.setDisable(false);

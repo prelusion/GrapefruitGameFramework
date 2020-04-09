@@ -27,7 +27,7 @@ public class ReversiBenchMark {
     public int calculateDepth(int depth) {
         System.out.println(depth);
         long startTime = System.currentTimeMillis()/1000;
-        Tile tile = minimax.calculateBestMove(board, player, opponent, 5);
+        Tile tile = minimax.calculateBestMove(board, player, opponent, 5, true);
         long endTime = System.currentTimeMillis()/1000;
 
         if((endTime - startTime) < turnTimeout && tile != null) {

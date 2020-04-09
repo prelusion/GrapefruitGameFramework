@@ -8,6 +8,7 @@ import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.app.util.ImageHelper;
 import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDialogFactory;
 import com.grapefruit.gamework.framework.*;
+import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.Helpers;
 import com.grapefruit.gamework.framework.network.ServerManager;
@@ -26,10 +27,9 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
+import java.lang.reflect.Array;
 import java.net.URL;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ControllerGame implements IController {
 
@@ -41,22 +41,18 @@ public class ControllerGame implements IController {
 
     private Player onlineGameLocalPlayer;
     private Player onlineGameOnlinePlayer;
+    private Player playerA;
+    private Player playerB;
 
     private boolean isFirstTurn = true;
 
-    MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm(7);
+    MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm(10);
 
     @FXML
     private Text turnNumber;
 
     @FXML
     private Text timeLeft;
-
-    @FXML
-    private VBox scorePlayerName;
-
-    @FXML
-    private VBox scorePlayerScore;
 
     @FXML
     private ImageView gameIcon;
@@ -128,11 +124,22 @@ public class ControllerGame implements IController {
             }
         }
 
-        drawBoard();
-        update();
+        Player[] players = game.getPlayers();
+        if (players.length < 1) {
+            System.err.println("Less than 1 player");
+            return;
+        }
+
+        playerA = players[0];
+        playerB = players[1];
+        playerNameA.setText(playerA.getName());
+        playerNameB.setText(playerB.getName());
 
         currentPlayerName.setText(game.getCurrentPlayer().getName());
         currentColor.setText(game.getCurrentPlayer().getColor().toString());
+
+        drawBoard();
+        update();
 
         if (!this.model.isOnlineGame()) {
             game.setTurnTimeout(60);
@@ -179,7 +186,7 @@ public class ControllerGame implements IController {
 
     private void setupServerEventHandlers() {
         serverManager.setMoveCallback((boolean success, String[] args) -> {
-            System.out.println("On move callback");
+////            System.out.println("On move callback");
             game.resetTurnTimer();
 
             String playerName = args[0];
@@ -201,8 +208,7 @@ public class ControllerGame implements IController {
 
         serverManager.setTurnCallback((boolean success, String[] args) -> {
             game.setCurrentPlayer(onlineGameLocalPlayer);
-            currentPlayerName.setText(game.getCurrentPlayer().getName());
-            currentColor.setText(game.getCurrentPlayer().getColor().toString());
+            Platform.runLater(this::update);
 
             if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
                 Platform.runLater(() -> {
@@ -212,12 +218,6 @@ public class ControllerGame implements IController {
                     playAI();
                 });
             }
-//            System.out.println("set turn call back, first turn: " + isFirstTurn);
-//            if (isFirstTurn) {
-//                if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
-//                    Platform.runLater(this::playAI);
-//                }
-//            }
         });
 
         serverManager.setTurnTimeoutWinCallback((boolean success, String[] args) -> {
@@ -277,7 +277,9 @@ public class ControllerGame implements IController {
         drawPieces();
         resetPossibleMoves();
 
-        if (player.isLocal() && !player.isAI()) {
+        if (model.isOnlineGame() && player.isLocal()) {
+            markPossibleMoves(game.getAvailableMoves(player), player.isAI());
+        } else if (player.isLocal() && !player.isAI()) {
             markPossibleMoves(game.getAvailableMoves(player), player.isAI());
         }
     }
@@ -288,11 +290,8 @@ public class ControllerGame implements IController {
         turnNumber.setText(Integer.toString(game.getTurnCount()));
         timeLeft.setText(String.valueOf(game.getTurnSecondsLeft()));
 
-        Player[] players = game.getPlayers();
-        playerNameA.setText(players[0].getName());
-        playerScoreA.setText(Integer.toString(game.getBoard().countPieces(players[0])));
-        playerNameB.setText(players[1].getName());
-        playerScoreB.setText(Integer.toString(game.getBoard().countPieces(players[1])));
+        playerScoreA.setText(Integer.toString(game.getBoard().countPieces(playerA)));
+        playerScoreB.setText(Integer.toString(game.getBoard().countPieces(playerB)));
     }
 
     public void checkFinished() {
@@ -393,8 +392,6 @@ public class ControllerGame implements IController {
         model.getServerManager().queueCommand(Commands.setMove(
                 (success, args) -> {
                     game.setCurrentPlayer(onlineGameOnlinePlayer);
-                    currentPlayerName.setText(game.getCurrentPlayer().getName());
-                    currentColor.setText(game.getCurrentPlayer().getColor().toString());
                     Platform.runLater(this::update);
                 },
                 row,
@@ -430,18 +427,15 @@ public class ControllerGame implements IController {
             return;
         }
 
-
-
         new Thread(() -> {
             minimaxAlgorithm.startTimeout(9000);
-
             Tile tile = minimaxAlgorithm.calculateBestMove(
                     game.getBoard(),
                     game.getCurrentPlayer(),
                     game.getOpponentPlayer(),
-                    game.getTurnCount()
+                    game.getTurnCount(),
+                    true
             );
-
             Platform.runLater(() -> onFinishAI(tile));
         }).start();
     }
@@ -454,7 +448,7 @@ public class ControllerGame implements IController {
 
         game.resetTurnTimer();
 
-        System.out.println("ai move: " + tile.getRow() + "," + tile.getCol());
+//        System.out.println("ai move: " + tile.getRow() + "," + tile.getCol());
         playMove(tile.getRow(), tile.getCol(), game.getCurrentPlayer());
     }
 
@@ -465,8 +459,6 @@ public class ControllerGame implements IController {
 
         do {
             game.nextPlayer();
-            currentPlayerName.setText(game.getCurrentPlayer().getName());
-            currentColor.setText(game.getCurrentPlayer().getColor().toString());
             update();
             if (game.hasFinished()) break;
         } while (game.getAvailableMoves(game.getCurrentPlayer()).size() < 1);
@@ -511,6 +503,20 @@ public class ControllerGame implements IController {
 
     @FXML
     private void quitGame() {
-        GameApplication.openLauncher();
+        if (model.isOnlineGame()) {
+            model.getServerManager().queueCommand(Commands.forfeit(new CommandCallback() {
+                @Override
+                public void onResponse(boolean success, String[] args) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            GameApplication.openLauncher();
+                        }
+                    });
+                }
+            }));
+        } else {
+            GameApplication.openLauncher();
+        }
     }
 }

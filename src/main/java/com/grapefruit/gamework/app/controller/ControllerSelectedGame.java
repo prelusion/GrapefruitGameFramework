@@ -49,6 +49,10 @@ public class ControllerSelectedGame implements IController {
     @Override
     public void setModel(IModel model) {
         this.model = (ModelSelectedGame) model;
+        setupWidgets();
+    }
+
+    public void setupWidgets() {
         gameName.setText(this.model.getSelectedGame().getAssets().getDisplayName());
         gameIcon.setImage(this.model.getSelectedGame().getAssets().getIcon());
         setMainMenuButtons();
@@ -56,6 +60,7 @@ public class ControllerSelectedGame implements IController {
 
     public void setMainMenuButtons() {
         ArrayList<Button> buttons = new ArrayList<>();
+
         Button onlineButton = new Button("Play online");
         Button offlineButton = new Button("Play offline");
 
@@ -95,10 +100,9 @@ public class ControllerSelectedGame implements IController {
 
             Player[] players = new Player[]{playerBlack, playerWhite};
 
-            GameApplication.startGame(
+            GameApplication.startOfflineGame(
                     model.getSelectedGame().getAssets(),
-                    model.getSelectedGame().getFactory().create(players),
-                    players
+                    model.getSelectedGame().getFactory().create(players)
             );
         });
 
@@ -108,10 +112,9 @@ public class ControllerSelectedGame implements IController {
 
             Player[] players = new Player[]{playerBlack, playerWhite};
 
-            GameApplication.startGame(
+            GameApplication.startOfflineGame(
                     model.getSelectedGame().getAssets(),
-                    model.getSelectedGame().getFactory().create(players),
-                    players
+                    model.getSelectedGame().getFactory().create(players)
             );
         });
 

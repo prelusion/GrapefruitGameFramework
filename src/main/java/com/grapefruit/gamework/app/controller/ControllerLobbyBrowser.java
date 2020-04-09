@@ -13,7 +13,6 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -24,7 +23,7 @@ import javafx.util.Duration;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ControllerLobbyBrowser implements IController{
+public class ControllerLobbyBrowser implements IController {
 
     private ModelLobbyBrowser model;
 
@@ -44,16 +43,14 @@ public class ControllerLobbyBrowser implements IController{
     /**
      * Required for FXML
      */
-    public ControllerLobbyBrowser()
-    {
+    public ControllerLobbyBrowser() {
     }
 
     /**
      * Required for FXML
      * Sets the displayed icon and name for listed game.
      */
-    private void initialize()
-    {
+    private void initialize() {
     }
 
     /**
@@ -62,7 +59,10 @@ public class ControllerLobbyBrowser implements IController{
     @Override
     public void setModel(IModel model) {
         this.model = (ModelLobbyBrowser) model;
-        initialize();
+        setupWidgets();
+    }
+
+    public void setupWidgets() {
         setupTable();
         Timeline timeline = new Timeline();
         timeline.getKeyFrames().add(new KeyFrame(
@@ -84,7 +84,7 @@ public class ControllerLobbyBrowser implements IController{
         aiRadioButton.setSelected(true);
     }
 
-    private void setupTable(){
+    private void setupTable() {
         TableColumn challengers = new TableColumn("Player");
         TableColumn status = new TableColumn("Status");
         TableColumn buttons = new TableColumn("Action");
@@ -94,142 +94,8 @@ public class ControllerLobbyBrowser implements IController{
         //
         buttons.setCellValueFactory(new PropertyValueFactory<>("status"));
 
-        Callback<TableColumn<ChallengeablePlayer, String>, TableCell<ChallengeablePlayer, String>> cellFactory
-                = //
-                new Callback<TableColumn<ChallengeablePlayer, String>, TableCell<ChallengeablePlayer, String>>() {
-                    @Override
-                    public TableCell call(final TableColumn<ChallengeablePlayer, String> param) {
-                        final TableCell<ChallengeablePlayer, String> cell = new TableCell<ChallengeablePlayer, String>() {
+        Callback<TableColumn<ChallengeablePlayer, String>, TableCell<ChallengeablePlayer, String>> cellFactory = param -> new PlayerTableCell();
 
-                            final Button btn = new Button("");
-
-                            @Override
-                            public void updateItem(String item, boolean empty) {
-                                super.updateItem(item, empty);
-                                if (empty) {
-                                    setGraphic(null);
-                                    setText(null);
-                                } else {
-                                    ChallengeablePlayer player = getTableView().getItems().get(getIndex());
-                                    if (player.getStatus().equals("Received")) {
-                                        btn.setDisable(false);
-                                        btn.setText("Accept");
-                                        btn.setOnAction(event -> {
-                                            model.getServerManager().setStartGameCallback(new CommandCallback() {
-                                                @Override
-                                                public void onResponse(boolean success, String[] args) {
-                                                    boolean isPlayingAsAI = aiRadioButton.isSelected();
-
-                                                    String firstTurnName = args[0];
-                                                    String opponentName = args[1];
-
-                                                    String currentPlayerName = model.getOnlineName();
-
-                                                    Player[] players = new Player[2];
-
-                                                    if (firstTurnName.equals(currentPlayerName)) {
-                                                        players[0] = new Player(currentPlayerName, Colors.BLACK, true, isPlayingAsAI);
-                                                        players[1] = new Player(opponentName, Colors.WHITE, false);
-                                                    } else if (firstTurnName.equals(opponentName)) {
-                                                        players[0] = new Player(opponentName, Colors.BLACK, false);
-                                                        players[1] = new Player(currentPlayerName, Colors.WHITE, true, isPlayingAsAI);
-                                                    }
-
-                                                    Platform.runLater(() -> {
-                                                        GameApplication.startGame(
-                                                                model.getSelectedGame().getAssets(),
-                                                                model.getSelectedGame().getFactory().create(players),
-                                                                players,
-                                                                model.getServerManager()
-                                                        );
-                                                    });
-                                                }
-                                            });
-
-                                            int challengeNumber = -1;
-
-                                            List<ServerConnection.ResponseChallenge> challenges = model.getChallenges();
-                                            for (ServerConnection.ResponseChallenge challenge : challenges) {
-                                                 if (challenge.getChallenger().equals(player.getPlayerName())) {
-                                                     challengeNumber = challenge.getNumber();
-                                                 }
-                                            }
-
-                                            if (challengeNumber < 0) {
-                                                return;
-                                            }
-
-                                            model.getServerManager().queueCommand(
-                                                    Commands.challengeRespond((success, args) -> {}, true, challengeNumber));
-                                        });
-                                    } else if (player.getStatus().equals("Sent")) {
-                                        btn.setText("Waiting");
-                                        btn.setDisable(true);
-                                        btn.setOnAction(event -> {
-                                            //Nothing
-                                        });
-                                    } else if (player.getStatus().equals("Unchallenged")) {
-                                        btn.setText("Send");
-                                        btn.setDisable(false);
-                                        btn.setOnAction(event -> {
-                                            model.getServerManager().queueCommand(Commands.challenge(new CommandCallback() {
-                                                @Override
-                                                public void onResponse(boolean success, String[] args) {
-                                                    if (success) {
-                                                        model.getServerManager().addChallenge(new ServerConnection.ResponseChallenge(player.getPlayerName(), -1,model.getGameAssets().getServerId() ,ServerConnection.ChallengeStatus.CHALLENGE_SENT));
-                                                        player.setStatus("Sent");
-                                                        Platform.runLater(new Runnable() {
-                                                            @Override
-                                                            public void run() {
-                                                                updateTable();
-                                                            }
-                                                        });
-                                                    }
-                                                }
-                                            }, player.getPlayerName(), model.getGameAssets().getServerId()));
-
-                                            model.getServerManager().setStartGameCallback(new CommandCallback() {
-                                                @Override
-                                                public void onResponse(boolean success, String[] args) {
-                                                    boolean isPlayingAsAI = aiRadioButton.isSelected();
-
-                                                    String firstTurnName = args[0];
-                                                    String opponentName = args[1];
-
-                                                    String currentPlayerName = model.getOnlineName();
-
-                                                    Player[] players = new Player[2];
-
-                                                    if (firstTurnName.equals(currentPlayerName)) {
-                                                        players[0] = new Player(currentPlayerName, Colors.BLACK, true, isPlayingAsAI);
-                                                        players[1] = new Player(opponentName, Colors.WHITE, false);
-                                                    } else if (firstTurnName.equals(opponentName)) {
-                                                        players[0] = new Player(opponentName, Colors.BLACK, false);
-                                                        players[1] = new Player(currentPlayerName, Colors.WHITE, true, isPlayingAsAI);
-                                                    }
-
-                                                    Platform.runLater(() -> {
-                                                        GameApplication.startGame(
-                                                                model.getSelectedGame().getAssets(),
-                                                                model.getSelectedGame().getFactory().create(players),
-                                                                players,
-                                                                model.getServerManager()
-                                                        );
-                                                    });
-                                                }
-                                            });
-                                        });
-                                    }
-
-
-                                    setGraphic(btn);
-                                    setText(null);
-                                }
-                            }
-                        };
-                        return cell;
-                    }
-                };
         //
         // END
         //
@@ -289,7 +155,7 @@ public class ControllerLobbyBrowser implements IController{
     }
 
     @FXML
-    private void onBack(){
+    private void onBack() {
         model.getControllerSelectedGame().setMainMenuButtons();
     }
 
@@ -307,16 +173,129 @@ public class ControllerLobbyBrowser implements IController{
             return playerName.get();
         }
 
-        public void setPlayerName(String key) {
-            this.playerName.set(key);
-        }
-
         public String getStatus() {
             return status.get();
         }
 
         public void setStatus(String value) {
             this.status.set(value);
+        }
+    }
+
+    public void sendChallenge(ChallengeablePlayer player) {
+        model.getServerManager().queueCommand(Commands.challenge((success, args) -> {
+            if (!success) {
+                System.err.println("Error sending challenge...");
+                return;
+            }
+            ServerConnection.ResponseChallenge responseChallenge = new ServerConnection.ResponseChallenge(
+                    player.getPlayerName(),
+                    -1,
+                    model.getGameAssets().getServerId(),
+                    ServerConnection.ChallengeStatus.CHALLENGE_SENT
+            );
+
+            model.getServerManager().addChallenge(responseChallenge);
+
+            player.setStatus("Sent");
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    updateTable();
+                }
+            });
+        }, player.getPlayerName(), model.getGameAssets().getServerId()));
+    }
+
+    public void acceptChallenge(int challengeNumber) {
+        model.getServerManager().queueCommand(
+                Commands.challengeRespond((success, args) -> {
+                }, true, challengeNumber));
+    }
+
+    public void setupGameStartEventHandler() {
+        model.getServerManager().setStartGameCallback((success, args) -> {
+            boolean isPlayingAsAI = aiRadioButton.isSelected();
+
+            String firstTurnName = args[0];
+            String opponentName = args[1];
+
+            String currentPlayerName = model.getOnlineName();
+
+            Player[] players = new Player[2];
+
+            if (firstTurnName.equals(currentPlayerName)) {
+                players[0] = new Player(currentPlayerName, Colors.BLACK, true, isPlayingAsAI);
+                players[1] = new Player(opponentName, Colors.WHITE, false);
+            } else if (firstTurnName.equals(opponentName)) {
+                players[0] = new Player(opponentName, Colors.BLACK, false);
+                players[1] = new Player(currentPlayerName, Colors.WHITE, true, isPlayingAsAI);
+            }
+
+            Platform.runLater(() -> {
+                GameApplication.startOnlineGame(
+                        model.getSelectedGame().getAssets(),
+                        model.getSelectedGame().getFactory().create(players),
+                        model.getServerManager()
+                );
+            });
+        });
+    }
+
+    private class PlayerTableCell extends TableCell<ChallengeablePlayer, String> {
+        final Button btn = new Button("");
+
+        @Override
+        public void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+
+            if (empty) {
+                setGraphic(null);
+                setText(null);
+                return;
+            }
+
+            setGraphic(btn);
+            setText(null);
+
+            ChallengeablePlayer player = getTableView().getItems().get(getIndex());
+            
+            switch (player.getStatus()) {
+                case "Received":
+                    btn.setDisable(false);
+                    btn.setText("Accept");
+                    btn.setOnAction(event -> {
+                        List<ServerConnection.ResponseChallenge> challenges = model.getChallenges();
+
+                        ServerConnection.ResponseChallenge responseChallenge = challenges
+                                .stream()
+                                .filter(e -> e.getChallenger().equals(player.getPlayerName()))
+                                .findFirst()
+                                .orElse(null);
+
+                        if (responseChallenge == null) {
+                            return;
+                        }
+
+                        setupGameStartEventHandler();
+                        acceptChallenge(responseChallenge.getNumber());
+                    });
+                    break;
+                case "Sent":
+                    btn.setText("Waiting");
+                    btn.setDisable(true);
+                    btn.setOnAction(event -> { /*Nothing*/ });
+                    break;
+                case "Unchallenged":
+                    btn.setText("Send");
+                    btn.setDisable(false);
+                    btn.setOnAction(event -> {
+                        System.out.println("Send challenge..");
+                        sendChallenge(player);
+                        setupGameStartEventHandler();
+                    });
+                    break;
+            }
         }
     }
 }

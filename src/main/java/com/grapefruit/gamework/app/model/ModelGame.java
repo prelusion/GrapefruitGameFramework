@@ -14,14 +14,12 @@ public class ModelGame implements IModel {
 
     private Game game;
     private Assets assets;
-    private List<Player> localPlayers;
     private ServerManager serverManager;
 
-    public ModelGame(Game game, Assets assets, Player[] localPlayers, ServerManager manager){
+    public ModelGame(Game game, Assets assets, ServerManager manager){
         this.game = game;
         this.assets = assets;
         this.serverManager = manager;
-        this.localPlayers = new ArrayList<>(Arrays.asList(localPlayers));
     }
 
     /**
@@ -34,10 +32,6 @@ public class ModelGame implements IModel {
 
     public Assets getAssets(){
         return assets;
-    }
-
-    public List<Player> getLocalPlayers() {
-        return localPlayers;
     }
 
     public ServerManager getServerManager() {

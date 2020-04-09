@@ -8,6 +8,7 @@ import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.app.util.ImageHelper;
 import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDialogFactory;
 import com.grapefruit.gamework.framework.*;
+import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.Helpers;
 import com.grapefruit.gamework.framework.network.ServerManager;
@@ -64,7 +65,22 @@ public class ControllerGame implements IController {
     private Text gameName;
 
     @FXML
-    private Text currentTurnPlayer;
+    private Text currentPlayerName;
+
+    @FXML
+    private Text currentColor;
+
+    @FXML
+    private Text playerNameA;
+
+    @FXML
+    private Text playerNameB;
+
+    @FXML
+    private Text playerScoreA;
+
+    @FXML
+    private Text playerScoreB;
 
     @FXML
     private VBox gameBoard;
@@ -114,6 +130,9 @@ public class ControllerGame implements IController {
 
         drawBoard();
         update();
+
+        currentPlayerName.setText(game.getCurrentPlayer().getName());
+        currentColor.setText(game.getCurrentPlayer().getColor().toString());
 
         if (!this.model.isOnlineGame()) {
             game.setTurnTimeout(60);
@@ -182,6 +201,8 @@ public class ControllerGame implements IController {
 
         serverManager.setTurnCallback((boolean success, String[] args) -> {
             game.setCurrentPlayer(onlineGameLocalPlayer);
+            currentPlayerName.setText(game.getCurrentPlayer().getName());
+            currentColor.setText(game.getCurrentPlayer().getColor().toString());
 
             if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
                 Platform.runLater(() -> {
@@ -262,19 +283,16 @@ public class ControllerGame implements IController {
     }
 
     private void updateInfo() {
-        scorePlayerName.getChildren().removeAll(scorePlayerName.getChildren());
-        scorePlayerScore.getChildren().removeAll(scorePlayerScore.getChildren());
-
-        for (Player ignored : game.getPlayers()) {
-            scorePlayerName.getChildren().add(new Text("PlayerName"));
-            scorePlayerScore.getChildren().add(new Text("100"));
-        }
-
-        currentTurnPlayer.setText(game.getCurrentPlayer().getColor().toString());
-
+        currentColor.setText(game.getCurrentPlayer().getColor().toString());
+        currentPlayerName.setText(game.getCurrentPlayer().getName());
+        turnNumber.setText(Integer.toString(game.getTurnCount()));
         timeLeft.setText(String.valueOf(game.getTurnSecondsLeft()));
-        //Todo implement turn number
-        turnNumber.setText("99");
+
+        Player[] players = game.getPlayers();
+        playerNameA.setText(players[0].getName());
+        playerScoreA.setText(Integer.toString(game.getBoard().countPieces(players[0])));
+        playerNameB.setText(players[1].getName());
+        playerScoreB.setText(Integer.toString(game.getBoard().countPieces(players[1])));
     }
 
     public void checkFinished() {
@@ -375,6 +393,8 @@ public class ControllerGame implements IController {
         model.getServerManager().queueCommand(Commands.setMove(
                 (success, args) -> {
                     game.setCurrentPlayer(onlineGameOnlinePlayer);
+                    currentPlayerName.setText(game.getCurrentPlayer().getName());
+                    currentColor.setText(game.getCurrentPlayer().getColor().toString());
                     Platform.runLater(this::update);
                 },
                 row,
@@ -442,6 +462,8 @@ public class ControllerGame implements IController {
 
         do {
             game.nextPlayer();
+            currentPlayerName.setText(game.getCurrentPlayer().getName());
+            currentColor.setText(game.getCurrentPlayer().getColor().toString());
             update();
             if (game.hasFinished()) break;
         } while (game.getAvailableMoves(game.getCurrentPlayer()).size() < 1);
@@ -486,6 +508,20 @@ public class ControllerGame implements IController {
 
     @FXML
     private void quitGame() {
-        GameApplication.openLauncher();
+        if (model.isOnlineGame()) {
+            model.getServerManager().queueCommand(Commands.forfeit(new CommandCallback() {
+                @Override
+                public void onResponse(boolean success, String[] args) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            GameApplication.openLauncher();
+                        }
+                    });
+                }
+            }));
+        } else {
+            GameApplication.openLauncher();
+        }
     }
 }

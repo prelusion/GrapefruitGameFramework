@@ -108,7 +108,9 @@ public class MinimaxAlgorithm {
             Tile newTile = this.calculateBestMove(board, player, opponent, turnCount, false);
             if(((System.currentTimeMillis() / 1000) - startTime) <= 8) {
                 System.out.println("LETS GO BETTER VALUE!");
-                bestTile = newTile;
+                if(newTile != null) {
+                    bestTile = newTile;
+                }
             }
 
         } else if(firstTurn && (endTime - startTime) >= 9) {

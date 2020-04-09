@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="secondary-background" stylesheets="@css/mainwindow.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grapefruit.gamework.app.controller.ControllerSettingsWindow">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style=" -fx-effect: innershadow(GAUSSIAN, #000000, 5, 0, 0, 0);" styleClass="secondary-background" stylesheets="@css/mainwindow.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grapefruit.gamework.app.controller.ControllerSettingsWindow">
    <children>
       <HBox prefHeight="366.0" prefWidth="600.0">
          <children>
@@ -27,7 +27,7 @@
             <FlowPane fx:id="selectedSetting" layoutX="108.0" layoutY="10.0" prefHeight="363.0" prefWidth="503.0" />
          </children>
       </HBox>
-      <ButtonBar minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0" styleClass="primary-background">
+      <ButtonBar minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0" style=" -fx-effect: innershadow(GAUSSIAN, #000000, 5, 0, 0, 0);" styleClass="primary-background">
         <buttons>
           <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancelButton" text="Cancel" />
             <Button fx:id="applyButton" mnemonicParsing="false" onAction="#onApplyButton" text="Apply" />

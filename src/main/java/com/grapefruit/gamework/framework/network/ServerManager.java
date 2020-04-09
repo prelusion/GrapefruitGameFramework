@@ -12,6 +12,7 @@ import java.util.*;
 public class ServerManager {
 
     private boolean sending;
+    private String connectedName = null;
     public BooleanProperty connected = new SimpleBooleanProperty();
 
     /**
@@ -205,5 +206,13 @@ public class ServerManager {
 
     public void setIllegalmoveWinCallback(CommandCallback callback) {
         connection.setIllegalmoveWinCallback(callback);
+    }
+
+    public void setConnectedName(String connectedName) {
+        this.connectedName = connectedName;
+    }
+
+    public String getConnectedName() {
+        return connectedName;
     }
 }

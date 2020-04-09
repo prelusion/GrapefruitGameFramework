@@ -42,7 +42,7 @@ public class GameApplication extends Application {
     }
 
     public static void startGame(Assets assets, Game game, Player[] localPlayers, ServerManager serverManager){
-        primaryStage.setScene(new Scene(GameFactory.build(new ModelGame(game, assets, localPlayers, SERVER_MANAGER)).getParent(), 1100, 800));
+        primaryStage.setScene(new Scene(GameFactory.build(new ModelGame(game, assets, localPlayers, serverManager)).getParent(), 1100, 800));
         primaryStage.setTitle("Now playing: " + assets.getDisplayName());
         primaryStage.show();
     }

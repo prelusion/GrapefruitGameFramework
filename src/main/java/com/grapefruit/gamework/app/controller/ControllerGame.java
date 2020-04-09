@@ -65,7 +65,10 @@ public class ControllerGame implements IController {
     private Text gameName;
 
     @FXML
-    private Text currentTurnPlayer;
+    private Text currentPlayerName;
+
+    @FXML
+    private Text currentColor;
 
     @FXML
     private VBox gameBoard;
@@ -115,6 +118,9 @@ public class ControllerGame implements IController {
 
         drawBoard();
         update();
+
+        currentPlayerName.setText(game.getCurrentPlayer().getName());
+        currentColor.setText(game.getCurrentPlayer().getColor().toString());
 
         if (!this.model.isOnlineGame()) {
             game.setTurnTimeout(60);
@@ -183,6 +189,8 @@ public class ControllerGame implements IController {
 
         serverManager.setTurnCallback((boolean success, String[] args) -> {
             game.setCurrentPlayer(onlineGameLocalPlayer);
+            currentPlayerName.setText(game.getCurrentPlayer().getName());
+            currentColor.setText(game.getCurrentPlayer().getColor().toString());
 
             if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
                 Platform.runLater(() -> {
@@ -271,11 +279,13 @@ public class ControllerGame implements IController {
             scorePlayerScore.getChildren().add(new Text("100"));
         }
 
-        currentTurnPlayer.setText(game.getCurrentPlayer().getColor().toString());
+        currentColor.setText(game.getCurrentPlayer().getColor().toString());
+        currentPlayerName.setText(game.getCurrentPlayer().getName());
+        turnNumber.setText(Integer.toString(game.getTurnCount()));
 
         timeLeft.setText(String.valueOf(game.getTurnSecondsLeft()));
         //Todo implement turn number
-        turnNumber.setText("99");
+//        turnNumber.setText("99");
     }
 
     public void checkFinished() {
@@ -376,6 +386,8 @@ public class ControllerGame implements IController {
         model.getServerManager().queueCommand(Commands.setMove(
                 (success, args) -> {
                     game.setCurrentPlayer(onlineGameOnlinePlayer);
+                    currentPlayerName.setText(game.getCurrentPlayer().getName());
+                    currentColor.setText(game.getCurrentPlayer().getColor().toString());
                     Platform.runLater(this::update);
                 },
                 row,
@@ -446,6 +458,8 @@ public class ControllerGame implements IController {
 
         do {
             game.nextPlayer();
+            currentPlayerName.setText(game.getCurrentPlayer().getName());
+            currentColor.setText(game.getCurrentPlayer().getColor().toString());
             update();
             if (game.hasFinished()) break;
         } while (game.getAvailableMoves(game.getCurrentPlayer()).size() < 1);

@@ -17,31 +17,58 @@
             <Pane minHeight="-Infinity" prefHeight="50.0" prefWidth="201.0" />
             <VBox alignment="CENTER" prefHeight="56.0" prefWidth="201.0">
                <children>
-                  <ImageView fx:id="gameIcon" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-               </children></VBox>
-            <VBox alignment="CENTER" prefHeight="75.0" prefWidth="201.0">
-               <children>
                   <Text fx:id="gameName" strokeType="OUTSIDE" strokeWidth="0.0" text="name">
                      <font>
-                        <Font size="26.0" />
+                        <Font size="58.0" />
                      </font>
                   </Text>
+                  <ImageView fx:id="gameIcon" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                </children></VBox>
+            <VBox alignment="CENTER" prefHeight="75.0" prefWidth="201.0" />
             <HBox alignment="CENTER">
                <children>
                   <VBox alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="98.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Currently playing:" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Remain turn time:" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Turn number:" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Current player:">
+                           <font>
+                              <Font size="23.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Color">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Remaining time:">
+                           <font>
+                              <Font size="18.0" />
+                           </font></Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Turn:">
+                           <font>
+                              <Font size="18.0" />
+                           </font></Text>
                      </children>
                   </VBox>
                   <Pane prefHeight="200.0" prefWidth="12.0" />
                   <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Text fx:id="currentTurnPlayer" strokeType="OUTSIDE" strokeWidth="0.0" text="playername" />
-                        <Text fx:id="timeLeft" strokeType="OUTSIDE" strokeWidth="0.0" text="time" />
-                        <Text fx:id="turnNumber" strokeType="OUTSIDE" strokeWidth="0.0" text="turn" />
+                        <Text fx:id="currentPlayerName" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="playername">
+                           <font>
+                              <Font size="23.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="currentColor" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="color">
+                           <font>
+                              <Font size="18.0" />
+                           </font></Text>
+                        <Text fx:id="timeLeft" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="time">
+                           <font>
+                              <Font size="18.0" />
+                           </font></Text>
+                        <Text fx:id="turnNumber" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="turn">
+                           <font>
+                              <Font size="18.0" />
+                           </font></Text>
                      </children>
                   </VBox>
                </children>
@@ -51,7 +78,10 @@
                <children>
                   <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Player" underline="true" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Player" underline="true">
+                           <font>
+                              <Font size="16.0" />
+                           </font></Text>
                         <Pane minHeight="-Infinity" prefHeight="10.0" prefWidth="100.0" />
                         <VBox fx:id="scorePlayerName" prefHeight="200.0" prefWidth="100.0" />
                      </children>
@@ -59,7 +89,10 @@
                   <Pane minWidth="-Infinity" prefHeight="200.0" prefWidth="12.0" />
                   <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Score" underline="true" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Score" underline="true">
+                           <font>
+                              <Font size="16.0" />
+                           </font></Text>
                         <Pane minHeight="-Infinity" prefHeight="10.0" prefWidth="100.0" />
                         <VBox fx:id="scorePlayerScore" prefHeight="200.0" prefWidth="100.0" />
                      </children>

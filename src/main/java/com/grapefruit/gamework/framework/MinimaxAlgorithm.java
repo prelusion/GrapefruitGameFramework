@@ -21,22 +21,11 @@ public class MinimaxAlgorithm {
     private int currentDepth;
     private Thread timeoutThread;
     private long startTime;
+    private Stack<Boolean> timeoutStack;
+    private int turnCount;
 
     public MinimaxAlgorithm(int depth) {
         currentDepth = depth;
-    }
-
-    public void destroy() {
-        if (timeoutThread != null) {
-            timeoutThread.interrupt();
-        }
-
-        if (threads != null) {
-            for (Thread thread : threads) {
-                thread.interrupt();
-            }
-        }
-
     }
 
     public Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount) {
@@ -82,7 +71,55 @@ public class MinimaxAlgorithm {
             turnCountDecrease();
         }
 
-        System.out.println("depth: " + depth);
+
+        Map<Tile, Integer> tiles = threadedMiniMax(board, player, depth);
+
+        Tile bestTile = null;
+        int bestScore = MIN_VALUE;
+        for (Map.Entry<Tile, Integer> entry : tiles.entrySet()) {
+            if (entry.getValue() > bestScore) {
+                bestTile = entry.getKey();
+                bestScore = entry.getValue();
+
+            } else if (bestTile != null &&
+                    entry.getKey().getStrategicValue() > bestTile.getStrategicValue() &&
+                    entry.getValue() == bestScore)
+            {
+                bestTile = entry.getKey();
+                bestScore = entry.getValue();
+            }
+        }
+
+        if (firstTurn && secondsLeft() > 8) {
+            currentDepth++;
+            System.out.println("increase depth");
+        }
+
+        if(!isTimedOut() && secondsLeft() >= 1 && depth < 30) {
+            timeoutStack.push(isTimedOut());
+
+            System.out.println("depth: " + depth);
+            Tile newTile = realCalculateBestMove(board, player, opponent, false, depth + 1);
+            System.out.println(timeoutStack);
+            if(!timeoutStack.isEmpty()) {
+                if (newTile != null && !timeoutStack.pop()) {
+                    System.out.println("new best tile on depth " + depth);
+                    bestTile = newTile;
+                    timeoutStack.clear();
+                } else {
+                    System.out.println("corrupt tile, ignoring");
+                }
+            }
+        } else if (firstTurn && secondsLeft() <= 1) {
+            System.out.println("decrease depth");
+            currentDepth--;
+        }
+
+        return bestTile;
+    }
+
+
+    private Map<Tile, Integer> threadedMiniMax(Board board, Player player, int depth) {
         ArrayList<Thread> threads = new ArrayList<>();
         List<Tile> moves = board.getAvailableMoves(player);
         Map<Tile, Integer> tiles = new HashMap<>();

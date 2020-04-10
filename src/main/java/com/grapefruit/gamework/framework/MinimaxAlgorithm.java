@@ -19,9 +19,20 @@ public class MinimaxAlgorithm {
     private int currentDepth;
     private Thread timeoutThread;
     private long startTime;
+    ArrayList<Thread> threads;
 
     public MinimaxAlgorithm(int depth) {
         currentDepth = depth;
+    }
+
+    public void destroy() {
+        if (timeoutThread != null) {
+            timeoutThread.interrupt();
+        }
+
+        for (Thread thread : threads) {
+            thread.interrupt();
+        }
     }
 
     public Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount) {
@@ -61,7 +72,7 @@ public class MinimaxAlgorithm {
         turnCountDecrease(turnCount);
 
         System.out.println("depth: " + depth);
-        ArrayList<Thread> threads = new ArrayList<>();
+        threads = new ArrayList<>();
         List<Tile> moves = board.getAvailableMoves(player);
         Map<Tile, Integer> tiles = new HashMap<>();
         for (Tile tile : moves) {

@@ -13,6 +13,9 @@ import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.Helpers;
 import com.grapefruit.gamework.framework.network.ServerManager;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -33,6 +36,8 @@ import java.util.*;
 
 public class ControllerGame implements IController {
 
+    private boolean destroyed = false;
+
     private ModelGame model;
     private Game game;
     private ServerManager serverManager;
@@ -47,6 +52,11 @@ public class ControllerGame implements IController {
     private boolean isFirstTurn = true;
 
     MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm(10);
+    Thread minimaxThread;
+
+    /** listeners */
+    ChangeListener<Number> turnChangeListener;
+    MapChangeListener<Player, Integer> scoreChangeListener;
 
     @FXML
     private Text turnNumber;
@@ -142,7 +152,7 @@ public class ControllerGame implements IController {
         update();
 
         if (!this.model.isOnlineGame()) {
-            game.setTurnTimeout(60);
+            game.setTurnTimeout(10);
 
             game.startTurnTimer();
 
@@ -163,30 +173,26 @@ public class ControllerGame implements IController {
     }
 
     private void setupObservableListeners() {
-        game.getBoard().scores.addListener(
-                (MapChangeListener<Player, Integer>) change -> updateInfo());
+        scoreChangeListener = (MapChangeListener<Player, Integer>) change -> updateInfo();
 
-        game.getTurnTimeProperty().addListener(
-                (observable, oldValue, newValue) -> {
+        turnChangeListener = (observableValue, oldValue, newValue) -> Platform.runLater(() -> {
+            if ((int) newValue <= 0) {
+                game.resetTurnTimer();
 
-                    Platform.runLater(() -> {
-                        if ((int) newValue <= 0) {
-                            this.model.getGame().resetTurnTimer();
-
-                            if (!this.model.isOnlineGame()) {
-                                createEndDialog("Turn timed out, you lose!");
-                            }
-                        } else {
-                            updateInfo();
-                        }
-                    });
+                if (!model.isOnlineGame()) {
+                    createEndDialog("Turn timed out, you lose!");
                 }
-        );
+            } else {
+                updateInfo();
+            }
+        });
+
+        game.getBoard().scores.addListener(scoreChangeListener);
+        game.getTurnTimeProperty().addListener(turnChangeListener);
     }
 
     private void setupServerEventHandlers() {
         serverManager.setMoveCallback((boolean success, String[] args) -> {
-////            System.out.println("On move callback");
             game.resetTurnTimer();
 
             String playerName = args[0];
@@ -423,7 +429,7 @@ public class ControllerGame implements IController {
             return;
         }
 
-        new Thread(() -> {
+        minimaxThread = new Thread(() -> {
             minimaxAlgorithm.startTimeout(9000);
             Tile tile = minimaxAlgorithm.calculateBestMove(
                     game.getBoard(),
@@ -432,7 +438,9 @@ public class ControllerGame implements IController {
                     game.getTurnCount()
             );
             Platform.runLater(() -> onFinishAI(tile));
-        }).start();
+        });
+
+        minimaxThread.start();
     }
 
     private void onFinishAI(Tile tile) {
@@ -455,6 +463,7 @@ public class ControllerGame implements IController {
         do {
             game.nextPlayer();
             update();
+            if (destroyed) break;
             if (game.hasFinished()) break;
         } while (game.getAvailableMoves(game.getCurrentPlayer()).size() < 1);
 
@@ -462,7 +471,8 @@ public class ControllerGame implements IController {
     }
 
     private void createEndDialog(String message) {
-        GameEndDialogFactory.build(new ModelGameEndDialog(message));
+        ModelGameEndDialog endDialogModel = new ModelGameEndDialog(message, this::onClose);
+        GameEndDialogFactory.build(endDialogModel);
     }
 
     private HBox createBoardTile(int size, Color color, Tile tile) {
@@ -498,6 +508,8 @@ public class ControllerGame implements IController {
 
     @FXML
     private void quitGame() {
+        onClose();
+
         if (model.isOnlineGame()) {
             model.getServerManager().queueCommand(Commands.forfeit(new CommandCallback() {
                 @Override
@@ -513,5 +525,41 @@ public class ControllerGame implements IController {
         } else {
             GameApplication.openLauncher();
         }
+    }
+
+    /**
+     * This method stops all side effects.
+     */
+    private void onClose() {
+        System.out.println("on close!");
+        System.out.println("removing side effects");
+
+        if (turnChangeListener != null) {
+            game.getTurnTimeProperty().removeListener(turnChangeListener);
+        }
+
+        if (scoreChangeListener != null) {
+            game.getBoard().scores.removeListener(scoreChangeListener);
+        }
+
+        if (serverManager != null) {
+            serverManager.removeMoveCallback();
+            serverManager.removeTurnCallback();
+            serverManager.removeTurnTimeoutWinCallback();
+            serverManager.removeTurnTimeoutLoseCallback();
+            serverManager.removeIllegalmoveWinCallback();
+        }
+
+        if (minimaxAlgorithm != null) {
+            minimaxAlgorithm.destroy();
+        }
+
+        if (minimaxThread != null) {
+            minimaxThread.interrupt();
+        }
+
+        game.destroy();
+
+        destroyed = true;
     }
 }

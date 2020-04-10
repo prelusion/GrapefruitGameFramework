@@ -192,20 +192,40 @@ public class ServerManager {
         connection.setMoveCallback(callback);
     }
 
+    public void removeMoveCallback() {
+        connection.setMoveCallback(null);
+    }
+
     public void setTurnCallback(CommandCallback callback) {
         connection.setTurnCallback(callback);
+    }
+
+    public void removeTurnCallback() {
+        connection.setTurnCallback(null);
     }
 
     public void setTurnTimeoutWinCallback(CommandCallback callback) {
         connection.setTurnTimeoutWinCallback(callback);
     }
 
+    public void removeTurnTimeoutWinCallback() {
+        connection.setTurnTimeoutWinCallback(null);
+    }
+
     public void setTurnTimeoutLoseCallback(CommandCallback callback) {
         connection.setTurnTimeoutLoseCallback(callback);
     }
 
+    public void removeTurnTimeoutLoseCallback() {
+        connection.setTurnTimeoutLoseCallback(null);
+    }
+
     public void setIllegalmoveWinCallback(CommandCallback callback) {
         connection.setIllegalmoveWinCallback(callback);
+    }
+
+    public void removeIllegalmoveWinCallback() {
+        connection.setIllegalmoveWinCallback(null);
     }
 
     public void setConnectedName(String connectedName) {

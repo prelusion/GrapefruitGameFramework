@@ -16,12 +16,15 @@ public class ModelGame implements IModel {
     private Assets assets;
     private ServerManager serverManager;
     private boolean isTournament;
+    private boolean showPopups;
 
-    public ModelGame(Game game, Assets assets, ServerManager manager, boolean isTournament){
+
+    public ModelGame(Game game, Assets assets, ServerManager manager, boolean isTournament, boolean showPopups){
         this.game = game;
         this.assets = assets;
         this.serverManager = manager;
         this.isTournament = isTournament;
+        this.showPopups = showPopups;
     }
 
     /**
@@ -45,4 +48,6 @@ public class ModelGame implements IModel {
     }
 
     public boolean isTournament() { return isTournament; };
+
+    public boolean showPopups() { return showPopups; };
 }

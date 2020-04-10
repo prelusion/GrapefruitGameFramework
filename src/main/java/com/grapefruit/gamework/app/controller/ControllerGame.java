@@ -328,6 +328,10 @@ public class ControllerGame implements IController {
             return;
         }
 
+        if (!model.showPopups()) {
+            return;
+        }
+
         if (game.isTie()) {
             createEndDialog("Tie!");
             return;

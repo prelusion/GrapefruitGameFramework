@@ -91,7 +91,7 @@ public class ControllerSelectedGame implements IController {
         tournamentButton.setOnAction(event -> {
             buttonBox.getChildren().removeAll(buttonBox.getChildren());
             Label label = new Label();
-            label.setText("Waiting...");
+            label.setText("tournament on");
             label.setStyle("-fx-text-fill: white; -fx-font-size: 20px;");
             buttonBox.getChildren().add(label);
             setupTournamentGameStartEventHandler();
@@ -100,7 +100,7 @@ public class ControllerSelectedGame implements IController {
         autoChallengeButton.setOnAction(event -> {
             buttonBox.getChildren().removeAll(buttonBox.getChildren());
             Label label = new Label();
-            label.setText("Waiting...");
+            label.setText("auto challenge on");
             label.setStyle("-fx-text-fill: white; -fx-font-size: 20px;");
             buttonBox.getChildren().add(label);
             setupAutoChallengeGameStartEventHandler();
@@ -215,7 +215,7 @@ public class ControllerSelectedGame implements IController {
             }
 
             Platform.runLater(() -> {
-                GameApplication.startTournamentGame(
+                GameApplication.startAutoChallengeGame(
                         model.getSelectedGame().getAssets(),
                         model.getSelectedGame().getFactory().create(players),
                         model.getServerManager()

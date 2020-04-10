@@ -264,4 +264,8 @@ public class ServerManager {
     public String getConnectedName() {
         return connectedName;
     }
+
+    public void clearChallenges() {
+        challenges = new ArrayList<>();
+    }
 }

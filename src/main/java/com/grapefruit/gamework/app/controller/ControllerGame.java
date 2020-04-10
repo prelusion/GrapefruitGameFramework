@@ -305,12 +305,8 @@ public class ControllerGame implements IController {
         }
 
         if (game.hasWinner()) {
-            if (model.getLocalPlayers().contains(game.getWinner())) {
-                if (model.getLocalPlayers().size() == 1) {
-                    createEndDialog("You win!");
-                } else {
-                    createEndDialog(game.getWinner().getName() + " has won the game!");
-                }
+            if (game.getWinner().isLocal()) {
+                createEndDialog(game.getWinner().getName() + " has won the game!");
             } else {
                 createEndDialog("You lose!");
             }

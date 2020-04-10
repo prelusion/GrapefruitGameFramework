@@ -2,10 +2,8 @@ package com.grapefruit.gamework.framework;
 
 import com.grapefruit.gamework.games.reversi.ReversiBoard;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
 import static java.lang.Integer.*;
@@ -13,18 +11,24 @@ import static java.lang.Integer.*;
 public class MinimaxAlgorithm {
     private Player player;
     private Player opponent;
-
     private int timeout;
+
+    public boolean isTimedOut() {
+        return timedOut;
+    }
+
     private boolean timedOut = false;
     private int currentDepth;
     private Thread timeoutThread;
     private long startTime;
+    private Stack<Boolean> timeoutStack;
 
     public MinimaxAlgorithm(int depth) {
         currentDepth = depth;
     }
 
     public Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount) {
+        timeoutStack = new Stack<>();
         timedOut = false;
         System.out.println("---------------- TURN " + turnCount + " -----------------");
         return realCalculateBestMove(board, player, opponent, turnCount, true, currentDepth);
@@ -106,29 +110,35 @@ public class MinimaxAlgorithm {
             }
         }
 
-
         if (timeoutThread != null) {
             timeoutThread.interrupt();
         }
 
-        System.out.println("timeout: " + timedOut);
+        System.out.println("timeout: " + isTimedOut());
         System.out.println("seconds left: " + secondsLeft());
 
-        if (!timedOut && secondsLeft() >= 8) {
-            if (firstTurn) {
-                currentDepth++;
-                System.out.println("increase depth");
-            }
+        if (firstTurn && secondsLeft() >= 8) {
+            currentDepth++;
+            System.out.println("increase depth");
+        }
+
+        if(isTimedOut() == false) {
+            timeoutStack.push(isTimedOut());
 
             System.out.println("recursion");
             Tile newTile = realCalculateBestMove(board, player, opponent, turnCount, false, depth + 1);
-            if (newTile != null) {
-                System.out.println("new best tile");
-                bestTile = newTile;
-            } else {
-                System.out.println("corrupt tile, ignoring");
+            if(!timeoutStack.isEmpty()) {
+                if (newTile != null && timeoutStack.pop() == false) {
+                    System.out.println("new best tile on depth " + depth);
+                    bestTile = newTile;
+                    timeoutStack.clear();
+                } else {
+                    System.out.println("corrupt tile, ignoring");
+                }
             }
-        } else if (timedOut && firstTurn && secondsLeft() <= 2) {
+        }
+
+        if (firstTurn && secondsLeft() <= 1) {
             System.out.println("decrease depth");
             currentDepth--;
         }
@@ -140,11 +150,11 @@ public class MinimaxAlgorithm {
         this.timeout = timeout;
         startTime = getCurrentSeconds();
 
+
         timeoutThread = new Thread(() -> {
             try {
                 Thread.sleep(timeout);
-            } catch (InterruptedException ignored) {
-            }
+            } catch (InterruptedException ignored) { }
 
             if (timeoutThread.isInterrupted()) {
                 timeoutThread = null;
@@ -152,6 +162,7 @@ public class MinimaxAlgorithm {
             }
 
             timedOut = true;
+            timeoutStack.push(isTimedOut());
             System.out.println("timed out");
             timeoutThread = null;
         });

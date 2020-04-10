@@ -70,7 +70,7 @@ public class ControllerLobbyBrowser implements IController {
         Timeline timeline = new Timeline();
 
         KeyFrame keyFrame = new KeyFrame(
-                Duration.millis(500),
+                Duration.millis(2000),
                 check -> {
                     if (!model.getServerManager().isConnected()) {
                         timeline.stop();

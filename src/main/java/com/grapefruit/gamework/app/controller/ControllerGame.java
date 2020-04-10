@@ -339,7 +339,9 @@ public class ControllerGame implements IController {
             return;
         }
 
-        if (!model.showPopups()) {
+        stopSideEffects();
+
+        if (!model.isAutoChallenge()) {
             return;
         }
 
@@ -508,7 +510,7 @@ public class ControllerGame implements IController {
     }
 
     private void createEndDialog(String message) {
-        ModelGameEndDialog endDialogModel = new ModelGameEndDialog(message, this::onClose);
+        ModelGameEndDialog endDialogModel = new ModelGameEndDialog(message, this::stopSideEffects);
         GameEndDialogFactory.build(endDialogModel);
     }
 
@@ -545,7 +547,7 @@ public class ControllerGame implements IController {
 
     @FXML
     private void quitGame() {
-        onClose();
+        stopSideEffects();
 
         if (model.isOnlineGame() && !game.hasFinished()) {
             model.getServerManager().queueCommand(Commands.forfeit(
@@ -558,7 +560,7 @@ public class ControllerGame implements IController {
     /**
      * This method stops all side effects.
      */
-    private void onClose() {
+    private void stopSideEffects() {
         System.out.println("destroying game session");
 
         if (turnChangeListener != null) {
@@ -570,7 +572,8 @@ public class ControllerGame implements IController {
         }
 
         if (serverManager != null) {
-            if (!model.isTournament()) {
+            if (!model.isTournament() && !model.isAutoChallenge()) {
+                System.out.println("removing start game callback");
                 serverManager.removeStartGameCallback();
             }
 

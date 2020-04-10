@@ -75,6 +75,7 @@ public class ServerConnection {
     }
 
     private void handleMessage(String msg) {
+        System.out.println("Handle message: " + msg);
         if (manager.commandsInQueue()) {
             handleCommandResponses(msg);
         }

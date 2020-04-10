@@ -199,6 +199,7 @@ public class ControllerSelectedGame implements IController {
         });
 
         model.getServerManager().setStartGameCallback((success, args) -> {
+            System.out.println("setupAutoChallengeGameStartEventHandler start game callback!!");
             String firstTurnName = args[0];
             String opponentName = args[1];
 

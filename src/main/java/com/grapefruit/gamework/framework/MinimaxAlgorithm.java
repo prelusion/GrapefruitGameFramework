@@ -31,6 +31,7 @@ public class MinimaxAlgorithm {
         timeoutStack = new Stack<>();
         timedOut = false;
         System.out.println("---------------- TURN " + turnCount + " -----------------");
+
         Tile tile = realCalculateBestMove(board, player, opponent, turnCount, true, currentDepth);
 
         if (timeoutThread != null) {
@@ -59,18 +60,7 @@ public class MinimaxAlgorithm {
         }
     }
 
-    private Tile realCalculateBestMove(Board board, Player player, Player opponent, int turnCount, boolean firstTurn, int depth) {
-        this.player = player;
-        this.opponent = opponent;
-
-        if (turnCount > 44) {
-            System.out.println("increase depth (turn > 44)");
-            currentDepth++;
-        }
-
-        turnCountDecrease(turnCount);
-
-        System.out.println("depth: " + depth);
+    private Map<Tile, Integer> threadedMiniMax(Board board, Player player, int depth) {
         ArrayList<Thread> threads = new ArrayList<>();
         List<Tile> moves = board.getAvailableMoves(player);
         Map<Tile, Integer> tiles = new HashMap<>();
@@ -100,6 +90,24 @@ public class MinimaxAlgorithm {
             }
         }
 
+        return tiles;
+    }
+
+    private Tile realCalculateBestMove(Board board, Player player, Player opponent, int turnCount, boolean firstTurn, int depth) {
+        this.player = player;
+        this.opponent = opponent;
+
+        if (turnCount > 44) {
+            System.out.println("increase depth (turn > 44)");
+            currentDepth++;
+        }
+
+        turnCountDecrease(turnCount);
+
+        System.out.println("depth: " + depth);
+
+        Map<Tile, Integer> tiles = threadedMiniMax(board, player, depth);
+
         Tile bestTile = null;
         int bestScore = MIN_VALUE;
         for (Map.Entry<Tile, Integer> entry : tiles.entrySet()) {
@@ -116,8 +124,6 @@ public class MinimaxAlgorithm {
             }
         }
 
-
-
         System.out.println("timeout: " + isTimedOut());
         System.out.println("seconds left: " + secondsLeft());
 
@@ -132,7 +138,7 @@ public class MinimaxAlgorithm {
             System.out.println("recursion");
             Tile newTile = realCalculateBestMove(board, player, opponent, turnCount, false, depth + 1);
             if(!timeoutStack.isEmpty()) {
-                if (newTile != null && timeoutStack.pop() == false) {
+                if (newTile != null && !timeoutStack.pop()) {
                     System.out.println("new best tile on depth " + depth);
                     bestTile = newTile;
                     timeoutStack.clear();
@@ -163,48 +169,12 @@ public class MinimaxAlgorithm {
                 timeoutStack.push(isTimedOut());
                 System.out.println("timed out");
             } catch (InterruptedException ignored) {
-                System.out.println("timeout thread interrupted");
+                System.out.println("timeout thread interrupted, ignoring");
             }
-
-//            while (!timeoutThread.isInterrupted()) {
-//                System.out.println("Timeout thread");
-//                System.out.println("seconds left: " + secondsLeft());
-//                System.out.println("timeout: " + timeout / 1000);
-//                System.out.println("boolean: " + (secondsLeft() < (timeout / 1000)));
-//
-//                if (secondsLeft() < (timeout / 1000)) {
-//                    System.out.println("timed out");
-//                    timedOut = true;
-//                    timeoutStack.push(isTimedOut());
-//                    break;
-//                }
-//
-//                try {
-//                    Thread.sleep(200);
-//                } catch (InterruptedException ignored) {
-//                    break;
-//                }
-//            }
-            System.out.println("breaking timeout loop");
-
-//            try {
-//                Thread.sleep(timeout);
-//            } catch (InterruptedException ignored) { }
-//
-//            if (timeoutThread.isInterrupted()) {
-//                timeoutThread = null;
-//                return;
-//            }
-//
-//            timedOut = true;
-//            timeoutStack.push(isTimedOut());
-//            System.out.println("timed out");
-//            timeoutThread = null;
         });
 
         timeoutThread.start();
     }
-
 
     public int minimax(int depth, Board board, int score, int alpha, int beta, boolean maximizingPlayer) {
         if (depth == 0 || timedOut) {

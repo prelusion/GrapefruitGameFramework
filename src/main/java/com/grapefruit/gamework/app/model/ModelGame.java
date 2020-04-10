@@ -15,11 +15,13 @@ public class ModelGame implements IModel {
     private Game game;
     private Assets assets;
     private ServerManager serverManager;
+    private boolean isTournament;
 
-    public ModelGame(Game game, Assets assets, ServerManager manager){
+    public ModelGame(Game game, Assets assets, ServerManager manager, boolean isTournament){
         this.game = game;
         this.assets = assets;
         this.serverManager = manager;
+        this.isTournament = isTournament;
     }
 
     /**
@@ -41,4 +43,6 @@ public class ModelGame implements IModel {
     public boolean isOnlineGame() {
         return serverManager != null;
     }
+
+    public boolean isTournament() { return isTournament; };
 }

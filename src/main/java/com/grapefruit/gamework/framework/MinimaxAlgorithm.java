@@ -30,9 +30,12 @@ public class MinimaxAlgorithm {
             timeoutThread.interrupt();
         }
 
-        for (Thread thread : threads) {
-            thread.interrupt();
+        if (threads != null) {
+            for (Thread thread : threads) {
+                thread.interrupt();
+            }
         }
+
     }
 
     public Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount) {

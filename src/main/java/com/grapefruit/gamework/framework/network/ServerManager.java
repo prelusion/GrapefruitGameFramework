@@ -188,6 +188,10 @@ public class ServerManager {
         connection.setStartGameCallback(callback);
     }
 
+    public void removeStartGameCallback() {
+        connection.setStartGameCallback(null);
+    }
+
     public void setMoveCallback(CommandCallback callback) {
         connection.setMoveCallback(callback);
     }

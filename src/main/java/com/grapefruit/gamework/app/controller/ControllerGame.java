@@ -301,6 +301,10 @@ public class ControllerGame implements IController {
     }
 
     public void checkFinished() {
+        if (destroyed) {
+            return;
+        }
+
         if (!game.hasFinished()) {
             return;
         }
@@ -451,7 +455,6 @@ public class ControllerGame implements IController {
 
         game.resetTurnTimer();
 
-//        System.out.println("ai move: " + tile.getRow() + "," + tile.getCol());
         playMove(tile.getRow(), tile.getCol(), game.getCurrentPlayer());
     }
 
@@ -510,7 +513,7 @@ public class ControllerGame implements IController {
     private void quitGame() {
         onClose();
 
-        if (model.isOnlineGame()) {
+        if (model.isOnlineGame() && !game.hasFinished()) {
             model.getServerManager().queueCommand(Commands.forfeit(new CommandCallback() {
                 @Override
                 public void onResponse(boolean success, String[] args) {
@@ -543,6 +546,10 @@ public class ControllerGame implements IController {
         }
 
         if (serverManager != null) {
+            if (!model.isTournament()) {
+                serverManager.removeStartGameCallback();
+            }
+
             serverManager.removeMoveCallback();
             serverManager.removeTurnCallback();
             serverManager.removeTurnTimeoutWinCallback();

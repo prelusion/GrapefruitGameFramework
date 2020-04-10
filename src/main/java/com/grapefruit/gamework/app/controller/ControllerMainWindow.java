@@ -172,12 +172,18 @@ public class ControllerMainWindow implements IController {
      */
     public void updateSelectionBox(){
         ArrayList<AppSettings.Server> servers =  AppSettings.getSettings().getServers();
-
         serverSelection.getItems().removeAll(serverSelection.getItems());
-
         for (AppSettings.Server server: servers){
             serverSelection.getItems().add(server);
         }
+        if (AppSettings.getSettings().getDefaultServer() != null) {
+            serverSelection.getSelectionModel().select(AppSettings.getSettings().getDefaultServer());
+            selectedServer = AppSettings.getSettings().getDefaultServer();
+        }
+        if (AppSettings.getSettings().getDefaultUser() != null) {
+            userName.setText(AppSettings.getSettings().getDefaultUser().getUsername());
+        }
+
     }
 
     /**
@@ -185,7 +191,6 @@ public class ControllerMainWindow implements IController {
      */
     @FXML
     private void onServerSelectionChange(){
-
         if (serverSelection.getValue() instanceof AppSettings.Server) {
             selectedServer = (AppSettings.Server) serverSelection.getValue();
         }
@@ -195,6 +200,7 @@ public class ControllerMainWindow implements IController {
     private void onConnect(){
         InetAddressValidator validator = new InetAddressValidator();
         if (selectedServer != null && validator.isValid(selectedServer.getIp()) && modelMainWindow.getServerManager() != null) {
+            setDefaultSettings();
             serverSelection.setDisable(true);
             userName.setDisable(true);
             connectButton.setDisable(true);
@@ -286,5 +292,14 @@ public class ControllerMainWindow implements IController {
                 updateGames();
             }
         });
+    }
+
+    public void setDefaultSettings(){
+        AppSettings.Settings settings = AppSettings.getSettings();
+        settings.setDefaultServer(selectedServer);
+        AppSettings.User defaultUser = new AppSettings.User();
+        defaultUser.setUsername(userName.getText());
+        settings.setDefaultUser(defaultUser);
+        AppSettings.saveSettings(settings);
     }
 }

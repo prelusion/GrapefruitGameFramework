@@ -108,10 +108,33 @@ public abstract class AppSettings {
     public static class Settings{
         private ArrayList<Server> servers;
         private ArrayList<User> users;
+        private Server defaultServer;
+        private User defaultUser;
 
         public Settings(){
             servers = new ArrayList<>();
             users = new ArrayList<>();
+
+            Server defaultServer = new Server("Hanze", "145.33.225.170");
+
+            setDefaultServer(defaultServer);
+            servers.add(defaultServer);
+        }
+
+        public void setDefaultServer(Server defaultServer) {
+            this.defaultServer = defaultServer;
+        }
+
+        public void setDefaultUser(User defaultUser) {
+            this.defaultUser = defaultUser;
+        }
+
+        public Server getDefaultServer() {
+            return defaultServer;
+        }
+
+        public User getDefaultUser() {
+            return defaultUser;
         }
 
         public void addServer(Server server){
@@ -164,6 +187,18 @@ public abstract class AppSettings {
     }
 
     public static class User{
+
+        public User(){
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
         private String username;
     }
 }

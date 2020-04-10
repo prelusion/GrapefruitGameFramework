@@ -2,8 +2,10 @@ package com.grapefruit.gamework.app.controller;
 
 import com.grapefruit.gamework.app.GameApplication;
 import com.grapefruit.gamework.app.model.IModel;
+import com.grapefruit.gamework.app.model.ModelGameEndDialog;
 import com.grapefruit.gamework.app.model.ModelLobbyBrowser;
 import com.grapefruit.gamework.app.util.Command;
+import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDialogFactory;
 import com.grapefruit.gamework.framework.Colors;
 import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.network.CommandCallback;
@@ -187,6 +189,11 @@ public class ControllerLobbyBrowser implements IController {
         model.getServerManager().queueCommand(Commands.challenge((success, args) -> {
             if (!success) {
                 System.err.println("Error sending challenge...");
+                if (args != null) {
+                    for (String arg : args) System.out.println(arg);
+                    ModelGameEndDialog endDialogModel = new ModelGameEndDialog(args[0], () -> {});
+                    GameEndDialogFactory.build(endDialogModel);
+                }
                 return;
             }
             ServerConnection.ResponseChallenge responseChallenge = new ServerConnection.ResponseChallenge(

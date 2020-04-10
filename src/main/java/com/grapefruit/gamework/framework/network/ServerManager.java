@@ -241,6 +241,22 @@ public class ServerManager {
         connection.setIllegalmoveWinCallback(null);
     }
 
+    public void setOnPlayerForfeitCallback(CommandCallback callback) {
+        connection.setOnPlayerForfeitCallback(callback);
+    }
+
+    public void removeOnPlayerForfeitCallback() {
+        connection.setOnPlayerForfeitCallback(null);
+    }
+
+    public void setOnPlayerDisconnectCallback(CommandCallback callback) {
+        connection.setOnPlayerDisconnectCallback(callback);
+    }
+
+    public void removeOnPlayerDisconnectCallbackCallback() {
+        connection.setOnPlayerDisconnectCallback(null);
+    }
+
     public void setConnectedName(String connectedName) {
         this.connectedName = connectedName;
     }

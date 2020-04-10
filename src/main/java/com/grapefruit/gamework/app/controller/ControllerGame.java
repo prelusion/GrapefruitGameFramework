@@ -47,8 +47,6 @@ public class ControllerGame implements IController {
     private Player playerA;
     private Player playerB;
 
-    private boolean isFirstTurn = true;
-
     MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm(10);
     Thread minimaxThread;
 
@@ -251,6 +249,22 @@ public class ControllerGame implements IController {
             game.resetTurnTimer();
             Platform.runLater(() -> {
                 createEndDialog("Opponent illegal move, you win!");
+                update();
+            });
+        });
+
+        serverManager.setOnPlayerForfeitCallback((boolean success, String[] args) -> {
+            game.resetTurnTimer();
+            Platform.runLater(() -> {
+                createEndDialog("Opponent forfeited, you win!");
+                update();
+            });
+        });
+
+        serverManager.setOnPlayerDisconnectCallback((boolean success, String[] args) -> {
+            game.resetTurnTimer();
+            Platform.runLater(() -> {
+                createEndDialog("Opponent disconnected, you win!");
                 update();
             });
         });
@@ -550,6 +564,8 @@ public class ControllerGame implements IController {
             serverManager.removeTurnTimeoutWinCallback();
             serverManager.removeTurnTimeoutLoseCallback();
             serverManager.removeIllegalmoveWinCallback();
+            serverManager.removeOnPlayerForfeitCallback();
+            serverManager.removeOnPlayerDisconnectCallbackCallback();
         }
 
         if (minimaxAlgorithm != null) {

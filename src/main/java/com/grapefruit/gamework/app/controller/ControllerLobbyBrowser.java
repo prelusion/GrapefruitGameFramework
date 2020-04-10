@@ -3,6 +3,7 @@ package com.grapefruit.gamework.app.controller;
 import com.grapefruit.gamework.app.GameApplication;
 import com.grapefruit.gamework.app.model.IModel;
 import com.grapefruit.gamework.app.model.ModelLobbyBrowser;
+import com.grapefruit.gamework.app.util.Command;
 import com.grapefruit.gamework.framework.Colors;
 import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.network.CommandCallback;
@@ -213,7 +214,7 @@ public class ControllerLobbyBrowser implements IController {
                 }, true, challengeNumber));
     }
 
-    public void setupGameStartEventHandler() {
+    public void setupGameStartEventHandler(Command command) {
         model.getServerManager().setStartGameCallback((success, args) -> {
             boolean isPlayingAsAI = aiRadioButton.isSelected();
 
@@ -233,6 +234,8 @@ public class ControllerLobbyBrowser implements IController {
             }
 
             Platform.runLater(() -> {
+                command.execute();
+
                 GameApplication.startOnlineGame(
                         model.getSelectedGame().getAssets(),
                         model.getSelectedGame().getFactory().create(players),
@@ -277,7 +280,15 @@ public class ControllerLobbyBrowser implements IController {
                             return;
                         }
 
-                        setupGameStartEventHandler();
+
+                        setupGameStartEventHandler(() -> {
+                            model.getChallenges().clear();
+                            model.getServerManager().clearChallenges();
+                            System.out.println("Reset lobby");
+                            player.setStatus("Unchallenged");
+                            btn.setText("Send");
+                            btn.setDisable(false);
+                        });
                         acceptChallenge(responseChallenge.getNumber());
                     });
                     break;
@@ -291,8 +302,14 @@ public class ControllerLobbyBrowser implements IController {
                     btn.setDisable(false);
                     btn.setOnAction(event -> {
                         System.out.println("Send challenge..");
+                        setupGameStartEventHandler(() -> {
+                            model.getChallenges().clear();
+                            model.getServerManager().clearChallenges();
+                            player.setStatus("Unchallenged");
+                            btn.setText(null);
+                            btn.setDisable(false);
+                        });
                         sendChallenge(player);
-                        setupGameStartEventHandler();
                     });
                     break;
             }

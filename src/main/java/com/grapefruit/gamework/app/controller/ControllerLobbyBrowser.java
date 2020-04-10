@@ -70,7 +70,7 @@ public class ControllerLobbyBrowser implements IController {
         Timeline timeline = new Timeline();
 
         KeyFrame keyFrame = new KeyFrame(
-                Duration.millis(1500),
+                Duration.millis(500),
                 check -> {
                     if (!model.getServerManager().isConnected()) {
                         timeline.stop();
@@ -314,7 +314,6 @@ public class ControllerLobbyBrowser implements IController {
                     btn.setText("Send");
                     btn.setDisable(false);
                     btn.setOnAction(event -> {
-                        System.out.println("Send challenge..");
                         setupGameStartEventHandler(() -> {
                             model.getChallenges().clear();
                             model.getServerManager().clearChallenges();

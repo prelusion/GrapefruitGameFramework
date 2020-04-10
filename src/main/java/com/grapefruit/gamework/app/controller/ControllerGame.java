@@ -12,6 +12,7 @@ import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.Helpers;
 import com.grapefruit.gamework.framework.network.ServerManager;
+import com.grapefruit.gamework.games.reversi.JarnoWinningMinimax;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
@@ -51,7 +52,7 @@ public class ControllerGame implements IController {
 
     private boolean isFirstTurn = true;
 
-    MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm(10);
+    JarnoWinningMinimax minimaxAlgorithm = new JarnoWinningMinimax(10);
     Thread minimaxThread;
 
     /** listeners */

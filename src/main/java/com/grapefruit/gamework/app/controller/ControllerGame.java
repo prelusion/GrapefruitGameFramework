@@ -295,7 +295,7 @@ public class ControllerGame implements IController {
         if (game.getCurrentPlayer().getName().equals(playerA.getName())) {
             playerTurnLabel.setText("your turn!");
         } else {
-            playerTurnLabel.setText("Waiting for oppenent!");
+            playerTurnLabel.setText("Waiting for opponent...");
         }
 
 

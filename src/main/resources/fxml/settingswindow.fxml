@@ -17,7 +17,10 @@
                <children>
                   <HBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onClickServer" prefHeight="50.0" prefWidth="90.0" styleClass="menu-item-normal">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Server presets" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Server presets">
+                           <font>
+                              <Font name="Berlin Sans FB" size="12.0" />
+                           </font></Text>
                      </children>
                   </HBox>
                </children>

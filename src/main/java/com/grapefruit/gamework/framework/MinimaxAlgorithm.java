@@ -13,19 +13,34 @@ import static java.lang.Integer.*;
 public class MinimaxAlgorithm {
     private Player player;
     private Player opponent;
-    ArrayList<Thread> threads;
+
     private int timeout;
     private boolean timedOut = false;
     private int currentDepth;
     private Thread timeoutThread;
     private long startTime;
+    ArrayList<Thread> threads;
 
     public MinimaxAlgorithm(int depth) {
         currentDepth = depth;
     }
 
+    public void destroy() {
+        if (timeoutThread != null) {
+            timeoutThread.interrupt();
+        }
+
+        if (threads != null) {
+            for (Thread thread : threads) {
+                thread.interrupt();
+            }
+        }
+
+    }
+
     public Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount) {
         timedOut = false;
+        System.out.println("---------------- TURN " + turnCount + " -----------------");
         return realCalculateBestMove(board, player, opponent, turnCount, true, currentDepth);
     }
 
@@ -37,26 +52,34 @@ public class MinimaxAlgorithm {
         return (startTime + (timeout / 1000)) - getCurrentSeconds();
     }
 
+    public void turnCountDecrease(int turn) {
+        if (currentDepth >= 10 && turn == 2) {
+            System.out.println("decrease depth (turn == 2)");
+            currentDepth--;
+        }
+        if (currentDepth >= 9 && turn == 4) {
+            System.out.println("decrease depth (turn == 4)");
+            currentDepth--;
+        }
+    }
+
     private Tile realCalculateBestMove(Board board, Player player, Player opponent, int turnCount, boolean firstTurn, int depth) {
         this.player = player;
         this.opponent = opponent;
-        threads = new ArrayList<>();
-        int alpha = MIN_VALUE;
-        int beta = MAX_VALUE;
-
-        Tile bestTile = null;
 
         if (turnCount > 44) {
-            System.out.println("INCREASE BECAUSE OF HIGH TURN");
+            System.out.println("increase depth (turn > 44)");
             currentDepth++;
         }
 
-        System.out.println("Starting minimax with depth: " + depth);
+        turnCountDecrease(turnCount);
 
+        System.out.println("depth: " + depth);
+        threads = new ArrayList<>();
         List<Tile> moves = board.getAvailableMoves(player);
         Map<Tile, Integer> tiles = new HashMap<>();
         for (Tile tile : moves) {
-            Board newBoard = new ReversiBoard(board.BOARDSIZE, STRATEGIC_VALUES);
+            Board newBoard = new ReversiBoard(Board.BOARDSIZE, STRATEGIC_VALUES);
             newBoard.copyState(board);
             newBoard.setMove(tile.getRow(), tile.getCol(), player);
             Thread thread = new Thread(() -> {
@@ -64,8 +87,8 @@ public class MinimaxAlgorithm {
                         depth - 1,
                         newBoard,
                         tile.getStrategicValue(),
-                        alpha,
-                        beta,
+                        MIN_VALUE,
+                        MAX_VALUE,
                         false
                 ));
             });
@@ -81,83 +104,53 @@ public class MinimaxAlgorithm {
             }
         }
 
+        Tile bestTile = null;
         int bestScore = MIN_VALUE;
         for (Map.Entry<Tile, Integer> entry : tiles.entrySet()) {
             if (entry.getValue() > bestScore) {
-//                if (player.getColor() == Colors.WHITE) {
-//                    System.out.println(String.format("new best move: %s,%s - strategic value: %s, score: %s", entry.getKey().getRow(), entry.getKey().getCol(), entry.getKey().getStrategicValue(), entry.getValue()));
-//                }
                 bestTile = entry.getKey();
                 bestScore = entry.getValue();
-            } else if (entry.getKey().getStrategicValue() > bestTile.getStrategicValue() && entry.getValue() == bestScore) {
-//                if (player.getColor() == Colors.WHITE) {
-//                    System.out.println(String.format("new best move: %s,%s - strategic value: %s, score: %s", entry.getKey().getRow(), entry.getKey().getCol(), entry.getKey().getStrategicValue(), entry.getValue()));
-//                }
+
+            } else if (bestTile != null &&
+                            entry.getKey().getStrategicValue() > bestTile.getStrategicValue() &&
+                            entry.getValue() == bestScore)
+            {
                 bestTile = entry.getKey();
                 bestScore = entry.getValue();
-            } else {
-//                if (player.getColor() == Colors.WHITE) {
-//                    System.out.println(String.format("not best move: %s,%s - strategic value: %s, score: %s", entry.getKey().getRow(), entry.getKey().getCol(), entry.getKey().getStrategicValue(), entry.getValue()));
-//                }
             }
         }
 
-        if (bestTile != null) {
-            if (player.getColor() == Colors.WHITE) {
-                //    System.out.println(String.format("best move: %s,%s - strategic value: %s, score: %s", bestTile.getRow(), bestTile.getCol(), bestTile.getStrategicValue(), bestScore));
-            }
-        }
-
-        //System.out.println(tiles.size() + " | " + moves.size());
 
         if (timeoutThread != null) {
             timeoutThread.interrupt();
         }
 
-        long endTime = getCurrentSeconds();
-
-        System.out.println("Timedout " + timedOut + " Time " + (endTime - startTime));
-
+        System.out.println("timeout: " + timedOut);
         System.out.println("seconds left: " + secondsLeft());
 
         if (!timedOut && secondsLeft() >= 8) {
             if (firstTurn) {
                 currentDepth++;
+                System.out.println("increase depth");
             }
 
-            System.out.println("INCREASING DEPTH!!");
-            System.out.println("TRYING WITH RECURSION");
+            System.out.println("recursion");
             Tile newTile = realCalculateBestMove(board, player, opponent, turnCount, false, depth + 1);
-            if (newTile != null) bestTile = newTile;
+            if (newTile != null) {
+                System.out.println("new best tile");
+                bestTile = newTile;
+            } else {
+                System.out.println("corrupt tile, ignoring");
+            }
         } else if (timedOut && firstTurn && secondsLeft() <= 2) {
-            System.out.println("DECREASING DEPTH!!");
+            System.out.println("decrease depth");
             currentDepth--;
         }
-
-//        if (firstTurn && (endTime - startTime) <= 2) {
-//            System.out.println("INCREASING DEPTH!!");
-//            currentDepth++;
-//            System.out.println("TRYING BETTER VALUE!");
-//
-//            Tile newTile = this.realCalculateBestMove(board, player, opponent, turnCount, false);
-//
-//            if(((System.currentTimeMillis() / 1000) - startTime) <= 8) {
-//                System.out.println("LETS GO BETTER VALUE!");
-//                if(newTile != null) {
-//                    bestTile = newTile;
-//                }
-//            }
-//
-//        } else if(firstTurn && (endTime - startTime) >= 9) {
-//            System.out.println("DECREASING DEPTH!!");
-//            currentDepth--;
-//        }
 
         return bestTile;
     }
 
     public void startTimeout(int timeout) {
-        System.out.println("START TIMEOUT");
         this.timeout = timeout;
         startTime = getCurrentSeconds();
 
@@ -173,7 +166,7 @@ public class MinimaxAlgorithm {
             }
 
             timedOut = true;
-            System.out.println("STOP RECURSIONS!");
+            System.out.println("timed out");
             timeoutThread = null;
         });
 
@@ -195,7 +188,7 @@ public class MinimaxAlgorithm {
             }
 
             for (Tile move : moves) {
-                Board newBoard = new ReversiBoard(board.BOARDSIZE, STRATEGIC_VALUES);
+                Board newBoard = new ReversiBoard(Board.BOARDSIZE, STRATEGIC_VALUES);
                 newBoard.copyState(board);
                 newBoard.setMove(move.getRow(), move.getCol(), player);
 
@@ -218,7 +211,6 @@ public class MinimaxAlgorithm {
                     break;
                 }
 
-//                if (isInterrupted) break;
             }
             return maxScore;
 
@@ -231,7 +223,7 @@ public class MinimaxAlgorithm {
             }
 
             for (Tile move : moves) {
-                Board newBoard = new ReversiBoard(board.BOARDSIZE, STRATEGIC_VALUES);
+                Board newBoard = new ReversiBoard(Board.BOARDSIZE, STRATEGIC_VALUES);
                 newBoard.copyState(board);
                 newBoard.setMove(move.getRow(), move.getCol(), opponent);
 
@@ -254,7 +246,6 @@ public class MinimaxAlgorithm {
                     break;
                 }
 
-//                if (isInterrupted) break;
             }
             return minScore;
         }

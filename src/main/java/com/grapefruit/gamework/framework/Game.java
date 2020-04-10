@@ -158,4 +158,8 @@ public abstract class Game {
     public List<Tile> getAvailableMoves(Player player) {
         return getBoard().getAvailableMoves(player);
     }
+
+    public void destroy() {
+        resetTurnTimer();
+    }
 }

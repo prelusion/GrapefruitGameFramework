@@ -89,13 +89,16 @@ public class ControllerGame implements IController {
     private Text playerScoreB;
 
     @FXML
-    private VBox gameBoard;
+    private Pane gameBoard;
 
     @FXML
     private URL location;
 
     @FXML
     private ResourceBundle resources;
+
+    @FXML
+    public Text playerTurnLabel;
 
     /**
      * Required for FXML
@@ -298,6 +301,14 @@ public class ControllerGame implements IController {
     private void updateInfo() {
         currentColor.setText(game.getCurrentPlayer().getColor().toString());
         currentPlayerName.setText(game.getCurrentPlayer().getName());
+
+        if (game.getCurrentPlayer().getName().equals(playerA.getName())) {
+            playerTurnLabel.setText("your turn!");
+        } else {
+            playerTurnLabel.setText("Waiting for opponent...");
+        }
+
+
         turnNumber.setText(Integer.toString(game.getTurnCount()));
         timeLeft.setText(String.valueOf(game.getTurnSecondsLeft()));
 

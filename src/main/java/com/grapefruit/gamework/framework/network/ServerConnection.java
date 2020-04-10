@@ -84,9 +84,16 @@ public class ServerConnection {
             manager.getChallenges().removeIf(challenge -> challenge.getNumber() == number);
 
         } else if (msg.startsWith("SVR GAME CHALLENGE")) {
-            ResponseChallenge challenge = parseChallenge(msg);
-            challenge.setStatus(ChallengeStatus.CHALLENGE_RECEIVED);
-            manager.addChallenge(challenge);
+            CommandCallback listener = serverCommandListeners.get("onNewChallenge");
+            String challengeNumber = parseCommandArg(msg, "CHALLENGENUMBER");
+
+            if (listener != null) {
+                listener.onResponse(true, new String[]{challengeNumber});
+            } else {
+                ResponseChallenge challenge = parseChallenge(msg);
+                challenge.setStatus(ChallengeStatus.CHALLENGE_RECEIVED);
+                manager.addChallenge(challenge);
+            }
 
         } else if (msg.startsWith("SVR GAME MATCH")) {
             // SVR GAME MATCH {PLAYERTOMOVE: "jarno", GAMETYPE: "Reversi", OPPONENT: "bob"}
@@ -300,6 +307,10 @@ public class ServerConnection {
 
     public void setOnPlayerDisconnectCallback(CommandCallback callback) {
         serverCommandListeners.put("onPlayerDisconnect", callback);
+    }
+
+    public void setOnNewChallengetCallback(CommandCallback callback) {
+        serverCommandListeners.put("onNewChallenge", callback);
     }
 
     /**

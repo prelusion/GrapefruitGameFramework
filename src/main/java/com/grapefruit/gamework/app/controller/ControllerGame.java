@@ -235,6 +235,11 @@ public class ControllerGame implements IController {
         serverManager.setTurnTimeoutWinCallback((boolean success, String[] args) -> {
             game.resetTurnTimer();
             Platform.runLater(() -> {
+                if (model.isAutoChallenge()) {
+                    autoChallengeQuit();
+                    return;
+                }
+
                 createEndDialog("Opponent's turn timed out, you win!");
                 update();
             });
@@ -243,6 +248,11 @@ public class ControllerGame implements IController {
         serverManager.setTurnTimeoutLoseCallback((boolean success, String[] args) -> {
             game.resetTurnTimer();
             Platform.runLater(() -> {
+                if (model.isAutoChallenge()) {
+                    autoChallengeQuit();
+                    return;
+                }
+
                 createEndDialog("Turn timed out, you lose!");
                 update();
             });
@@ -251,6 +261,11 @@ public class ControllerGame implements IController {
         serverManager.setIllegalmoveWinCallback((boolean success, String[] args) -> {
             game.resetTurnTimer();
             Platform.runLater(() -> {
+                if (model.isAutoChallenge()) {
+                    autoChallengeQuit();
+                    return;
+                }
+
                 createEndDialog("Opponent illegal move, you win!");
                 update();
             });
@@ -259,6 +274,11 @@ public class ControllerGame implements IController {
         serverManager.setOnPlayerForfeitCallback((boolean success, String[] args) -> {
             game.resetTurnTimer();
             Platform.runLater(() -> {
+                if (model.isAutoChallenge()) {
+                    autoChallengeQuit();
+                    return;
+                }
+
                 createEndDialog("Opponent forfeited, you win!");
                 update();
             });
@@ -267,6 +287,10 @@ public class ControllerGame implements IController {
         serverManager.setOnPlayerDisconnectCallback((boolean success, String[] args) -> {
             game.resetTurnTimer();
             Platform.runLater(() -> {
+                if (model.isAutoChallenge()) {
+                    autoChallengeQuit();
+                    return;
+                }
                 createEndDialog("Opponent disconnected, you win!");
                 update();
             });
@@ -336,6 +360,13 @@ public class ControllerGame implements IController {
         }
 
         if (!game.hasFinished()) {
+            return;
+        }
+
+        stopSideEffects();
+
+        if (model.isAutoChallenge()) {
+            autoChallengeQuit();
             return;
         }
 
@@ -504,7 +535,7 @@ public class ControllerGame implements IController {
     }
 
     private void createEndDialog(String message) {
-        ModelGameEndDialog endDialogModel = new ModelGameEndDialog(message, this::onClose);
+        ModelGameEndDialog endDialogModel = new ModelGameEndDialog(message, this::stopSideEffects);
         GameEndDialogFactory.build(endDialogModel);
     }
 
@@ -541,7 +572,7 @@ public class ControllerGame implements IController {
 
     @FXML
     private void quitGame() {
-        onClose();
+        stopSideEffects();
 
         if (model.isOnlineGame() && !game.hasFinished()) {
             model.getServerManager().queueCommand(Commands.forfeit(
@@ -554,7 +585,7 @@ public class ControllerGame implements IController {
     /**
      * This method stops all side effects.
      */
-    private void onClose() {
+    private void stopSideEffects() {
         System.out.println("destroying game session");
 
         if (turnChangeListener != null) {
@@ -566,7 +597,8 @@ public class ControllerGame implements IController {
         }
 
         if (serverManager != null) {
-            if (!model.isTournament()) {
+            if (!model.isTournament() && !model.isAutoChallenge()) {
+                System.out.println("removing start game callback");
                 serverManager.removeStartGameCallback();
             }
 
@@ -590,5 +622,10 @@ public class ControllerGame implements IController {
         game.destroy();
 
         destroyed = true;
+    }
+
+    public void autoChallengeQuit() {
+        stopSideEffects();
+        GameApplication.openLauncher();
     }
 }

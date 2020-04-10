@@ -268,6 +268,10 @@ public class ServerManager {
         connection.setOnPlayerDisconnectCallback(null);
     }
 
+    public void setOnNewChallengetCallback(CommandCallback callback) {
+        connection.setOnNewChallengetCallback(callback);
+    }
+
     public void setConnectedName(String connectedName) {
         this.connectedName = connectedName;
     }

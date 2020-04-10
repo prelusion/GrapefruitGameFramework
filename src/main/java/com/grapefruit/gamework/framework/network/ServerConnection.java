@@ -187,6 +187,8 @@ public class ServerConnection {
             }
 
         } else if (msg.contains("SVR") && msg.contains("[")) {
+            String keyword = msg.split(" ")[1].split(" ")[0];
+
             int startArg = msg.indexOf("[");
             String[] args = msg.substring(startArg + 1, msg.trim().length() - 1).split(", ");
 
@@ -196,14 +198,15 @@ public class ServerConnection {
                 result[i] = element.substring(1, element.length() - 1);
                 i++;
             }
-            Command command = manager.findFirstFittingCommand(ServerManager.ResponseType.LIST, true);
+
+            Command command = manager.findByKeyword(keyword, true);
+
             if (command != null && command.isSent()) {
                 command.confirm();
                 command.doCallBack(true, result);
                 manager.removeCommandFromQueue(command);
             }
         }
-
     }
 
     private String parseCommandArg(String msg, String fieldname) {

@@ -11,7 +11,23 @@
 <HBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="796.0" prefWidth="1012.0" style=" -fx-effect: innershadow(GAUSSIAN, #000000, 30, 0, 0, 0);" styleClass="primary-background" stylesheets="@css/mainwindow.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grapefruit.gamework.app.controller.ControllerGame">
    <children>
       <Pane minWidth="-Infinity" prefHeight="796.0" prefWidth="60.0" />
-      <VBox fx:id="gameBoard" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" stylesheets="@css/mainwindow.css" HBox.hgrow="SOMETIMES" />
+      <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" HBox.hgrow="SOMETIMES">
+         <children>
+            <Pane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="98.0" prefWidth="652.0">
+                     <HBox alignment="CENTER">
+                        <Text fx:id="playerTurnLabel" fill="#dcceb7" strokeType="OUTSIDE" strokeWidth="0.0" text="test">
+                           <font>
+                              <Font name="Berlin Sans FB" size="48.0" />
+                           </font>
+                        </Text>
+                     </HBox>
+                  </VBox>
+               </children>
+            </Pane>
+            <Pane fx:id="gameBoard" prefHeight="800.0" prefWidth="200.0" />
+         </children></VBox>
       <VBox prefHeight="796.0" prefWidth="300.0" style=" -fx-effect: innershadow(GAUSSIAN, #000000, 5, 0, 0, 0);" styleClass="secondary-background">
          <children>
             <Pane minHeight="-Infinity" prefHeight="50.0" prefWidth="201.0" />

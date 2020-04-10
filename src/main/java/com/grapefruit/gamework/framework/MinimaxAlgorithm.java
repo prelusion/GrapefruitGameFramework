@@ -23,6 +23,7 @@ public class MinimaxAlgorithm {
     private long startTime;
     private Stack<Boolean> timeoutStack;
     private int turnCount;
+    ArrayList<Thread> threads;
 
     public MinimaxAlgorithm(int depth) {
         currentDepth = depth;
@@ -133,7 +134,7 @@ public class MinimaxAlgorithm {
 
 
     private Map<Tile, Integer> threadedMiniMax(Board board, Player player, int depth) {
-        ArrayList<Thread> threads = new ArrayList<>();
+        threads = new ArrayList<>();
         List<Tile> moves = board.getAvailableMoves(player);
         Map<Tile, Integer> tiles = new HashMap<>();
         for (Tile tile : moves) {

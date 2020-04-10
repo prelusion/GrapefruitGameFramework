@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="255.0" prefWidth="542.0" styleClass="secondary-background" stylesheets="@css/mainwindow.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grapefruit.gamework.app.controller.ControllerTableSetting">
@@ -17,9 +18,15 @@
       <VBox alignment="TOP_RIGHT" prefHeight="255.0" prefWidth="103.0">
          <children>
             <Pane prefHeight="48.0" prefWidth="100.0" />
-            <Text fx:id="keyName" strokeType="OUTSIDE" strokeWidth="0.0" text="key" wrappingWidth="92.53666830062866" />
+            <Text fx:id="keyName" strokeType="OUTSIDE" strokeWidth="0.0" text="key" wrappingWidth="92.53666830062866">
+               <font>
+                  <Font name="Berlin Sans FB" size="14.0" />
+               </font></Text>
             <Pane prefHeight="15.0" prefWidth="100.0" />
-            <Text fx:id="valueName" strokeType="OUTSIDE" strokeWidth="0.0" text="value" wrappingWidth="90.2261290550232" />
+            <Text fx:id="valueName" strokeType="OUTSIDE" strokeWidth="0.0" text="value" wrappingWidth="92.53666830062866" >
+                <font>
+                    <Font name="Berlin Sans FB" size="14.0" />
+                </font></Text>
          </children>
       </VBox>
       <Pane minWidth="-Infinity" prefHeight="400.0" prefWidth="10.0" />

@@ -135,15 +135,9 @@ public class ServerConnection {
             }
 
         } else if (msg.startsWith("SVR GAME WIN")) {
-//            System.out.println("GAME WIN");
-//            System.out.println(msg);
-            // SVR GAME LOSS {PLAYERONESCORE: "0", PLAYERTWOSCORE: "0", COMMENT: "Turn timelimit reached"}
             String playerOneScore = parseCommandArg(msg, "PLAYERONESCORE");
             String playerTwoScore = parseCommandArg(msg, "PLAYERTWOSCORE");
             String comment = parseCommandArg(msg, "COMMENT");
-
-//            System.out.println("SVR GAME LOSS");
-//            System.out.println("Comment: " + comment);
 
             if (comment.equals("Turn timelimit reached")) {
                 CommandCallback listener = serverCommandListeners.get("onTurnTimeoutWin");
@@ -152,11 +146,14 @@ public class ServerConnection {
                 }
             } else if (comment.equals("Illegal move")) {
                 CommandCallback listener = serverCommandListeners.get("onIllegalmoveWin");
-                if (listener != null) {
-                    listener.onResponse(true, new String[]{});
-                }
+                if (listener != null) listener.onResponse(true, new String[]{});
+            } else if (comment.equals("Player forfeited match")) {
+                CommandCallback listener = serverCommandListeners.get("onPlayerForfeit");
+                if (listener != null) listener.onResponse(true, new String[]{});
+            } else if (comment.equals("Client disconnected")) {
+                CommandCallback listener = serverCommandListeners.get("onPlayerDisconnect");
+                if (listener != null) listener.onResponse(true, new String[]{});
             }
-
         }
 
     }
@@ -193,13 +190,14 @@ public class ServerConnection {
                 i++;
             }
             Command command = manager.findFirstFittingCommand(ServerManager.ResponseType.LIST, true);
+//            if (msg.contains("SVR PLAYERLIST") && command.getCommandString().equals("get gamelist")) {
+//                System.out.println("IGNOREING PLAYER LIST");
             if (command != null && command.isSent()) {
                 command.confirm();
                 command.doCallBack(true, result);
                 manager.removeCommandFromQueue(command);
             }
         }
-
     }
 
     private String parseCommandArg(String msg, String fieldname) {
@@ -292,6 +290,14 @@ public class ServerConnection {
 
     public void setIllegalmoveWinCallback(CommandCallback callback) {
         serverCommandListeners.put("onIllegalmoveWin", callback);
+    }
+
+    public void setOnPlayerForfeitCallback(CommandCallback callback) {
+        serverCommandListeners.put("onPlayerForfeit", callback);
+    }
+
+    public void setOnPlayerDisconnectCallback(CommandCallback callback) {
+        serverCommandListeners.put("onPlayerDisconnect", callback);
     }
 
     /**

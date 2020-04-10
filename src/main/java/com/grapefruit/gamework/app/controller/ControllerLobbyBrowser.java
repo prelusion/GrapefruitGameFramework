@@ -2,10 +2,12 @@ package com.grapefruit.gamework.app.controller;
 
 import com.grapefruit.gamework.app.GameApplication;
 import com.grapefruit.gamework.app.model.IModel;
+import com.grapefruit.gamework.app.model.ModelGameEndDialog;
 import com.grapefruit.gamework.app.model.ModelLobbyBrowser;
+import com.grapefruit.gamework.app.util.Command;
+import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDialogFactory;
 import com.grapefruit.gamework.framework.Colors;
 import com.grapefruit.gamework.framework.Player;
-import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.ServerConnection;
 import javafx.animation.KeyFrame;
@@ -64,19 +66,25 @@ public class ControllerLobbyBrowser implements IController {
 
     public void setupWidgets() {
         setupTable();
+
         Timeline timeline = new Timeline();
-        timeline.getKeyFrames().add(new KeyFrame(
-                Duration.millis(500),
+
+        KeyFrame keyFrame = new KeyFrame(
+                Duration.millis(1500),
                 check -> {
+                    if (!model.getServerManager().isConnected()) {
+                        timeline.stop();
+                        return;
+                    }
                     updateTable();
                     challengeTable.sceneProperty().addListener((obs, oldScene, newScene) -> {
                         if (newScene == null) {
                             timeline.stop();
                         }
                     });
-                }
+                });
 
-        ));
+        timeline.getKeyFrames().add(keyFrame);
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
         updateTable();
@@ -186,6 +194,12 @@ public class ControllerLobbyBrowser implements IController {
         model.getServerManager().queueCommand(Commands.challenge((success, args) -> {
             if (!success) {
                 System.err.println("Error sending challenge...");
+                if (args != null) {
+                    for (String arg : args) System.out.println(arg);
+                    ModelGameEndDialog endDialogModel = new ModelGameEndDialog(args[0], () -> {
+                    });
+                    GameEndDialogFactory.build(endDialogModel);
+                }
                 return;
             }
             ServerConnection.ResponseChallenge responseChallenge = new ServerConnection.ResponseChallenge(
@@ -213,7 +227,7 @@ public class ControllerLobbyBrowser implements IController {
                 }, true, challengeNumber));
     }
 
-    public void setupGameStartEventHandler() {
+    public void setupGameStartEventHandler(Command command) {
         model.getServerManager().setStartGameCallback((success, args) -> {
             boolean isPlayingAsAI = aiRadioButton.isSelected();
 
@@ -233,6 +247,8 @@ public class ControllerLobbyBrowser implements IController {
             }
 
             Platform.runLater(() -> {
+                command.execute();
+
                 GameApplication.startOnlineGame(
                         model.getSelectedGame().getAssets(),
                         model.getSelectedGame().getFactory().create(players),
@@ -277,7 +293,15 @@ public class ControllerLobbyBrowser implements IController {
                             return;
                         }
 
-                        setupGameStartEventHandler();
+
+                        setupGameStartEventHandler(() -> {
+                            model.getChallenges().clear();
+                            model.getServerManager().clearChallenges();
+                            System.out.println("Reset lobby");
+                            player.setStatus("Unchallenged");
+                            btn.setText("Send");
+                            btn.setDisable(false);
+                        });
                         acceptChallenge(responseChallenge.getNumber());
                     });
                     break;
@@ -291,8 +315,14 @@ public class ControllerLobbyBrowser implements IController {
                     btn.setDisable(false);
                     btn.setOnAction(event -> {
                         System.out.println("Send challenge..");
+                        setupGameStartEventHandler(() -> {
+                            model.getChallenges().clear();
+                            model.getServerManager().clearChallenges();
+                            player.setStatus("Unchallenged");
+                            btn.setText(null);
+                            btn.setDisable(false);
+                        });
                         sendChallenge(player);
-                        setupGameStartEventHandler();
                     });
                     break;
             }

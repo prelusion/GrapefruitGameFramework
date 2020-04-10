@@ -153,6 +153,15 @@ public class ServerManager {
     }
 
     public void addChallenge(ServerConnection.ResponseChallenge challenge) {
+        if (challenge.getStatus() == ServerConnection.ChallengeStatus.CHALLENGE_SENT){
+            Iterator<ServerConnection.ResponseChallenge> iterator = challenges.iterator();
+            while (iterator.hasNext()){
+                ServerConnection.ResponseChallenge challenge1 = iterator.next();
+                if (challenge1.getStatus() == ServerConnection.ChallengeStatus.CHALLENGE_SENT){
+                    iterator.remove();
+                }
+            }
+        }
         challenges.add(challenge);
     }
 

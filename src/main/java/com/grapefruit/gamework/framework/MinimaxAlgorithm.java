@@ -22,17 +22,19 @@ public class MinimaxAlgorithm {
     private Thread timeoutThread;
     private long startTime;
     private Stack<Boolean> timeoutStack;
+    private int turnCount;
 
     public MinimaxAlgorithm(int depth) {
         currentDepth = depth;
     }
 
     public Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount) {
+        this.turnCount = turnCount;
         timeoutStack = new Stack<>();
         timedOut = false;
         System.out.println("---------------- TURN " + turnCount + " -----------------");
 
-        Tile tile = realCalculateBestMove(board, player, opponent, turnCount, true, currentDepth);
+        Tile tile = realCalculateBestMove(board, player, opponent, true, currentDepth);
 
         if (timeoutThread != null) {
             timeoutThread.interrupt();
@@ -49,18 +51,13 @@ public class MinimaxAlgorithm {
         return (startTime + (timeout / 1000)) - getCurrentSeconds();
     }
 
-    public void turnCountDecrease(int turn) {
-        if (currentDepth >= 10 && turn == 2) {
-            System.out.println("decrease depth (turn == 2)");
-            currentDepth--;
-        }
-        if (currentDepth >= 9 && turn == 4) {
-            System.out.println("decrease depth (turn == 4)");
+    public void turnCountDecrease() {
+        if (currentDepth >= 9 && turnCount < 7) {
             currentDepth--;
         }
     }
 
-    private Tile realCalculateBestMove(Board board, Player player, Player opponent, int turnCount, boolean firstTurn, int depth) {
+    private Tile realCalculateBestMove(Board board, Player player, Player opponent, boolean firstTurn, int depth) {
         this.player = player;
         this.opponent = opponent;
 
@@ -70,7 +67,7 @@ public class MinimaxAlgorithm {
         }
 
         if (firstTurn) {
-            turnCountDecrease(turnCount);
+            turnCountDecrease();
         }
 
 
@@ -92,7 +89,7 @@ public class MinimaxAlgorithm {
             }
         }
 
-        if (firstTurn && secondsLeft() >= 8) {
+        if (firstTurn && secondsLeft() > 8) {
             currentDepth++;
             System.out.println("increase depth");
         }
@@ -101,7 +98,7 @@ public class MinimaxAlgorithm {
             timeoutStack.push(isTimedOut());
 
             System.out.println("depth: " + depth);
-            Tile newTile = realCalculateBestMove(board, player, opponent, turnCount, false, depth + 1);
+            Tile newTile = realCalculateBestMove(board, player, opponent, false, depth + 1);
             System.out.println(timeoutStack);
             if(!timeoutStack.isEmpty()) {
                 if (newTile != null && !timeoutStack.pop()) {
@@ -112,9 +109,7 @@ public class MinimaxAlgorithm {
                     System.out.println("corrupt tile, ignoring");
                 }
             }
-        }
-
-        if (firstTurn && secondsLeft() <= 1) {
+        } else if (firstTurn && secondsLeft() <= 1) {
             System.out.println("decrease depth");
             currentDepth--;
         }
@@ -163,8 +158,7 @@ public class MinimaxAlgorithm {
         timeoutThread = new Thread(() -> {
             try {
                 Thread.sleep(timeout);
-                timedOut = true;
-                timeoutStack.push(isTimedOut());
+                triggerTimeout();
                 System.out.println("TIMEOUTPUSHED");
                 System.out.println("TIMEOUTPUSHED");
             } catch (InterruptedException ignored) {
@@ -172,6 +166,11 @@ public class MinimaxAlgorithm {
         });
 
         timeoutThread.start();
+    }
+
+    public synchronized void triggerTimeout() {
+        timedOut = true;
+        timeoutStack.push(isTimedOut());
     }
 
     public int minimax(int depth, Board board, int score, int alpha, int beta, boolean maximizingPlayer) {
@@ -197,7 +196,7 @@ public class MinimaxAlgorithm {
                 int currentScore = minimax(
                         depth - 1,
                         newBoard,
-                        score + move.getStrategicValue(),
+                        score + ((turnCount > 44) ? move.getStrategicValue() + board.countPieces(player) * 2 : move.getStrategicValue()),
                         alpha, beta,
                         false
                 );
@@ -234,7 +233,7 @@ public class MinimaxAlgorithm {
                 int currentScore = minimax(
                         depth - 1,
                         newBoard,
-                        score - move.getStrategicValue(),
+                        score - ((turnCount > 44) ? move.getStrategicValue() + board.countPieces(player) * 2 : move.getStrategicValue()),
                         alpha,
                         beta,
                         true

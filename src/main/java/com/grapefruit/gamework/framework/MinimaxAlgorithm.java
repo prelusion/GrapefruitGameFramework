@@ -31,7 +31,13 @@ public class MinimaxAlgorithm {
         timeoutStack = new Stack<>();
         timedOut = false;
         System.out.println("---------------- TURN " + turnCount + " -----------------");
-        return realCalculateBestMove(board, player, opponent, turnCount, true, currentDepth);
+        Tile tile = realCalculateBestMove(board, player, opponent, turnCount, true, currentDepth);
+
+        if (timeoutThread != null) {
+            timeoutThread.interrupt();
+        }
+
+        return tile;
     }
 
     public static long getCurrentSeconds() {
@@ -110,9 +116,7 @@ public class MinimaxAlgorithm {
             }
         }
 
-        if (timeoutThread != null) {
-            timeoutThread.interrupt();
-        }
+
 
         System.out.println("timeout: " + isTimedOut());
         System.out.println("seconds left: " + secondsLeft());
@@ -122,7 +126,7 @@ public class MinimaxAlgorithm {
             System.out.println("increase depth");
         }
 
-        if(isTimedOut() == false) {
+        if(!isTimedOut() && secondsLeft() >= 1) {
             timeoutStack.push(isTimedOut());
 
             System.out.println("recursion");
@@ -150,21 +154,52 @@ public class MinimaxAlgorithm {
         this.timeout = timeout;
         startTime = getCurrentSeconds();
 
-
         timeoutThread = new Thread(() -> {
             try {
+                System.out.println("sleeping");
                 Thread.sleep(timeout);
-            } catch (InterruptedException ignored) { }
-
-            if (timeoutThread.isInterrupted()) {
-                timeoutThread = null;
-                return;
+                System.out.println("after sleep");
+                timedOut = true;
+                timeoutStack.push(isTimedOut());
+                System.out.println("timed out");
+            } catch (InterruptedException ignored) {
+                System.out.println("timeout thread interrupted");
             }
 
-            timedOut = true;
-            timeoutStack.push(isTimedOut());
-            System.out.println("timed out");
-            timeoutThread = null;
+//            while (!timeoutThread.isInterrupted()) {
+//                System.out.println("Timeout thread");
+//                System.out.println("seconds left: " + secondsLeft());
+//                System.out.println("timeout: " + timeout / 1000);
+//                System.out.println("boolean: " + (secondsLeft() < (timeout / 1000)));
+//
+//                if (secondsLeft() < (timeout / 1000)) {
+//                    System.out.println("timed out");
+//                    timedOut = true;
+//                    timeoutStack.push(isTimedOut());
+//                    break;
+//                }
+//
+//                try {
+//                    Thread.sleep(200);
+//                } catch (InterruptedException ignored) {
+//                    break;
+//                }
+//            }
+            System.out.println("breaking timeout loop");
+
+//            try {
+//                Thread.sleep(timeout);
+//            } catch (InterruptedException ignored) { }
+//
+//            if (timeoutThread.isInterrupted()) {
+//                timeoutThread = null;
+//                return;
+//            }
+//
+//            timedOut = true;
+//            timeoutStack.push(isTimedOut());
+//            System.out.println("timed out");
+//            timeoutThread = null;
         });
 
         timeoutThread.start();
@@ -185,6 +220,8 @@ public class MinimaxAlgorithm {
             }
 
             for (Tile move : moves) {
+                if (timedOut) break;
+
                 Board newBoard = new ReversiBoard(Board.BOARDSIZE, STRATEGIC_VALUES);
                 newBoard.copyState(board);
                 newBoard.setMove(move.getRow(), move.getCol(), player);
@@ -220,6 +257,8 @@ public class MinimaxAlgorithm {
             }
 
             for (Tile move : moves) {
+                if (timedOut) break;
+
                 Board newBoard = new ReversiBoard(Board.BOARDSIZE, STRATEGIC_VALUES);
                 newBoard.copyState(board);
                 newBoard.setMove(move.getRow(), move.getCol(), opponent);

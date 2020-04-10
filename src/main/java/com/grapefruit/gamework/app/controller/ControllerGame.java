@@ -8,15 +8,12 @@ import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.app.util.ImageHelper;
 import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDialogFactory;
 import com.grapefruit.gamework.framework.*;
-import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.Helpers;
 import com.grapefruit.gamework.framework.network.ServerManager;
 import com.grapefruit.gamework.games.reversi.JarnoWinningMinimax;
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -31,9 +28,10 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
-import java.lang.reflect.Array;
 import java.net.URL;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ResourceBundle;
 
 public class ControllerGame implements IController {
 
@@ -55,7 +53,9 @@ public class ControllerGame implements IController {
     JarnoWinningMinimax minimaxAlgorithm = new JarnoWinningMinimax(10);
     Thread minimaxThread;
 
-    /** listeners */
+    /**
+     * listeners
+     */
     ChangeListener<Number> turnChangeListener;
     MapChangeListener<Player, Integer> scoreChangeListener;
 
@@ -117,6 +117,10 @@ public class ControllerGame implements IController {
     @Override
     public void setModel(IModel model) {
         this.model = (ModelGame) model;
+
+        if (this.model.isTournament()) {
+            System.out.println("Playing game in tournament mode");
+        }
 
         game = this.model.getGame();
         serverManager = this.model.getServerManager();
@@ -221,7 +225,8 @@ public class ControllerGame implements IController {
                 Platform.runLater(() -> {
                     try {
                         Thread.sleep(100);
-                    } catch (InterruptedException ignored) {}
+                    } catch (InterruptedException ignored) {
+                    }
                     playAI();
                 });
             }
@@ -268,7 +273,7 @@ public class ControllerGame implements IController {
 
         for (int row = 0; row < board.getBoardSize(); row++) {
             for (int col = 0; col < board.getBoardSize(); col++) {
-                HBox hbox = createBoardTile(tileSize, Color.GREEN, board.getTile(row, col));
+                HBox hbox = createBoardTile(tileSize);
                 gridPane.add(hbox, row, col, 1, 1);
                 boardTiles[col][row] = hbox;
             }
@@ -479,7 +484,7 @@ public class ControllerGame implements IController {
         GameEndDialogFactory.build(endDialogModel);
     }
 
-    private HBox createBoardTile(int size, Color color, Tile tile) {
+    private HBox createBoardTile(int size) {
         HBox hbox = new HBox();
         hbox.setAlignment(Pos.CENTER);
         hbox.setMinSize(size, size);
@@ -515,17 +520,8 @@ public class ControllerGame implements IController {
         onClose();
 
         if (model.isOnlineGame() && !game.hasFinished()) {
-            model.getServerManager().queueCommand(Commands.forfeit(new CommandCallback() {
-                @Override
-                public void onResponse(boolean success, String[] args) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            GameApplication.openLauncher();
-                        }
-                    });
-                }
-            }));
+            model.getServerManager().queueCommand(Commands.forfeit(
+                    (success, args) -> Platform.runLater(GameApplication::openLauncher)));
         } else {
             GameApplication.openLauncher();
         }
@@ -535,8 +531,7 @@ public class ControllerGame implements IController {
      * This method stops all side effects.
      */
     private void onClose() {
-        System.out.println("on close!");
-        System.out.println("removing side effects");
+        System.out.println("destroying game session");
 
         if (turnChangeListener != null) {
             game.getTurnTimeProperty().removeListener(turnChangeListener);

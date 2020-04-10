@@ -14,7 +14,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class GameApplication extends Application {
-    
+
     private static Stage primaryStage;
     private static final int WINDOW_START_HEIGHT = 600;
     private static final int WINDOW_START_WIDTH = 1000;

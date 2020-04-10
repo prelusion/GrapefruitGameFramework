@@ -8,10 +8,8 @@ import com.grapefruit.gamework.app.view.templates.MainWindow.MainWindowFactory;
 import com.grapefruit.gamework.app.view.templates.Template;
 import com.grapefruit.gamework.framework.Assets;
 import com.grapefruit.gamework.framework.Game;
-import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.network.ServerManager;
 import javafx.application.Application;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -50,7 +48,6 @@ public class GameApplication extends Application {
         ModelMainWindow modelMainWindow = new ModelMainWindow(SERVER_MANAGER);
         Template template = MainWindowFactory.build(modelMainWindow);
         Scene scene = new Scene(template.getParent(), WINDOW_START_WIDTH, WINDOW_START_HEIGHT);
-
         primaryStage.setScene(scene);
         primaryStage.setTitle("Grapefruit Gamework");
         primaryStage.show();
@@ -68,7 +65,6 @@ public class GameApplication extends Application {
         ModelGame modelGame = new ModelGame(game, assets, serverManager);
         Template template = GameFactory.build(modelGame);
         Scene scene = new Scene(template.getParent(), GAME_SCENE_WIDTH, GAME_SCENE_HEIGHT);
-
         primaryStage.setScene(scene);
         primaryStage.setTitle("Now playing: " + assets.getDisplayName());
         primaryStage.show();

@@ -47,7 +47,7 @@ public class JarnoWinningMinimax {
         timeoutThread = null;
         timeoutStack = new Stack<>();
         flag = false;
-        currentDepth = 7;
+        currentDepth = 4;
         return realCalculateBestMove(board, player, opponent, turnCount, true, currentDepth);
     }
 
@@ -70,7 +70,7 @@ public class JarnoWinningMinimax {
 
         if (firstTurn && turnCount > 44) {
             System.out.println("INCREASE BECAUSE OF HIGH TURN");
-            currentDepth++;
+//            currentDepth++;
         }
 
         System.out.println("Starting minimax with depth: " + depth);

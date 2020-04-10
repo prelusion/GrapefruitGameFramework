@@ -65,7 +65,7 @@ public class ControllerSelectedGame implements IController {
         ArrayList<Button> buttons = new ArrayList<>();
 
         Button tournamentButton = new Button("Tournament");
-        Button autoChallengeButton = new Button("Random");
+        Button autoChallengeButton = new Button("Auto challenge");
         Button onlineButton = new Button("Play online");
         Button offlineButton = new Button("Play offline");
 

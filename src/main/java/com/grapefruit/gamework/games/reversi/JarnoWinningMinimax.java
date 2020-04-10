@@ -47,7 +47,7 @@ public class JarnoWinningMinimax {
         timeoutThread = null;
         timeoutStack = new Stack<>();
         flag = false;
-        currentDepth = 4;
+        currentDepth = 2;
         return realCalculateBestMove(board, player, opponent, turnCount, true, currentDepth);
     }
 

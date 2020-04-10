@@ -32,8 +32,9 @@ public class MinimaxAlgorithm {
         this.turnCount = turnCount;
         timeoutStack = new Stack<>();
         timedOut = false;
-        System.out.println("---------------- TURN " + turnCount + " -----------------");
+        revaluation(board);
 
+        System.out.println("---------------- TURN " + turnCount + " -----------------");
         Tile tile = realCalculateBestMove(board, player, opponent, true, currentDepth);
 
         if (timeoutThread != null) {
@@ -175,7 +176,11 @@ public class MinimaxAlgorithm {
 
     public int minimax(int depth, Board board, int score, int alpha, int beta, boolean maximizingPlayer) {
         if (depth == 0 || timedOut) {
-            return score + board.countPieces(player);
+            if(turnCount > 44) {
+                return score + (board.countPieces(player) * 3);
+            } else {
+                return score + board.countPieces(player);
+            }
         }
 
         if (maximizingPlayer) {
@@ -196,7 +201,7 @@ public class MinimaxAlgorithm {
                 int currentScore = minimax(
                         depth - 1,
                         newBoard,
-                        score + ((turnCount > 44) ? move.getStrategicValue() + board.countPieces(player) * 2 : move.getStrategicValue()),
+                        score + move.getStrategicValue(),
                         alpha, beta,
                         false
                 );
@@ -233,7 +238,7 @@ public class MinimaxAlgorithm {
                 int currentScore = minimax(
                         depth - 1,
                         newBoard,
-                        score - ((turnCount > 44) ? move.getStrategicValue() + board.countPieces(player) * 2 : move.getStrategicValue()),
+                        score - move.getStrategicValue(),
                         alpha,
                         beta,
                         true
@@ -251,6 +256,33 @@ public class MinimaxAlgorithm {
 
             }
             return minScore;
+        }
+    }
+
+    public void revaluation(Board board) {
+        Tile topleft = board.getTile(0, 0);
+        Tile topright = board.getTile(0, board.getBoardSize() - 1);
+        Tile bottomleft = board.getTile(board.getBoardSize() - 1, 0);
+        Tile bottomright = board.getTile(board.getBoardSize() - 1, board.getBoardSize() - 1);
+
+        if(topleft.getPlayer() != null && topright.getPlayer() != null && topleft.getStrategicValue() != 55) {
+            System.out.println("Its damn time Right");
+            board.changeValuesBetweenTiles(board.getTile(0, 0), "Right", 55);
+        }
+
+        if(topleft.getPlayer() != null && bottomleft.getPlayer() != null && topleft.getStrategicValue() != 55) {
+            System.out.println("Its damn time Down");
+            board.changeValuesBetweenTiles(board.getTile(0, 0), "Down", 55);
+        }
+
+        if(bottomright.getPlayer() != null && topright.getPlayer() != null && bottomright.getStrategicValue() != 55) {
+            System.out.println("Its damn time Top");
+            board.changeValuesBetweenTiles(board.getTile(board.getBoardSize() - 1, board.getBoardSize() - 1), "Top", 55);
+        }
+
+        if(bottomright.getPlayer() != null && bottomleft.getPlayer() != null && bottomright.getStrategicValue() != 55) {
+            System.out.println("Its damn time Left");
+            board.changeValuesBetweenTiles(board.getTile(board.getBoardSize() - 1, board.getBoardSize() - 1), "Left", 55);
         }
     }
 }

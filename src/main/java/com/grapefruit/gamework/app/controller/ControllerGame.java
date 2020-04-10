@@ -47,7 +47,7 @@ public class ControllerGame implements IController {
     private Player playerA;
     private Player playerB;
 
-    MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm(10);
+    MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm(4, false);
     Thread minimaxThread;
 
     /**

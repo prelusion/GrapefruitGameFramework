@@ -11,6 +11,7 @@ import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VAL
 import static java.lang.Integer.*;
 
 public class MinimaxAlgorithm {
+    private boolean dynamicDepth = false;
     private Player player;
     private Player opponent;
 
@@ -23,6 +24,11 @@ public class MinimaxAlgorithm {
 
     public MinimaxAlgorithm(int depth) {
         currentDepth = depth;
+    }
+
+    public MinimaxAlgorithm(int depth, boolean dynamicDepth) {
+        this(depth);
+        this.dynamicDepth = dynamicDepth;
     }
 
     public void destroy() {
@@ -52,14 +58,27 @@ public class MinimaxAlgorithm {
         return (startTime + (timeout / 1000)) - getCurrentSeconds();
     }
 
+    public void incrementDepth() {
+        if (dynamicDepth) {
+            currentDepth++;
+        }
+
+    }
+
+    public void decrementDepth() {
+        if (dynamicDepth) {
+            currentDepth--;
+        }
+    }
+
     public void turnCountDecrease(int turn) {
         if (currentDepth >= 10 && turn == 2) {
             System.out.println("decrease depth (turn == 2)");
-            currentDepth--;
+            decrementDepth();
         }
         if (currentDepth >= 9 && turn == 4) {
             System.out.println("decrease depth (turn == 4)");
-            currentDepth--;
+            decrementDepth();
         }
     }
 
@@ -69,7 +88,7 @@ public class MinimaxAlgorithm {
 
         if (turnCount > 44) {
             System.out.println("increase depth (turn > 44)");
-            currentDepth++;
+            incrementDepth();
         }
 
         turnCountDecrease(turnCount);
@@ -130,7 +149,7 @@ public class MinimaxAlgorithm {
 
         if (!timedOut && secondsLeft() >= 8) {
             if (firstTurn) {
-                currentDepth++;
+                incrementDepth();
                 System.out.println("increase depth");
             }
 
@@ -144,7 +163,7 @@ public class MinimaxAlgorithm {
             }
         } else if (timedOut && firstTurn && secondsLeft() <= 2) {
             System.out.println("decrease depth");
-            currentDepth--;
+            decrementDepth();
         }
 
         return bestTile;

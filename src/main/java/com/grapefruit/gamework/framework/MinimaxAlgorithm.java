@@ -28,6 +28,19 @@ public class MinimaxAlgorithm {
         currentDepth = depth;
     }
 
+    public void destroy() {
+        if (timeoutThread != null) {
+            timeoutThread.interrupt();
+        }
+
+        if (threads != null) {
+            for (Thread thread : threads) {
+                thread.interrupt();
+            }
+        }
+
+    }
+
     public Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount) {
         this.turnCount = turnCount;
         timeoutStack = new Stack<>();

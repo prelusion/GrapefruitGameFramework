@@ -4,7 +4,9 @@ import com.grapefruit.gamework.app.GameApplication;
 import com.grapefruit.gamework.app.model.IModel;
 import com.grapefruit.gamework.app.model.ModelLobbyBrowser;
 import com.grapefruit.gamework.app.model.ModelSelectedGame;
+import com.grapefruit.gamework.app.model.ModelTournament;
 import com.grapefruit.gamework.app.view.templates.LobbyBrowser.LobbyBrowserFactory;
+import com.grapefruit.gamework.app.view.templates.Tournament.TournamentFactory;
 import com.grapefruit.gamework.framework.Colors;
 import com.grapefruit.gamework.framework.Player;
 import javafx.application.Platform;
@@ -101,6 +103,11 @@ public class ControllerSelectedGame implements IController {
         buttons.add(onlineButton);
         buttons.add(offlineButton);
         layoutButtons(buttons);
+    }
+
+    private void openTournamentView(){
+        buttonBox.getChildren().removeAll(buttonBox.getChildren());
+        buttonBox.getChildren().add(TournamentFactory.build(new ModelTournament(model.getSelectedGame().getAssets())).getParent());
     }
 
     private void setOfflineOptions() {

@@ -10,5 +10,6 @@ public abstract class FXMLRegistry {
     public static String GAME_WINDOW = "gamewindow.fxml";
     public static String GAME_END_DIALOG = "gameenddialog.fxml";
     public static String LOBBY_BROWSER = "lobbybrowser.fxml";
+    public static String TOURNAMENT = "tournament.fxml";
     
 }

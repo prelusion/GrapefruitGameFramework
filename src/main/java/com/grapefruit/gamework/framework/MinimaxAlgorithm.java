@@ -41,6 +41,7 @@ public class MinimaxAlgorithm {
     public Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount) {
         timedOut = false;
         System.out.println("---------------- TURN " + turnCount + " -----------------");
+        currentDepth = 3;
         return realCalculateBestMove(board, player, opponent, turnCount, true, currentDepth);
     }
 
@@ -67,12 +68,12 @@ public class MinimaxAlgorithm {
         this.player = player;
         this.opponent = opponent;
 
-        if (turnCount > 44) {
-            System.out.println("increase depth (turn > 44)");
-            currentDepth++;
-        }
+//        if (turnCount > 44) {
+//            System.out.println("increase depth (turn > 44)");
+//            currentDepth++;
+//        }
 
-        turnCountDecrease(turnCount);
+//        turnCountDecrease(turnCount);
 
         System.out.println("depth: " + depth);
         threads = new ArrayList<>();
@@ -128,24 +129,24 @@ public class MinimaxAlgorithm {
         System.out.println("timeout: " + timedOut);
         System.out.println("seconds left: " + secondsLeft());
 
-        if (!timedOut && secondsLeft() >= 8) {
-            if (firstTurn) {
-                currentDepth++;
-                System.out.println("increase depth");
-            }
-
-            System.out.println("recursion");
-            Tile newTile = realCalculateBestMove(board, player, opponent, turnCount, false, depth + 1);
-            if (newTile != null) {
-                System.out.println("new best tile");
-                bestTile = newTile;
-            } else {
-                System.out.println("corrupt tile, ignoring");
-            }
-        } else if (timedOut && firstTurn && secondsLeft() <= 2) {
-            System.out.println("decrease depth");
-            currentDepth--;
-        }
+//        if (!timedOut && secondsLeft() >= 8) {
+//            if (firstTurn) {
+//                currentDepth++;
+//                System.out.println("increase depth");
+//            }
+//
+//            System.out.println("recursion");
+//            Tile newTile = realCalculateBestMove(board, player, opponent, turnCount, false, depth + 1);
+//            if (newTile != null) {
+//                System.out.println("new best tile");
+//                bestTile = newTile;
+//            } else {
+//                System.out.println("corrupt tile, ignoring");
+//            }
+//        } else if (timedOut && firstTurn && secondsLeft() <= 2) {
+//            System.out.println("decrease depth");
+//            currentDepth--;
+//        }
 
         return bestTile;
     }

@@ -157,7 +157,7 @@ public class ControllerGame implements IController {
         update();
 
         if (!this.model.isOnlineGame()) {
-            game.setTurnTimeout(10);
+            game.setTurnTimeout(60);
 
             game.startTurnTimer();
 

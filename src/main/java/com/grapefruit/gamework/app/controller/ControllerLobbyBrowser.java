@@ -8,7 +8,6 @@ import com.grapefruit.gamework.app.util.Command;
 import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDialogFactory;
 import com.grapefruit.gamework.framework.Colors;
 import com.grapefruit.gamework.framework.Player;
-import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.ServerConnection;
 import javafx.animation.KeyFrame;
@@ -67,19 +66,25 @@ public class ControllerLobbyBrowser implements IController {
 
     public void setupWidgets() {
         setupTable();
+
         Timeline timeline = new Timeline();
-        timeline.getKeyFrames().add(new KeyFrame(
-                Duration.millis(500),
+
+        KeyFrame keyFrame = new KeyFrame(
+                Duration.millis(1500),
                 check -> {
+                    if (!model.getServerManager().isConnected()) {
+                        timeline.stop();
+                        return;
+                    }
                     updateTable();
                     challengeTable.sceneProperty().addListener((obs, oldScene, newScene) -> {
                         if (newScene == null) {
                             timeline.stop();
                         }
                     });
-                }
+                });
 
-        ));
+        timeline.getKeyFrames().add(keyFrame);
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
         updateTable();
@@ -191,7 +196,8 @@ public class ControllerLobbyBrowser implements IController {
                 System.err.println("Error sending challenge...");
                 if (args != null) {
                     for (String arg : args) System.out.println(arg);
-                    ModelGameEndDialog endDialogModel = new ModelGameEndDialog(args[0], () -> {});
+                    ModelGameEndDialog endDialogModel = new ModelGameEndDialog(args[0], () -> {
+                    });
                     GameEndDialogFactory.build(endDialogModel);
                 }
                 return;

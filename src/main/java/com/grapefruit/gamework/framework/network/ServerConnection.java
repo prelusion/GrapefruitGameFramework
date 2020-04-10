@@ -190,13 +190,14 @@ public class ServerConnection {
                 i++;
             }
             Command command = manager.findFirstFittingCommand(ServerManager.ResponseType.LIST, true);
+//            if (msg.contains("SVR PLAYERLIST") && command.getCommandString().equals("get gamelist")) {
+//                System.out.println("IGNOREING PLAYER LIST");
             if (command != null && command.isSent()) {
                 command.confirm();
                 command.doCallBack(true, result);
                 manager.removeCommandFromQueue(command);
             }
         }
-
     }
 
     private String parseCommandArg(String msg, String fieldname) {

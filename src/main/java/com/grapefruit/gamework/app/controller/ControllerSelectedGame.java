@@ -65,7 +65,7 @@ public class ControllerSelectedGame implements IController {
         ArrayList<Button> buttons = new ArrayList<>();
 
         Button tournamentButton = new Button("Tournament");
-        Button autoChallengeButton = new Button("Auto challenge");
+        Button autoChallengeButton = new Button("Random");
         Button onlineButton = new Button("Play online");
         Button offlineButton = new Button("Play offline");
 
@@ -100,7 +100,7 @@ public class ControllerSelectedGame implements IController {
         autoChallengeButton.setOnAction(event -> {
             buttonBox.getChildren().removeAll(buttonBox.getChildren());
             Label label = new Label();
-            label.setText("auto challenge on");
+            label.setText("waiting...");
             label.setStyle("-fx-text-fill: white; -fx-font-size: 20px;");
             buttonBox.getChildren().add(label);
             setupAutoChallengeGameStartEventHandler();

@@ -61,7 +61,7 @@ public class GameApplication extends Application {
     }
 
     public static void startAutoChallengeGame(Assets assets, Game game, ServerManager serverManager) {
-        startGame(assets, game, serverManager, false, false);
+        startGame(assets, game, serverManager, false, true);
     }
 
     private static void startGame(Assets assets, Game game, ServerManager serverManager, boolean isTournament, boolean showPopups) {

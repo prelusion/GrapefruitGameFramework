@@ -196,9 +196,10 @@ public class ControllerLobbyBrowser implements IController {
                 System.err.println("Error sending challenge...");
                 if (args != null) {
                     for (String arg : args) System.out.println(arg);
-                    ModelGameEndDialog endDialogModel = new ModelGameEndDialog(args[0], () -> {
+                    Platform.runLater(() -> {
+                        ModelGameEndDialog endDialogModel = new ModelGameEndDialog(args[0], () -> {});
+                        GameEndDialogFactory.build(endDialogModel);
                     });
-                    GameEndDialogFactory.build(endDialogModel);
                 }
                 return;
             }

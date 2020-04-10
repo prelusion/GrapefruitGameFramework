@@ -13,7 +13,11 @@
    <children>
       <HBox alignment="CENTER" prefHeight="199.0" prefWidth="439.0">
          <children>
-            <TableView fx:id="challengeTable" prefHeight="105.0" prefWidth="309.0" />
+            <TableView fx:id="challengeTable" prefHeight="105.0" prefWidth="309.0">
+               <placeholder>
+                  <Label text="No players online"/>
+               </placeholder>
+            </TableView>
          </children>
       </HBox>
       <Pane minHeight="-Infinity" prefHeight="10.0" prefWidth="439.0" />

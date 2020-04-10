@@ -7,6 +7,7 @@ import com.grapefruit.gamework.app.model.ModelSelectedGame;
 import com.grapefruit.gamework.app.view.templates.LobbyBrowser.LobbyBrowserFactory;
 import com.grapefruit.gamework.framework.Colors;
 import com.grapefruit.gamework.framework.Player;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -91,6 +92,7 @@ public class ControllerSelectedGame implements IController {
             label.setText("Waiting...");
             label.setStyle("-fx-text-fill: white; -fx-font-size: 20px;");
             buttonBox.getChildren().add(label);
+            setupTournamentGameStartEventHandler();
         });
 
         offlineButton.setOnAction(event -> setOfflineOptions());
@@ -145,5 +147,33 @@ public class ControllerSelectedGame implements IController {
             buttonBox.getChildren().add(pane);
             buttonBox.getChildren().add(button);
         }
+    }
+
+    public void setupTournamentGameStartEventHandler() {
+        model.getServerManager().removeStartGameCallback();
+        model.getServerManager().setStartGameCallback((success, args) -> {
+            String firstTurnName = args[0];
+            String opponentName = args[1];
+
+            String currentPlayerName = model.getOnlineName();
+
+            Player[] players = new Player[2];
+
+            if (firstTurnName.equals(currentPlayerName)) {
+                players[0] = new Player(currentPlayerName, Colors.BLACK, true, true);
+                players[1] = new Player(opponentName, Colors.WHITE, false);
+            } else if (firstTurnName.equals(opponentName)) {
+                players[0] = new Player(opponentName, Colors.BLACK, false);
+                players[1] = new Player(currentPlayerName, Colors.WHITE, true, true);
+            }
+
+            Platform.runLater(() -> {
+                GameApplication.startTournamentGame(
+                        model.getSelectedGame().getAssets(),
+                        model.getSelectedGame().getFactory().create(players),
+                        model.getServerManager()
+                );
+            });
+        });
     }
 }

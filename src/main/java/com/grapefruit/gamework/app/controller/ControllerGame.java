@@ -8,11 +8,11 @@ import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.app.util.ImageHelper;
 import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDialogFactory;
 import com.grapefruit.gamework.framework.*;
-import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.Helpers;
 import com.grapefruit.gamework.framework.network.ServerManager;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -27,11 +27,14 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
-import java.lang.reflect.Array;
 import java.net.URL;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ResourceBundle;
 
 public class ControllerGame implements IController {
+
+    private boolean destroyed = false;
 
     private ModelGame model;
     private Game game;
@@ -44,9 +47,14 @@ public class ControllerGame implements IController {
     private Player playerA;
     private Player playerB;
 
-    private boolean isFirstTurn = true;
-
     MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm(10);
+    Thread minimaxThread;
+
+    /**
+     * listeners
+     */
+    ChangeListener<Number> turnChangeListener;
+    MapChangeListener<Player, Integer> scoreChangeListener;
 
     @FXML
     private Text turnNumber;
@@ -79,13 +87,16 @@ public class ControllerGame implements IController {
     private Text playerScoreB;
 
     @FXML
-    private VBox gameBoard;
+    private Pane gameBoard;
 
     @FXML
     private URL location;
 
     @FXML
     private ResourceBundle resources;
+
+    @FXML
+    public Text playerTurnLabel;
 
     /**
      * Required for FXML
@@ -106,6 +117,10 @@ public class ControllerGame implements IController {
     @Override
     public void setModel(IModel model) {
         this.model = (ModelGame) model;
+
+        if (this.model.isTournament()) {
+            System.out.println("Playing game in tournament mode");
+        }
 
         game = this.model.getGame();
         serverManager = this.model.getServerManager();
@@ -142,7 +157,7 @@ public class ControllerGame implements IController {
         update();
 
         if (!this.model.isOnlineGame()) {
-            game.setTurnTimeout(60);
+            game.setTurnTimeout(10);
 
             game.startTurnTimer();
 
@@ -163,30 +178,26 @@ public class ControllerGame implements IController {
     }
 
     private void setupObservableListeners() {
-        game.getBoard().scores.addListener(
-                (MapChangeListener<Player, Integer>) change -> updateInfo());
+        scoreChangeListener = (MapChangeListener<Player, Integer>) change -> updateInfo();
 
-        game.getTurnTimeProperty().addListener(
-                (observable, oldValue, newValue) -> {
+        turnChangeListener = (observableValue, oldValue, newValue) -> Platform.runLater(() -> {
+            if ((int) newValue <= 0) {
+                game.resetTurnTimer();
 
-                    Platform.runLater(() -> {
-                        if ((int) newValue <= 0) {
-                            this.model.getGame().resetTurnTimer();
-
-                            if (!this.model.isOnlineGame()) {
-                                createEndDialog("Turn timed out, you lose!");
-                            }
-                        } else {
-                            updateInfo();
-                        }
-                    });
+                if (!model.isOnlineGame()) {
+                    createEndDialog("Turn timed out, you lose!");
                 }
-        );
+            } else {
+                updateInfo();
+            }
+        });
+
+        game.getBoard().scores.addListener(scoreChangeListener);
+        game.getTurnTimeProperty().addListener(turnChangeListener);
     }
 
     private void setupServerEventHandlers() {
         serverManager.setMoveCallback((boolean success, String[] args) -> {
-////            System.out.println("On move callback");
             game.resetTurnTimer();
 
             String playerName = args[0];
@@ -214,7 +225,8 @@ public class ControllerGame implements IController {
                 Platform.runLater(() -> {
                     try {
                         Thread.sleep(100);
-                    } catch (InterruptedException ignored) {}
+                    } catch (InterruptedException ignored) {
+                    }
                     playAI();
                 });
             }
@@ -244,6 +256,22 @@ public class ControllerGame implements IController {
             });
         });
 
+        serverManager.setOnPlayerForfeitCallback((boolean success, String[] args) -> {
+            game.resetTurnTimer();
+            Platform.runLater(() -> {
+                createEndDialog("Opponent forfeited, you win!");
+                update();
+            });
+        });
+
+        serverManager.setOnPlayerDisconnectCallback((boolean success, String[] args) -> {
+            game.resetTurnTimer();
+            Platform.runLater(() -> {
+                createEndDialog("Opponent disconnected, you win!");
+                update();
+            });
+        });
+
     }
 
     public void update() {
@@ -261,7 +289,7 @@ public class ControllerGame implements IController {
 
         for (int row = 0; row < board.getBoardSize(); row++) {
             for (int col = 0; col < board.getBoardSize(); col++) {
-                HBox hbox = createBoardTile(tileSize, Color.GREEN, board.getTile(row, col));
+                HBox hbox = createBoardTile(tileSize);
                 gridPane.add(hbox, row, col, 1, 1);
                 boardTiles[col][row] = hbox;
             }
@@ -287,6 +315,14 @@ public class ControllerGame implements IController {
     private void updateInfo() {
         currentColor.setText(game.getCurrentPlayer().getColor().toString());
         currentPlayerName.setText(game.getCurrentPlayer().getName());
+
+        if (game.getCurrentPlayer().getName().equals(playerA.getName())) {
+            playerTurnLabel.setText("your turn!");
+        } else {
+            playerTurnLabel.setText("Waiting for opponent...");
+        }
+
+
         turnNumber.setText(Integer.toString(game.getTurnCount()));
         timeLeft.setText(String.valueOf(game.getTurnSecondsLeft()));
 
@@ -295,6 +331,10 @@ public class ControllerGame implements IController {
     }
 
     public void checkFinished() {
+        if (destroyed) {
+            return;
+        }
+
         if (!game.hasFinished()) {
             return;
         }
@@ -423,7 +463,7 @@ public class ControllerGame implements IController {
             return;
         }
 
-        new Thread(() -> {
+        minimaxThread = new Thread(() -> {
             minimaxAlgorithm.startTimeout(9000);
             Tile tile = minimaxAlgorithm.calculateBestMove(
                     game.getBoard(),
@@ -432,7 +472,9 @@ public class ControllerGame implements IController {
                     game.getTurnCount()
             );
             Platform.runLater(() -> onFinishAI(tile));
-        }).start();
+        });
+
+        minimaxThread.start();
     }
 
     private void onFinishAI(Tile tile) {
@@ -443,7 +485,6 @@ public class ControllerGame implements IController {
 
         game.resetTurnTimer();
 
-//        System.out.println("ai move: " + tile.getRow() + "," + tile.getCol());
         playMove(tile.getRow(), tile.getCol(), game.getCurrentPlayer());
     }
 
@@ -455,6 +496,7 @@ public class ControllerGame implements IController {
         do {
             game.nextPlayer();
             update();
+            if (destroyed) break;
             if (game.hasFinished()) break;
         } while (game.getAvailableMoves(game.getCurrentPlayer()).size() < 1);
 
@@ -462,10 +504,11 @@ public class ControllerGame implements IController {
     }
 
     private void createEndDialog(String message) {
-        GameEndDialogFactory.build(new ModelGameEndDialog(message));
+        ModelGameEndDialog endDialogModel = new ModelGameEndDialog(message, this::onClose);
+        GameEndDialogFactory.build(endDialogModel);
     }
 
-    private HBox createBoardTile(int size, Color color, Tile tile) {
+    private HBox createBoardTile(int size) {
         HBox hbox = new HBox();
         hbox.setAlignment(Pos.CENTER);
         hbox.setMinSize(size, size);
@@ -498,20 +541,54 @@ public class ControllerGame implements IController {
 
     @FXML
     private void quitGame() {
-        if (model.isOnlineGame()) {
-            model.getServerManager().queueCommand(Commands.forfeit(new CommandCallback() {
-                @Override
-                public void onResponse(boolean success, String[] args) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            GameApplication.openLauncher();
-                        }
-                    });
-                }
-            }));
+        onClose();
+
+        if (model.isOnlineGame() && !game.hasFinished()) {
+            model.getServerManager().queueCommand(Commands.forfeit(
+                    (success, args) -> Platform.runLater(GameApplication::openLauncher)));
         } else {
             GameApplication.openLauncher();
         }
+    }
+
+    /**
+     * This method stops all side effects.
+     */
+    private void onClose() {
+        System.out.println("destroying game session");
+
+        if (turnChangeListener != null) {
+            game.getTurnTimeProperty().removeListener(turnChangeListener);
+        }
+
+        if (scoreChangeListener != null) {
+            game.getBoard().scores.removeListener(scoreChangeListener);
+        }
+
+        if (serverManager != null) {
+            if (!model.isTournament()) {
+                serverManager.removeStartGameCallback();
+            }
+
+            serverManager.removeMoveCallback();
+            serverManager.removeTurnCallback();
+            serverManager.removeTurnTimeoutWinCallback();
+            serverManager.removeTurnTimeoutLoseCallback();
+            serverManager.removeIllegalmoveWinCallback();
+            serverManager.removeOnPlayerForfeitCallback();
+            serverManager.removeOnPlayerDisconnectCallbackCallback();
+        }
+
+        if (minimaxAlgorithm != null) {
+            minimaxAlgorithm.destroy();
+        }
+
+        if (minimaxThread != null) {
+            minimaxThread.interrupt();
+        }
+
+        game.destroy();
+
+        destroyed = true;
     }
 }

@@ -7,6 +7,7 @@ import com.grapefruit.gamework.app.model.ModelSelectedGame;
 import com.grapefruit.gamework.app.view.templates.LobbyBrowser.LobbyBrowserFactory;
 import com.grapefruit.gamework.framework.Colors;
 import com.grapefruit.gamework.framework.Player;
+import com.grapefruit.gamework.framework.network.Commands;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -64,6 +65,7 @@ public class ControllerSelectedGame implements IController {
         ArrayList<Button> buttons = new ArrayList<>();
 
         Button tournamentButton = new Button("Tournament");
+        Button autoChallengeButton = new Button("Auto challenge");
         Button onlineButton = new Button("Play online");
         Button offlineButton = new Button("Play offline");
 
@@ -95,9 +97,19 @@ public class ControllerSelectedGame implements IController {
             setupTournamentGameStartEventHandler();
         });
 
+        autoChallengeButton.setOnAction(event -> {
+            buttonBox.getChildren().removeAll(buttonBox.getChildren());
+            Label label = new Label();
+            label.setText("Waiting...");
+            label.setStyle("-fx-text-fill: white; -fx-font-size: 20px;");
+            buttonBox.getChildren().add(label);
+            setupAutoChallengeGameStartEventHandler();
+        });
+
         offlineButton.setOnAction(event -> setOfflineOptions());
 
         buttons.add(tournamentButton);
+        buttons.add(autoChallengeButton);
         buttons.add(onlineButton);
         buttons.add(offlineButton);
         layoutButtons(buttons);
@@ -151,6 +163,41 @@ public class ControllerSelectedGame implements IController {
 
     public void setupTournamentGameStartEventHandler() {
         model.getServerManager().removeStartGameCallback();
+        model.getServerManager().setStartGameCallback((success, args) -> {
+            String firstTurnName = args[0];
+            String opponentName = args[1];
+
+            String currentPlayerName = model.getOnlineName();
+
+            Player[] players = new Player[2];
+
+            if (firstTurnName.equals(currentPlayerName)) {
+                players[0] = new Player(currentPlayerName, Colors.BLACK, true, true);
+                players[1] = new Player(opponentName, Colors.WHITE, false);
+            } else if (firstTurnName.equals(opponentName)) {
+                players[0] = new Player(opponentName, Colors.BLACK, false);
+                players[1] = new Player(currentPlayerName, Colors.WHITE, true, true);
+            }
+
+            Platform.runLater(() -> {
+                GameApplication.startTournamentGame(
+                        model.getSelectedGame().getAssets(),
+                        model.getSelectedGame().getFactory().create(players),
+                        model.getServerManager()
+                );
+            });
+        });
+    }
+
+    public void setupAutoChallengeGameStartEventHandler() {
+        model.getServerManager().setOnNewChallengetCallback((success, args) -> {
+            int challengeNumber = Integer.parseInt(args[0]);
+
+            model.getServerManager().queueCommand(
+                    Commands.challengeRespond((success2, args2) -> {
+                    }, true, challengeNumber));
+        });
+
         model.getServerManager().setStartGameCallback((success, args) -> {
             String firstTurnName = args[0];
             String opponentName = args[1];

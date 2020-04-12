@@ -84,9 +84,16 @@ public class ServerConnection {
             manager.getChallenges().removeIf(challenge -> challenge.getNumber() == number);
 
         } else if (msg.startsWith("SVR GAME CHALLENGE")) {
-            ResponseChallenge challenge = parseChallenge(msg);
-            challenge.setStatus(ChallengeStatus.CHALLENGE_RECEIVED);
-            manager.addChallenge(challenge);
+            CommandCallback listener = serverCommandListeners.get("onNewChallenge");
+            String challengeNumber = parseCommandArg(msg, "CHALLENGENUMBER");
+
+            if (listener != null) {
+                listener.onResponse(true, new String[]{challengeNumber});
+            } else {
+                ResponseChallenge challenge = parseChallenge(msg);
+                challenge.setStatus(ChallengeStatus.CHALLENGE_RECEIVED);
+                manager.addChallenge(challenge);
+            }
 
         } else if (msg.startsWith("SVR GAME MATCH")) {
             // SVR GAME MATCH {PLAYERTOMOVE: "jarno", GAMETYPE: "Reversi", OPPONENT: "bob"}
@@ -180,6 +187,8 @@ public class ServerConnection {
             }
 
         } else if (msg.contains("SVR") && msg.contains("[")) {
+            String keyword = msg.split(" ")[1].split(" ")[0];
+
             int startArg = msg.indexOf("[");
             String[] args = msg.substring(startArg + 1, msg.trim().length() - 1).split(", ");
 
@@ -189,14 +198,15 @@ public class ServerConnection {
                 result[i] = element.substring(1, element.length() - 1);
                 i++;
             }
-            Command command = manager.findFirstFittingCommand(ServerManager.ResponseType.LIST, true);
+
+            Command command = manager.findByKeyword(keyword, true);
+
             if (command != null && command.isSent()) {
                 command.confirm();
                 command.doCallBack(true, result);
                 manager.removeCommandFromQueue(command);
             }
         }
-
     }
 
     private String parseCommandArg(String msg, String fieldname) {
@@ -297,6 +307,10 @@ public class ServerConnection {
 
     public void setOnPlayerDisconnectCallback(CommandCallback callback) {
         serverCommandListeners.put("onPlayerDisconnect", callback);
+    }
+
+    public void setOnNewChallengetCallback(CommandCallback callback) {
+        serverCommandListeners.put("onNewChallenge", callback);
     }
 
     /**

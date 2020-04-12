@@ -2,13 +2,7 @@ package com.grapefruit.gamework.app.model;
 
 import com.grapefruit.gamework.framework.Assets;
 import com.grapefruit.gamework.framework.Game;
-import com.grapefruit.gamework.framework.GameWrapper;
-import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.network.ServerManager;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class ModelGame implements IModel {
 
@@ -16,12 +10,15 @@ public class ModelGame implements IModel {
     private Assets assets;
     private ServerManager serverManager;
     private boolean isTournament;
+    private boolean autoChallenge;
 
-    public ModelGame(Game game, Assets assets, ServerManager manager, boolean isTournament){
+
+    public ModelGame(Game game, Assets assets, ServerManager manager, boolean isTournament, boolean autoChallenge){
         this.game = game;
         this.assets = assets;
         this.serverManager = manager;
         this.isTournament = isTournament;
+        this.autoChallenge = autoChallenge;
     }
 
     /**
@@ -45,4 +42,6 @@ public class ModelGame implements IModel {
     }
 
     public boolean isTournament() { return isTournament; };
+
+    public boolean isAutoChallenge() { return autoChallenge; };
 }

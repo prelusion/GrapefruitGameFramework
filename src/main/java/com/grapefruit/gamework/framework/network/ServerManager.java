@@ -104,6 +104,17 @@ public class ServerManager {
         return null;
     }
 
+    public Command findByKeyword(String keyword, boolean isConfirmed) {
+        for (Command command : commandQueue) {
+            String commandKeyword = command.getCommandString();
+
+            if (commandKeyword.contains(keyword.toLowerCase()) && command.isConfirmed() == isConfirmed) {
+                return command;
+            }
+        }
+        return null;
+    }
+
     /**
      * Gets first unconfirmed command.
      *
@@ -255,6 +266,10 @@ public class ServerManager {
 
     public void removeOnPlayerDisconnectCallbackCallback() {
         connection.setOnPlayerDisconnectCallback(null);
+    }
+
+    public void setOnNewChallengetCallback(CommandCallback callback) {
+        connection.setOnNewChallengetCallback(callback);
     }
 
     public void setConnectedName(String connectedName) {

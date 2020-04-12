@@ -316,6 +316,7 @@ public class ControllerLobbyBrowser implements IController {
                     btn.setDisable(false);
                     btn.setOnAction(event -> {
                         setupGameStartEventHandler(() -> {
+                            System.out.println("Clear challenges");
                             model.getChallenges().clear();
                             model.getServerManager().clearChallenges();
                             player.setStatus("Unchallenged");

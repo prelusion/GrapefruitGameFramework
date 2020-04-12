@@ -194,8 +194,7 @@ public class ControllerSelectedGame implements IController {
             int challengeNumber = Integer.parseInt(args[0]);
 
             model.getServerManager().queueCommand(
-                    Commands.challengeRespond((success2, args2) -> {
-                    }, true, challengeNumber));
+                    Commands.challengeRespond((success2, args2) -> {}, true, challengeNumber));
         });
 
         model.getServerManager().setStartGameCallback((success, args) -> {

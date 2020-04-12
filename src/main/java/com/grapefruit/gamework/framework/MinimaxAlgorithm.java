@@ -3,28 +3,22 @@ package com.grapefruit.gamework.framework;
 import com.grapefruit.gamework.games.reversi.ReversiBoard;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
 import static java.lang.Integer.*;
 
 public class MinimaxAlgorithm {
-    private boolean dynamicDepth = false;
+    private boolean dynamicDepth = true;
     private Player player;
     private Player opponent;
+    private int turnCount;
     private int timeout;
-
-    public boolean isTimedOut() {
-        return timedOut;
-    }
-
+    private long startTime;
     private boolean timedOut = false;
     private int currentDepth;
     private Thread timeoutThread;
-    private long startTime;
     private Stack<Boolean> timeoutStack;
-    private int turnCount;
-    ArrayList<Thread> threads;
+    ArrayList<Thread> minimaxThreads;
 
     public MinimaxAlgorithm(int depth) {
         currentDepth = depth;
@@ -40,12 +34,13 @@ public class MinimaxAlgorithm {
             timeoutThread.interrupt();
         }
 
-        if (threads != null) {
-            for (Thread thread : threads) {
-                thread.interrupt();
-            }
+        if (minimaxThreads != null) {
+            for (Thread thread : minimaxThreads) thread.interrupt();
         }
+    }
 
+    public boolean isTimedOut() {
+        return timedOut;
     }
 
     public Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount) {
@@ -74,6 +69,7 @@ public class MinimaxAlgorithm {
 
     public void incrementDepth() {
         if (dynamicDepth) {
+            System.out.println("increase depth");
             currentDepth++;
         }
 
@@ -95,8 +91,8 @@ public class MinimaxAlgorithm {
         this.player = player;
         this.opponent = opponent;
 
-        if (turnCount > 44) {
-            System.out.println("increase depth (turn > 44)");
+        if (firstTurn && turnCount > 44) {
+            System.out.println("turn > 44");
             incrementDepth();
         }
 
@@ -153,7 +149,7 @@ public class MinimaxAlgorithm {
 
 
     private Map<Tile, Integer> threadedMiniMax(Board board, Player player, int depth) {
-        threads = new ArrayList<>();
+        minimaxThreads = new ArrayList<>();
         List<Tile> moves = board.getAvailableMoves(player);
         Map<Tile, Integer> tiles = new HashMap<>();
         for (Tile tile : moves) {
@@ -171,10 +167,10 @@ public class MinimaxAlgorithm {
                 ));
             });
             thread.start();
-            threads.add(thread);
+            minimaxThreads.add(thread);
         }
 
-        for (Thread thread : threads) {
+        for (Thread thread : minimaxThreads) {
             try {
                 thread.join();
             } catch (InterruptedException e) {

@@ -47,7 +47,7 @@ public class ControllerGame implements IController {
     private Player playerA;
     private Player playerB;
 
-    MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm(4, false);
+    MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm(7, true);
     Thread minimaxThread;
 
     /**
@@ -118,6 +118,8 @@ public class ControllerGame implements IController {
     public void setModel(IModel model) {
         this.model = (ModelGame) model;
 
+        System.out.println("Started game session");
+
         if (this.model.isTournament()) {
             System.out.println("Playing game in tournament mode");
         }
@@ -153,6 +155,8 @@ public class ControllerGame implements IController {
         currentPlayerName.setText(game.getCurrentPlayer().getName());
         currentColor.setText(game.getCurrentPlayer().getColor().toString());
 
+        System.out.println("Player with first move: " + currentPlayerName);
+
         drawBoard();
         update();
 
@@ -165,9 +169,13 @@ public class ControllerGame implements IController {
                 playAI();
             }
         } else {
+            game.startTurnTimer();
+
             if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
-                game.startTurnTimer();
+                System.out.println("Starting AI");
                 playAI();
+            } else {
+                System.out.println("Not starting AI");
             }
         }
     }
@@ -506,7 +514,7 @@ public class ControllerGame implements IController {
         }
 
         minimaxThread = new Thread(() -> {
-            minimaxAlgorithm.startTimeout(9000);
+            minimaxAlgorithm.startTimeout(8800);
             Tile tile = minimaxAlgorithm.calculateBestMove(
                     game.getBoard(),
                     game.getCurrentPlayer(),

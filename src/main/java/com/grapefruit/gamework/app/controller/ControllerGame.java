@@ -514,7 +514,7 @@ public class ControllerGame implements IController {
         }
 
         minimaxThread = new Thread(() -> {
-            int timeout = isFirstTurn ? 5000 : 9000;
+            int timeout = isFirstTurn ? 5000 : 8800;
             System.out.println("minimax timeout: " + timeout);
             minimaxAlgorithm.startTimeout(timeout);
             Tile tile = minimaxAlgorithm.calculateBestMove(

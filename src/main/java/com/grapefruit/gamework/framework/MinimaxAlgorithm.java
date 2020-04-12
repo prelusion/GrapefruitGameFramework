@@ -132,13 +132,17 @@ public class MinimaxAlgorithm {
             System.out.println("New tile on depth: " + newDepth + " position: " + newTile.getRow() + ", " + newTile.getCol());
             if (!timeoutStack.isEmpty()) {
                 System.out.println(timeoutStack);
-                if (newTile != null && !timeoutStack.pop()) {
-                    System.out.println("New best tile on depth: " + newDepth + " position: " + newTile.getRow() + ", " + newTile.getCol());
-                    bestTile = newTile;
-                    timeoutStack.clear();
-                } else {
-                    System.out.println("corrupt tile, ignoring");
-                }
+                try {
+                    boolean timeout = timeoutStack.pop();
+
+                    if (newTile != null && !timeout) {
+                        System.out.println("New best tile on depth: " + newDepth + " position: " + newTile.getRow() + ", " + newTile.getCol());
+                        bestTile = newTile;
+                        timeoutStack.clear();
+                    } else {
+                        System.out.println("corrupt tile, ignoring");
+                    }
+                } catch (EmptyStackException ignored) {}
             }
         } else if (firstTurn && secondsLeft() <= 1) {
             System.out.println("decrease depth");

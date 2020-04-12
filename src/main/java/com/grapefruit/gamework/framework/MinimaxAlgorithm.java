@@ -54,10 +54,10 @@ public class MinimaxAlgorithm {
         ReversiBoard board = new ReversiBoard(Board.BOARDSIZE, STRATEGIC_VALUES);
         board.copyState(boardIn);
 
-        revaluation(board);
+//        revaluation(board);
 
-        stableDiscStrategy(board);
-        board.printStrategicValues();
+//        stableDiscStrategy(board);
+//        board.printStrategicValues();
 
         List<Tile> moves = board.getAvailableMoves(player);
         for (Tile move : moves) {
@@ -142,7 +142,7 @@ public class MinimaxAlgorithm {
                 incrementDepth();
             }
 
-            if (!isTimedOut() && secondsLeft() >= 1 && depth < 15) {
+            if (firstTurn && !isTimedOut() && secondsLeft() >= 1 && depth < 15) {
                 timeoutStack.push(isTimedOut());
 
                 System.out.println("depth found: " + depth);
@@ -233,7 +233,7 @@ public class MinimaxAlgorithm {
     }
 
     public int minimax(int depth, Board board, int score, int alpha, int beta, boolean maximizingPlayer) {
-        stableDiscStrategy((ReversiBoard) board);
+//        stableDiscStrategy((ReversiBoard) board);
 
         if (depth == 0 || timedOut) {
 //            if (turnCount > 45) {
@@ -259,9 +259,9 @@ public class MinimaxAlgorithm {
 //            }
 
             if (turnCount > 48) {
-//                return score + (board.countPieces(player) * 3);
+                return score + (board.countPieces(player) * 40);
 //                return score + board.countPieces(player);
-                return score;
+//                return score;
             } else {
                 return score + board.countPieces(player);
 //                return score;
@@ -406,6 +406,8 @@ public class MinimaxAlgorithm {
 
             if (neighbour.getPlayer() == null) {
                 board.setStrategicValue(neighbour.getRow(), neighbour.getCol(), 45 * 40);
+            } else if (neighbour.getPlayer() == tile.getPlayer()) {
+                maxStrategicValueOfNeighbours(board, neighbour, visited);
             }
         }
     }

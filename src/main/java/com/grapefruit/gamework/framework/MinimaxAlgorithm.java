@@ -123,7 +123,7 @@ public class MinimaxAlgorithm {
             System.out.println("increase depth");
         }
 
-        if (!isTimedOut() && secondsLeft() >= 1 && depth < 30) {
+        if (!isTimedOut() && secondsLeft() >= 1 && depth < 15) {
             timeoutStack.push(isTimedOut());
 
             System.out.println("depth found: " + depth);
@@ -223,7 +223,16 @@ public class MinimaxAlgorithm {
 //                }
 //            }
 
-            if (turnCount > 44) {
+//            if (turnCount > 46) {
+//                if (!board.anyMovesLeft(new Player[]{player, opponent})) {
+//                    if (board.countPieces(player) > 48) {
+//                        System.out.println("Count pieces significantly higer than opponent");
+//                        return 120;
+//                    }
+//                }
+//            }
+
+            if (turnCount > 48) {
                 return score + (board.countPieces(player) * 3);
 //                return score + board.countPieces(player);
             } else {

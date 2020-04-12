@@ -143,11 +143,11 @@ public class ServerConnection {
 
             if (comment.equals("Turn timelimit reached")) {
                 CommandCallback listener = serverCommandListeners.get("onTurnTimeoutLose");
-                if (listener != null) {
-                    listener.onResponse(true, new String[]{});
-                }
+                if (listener != null) listener.onResponse(true, new String[]{});
+            } else if (comment.equals("Illegal move")) {
+                CommandCallback listener = serverCommandListeners.get("onIllegalMoveLose");
+                if (listener != null) listener.onResponse(true, new String[]{});
             }
-
         } else if (msg.startsWith("SVR GAME WIN")) {
             String playerOneScore = parseCommandArg(msg, "PLAYERONESCORE");
             String playerTwoScore = parseCommandArg(msg, "PLAYERTWOSCORE");
@@ -331,6 +331,12 @@ public class ServerConnection {
     public void setOnNewChallengetCallback(CommandCallback callback) {
         serverCommandListeners.put("onNewChallenge", callback);
     }
+
+    public void setIllegalmoveLoseCallback(CommandCallback callback) {
+        serverCommandListeners.put("onIllegalMoveLose", callback);
+    }
+
+
 
     /**
      * The type Response challenge.

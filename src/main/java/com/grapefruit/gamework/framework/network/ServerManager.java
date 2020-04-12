@@ -15,6 +15,8 @@ public class ServerManager {
     private String connectedName = null;
     public BooleanProperty connected = new SimpleBooleanProperty();
     private boolean turnTooFast = false;
+    private boolean moveTooFast = false;
+    private String[] moveTooFastArgs;
 
     /**
      * The enum Response type.
@@ -64,6 +66,22 @@ public class ServerManager {
 
     public boolean getTurnTooFast() {
         return turnTooFast;
+    }
+
+    public void setMoveTooFast() {
+        moveTooFast = true;
+    }
+
+    public boolean getMoveTooFast() {
+        return moveTooFast;
+    }
+
+    public void setMoveTooFastArgs(String[] args) {
+        moveTooFastArgs = args;
+    }
+
+    public String[] getMoveTooFastArgs() {
+        return moveTooFastArgs;
     }
 
     /**
@@ -265,6 +283,14 @@ public class ServerManager {
 
     public void removeIllegalmoveWinCallback() {
         connection.setIllegalmoveWinCallback(null);
+    }
+
+    public void setIllegalmoveLoseCallback(CommandCallback callback) {
+        connection.setIllegalmoveLoseCallback(callback);
+    }
+
+    public void removeIllegalmoveLoseCallback() {
+        connection.setIllegalmoveLoseCallback(null);
     }
 
     public void setOnPlayerForfeitCallback(CommandCallback callback) {

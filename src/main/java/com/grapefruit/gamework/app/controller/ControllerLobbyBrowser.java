@@ -235,15 +235,26 @@ public class ControllerLobbyBrowser implements IController {
             model.getServerManager().setTurnTooFast();
         });
 
+        model.getServerManager().setMoveCallback((boolean success2, String[] args2) -> {
+            System.out.println("move callback too fast");
+            model.getServerManager().setMoveTooFast();
+            model.getServerManager().setMoveTooFastArgs(args2);
+        });
+
         model.getServerManager().setStartGameCallback((success, args) -> {
             boolean isPlayingAsAI = aiRadioButton.isSelected();
 
             String firstTurnName = args[0];
             String opponentName = args[1];
 
+
             String currentPlayerName = model.getOnlineName();
 
             Player[] players = new Player[2];
+
+            System.out.println("Starting game");
+            System.out.println("player 1 name: " + currentPlayerName);
+            System.out.println("player 2 name: " + opponentName);
 
             if (firstTurnName.equals(currentPlayerName)) {
                 players[0] = new Player(currentPlayerName, Colors.BLACK, true, isPlayingAsAI);

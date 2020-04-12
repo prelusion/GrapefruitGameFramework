@@ -175,6 +175,10 @@ public class ControllerGame implements IController {
         } else {
             game.startTurnTimer();
 
+            if (serverManager.getMoveTooFast()) {
+                onMove(serverManager.getMoveTooFastArgs());
+            }
+
             if (serverManager.getTurnTooFast()) {
                 System.out.println("Executing on turn too fast");
                 onTurn();
@@ -216,23 +220,7 @@ public class ControllerGame implements IController {
     private void setupServerEventHandlers() {
         System.out.println("Initializing server event handlers");
         serverManager.setMoveCallback((boolean success, String[] args) -> {
-            game.resetTurnTimer();
-
-            String playerName = args[0];
-            String move = args[1];
-
-            int[] rowcol = Helpers.convertMoveString(move, this.model.getGame().getBoard().getBoardSize());
-            int row = rowcol[0];
-            int col = rowcol[1];
-
-            Game game = this.model.getGame();
-            Player player = game.getPlayerByName(playerName);
-
-            Platform.runLater(() -> {
-                game.playMove(row, col, player);
-                update();
-                game.startTurnTimer();
-            });
+            onMove(args);
         });
 
         serverManager.setTurnCallback((boolean success, String[] args) -> {
@@ -281,6 +269,21 @@ public class ControllerGame implements IController {
                 }
 
                 createEndDialog("Opponent illegal move, you win!");
+                update();
+            });
+        });
+
+        serverManager.setIllegalmoveLoseCallback((boolean success, String[] args) -> {
+            game.resetTurnTimer();
+            Platform.runLater(() -> {
+                stopSideEffects();
+
+                if (model.isAutoChallenge()) {
+                    autoChallengeQuit();
+                    return;
+                }
+
+                createEndDialog("Illegal move, you lose!");
                 update();
             });
         });
@@ -629,6 +632,7 @@ public class ControllerGame implements IController {
             serverManager.removeTurnTimeoutWinCallback();
             serverManager.removeTurnTimeoutLoseCallback();
             serverManager.removeIllegalmoveWinCallback();
+            serverManager.removeIllegalmoveLoseCallback();
             serverManager.removeOnPlayerForfeitCallback();
             serverManager.removeOnPlayerDisconnectCallbackCallback();
         }
@@ -663,5 +667,25 @@ public class ControllerGame implements IController {
                 playAI();
             });
         }
+    }
+
+    public void onMove(String[] args) {
+        game.resetTurnTimer();
+
+        String playerName = args[0];
+        String move = args[1];
+
+        int[] rowcol = Helpers.convertMoveString(move, this.model.getGame().getBoard().getBoardSize());
+        int row = rowcol[0];
+        int col = rowcol[1];
+
+        Game game = this.model.getGame();
+        Player player = game.getPlayerByName(playerName);
+
+        Platform.runLater(() -> {
+            game.playMove(row, col, player);
+            update();
+            game.startTurnTimer();
+        });
     }
 }

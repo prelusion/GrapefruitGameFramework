@@ -350,24 +350,27 @@ public class MinimaxAlgorithm {
         Tile bottomleft = board.getTile(board.getBoardSize() - 1, 0);
         Tile bottomright = board.getTile(board.getBoardSize() - 1, board.getBoardSize() - 1);
 
-        if (topleft.getPlayer() != null && topright.getPlayer() != null && topleft.getStrategicValue() != 55) {
+        int value = 55 * 40;
+//        int value = 3 * 40;
+
+        if (topleft.getPlayer() != null && topright.getPlayer() != null && topleft.getStrategicValue() != value) {
             System.out.println("Its damn time Right");
-            board.changeValuesBetweenTiles(board.getTile(0, 0), "Right", 55);
+            board.changeValuesBetweenTiles(board.getTile(0, 0), "Right", value);
         }
 
-        if (topleft.getPlayer() != null && bottomleft.getPlayer() != null && topleft.getStrategicValue() != 55) {
+        if (topleft.getPlayer() != null && bottomleft.getPlayer() != null && topleft.getStrategicValue() != value) {
             System.out.println("Its damn time Down");
-            board.changeValuesBetweenTiles(board.getTile(0, 0), "Down", 55);
+            board.changeValuesBetweenTiles(board.getTile(0, 0), "Down", value);
         }
 
-        if (bottomright.getPlayer() != null && topright.getPlayer() != null && bottomright.getStrategicValue() != 55) {
+        if (bottomright.getPlayer() != null && topright.getPlayer() != null && bottomright.getStrategicValue() != value) {
             System.out.println("Its damn time Top");
-            board.changeValuesBetweenTiles(board.getTile(board.getBoardSize() - 1, board.getBoardSize() - 1), "Top", 55);
+            board.changeValuesBetweenTiles(board.getTile(board.getBoardSize() - 1, board.getBoardSize() - 1), "Top", value);
         }
 
-        if (bottomright.getPlayer() != null && bottomleft.getPlayer() != null && bottomright.getStrategicValue() != 55) {
+        if (bottomright.getPlayer() != null && bottomleft.getPlayer() != null && bottomright.getStrategicValue() != value) {
             System.out.println("Its damn time Left");
-            board.changeValuesBetweenTiles(board.getTile(board.getBoardSize() - 1, board.getBoardSize() - 1), "Left", 55);
+            board.changeValuesBetweenTiles(board.getTile(board.getBoardSize() - 1, board.getBoardSize() - 1), "Left", value);
         }
     }
 
@@ -402,7 +405,7 @@ public class MinimaxAlgorithm {
             visited.add(neighbour);
 
             if (neighbour.getPlayer() == null) {
-                board.setStrategicValue(neighbour.getRow(), neighbour.getCol(), 24 * 40);
+                board.setStrategicValue(neighbour.getRow(), neighbour.getCol(), 45 * 40);
             }
         }
     }

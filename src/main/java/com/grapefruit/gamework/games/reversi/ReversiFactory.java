@@ -21,6 +21,89 @@ public class ReversiFactory extends GameFactory {
         return new Reversi(board, playerBlack, playerWhite, turnTimeout);
     }
 
+    private static int[][] getStrategicValue() {
+        int[][] strat = new int[8][8];
+
+        strat[0][0] = 5;
+        strat[0][1] = 1;
+        strat[0][2] = 3;
+        strat[0][3] = 3;
+        strat[0][4] = 3;
+        strat[0][5] = 3;
+        strat[0][6] = 1;
+        strat[0][7] = 5;
+
+        strat[1][0] = 1;
+        strat[1][1] = 1;
+        strat[1][2] = 2;
+        strat[1][3] = 2;
+        strat[1][4] = 2;
+        strat[1][5] = 2;
+        strat[1][6] = 1;
+        strat[1][7] = 1;
+
+        strat[2][0] = 3;
+        strat[2][1] = 2;
+        strat[2][2] = 4;
+        strat[2][3] = 4;
+        strat[2][4] = 4;
+        strat[2][5] = 4;
+        strat[2][6] = 2;
+        strat[2][7] = 3;
+
+        strat[3][0] = 3;
+        strat[3][1] = 2;
+        strat[3][2] = 4;
+        strat[3][3] = 6;
+        strat[3][4] = 6;
+        strat[3][5] = 4;
+        strat[3][6] = 2;
+        strat[3][7] = 3;
+
+        strat[4][0] = 3;
+        strat[4][1] = 2;
+        strat[4][2] = 4;
+        strat[4][3] = 6;
+        strat[4][4] = 6;
+        strat[4][5] = 4;
+        strat[4][6] = 2;
+        strat[4][7] = 3;
+
+        strat[5][0] = 3;
+        strat[5][1] = 2;
+        strat[5][2] = 4;
+        strat[5][3] = 4;
+        strat[5][4] = 4;
+        strat[5][5] = 4;
+        strat[5][6] = 2;
+        strat[5][7] = 3;
+
+        strat[6][0] = 1;
+        strat[6][1] = 1;
+        strat[6][2] = 2;
+        strat[6][3] = 2;
+        strat[6][4] = 2;
+        strat[6][5] = 2;
+        strat[6][6] = 1;
+        strat[6][7] = 1;
+
+        strat[7][0] = 5;
+        strat[7][1] = 1;
+        strat[7][2] = 3;
+        strat[7][3] = 3;
+        strat[7][4] = 3;
+        strat[7][5] = 3;
+        strat[7][6] = 1;
+        strat[7][7] = 5;
+
+        for (int i = 0; i < strat.length; i++) {
+            for (int j = 0; j < strat.length; j++) {
+                strat[i][j] = strat[i][j] * 40;
+            }
+        }
+        return strat;
+    }
+
     private static int[][] getStrategicValues() {
         int[][] strat = new int[8][8];
 

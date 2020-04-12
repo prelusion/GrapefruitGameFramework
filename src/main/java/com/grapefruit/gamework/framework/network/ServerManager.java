@@ -14,6 +14,7 @@ public class ServerManager {
     private boolean sending;
     private String connectedName = null;
     public BooleanProperty connected = new SimpleBooleanProperty();
+    private boolean turnTooFast = false;
 
     /**
      * The enum Response type.
@@ -55,6 +56,14 @@ public class ServerManager {
      */
     public boolean isConnected() {
         return connection.isConnected();
+    }
+
+    public void setTurnTooFast() {
+        turnTooFast = true;
+    }
+
+    public boolean getTurnTooFast() {
+        return turnTooFast;
     }
 
     /**
@@ -137,10 +146,16 @@ public class ServerManager {
     public synchronized Command getFirstUnsent() {
         Iterator<Command> i = commandQueue.iterator();
         while (i.hasNext()) {
-            Command command = i.next();
-            if (!command.isSent()) {
-                return command;
+            try {
+                Command command = i.next();
+                if (!command.isSent()) {
+                    return command;
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                return null;
             }
+
         }
         return null;
     }

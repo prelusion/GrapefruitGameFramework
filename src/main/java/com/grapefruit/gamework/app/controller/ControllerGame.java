@@ -46,7 +46,7 @@ public class ControllerGame implements IController {
     private Player onlineGameOnlinePlayer;
     private Player playerA;
     private Player playerB;
-
+    private boolean isFirstTurn = false;
     MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm(7, true);
     Thread minimaxThread;
 
@@ -120,20 +120,24 @@ public class ControllerGame implements IController {
 
         System.out.println("Started game session");
 
+        game = this.model.getGame();
+        serverManager = this.model.getServerManager();
+
+        if (this.model.isOnlineGame()) {
+            setupServerEventHandlers();
+        }
+
         if (this.model.isTournament()) {
             System.out.println("Playing game in tournament mode");
         }
 
-        game = this.model.getGame();
-        serverManager = this.model.getServerManager();
+
 
         setupAssets();
         setupObservableListeners();
 
         if (this.model.isOnlineGame()) {
             game.setTurnTimeout(10);
-
-            setupServerEventHandlers();
 
             for (Player player : game.getPlayers()) {
                 if (player.isLocal()) onlineGameLocalPlayer = player;
@@ -171,7 +175,11 @@ public class ControllerGame implements IController {
         } else {
             game.startTurnTimer();
 
-            if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
+            if (serverManager.getTurnTooFast()) {
+                System.out.println("Executing on turn too fast");
+                onTurn();
+            } else if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
+                isFirstTurn = true;
                 System.out.println("Starting AI");
                 playAI();
             } else {
@@ -206,6 +214,7 @@ public class ControllerGame implements IController {
     }
 
     private void setupServerEventHandlers() {
+        System.out.println("Initializing server event handlers");
         serverManager.setMoveCallback((boolean success, String[] args) -> {
             game.resetTurnTimer();
 
@@ -227,18 +236,8 @@ public class ControllerGame implements IController {
         });
 
         serverManager.setTurnCallback((boolean success, String[] args) -> {
-            game.setCurrentPlayer(onlineGameLocalPlayer);
-            Platform.runLater(this::update);
-
-            if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
-                Platform.runLater(() -> {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException ignored) {
-                    }
-                    playAI();
-                });
-            }
+            System.out.println("Set turn callback");
+            onTurn();
         });
 
         serverManager.setTurnTimeoutWinCallback((boolean success, String[] args) -> {
@@ -315,6 +314,7 @@ public class ControllerGame implements IController {
             });
         });
 
+        System.out.println("Initialized server event handlers");
     }
 
     public void update() {
@@ -514,13 +514,16 @@ public class ControllerGame implements IController {
         }
 
         minimaxThread = new Thread(() -> {
-            minimaxAlgorithm.startTimeout(8800);
+            int timeout = isFirstTurn ? 5000 : 9000;
+            System.out.println("minimax timeout: " + timeout);
+            minimaxAlgorithm.startTimeout(timeout);
             Tile tile = minimaxAlgorithm.calculateBestMove(
                     game.getBoard(),
                     game.getCurrentPlayer(),
                     game.getOpponentPlayer(),
                     game.getTurnCount()
             );
+            isFirstTurn = false;
             Platform.runLater(() -> onFinishAI(tile));
         });
 
@@ -645,5 +648,20 @@ public class ControllerGame implements IController {
 
     public void autoChallengeQuit() {
         GameApplication.openLauncher();
+    }
+
+    public void onTurn() {
+        game.setCurrentPlayer(onlineGameLocalPlayer);
+        Platform.runLater(this::update);
+
+        if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
+            Platform.runLater(() -> {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ignored) {
+                }
+                playAI();
+            });
+        }
     }
 }

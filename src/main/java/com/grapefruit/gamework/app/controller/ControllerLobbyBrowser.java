@@ -7,6 +7,7 @@ import com.grapefruit.gamework.app.model.ModelLobbyBrowser;
 import com.grapefruit.gamework.app.util.Command;
 import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDialogFactory;
 import com.grapefruit.gamework.framework.Colors;
+import com.grapefruit.gamework.framework.Game;
 import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.ServerConnection;
@@ -229,6 +230,11 @@ public class ControllerLobbyBrowser implements IController {
     }
 
     public void setupGameStartEventHandler(Command command) {
+        model.getServerManager().setTurnCallback((boolean success2, String[] args2) -> {
+            System.out.println("turn callback too fast");
+            model.getServerManager().setTurnTooFast();
+        });
+
         model.getServerManager().setStartGameCallback((success, args) -> {
             boolean isPlayingAsAI = aiRadioButton.isSelected();
 
@@ -247,12 +253,14 @@ public class ControllerLobbyBrowser implements IController {
                 players[1] = new Player(currentPlayerName, Colors.WHITE, true, isPlayingAsAI);
             }
 
+            Game game = model.getSelectedGame().getFactory().create(players);
+
             Platform.runLater(() -> {
                 command.execute();
 
                 GameApplication.startOnlineGame(
                         model.getSelectedGame().getAssets(),
-                        model.getSelectedGame().getFactory().create(players),
+                        game,
                         model.getServerManager()
                 );
             });

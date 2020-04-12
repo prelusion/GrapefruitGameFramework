@@ -47,7 +47,7 @@ public class MinimaxAlgorithm {
         this.turnCount = turnCount;
         timeoutStack = new Stack<>();
         timedOut = false;
-        revaluation(board);
+//        revaluation(board);
 
         System.out.println("---------------- TURN " + turnCount + " -----------------");
         Tile tile = realCalculateBestMove(board, player, opponent, true, currentDepth);
@@ -100,7 +100,7 @@ public class MinimaxAlgorithm {
             turnCountDecrease();
         }
 
-
+        System.out.println("start minimax for depth: " + depth);
         Map<Tile, Integer> tiles = threadedMiniMax(board, player, depth);
 
         Tile bestTile = null;
@@ -112,8 +112,7 @@ public class MinimaxAlgorithm {
 
             } else if (bestTile != null &&
                     entry.getKey().getStrategicValue() > bestTile.getStrategicValue() &&
-                    entry.getValue() == bestScore)
-            {
+                    entry.getValue() == bestScore) {
                 bestTile = entry.getKey();
                 bestScore = entry.getValue();
             }
@@ -124,15 +123,17 @@ public class MinimaxAlgorithm {
             System.out.println("increase depth");
         }
 
-        if(!isTimedOut() && secondsLeft() >= 1 && depth < 30) {
+        if (!isTimedOut() && secondsLeft() >= 1 && depth < 30) {
             timeoutStack.push(isTimedOut());
 
-            System.out.println("depth: " + depth);
-            Tile newTile = realCalculateBestMove(board, player, opponent, false, depth + 1);
-            System.out.println(timeoutStack);
-            if(!timeoutStack.isEmpty()) {
+            System.out.println("depth found: " + depth);
+            int newDepth = depth + 1;
+            Tile newTile = realCalculateBestMove(board, player, opponent, false, newDepth);
+            System.out.println("New tile on depth: " + newDepth + " position: " + newTile.getRow() + ", " + newTile.getCol());
+            if (!timeoutStack.isEmpty()) {
+                System.out.println(timeoutStack);
                 if (newTile != null && !timeoutStack.pop()) {
-                    System.out.println("new best tile on depth " + depth);
+                    System.out.println("New best tile on depth: " + newDepth + " position: " + newTile.getRow() + ", " + newTile.getCol());
                     bestTile = newTile;
                     timeoutStack.clear();
                 } else {
@@ -189,8 +190,7 @@ public class MinimaxAlgorithm {
             try {
                 Thread.sleep(timeout);
                 triggerTimeout();
-                System.out.println("TIMEOUTPUSHED");
-                System.out.println("TIMEOUTPUSHED");
+
             } catch (InterruptedException ignored) {
             }
         });
@@ -201,12 +201,27 @@ public class MinimaxAlgorithm {
     public synchronized void triggerTimeout() {
         timedOut = true;
         timeoutStack.push(isTimedOut());
+        System.out.println("TIMEOUTPUSHED");
     }
 
     public int minimax(int depth, Board board, int score, int alpha, int beta, boolean maximizingPlayer) {
         if (depth == 0 || timedOut) {
-            if(turnCount > 44) {
+//            if (turnCount > 45) {
+//                if (!board.anyMovesLeft(new Player[]{player, opponent})) {
+//                    System.out.println("End game predicted");
+//                    if (board.countPieces(player) > 32) {
+//                        System.out.println("We won, returning 9999");
+//                        return 9999;
+//                    } else {
+//                        System.out.println("We lost");
+//                        return -99;
+//                    }
+//                }
+//            }
+
+            if (turnCount > 44) {
                 return score + (board.countPieces(player) * 3);
+//                return score + board.countPieces(player);
             } else {
                 return score + board.countPieces(player);
             }
@@ -294,22 +309,22 @@ public class MinimaxAlgorithm {
         Tile bottomleft = board.getTile(board.getBoardSize() - 1, 0);
         Tile bottomright = board.getTile(board.getBoardSize() - 1, board.getBoardSize() - 1);
 
-        if(topleft.getPlayer() != null && topright.getPlayer() != null && topleft.getStrategicValue() != 55) {
+        if (topleft.getPlayer() != null && topright.getPlayer() != null && topleft.getStrategicValue() != 55) {
             System.out.println("Its damn time Right");
             board.changeValuesBetweenTiles(board.getTile(0, 0), "Right", 55);
         }
 
-        if(topleft.getPlayer() != null && bottomleft.getPlayer() != null && topleft.getStrategicValue() != 55) {
+        if (topleft.getPlayer() != null && bottomleft.getPlayer() != null && topleft.getStrategicValue() != 55) {
             System.out.println("Its damn time Down");
             board.changeValuesBetweenTiles(board.getTile(0, 0), "Down", 55);
         }
 
-        if(bottomright.getPlayer() != null && topright.getPlayer() != null && bottomright.getStrategicValue() != 55) {
+        if (bottomright.getPlayer() != null && topright.getPlayer() != null && bottomright.getStrategicValue() != 55) {
             System.out.println("Its damn time Top");
             board.changeValuesBetweenTiles(board.getTile(board.getBoardSize() - 1, board.getBoardSize() - 1), "Top", 55);
         }
 
-        if(bottomright.getPlayer() != null && bottomleft.getPlayer() != null && bottomright.getStrategicValue() != 55) {
+        if (bottomright.getPlayer() != null && bottomleft.getPlayer() != null && bottomright.getStrategicValue() != 55) {
             System.out.println("Its damn time Left");
             board.changeValuesBetweenTiles(board.getTile(board.getBoardSize() - 1, board.getBoardSize() - 1), "Left", 55);
         }

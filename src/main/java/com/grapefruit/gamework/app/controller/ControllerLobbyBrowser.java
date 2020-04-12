@@ -234,7 +234,7 @@ public class ControllerLobbyBrowser implements IController {
             System.out.println("turn callback too fast");
             model.getServerManager().setTurnTooFast(true);
         });
-        
+
         model.getServerManager().setMoveCallback((boolean success2, String[] args2) -> {
             System.out.println("move callback too fast");
             model.getServerManager().setMoveTooFast(true);

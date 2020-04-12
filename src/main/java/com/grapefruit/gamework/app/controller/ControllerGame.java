@@ -118,10 +118,10 @@ public class ControllerGame implements IController {
     public void setModel(IModel model) {
         this.model = (ModelGame) model;
 
-        System.out.println("Started game session");
-
         game = this.model.getGame();
         serverManager = this.model.getServerManager();
+
+        System.out.println("Started game session");
 
         if (this.model.isOnlineGame()) {
             setupServerEventHandlers();
@@ -131,7 +131,7 @@ public class ControllerGame implements IController {
             System.out.println("Playing game in tournament mode");
         }
 
-
+        game.getBoard().printStrategicValues();
 
         setupAssets();
         setupObservableListeners();
@@ -182,6 +182,7 @@ public class ControllerGame implements IController {
 
             if (serverManager.getTurnTooFast()) {
                 System.out.println("Executing on turn too fast");
+                isFirstTurn = true;
                 onTurn();
             } else if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
                 isFirstTurn = true;

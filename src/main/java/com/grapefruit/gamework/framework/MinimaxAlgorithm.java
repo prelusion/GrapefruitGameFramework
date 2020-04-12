@@ -237,8 +237,8 @@ public class MinimaxAlgorithm {
 //                return score + board.countPieces(player);
                 return score;
             } else {
-//                return score + board.countPieces(player);
-                return score;
+                return score + board.countPieces(player);
+//                return score;
             }
         }
 

@@ -96,6 +96,13 @@ public class ReversiFactory extends GameFactory {
         strat[7][6] = -8;
         strat[7][7] = 99;
 
+        for (int i = 0; i < strat.length; i++) {
+            for (int j = 0; j < strat.length; j++) {
+                strat[i][j] = strat[i][j] * 40;
+            }
+        }
         return strat;
     }
+
+
 }

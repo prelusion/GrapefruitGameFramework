@@ -233,10 +233,12 @@ public class MinimaxAlgorithm {
 //            }
 
             if (turnCount > 48) {
-                return score + (board.countPieces(player) * 3);
+//                return score + (board.countPieces(player) * 3);
 //                return score + board.countPieces(player);
+                return score;
             } else {
-                return score + board.countPieces(player);
+//                return score + board.countPieces(player);
+                return score;
             }
         }
 

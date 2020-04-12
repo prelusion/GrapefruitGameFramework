@@ -232,12 +232,12 @@ public class ControllerLobbyBrowser implements IController {
     public void setupGameStartEventHandler(Command command) {
         model.getServerManager().setTurnCallback((boolean success2, String[] args2) -> {
             System.out.println("turn callback too fast");
-            model.getServerManager().setTurnTooFast();
+            model.getServerManager().setTurnTooFast(true);
         });
-
+        
         model.getServerManager().setMoveCallback((boolean success2, String[] args2) -> {
             System.out.println("move callback too fast");
-            model.getServerManager().setMoveTooFast();
+            model.getServerManager().setMoveTooFast(true);
             model.getServerManager().setMoveTooFastArgs(args2);
         });
 

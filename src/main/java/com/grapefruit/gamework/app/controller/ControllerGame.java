@@ -176,6 +176,7 @@ public class ControllerGame implements IController {
             game.startTurnTimer();
 
             if (serverManager.getMoveTooFast()) {
+                System.out.println("Executing on move too fast");
                 onMove(serverManager.getMoveTooFastArgs());
             }
 
@@ -627,6 +628,8 @@ public class ControllerGame implements IController {
                 serverManager.removeStartGameCallback();
             }
 
+            serverManager.setTurnTooFast(false);
+            serverManager.setMoveTooFast(false);
             serverManager.removeMoveCallback();
             serverManager.removeTurnCallback();
             serverManager.removeTurnTimeoutWinCallback();

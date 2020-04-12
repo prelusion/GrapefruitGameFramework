@@ -60,16 +60,16 @@ public class ServerManager {
         return connection.isConnected();
     }
 
-    public void setTurnTooFast() {
-        turnTooFast = true;
+    public void setTurnTooFast(boolean value) {
+        turnTooFast = value;
     }
 
     public boolean getTurnTooFast() {
         return turnTooFast;
     }
 
-    public void setMoveTooFast() {
-        moveTooFast = true;
+    public void setMoveTooFast(boolean value) {
+        moveTooFast = value;
     }
 
     public boolean getMoveTooFast() {

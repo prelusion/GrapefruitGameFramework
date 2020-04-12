@@ -8,6 +8,7 @@ import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VAL
 import static java.lang.Integer.*;
 
 public class MinimaxAlgorithm {
+    private Board boardIn;
     private boolean dynamicDepth = true;
     private Player player;
     private Player opponent;
@@ -44,7 +45,7 @@ public class MinimaxAlgorithm {
     }
 
     public Tile calculateBestMove(Board boardIn, Player player, Player opponent, int turnCount) {
-
+        this.boardIn = boardIn;
         this.turnCount = turnCount;
         timeoutStack = new Stack<>();
         timedOut = false;
@@ -146,7 +147,11 @@ public class MinimaxAlgorithm {
 
                 System.out.println("depth found: " + depth);
                 int newDepth = depth + 1;
-                Tile newTile = realCalculateBestMove(board, player, opponent, false, newDepth);
+
+                ReversiBoard newBoard = new ReversiBoard(board.getBoardSize(), STRATEGIC_VALUES);
+                newBoard.copyState(boardIn);
+
+                Tile newTile = realCalculateBestMove(newBoard, player, opponent, false, newDepth);
                 System.out.println("New tile on depth: " + newDepth + " position: " + newTile.getRow() + ", " + newTile.getCol());
                 if (!timeoutStack.isEmpty()) {
                     System.out.println(timeoutStack);

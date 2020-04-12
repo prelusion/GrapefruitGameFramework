@@ -9,14 +9,14 @@ import java.util.List;
  */
 public abstract class Commands {
 
-    private static final String KEYWORD_LOGIN = "login ";
-    private static final String KEYWORD_LOGOUT = "logout";
-    private static final String KEYWORD_GAME_LIST = "get gamelist";
-    private static final String KEYWORD_PLAYER_LIST = "get playerlist";
-    private static final String KEYWORD_HELP = "help ";
-    private static final String KEYWORD_MOVE = "move ";
-    private static final String KEYWORD_FORFEIT = "forfeit";
-    private static final String KEYWORD_CHALLENGE = "challenge ";
+    public static final String KEYWORD_LOGIN = "login ";
+    public static final String KEYWORD_LOGOUT = "logout";
+    public static final String KEYWORD_GAME_LIST = "get gamelist";
+    public static final String KEYWORD_PLAYER_LIST = "get playerlist";
+    public static final String KEYWORD_HELP = "help ";
+    public static final String KEYWORD_MOVE = "move ";
+    public static final String KEYWORD_FORFEIT = "forfeit";
+    public static final String KEYWORD_CHALLENGE = "challenge ";
 
     /**
      * The login function sends a login command from the client to the server.

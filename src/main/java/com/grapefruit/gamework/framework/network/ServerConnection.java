@@ -286,11 +286,12 @@ public class ServerConnection {
                         out.println(command.getCommandString());
                     }
                     try {
-                        Thread.sleep(300);
+                        Thread.sleep(100);
                     } catch (Exception e) {
                         Thread.currentThread().interrupt();
                     }
                 }
+                System.out.println("Start sending interrupted");
             }
         });
         timer.start();

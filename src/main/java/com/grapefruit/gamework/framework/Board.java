@@ -70,6 +70,10 @@ public abstract class Board {
         grid[row][col].setPlayer(player);
     }
 
+    public void setStrategicValue(int row, int col, int value) {
+        grid[row][col].setStrategicValue(value);
+    }
+
     public Player getPlayer(int row, int col) {
         return grid[row][col].getPlayer();
     }

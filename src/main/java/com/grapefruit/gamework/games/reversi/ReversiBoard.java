@@ -53,7 +53,7 @@ public class ReversiBoard extends Board {
         return validMoves;
     }
 
-    private HashSet<Tile> getDirectNeighbours(Tile tile) {
+    public HashSet<Tile> getDirectNeighbours(Tile tile) {
         HashSet<Tile> neighbours = new HashSet<>();
 
         for (int[] coord : relativeNeighborGrid) {

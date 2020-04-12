@@ -47,7 +47,7 @@ public class ControllerGame implements IController {
     private Player playerA;
     private Player playerB;
     private boolean isFirstTurn = false;
-    MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm(7, true);
+    MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm(7, false);  // 7, true
     Thread minimaxThread;
 
     /**
@@ -222,11 +222,13 @@ public class ControllerGame implements IController {
     private void setupServerEventHandlers() {
         System.out.println("Initializing server event handlers");
         serverManager.setMoveCallback((boolean success, String[] args) -> {
+            System.out.println("move callback in controller");
+            for (String arg : args) System.out.println(arg);
             onMove(args);
         });
 
         serverManager.setTurnCallback((boolean success, String[] args) -> {
-            System.out.println("Set turn callback");
+            System.out.println("turn callback in controller");
             onTurn();
         });
 
@@ -514,12 +516,14 @@ public class ControllerGame implements IController {
 
     private void playAI() {
         System.out.println("Play AI");
+
         if (game.hasFinished()) {
             return;
         }
 
         minimaxThread = new Thread(() -> {
-            int timeout = isFirstTurn ? 5000 : 8800;
+            System.out.println("is first turn: " + isFirstTurn);
+            int timeout = isFirstTurn ? 5000 : 8400;
             System.out.println("minimax timeout: " + timeout);
             minimaxAlgorithm.startTimeout(timeout);
             Tile tile = minimaxAlgorithm.calculateBestMove(

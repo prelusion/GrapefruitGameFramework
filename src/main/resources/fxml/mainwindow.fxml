@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
@@ -11,7 +11,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<?import com.jfoenix.controls.JFXButton?>
 <VBox fx:id="parent" onMouseClicked="#onClick" prefHeight="554.0" prefWidth="860.0" styleClass="secondary-background" stylesheets="@css/mainwindow.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grapefruit.gamework.app.controller.ControllerMainWindow">
   <children>
       <Pane prefHeight="42.0" prefWidth="710.0" style="-fx-view-order: -10; -fx-effect: innershadow(GAUSSIAN, #000000, 5, 0, 0, 0);;" styleClass="primary-background">
@@ -44,8 +43,9 @@
                   <Pane prefHeight="34.0" prefWidth="10.0" />
                   <Text fx:id="connectionStatus" strokeType="OUTSIDE" strokeWidth="0.0" text="status">
                      <font>
-                        <Font name="Berlin Sans FB Bold" size="14.0" />
-                     </font></Text>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
                </children>
             </HBox>
          </children></Pane>

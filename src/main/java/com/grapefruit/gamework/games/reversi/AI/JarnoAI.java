@@ -305,7 +305,7 @@ public class JarnoAI implements MinimaxAlgorithm {
                 return score;
             }
 
-//            wedgeStrategy((ReversiBoard) board, moves);
+            wedgeStrategy((ReversiBoard) board, moves);
 
             for (Tile move : moves) {
                 if (timedOut) break;
@@ -344,7 +344,7 @@ public class JarnoAI implements MinimaxAlgorithm {
                 return score;
             }
 
-//            wedgeStrategy((ReversiBoard) board, moves);
+            wedgeStrategy((ReversiBoard) board, moves);
 
             for (Tile move : moves) {
                 if (timedOut) break;
@@ -451,17 +451,17 @@ public class JarnoAI implements MinimaxAlgorithm {
         for (Map.Entry<String, List<Tile>> entry : edges.entrySet()) {
             List<Tile> edge = entry.getValue();
             if (edge.size() > 0) {
-                System.out.println("Performing wedge strategy");
+//                System.out.println("Performing wedge strategy");
 
                 // Even
                 if (edge.size() % 2 == 0) {
-                    System.out.println("wedge strategy increase edge: " + entry.getKey());
+//                    System.out.println("wedge strategy increase edge: " + entry.getKey());
                     for (Tile tile : edge) {
                         board.setStrategicValue(tile.getRow(), tile.getCol(), tile.getStrategicValue() + 5 * strategicValueFactor);
                     }
                     // Odd
                 } else {
-                    System.out.println("wedge strategy decrease edge: " + entry.getKey());
+//                    System.out.println("wedge strategy decrease edge: " + entry.getKey());
                     for (Tile tile : edge) {
                         board.setStrategicValue(tile.getRow(), tile.getCol(), tile.getStrategicValue() - 5 * strategicValueFactor);
                     }

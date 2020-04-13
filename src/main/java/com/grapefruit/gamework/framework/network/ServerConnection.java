@@ -81,17 +81,26 @@ public class ServerConnection {
 
         if (msg.startsWith("SVR GAME CHALLENGE CANCELLED")) {
             int number = Integer.parseInt(msg.replace("SVR GAME CHALLENGE CANCELLED {CHALLENGENUMBER: \"", "").replace("\"}", ""));
+            System.out.println("SVR GAME CHALLENGE CANCELLED, number: " + number);
             manager.getChallenges().removeIf(challenge -> challenge.getNumber() == number);
 
         } else if (msg.startsWith("SVR GAME CHALLENGE")) {
-            ResponseChallenge challenge = parseChallenge(msg);
-            challenge.setStatus(ChallengeStatus.CHALLENGE_RECEIVED);
-            manager.addChallenge(challenge);
+            CommandCallback listener = serverCommandListeners.get("onNewChallenge");
+            String challengeNumber = parseCommandArg(msg, "CHALLENGENUMBER");
+            System.out.println("SVR GAME CHALLENGE, number: " + challengeNumber);
+            if (listener != null) {
+                listener.onResponse(true, new String[]{challengeNumber});
+            } else {
+                ResponseChallenge challenge = parseChallenge(msg);
+                challenge.setStatus(ChallengeStatus.CHALLENGE_RECEIVED);
+                manager.addChallenge(challenge);
+            }
 
         } else if (msg.startsWith("SVR GAME MATCH")) {
             // SVR GAME MATCH {PLAYERTOMOVE: "jarno", GAMETYPE: "Reversi", OPPONENT: "bob"}
             String firstTurnName = parseCommandArg(msg, "PLAYERTOMOVE");
             String opponentName = parseCommandArg(msg, "OPPONENT");
+            System.out.println("SVR GAME MATCH, first turn: " + firstTurnName + ", opponent: " + opponentName);
             CommandCallback listener = serverCommandListeners.get("onStartGame");
             if (listener != null) {
                 listener.onResponse(true, new String[]{firstTurnName, opponentName});
@@ -100,6 +109,7 @@ public class ServerConnection {
         } else if (msg.startsWith("SVR GAME YOURTURN")) {
             // SVR GAME YOURTURN {TURNMESSAGE: ""}
             String message = parseCommandArg(msg, "TURNMESSAGE");
+            System.out.println("SVR GAME YOURTURN, message: " + message);
             CommandCallback listener = serverCommandListeners.get("onTurn");
             if (listener != null) {
                 listener.onResponse(true, new String[]{message});
@@ -110,6 +120,8 @@ public class ServerConnection {
             String playerName = parseCommandArg(msg, "PLAYER");
             String move = parseCommandArg(msg, "MOVE");
             String details = parseCommandArg(msg, "DETAILS");
+
+            System.out.println("SVR GAME MOVE, player: " + playerName + ", move: " + move + ", details: " + details);
 
             CommandCallback listener = serverCommandListeners.get("onMove");
             if (listener != null) {
@@ -124,20 +136,24 @@ public class ServerConnection {
             String playerTwoScore = parseCommandArg(msg, "PLAYERTWOSCORE");
             String comment = parseCommandArg(msg, "COMMENT");
 
+            System.out.println("SVR GAME LOSS, comment: " + comment);
+
 //            System.out.println("SVR GAME LOSS");
 //            System.out.println("Comment: " + comment);
 
             if (comment.equals("Turn timelimit reached")) {
                 CommandCallback listener = serverCommandListeners.get("onTurnTimeoutLose");
-                if (listener != null) {
-                    listener.onResponse(true, new String[]{});
-                }
+                if (listener != null) listener.onResponse(true, new String[]{});
+            } else if (comment.equals("Illegal move")) {
+                CommandCallback listener = serverCommandListeners.get("onIllegalMoveLose");
+                if (listener != null) listener.onResponse(true, new String[]{});
             }
-
         } else if (msg.startsWith("SVR GAME WIN")) {
             String playerOneScore = parseCommandArg(msg, "PLAYERONESCORE");
             String playerTwoScore = parseCommandArg(msg, "PLAYERTWOSCORE");
             String comment = parseCommandArg(msg, "COMMENT");
+
+            System.out.println("SVR GAME WIN, comment: " + comment);
 
             if (comment.equals("Turn timelimit reached")) {
                 CommandCallback listener = serverCommandListeners.get("onTurnTimeoutWin");
@@ -180,18 +196,30 @@ public class ServerConnection {
             }
 
         } else if (msg.contains("SVR") && msg.contains("[")) {
+            String keyword = msg.split(" ")[1].split(" ")[0];
+
             int startArg = msg.indexOf("[");
             String[] args = msg.substring(startArg + 1, msg.trim().length() - 1).split(", ");
 
             String[] result = new String[args.length];
             int i = 0;
+
             for (String element : args) {
-                result[i] = element.substring(1, element.length() - 1);
+                try {
+                    result[i] = element.substring(1, element.length() - 1);
+                } catch (StringIndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                    Command command = manager.findByKeyword(keyword, true);
+                    if (command != null && command.isSent()) {
+                        manager.removeCommandFromQueue(command);
+                    }
+                    return;
+                }
                 i++;
             }
-            Command command = manager.findFirstFittingCommand(ServerManager.ResponseType.LIST, true);
-//            if (msg.contains("SVR PLAYERLIST") && command.getCommandString().equals("get gamelist")) {
-//                System.out.println("IGNOREING PLAYER LIST");
+
+            Command command = manager.findByKeyword(keyword, true);
+
             if (command != null && command.isSent()) {
                 command.confirm();
                 command.doCallBack(true, result);
@@ -258,11 +286,12 @@ public class ServerConnection {
                         out.println(command.getCommandString());
                     }
                     try {
-                        Thread.sleep(300);
+                        Thread.sleep(100);
                     } catch (Exception e) {
                         Thread.currentThread().interrupt();
                     }
                 }
+                System.out.println("Start sending interrupted");
             }
         });
         timer.start();
@@ -299,6 +328,16 @@ public class ServerConnection {
     public void setOnPlayerDisconnectCallback(CommandCallback callback) {
         serverCommandListeners.put("onPlayerDisconnect", callback);
     }
+
+    public void setOnNewChallengetCallback(CommandCallback callback) {
+        serverCommandListeners.put("onNewChallenge", callback);
+    }
+
+    public void setIllegalmoveLoseCallback(CommandCallback callback) {
+        serverCommandListeners.put("onIllegalMoveLose", callback);
+    }
+
+
 
     /**
      * The type Response challenge.

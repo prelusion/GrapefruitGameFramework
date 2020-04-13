@@ -48,9 +48,8 @@ public class ControllerGame implements IController {
     private Player playerA;
     private Player playerB;
 
-    private boolean isFirstTurn = true;
-
     JarnoWinningMinimax minimaxAlgorithm = new JarnoWinningMinimax(10);
+    private boolean isFirstTurn = false;
     Thread minimaxThread;
 
     /**
@@ -121,20 +120,26 @@ public class ControllerGame implements IController {
     public void setModel(IModel model) {
         this.model = (ModelGame) model;
 
+        game = this.model.getGame();
+        serverManager = this.model.getServerManager();
+
+        System.out.println("Started game session");
+
+        if (this.model.isOnlineGame()) {
+            setupServerEventHandlers();
+        }
+
         if (this.model.isTournament()) {
             System.out.println("Playing game in tournament mode");
         }
 
-        game = this.model.getGame();
-        serverManager = this.model.getServerManager();
+        game.getBoard().printStrategicValues();
 
         setupAssets();
         setupObservableListeners();
 
         if (this.model.isOnlineGame()) {
             game.setTurnTimeout(10);
-
-            setupServerEventHandlers();
 
             for (Player player : game.getPlayers()) {
                 if (player.isLocal()) onlineGameLocalPlayer = player;
@@ -156,6 +161,8 @@ public class ControllerGame implements IController {
         currentPlayerName.setText(game.getCurrentPlayer().getName());
         currentColor.setText(game.getCurrentPlayer().getColor().toString());
 
+        System.out.println("Player with first move: " + currentPlayerName);
+
         drawBoard();
         update();
 
@@ -168,9 +175,23 @@ public class ControllerGame implements IController {
                 playAI();
             }
         } else {
-            if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
-                game.startTurnTimer();
+            game.startTurnTimer();
+
+            if (serverManager.getMoveTooFast()) {
+                System.out.println("Executing on move too fast");
+                onMove(serverManager.getMoveTooFastArgs());
+            }
+
+            if (serverManager.getTurnTooFast()) {
+                System.out.println("Executing on turn too fast");
+                isFirstTurn = true;
+                onTurn();
+            } else if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
+                isFirstTurn = true;
+                System.out.println("Starting AI");
                 playAI();
+            } else {
+                System.out.println("Not starting AI");
             }
         }
     }
@@ -188,6 +209,7 @@ public class ControllerGame implements IController {
                 game.resetTurnTimer();
 
                 if (!model.isOnlineGame()) {
+                    stopSideEffects();
                     createEndDialog("Turn timed out, you lose!");
                 }
             } else {
@@ -200,43 +222,28 @@ public class ControllerGame implements IController {
     }
 
     private void setupServerEventHandlers() {
+        System.out.println("Initializing server event handlers");
         serverManager.setMoveCallback((boolean success, String[] args) -> {
-            game.resetTurnTimer();
-
-            String playerName = args[0];
-            String move = args[1];
-
-            int[] rowcol = Helpers.convertMoveString(move, this.model.getGame().getBoard().getBoardSize());
-            int row = rowcol[0];
-            int col = rowcol[1];
-
-            Game game = this.model.getGame();
-            Player player = game.getPlayerByName(playerName);
-
-            Platform.runLater(() -> {
-                game.playMove(row, col, player);
-                update();
-                game.startTurnTimer();
-            });
+            System.out.println("move callback in controller");
+            for (String arg : args) System.out.println(arg);
+            onMove(args);
         });
 
         serverManager.setTurnCallback((boolean success, String[] args) -> {
-            game.setCurrentPlayer(onlineGameLocalPlayer);
-            Platform.runLater(this::update);
-
-            if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
-                Platform.runLater(() -> {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException ignored) {}
-                    playAI();
-                });
-            }
+            System.out.println("turn callback in controller");
+            onTurn();
         });
 
         serverManager.setTurnTimeoutWinCallback((boolean success, String[] args) -> {
             game.resetTurnTimer();
             Platform.runLater(() -> {
+                stopSideEffects();
+
+                if (model.isAutoChallenge()) {
+                    autoChallengeQuit();
+                    return;
+                }
+
                 createEndDialog("Opponent's turn timed out, you win!");
                 update();
             });
@@ -245,6 +252,13 @@ public class ControllerGame implements IController {
         serverManager.setTurnTimeoutLoseCallback((boolean success, String[] args) -> {
             game.resetTurnTimer();
             Platform.runLater(() -> {
+                stopSideEffects();
+
+                if (model.isAutoChallenge()) {
+                    autoChallengeQuit();
+                    return;
+                }
+
                 createEndDialog("Turn timed out, you lose!");
                 update();
             });
@@ -253,7 +267,29 @@ public class ControllerGame implements IController {
         serverManager.setIllegalmoveWinCallback((boolean success, String[] args) -> {
             game.resetTurnTimer();
             Platform.runLater(() -> {
+                stopSideEffects();
+
+                if (model.isAutoChallenge()) {
+                    autoChallengeQuit();
+                    return;
+                }
+
                 createEndDialog("Opponent illegal move, you win!");
+                update();
+            });
+        });
+
+        serverManager.setIllegalmoveLoseCallback((boolean success, String[] args) -> {
+            game.resetTurnTimer();
+            Platform.runLater(() -> {
+                stopSideEffects();
+
+                if (model.isAutoChallenge()) {
+                    autoChallengeQuit();
+                    return;
+                }
+
+                createEndDialog("Illegal move, you lose!");
                 update();
             });
         });
@@ -261,6 +297,13 @@ public class ControllerGame implements IController {
         serverManager.setOnPlayerForfeitCallback((boolean success, String[] args) -> {
             game.resetTurnTimer();
             Platform.runLater(() -> {
+                stopSideEffects();
+
+                if (model.isAutoChallenge()) {
+                    autoChallengeQuit();
+                    return;
+                }
+
                 createEndDialog("Opponent forfeited, you win!");
                 update();
             });
@@ -269,11 +312,18 @@ public class ControllerGame implements IController {
         serverManager.setOnPlayerDisconnectCallback((boolean success, String[] args) -> {
             game.resetTurnTimer();
             Platform.runLater(() -> {
+                stopSideEffects();
+
+                if (model.isAutoChallenge()) {
+                    autoChallengeQuit();
+                    return;
+                }
                 createEndDialog("Opponent disconnected, you win!");
                 update();
             });
         });
 
+        System.out.println("Initialized server event handlers");
     }
 
     public void update() {
@@ -338,6 +388,13 @@ public class ControllerGame implements IController {
         }
 
         if (!game.hasFinished()) {
+            return;
+        }
+
+        stopSideEffects();
+
+        if (model.isAutoChallenge()) {
+            autoChallengeQuit();
             return;
         }
 
@@ -461,18 +518,23 @@ public class ControllerGame implements IController {
 
     private void playAI() {
         System.out.println("Play AI");
+
         if (game.hasFinished()) {
             return;
         }
 
         minimaxThread = new Thread(() -> {
-            minimaxAlgorithm.startTimeout(9000);
+            System.out.println("is first turn: " + isFirstTurn);
+            int timeout = isFirstTurn ? 5000 : 8400;
+            System.out.println("minimax timeout: " + timeout);
+            minimaxAlgorithm.startTimeout(timeout);
             Tile tile = minimaxAlgorithm.calculateBestMove(
                     game.getBoard(),
                     game.getCurrentPlayer(),
                     game.getOpponentPlayer(),
                     game.getTurnCount()
             );
+            isFirstTurn = false;
             Platform.runLater(() -> onFinishAI(tile));
         });
 
@@ -506,7 +568,7 @@ public class ControllerGame implements IController {
     }
 
     private void createEndDialog(String message) {
-        ModelGameEndDialog endDialogModel = new ModelGameEndDialog(message, this::onClose);
+        ModelGameEndDialog endDialogModel = new ModelGameEndDialog(message, this::stopSideEffects);
         GameEndDialogFactory.build(endDialogModel);
     }
 
@@ -543,7 +605,7 @@ public class ControllerGame implements IController {
 
     @FXML
     private void quitGame() {
-        onClose();
+        stopSideEffects();
 
         if (model.isOnlineGame() && !game.hasFinished()) {
             model.getServerManager().queueCommand(Commands.forfeit(
@@ -556,7 +618,7 @@ public class ControllerGame implements IController {
     /**
      * This method stops all side effects.
      */
-    private void onClose() {
+    private void stopSideEffects() {
         System.out.println("destroying game session");
 
         if (turnChangeListener != null) {
@@ -568,15 +630,19 @@ public class ControllerGame implements IController {
         }
 
         if (serverManager != null) {
-            if (!model.isTournament()) {
+            if (!model.isTournament() && !model.isAutoChallenge()) {
+                System.out.println("removing start game callback");
                 serverManager.removeStartGameCallback();
             }
 
+            serverManager.setTurnTooFast(false);
+            serverManager.setMoveTooFast(false);
             serverManager.removeMoveCallback();
             serverManager.removeTurnCallback();
             serverManager.removeTurnTimeoutWinCallback();
             serverManager.removeTurnTimeoutLoseCallback();
             serverManager.removeIllegalmoveWinCallback();
+            serverManager.removeIllegalmoveLoseCallback();
             serverManager.removeOnPlayerForfeitCallback();
             serverManager.removeOnPlayerDisconnectCallbackCallback();
         }
@@ -592,5 +658,44 @@ public class ControllerGame implements IController {
         game.destroy();
 
         destroyed = true;
+    }
+
+    public void autoChallengeQuit() {
+        GameApplication.openLauncher();
+    }
+
+    public void onTurn() {
+        game.setCurrentPlayer(onlineGameLocalPlayer);
+        Platform.runLater(this::update);
+
+        if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
+            Platform.runLater(() -> {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ignored) {
+                }
+                playAI();
+            });
+        }
+    }
+
+    public void onMove(String[] args) {
+        game.resetTurnTimer();
+
+        String playerName = args[0];
+        String move = args[1];
+
+        int[] rowcol = Helpers.convertMoveString(move, this.model.getGame().getBoard().getBoardSize());
+        int row = rowcol[0];
+        int col = rowcol[1];
+
+        Game game = this.model.getGame();
+        Player player = game.getPlayerByName(playerName);
+
+        Platform.runLater(() -> {
+            game.playMove(row, col, player);
+            update();
+            game.startTurnTimer();
+        });
     }
 }

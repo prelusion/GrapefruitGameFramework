@@ -70,6 +70,10 @@ public abstract class Board {
         grid[row][col].setPlayer(player);
     }
 
+    public void setStrategicValue(int row, int col, int value) {
+        grid[row][col].setStrategicValue(value);
+    }
+
     public Player getPlayer(int row, int col) {
         return grid[row][col].getPlayer();
     }
@@ -255,6 +259,31 @@ public abstract class Board {
     }
 
     public abstract void calculateScores(Player[] players);
+
+    public void changeValuesBetweenTiles(Tile tile1, String side, int value) {
+        switch (side) {
+            case "Top":
+                for (int i = 0; i < getBoardSize(); i++) {
+                    getTile(tile1.getRow() - i, tile1.getCol()).setStrategicValue(value);
+                }
+                break;
+            case "Right":
+                for (int i = 0; i < getBoardSize(); i++) {
+                    getTile(tile1.getRow(), tile1.getCol() + i).setStrategicValue(value);
+                }
+                break;
+            case "Down":
+                for (int i = 0; i < getBoardSize(); i++) {
+                    getTile(tile1.getRow() + i, tile1.getCol()).setStrategicValue(value);
+                }
+                break;
+            case "Left":
+                for (int i = 0; i < getBoardSize(); i++) {
+                    getTile(tile1.getRow(), tile1.getCol() - i).setStrategicValue(value);
+                }
+                break;
+        }
+    }
 
     public int getScore(Player player){
         return scores.getOrDefault(player, 0);

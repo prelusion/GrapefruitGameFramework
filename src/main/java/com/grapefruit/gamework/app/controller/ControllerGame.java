@@ -11,6 +11,7 @@ import com.grapefruit.gamework.framework.*;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.Helpers;
 import com.grapefruit.gamework.framework.network.ServerManager;
+import com.grapefruit.gamework.games.reversi.AI.DelanoAI;
 import com.grapefruit.gamework.games.reversi.AI.JarnoAI;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -48,6 +49,7 @@ public class ControllerGame implements IController {
     private Player playerA;
     private Player playerB;
     private boolean isFirstTurn = false;
+    MinimaxAlgorithm minimaxAlgorithm = new DelanoAI();
     Thread minimaxThread;
 
     int offlineTurnTimeout = 60;
@@ -551,7 +553,7 @@ public class ControllerGame implements IController {
                 System.out.println("Game session destroyed, not sending AI generated move to server.");
                 return;
             }
-            
+
             Platform.runLater(() -> onFinishAI(tile));
         });
 

@@ -1,6 +1,7 @@
 package com.grapefruit.gamework.framework.network;
 
 import com.google.gson.Gson;
+import com.grapefruit.gamework.app.resources.AppSettings;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class ServerConnection {
      * @throws IOException the io exception
      */
     public void connect(String serverIp) throws IOException {
-        socket = new Socket(serverIp, 7791);
+        socket = new Socket(serverIp, AppSettings.getSettings().getPort());
         out = new PrintWriter(socket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         listen();

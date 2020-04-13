@@ -110,13 +110,16 @@ public abstract class AppSettings {
         private ArrayList<User> users;
         private Server defaultServer;
         private User defaultUser;
+        private Integer timeout;
+        private Integer port;
 
         public Settings(){
             servers = new ArrayList<>();
             users = new ArrayList<>();
 
             Server defaultServer = new Server("Hanze", "145.33.225.170");
-
+            timeout = 10;
+            port = 7789;
             setDefaultServer(defaultServer);
             servers.add(defaultServer);
         }
@@ -151,6 +154,22 @@ public abstract class AppSettings {
 
         public ArrayList<User> getUsers() {
             return users;
+        }
+
+        public Integer getPort() {
+            return port;
+        }
+
+        public void setPort(Integer port) {
+            this.port = port;
+        }
+
+        public void setTimeout(Integer timeout) {
+            this.timeout = timeout;
+        }
+
+        public Integer getTimeout() {
+            return timeout;
         }
     }
 

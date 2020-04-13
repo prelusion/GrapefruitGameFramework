@@ -249,14 +249,14 @@ public class MinimaxAlgorithm {
 //                }
 //            }
 
-            if (turnCount > 46) {
-                if (!board.anyMovesLeft(new Player[]{player, opponent})) {
-                    if (board.countPieces(player) > 48) {
-                        System.out.println("Count pieces significantly higer than opponent");
-                        return 120;
-                    }
-                }
-            }
+//            if (turnCount > 46) {
+//                if (!board.anyMovesLeft(new Player[]{player, opponent})) {
+//                    if (board.countPieces(player) > 48) {
+//                        System.out.println("Count pieces significantly higer than opponent");
+//                        return 120;
+//                    }
+//                }
+//            }
 
             if (turnCount > 48) {
                 return score + (board.countPieces(player) * 40);

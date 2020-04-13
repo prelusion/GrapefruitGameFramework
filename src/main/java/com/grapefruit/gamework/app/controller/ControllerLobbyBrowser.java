@@ -2,11 +2,13 @@ package com.grapefruit.gamework.app.controller;
 
 import com.grapefruit.gamework.app.GameApplication;
 import com.grapefruit.gamework.app.model.IModel;
+import com.grapefruit.gamework.app.model.ModelGameEndDialog;
 import com.grapefruit.gamework.app.model.ModelLobbyBrowser;
 import com.grapefruit.gamework.app.util.Command;
+import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDialogFactory;
 import com.grapefruit.gamework.framework.Colors;
+import com.grapefruit.gamework.framework.Game;
 import com.grapefruit.gamework.framework.Player;
-import com.grapefruit.gamework.framework.network.CommandCallback;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.ServerConnection;
 import javafx.animation.KeyFrame;
@@ -65,19 +67,25 @@ public class ControllerLobbyBrowser implements IController {
 
     public void setupWidgets() {
         setupTable();
+
         Timeline timeline = new Timeline();
-        timeline.getKeyFrames().add(new KeyFrame(
+
+        KeyFrame keyFrame = new KeyFrame(
                 Duration.millis(500),
                 check -> {
+                    if (!model.getServerManager().isConnected()) {
+                        timeline.stop();
+                        return;
+                    }
                     updateTable();
                     challengeTable.sceneProperty().addListener((obs, oldScene, newScene) -> {
                         if (newScene == null) {
                             timeline.stop();
                         }
                     });
-                }
+                });
 
-        ));
+        timeline.getKeyFrames().add(keyFrame);
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
         updateTable();
@@ -187,6 +195,13 @@ public class ControllerLobbyBrowser implements IController {
         model.getServerManager().queueCommand(Commands.challenge((success, args) -> {
             if (!success) {
                 System.err.println("Error sending challenge...");
+                if (args != null) {
+                    for (String arg : args) System.out.println(arg);
+                    Platform.runLater(() -> {
+                        ModelGameEndDialog endDialogModel = new ModelGameEndDialog(args[0], () -> {});
+                        GameEndDialogFactory.build(endDialogModel);
+                    });
+                }
                 return;
             }
             ServerConnection.ResponseChallenge responseChallenge = new ServerConnection.ResponseChallenge(
@@ -215,15 +230,31 @@ public class ControllerLobbyBrowser implements IController {
     }
 
     public void setupGameStartEventHandler(Command command) {
+        model.getServerManager().setTurnCallback((boolean success2, String[] args2) -> {
+            System.out.println("turn callback too fast in lobby browser");
+            model.getServerManager().setTurnTooFast(true);
+        });
+
+        model.getServerManager().setMoveCallback((boolean success2, String[] args2) -> {
+            System.out.println("move callback too fast in lobby browser");
+            model.getServerManager().setMoveTooFast(true);
+            model.getServerManager().setMoveTooFastArgs(args2);
+        });
+
         model.getServerManager().setStartGameCallback((success, args) -> {
             boolean isPlayingAsAI = aiRadioButton.isSelected();
 
             String firstTurnName = args[0];
             String opponentName = args[1];
 
+
             String currentPlayerName = model.getOnlineName();
 
             Player[] players = new Player[2];
+
+            System.out.println("Starting game");
+            System.out.println("player 1 name: " + currentPlayerName);
+            System.out.println("player 2 name: " + opponentName);
 
             if (firstTurnName.equals(currentPlayerName)) {
                 players[0] = new Player(currentPlayerName, Colors.BLACK, true, isPlayingAsAI);
@@ -233,12 +264,14 @@ public class ControllerLobbyBrowser implements IController {
                 players[1] = new Player(currentPlayerName, Colors.WHITE, true, isPlayingAsAI);
             }
 
+            Game game = model.getSelectedGame().getFactory().create(players);
+
             Platform.runLater(() -> {
                 command.execute();
 
                 GameApplication.startOnlineGame(
                         model.getSelectedGame().getAssets(),
-                        model.getSelectedGame().getFactory().create(players),
+                        game,
                         model.getServerManager()
                 );
             });
@@ -301,8 +334,8 @@ public class ControllerLobbyBrowser implements IController {
                     btn.setText("Send");
                     btn.setDisable(false);
                     btn.setOnAction(event -> {
-                        System.out.println("Send challenge..");
                         setupGameStartEventHandler(() -> {
+                            System.out.println("Clear challenges");
                             model.getChallenges().clear();
                             model.getServerManager().clearChallenges();
                             player.setStatus("Unchallenged");

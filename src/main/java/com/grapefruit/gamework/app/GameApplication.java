@@ -49,19 +49,23 @@ public class GameApplication extends Application {
     }
 
     public static void startOfflineGame(Assets assets, Game game) {
-        startGame(assets, game, null, false);
+        startGame(assets, game, null, false, false);
     }
 
     public static void startOnlineGame(Assets assets, Game game, ServerManager serverManager) {
-        startGame(assets, game, serverManager, false);
+        startGame(assets, game, serverManager, false, false);
     }
 
     public static void startTournamentGame(Assets assets, Game game, ServerManager serverManager) {
-        startGame(assets, game, serverManager, true);
+        startGame(assets, game, serverManager, true, false);
     }
 
-    private static void startGame(Assets assets, Game game, ServerManager serverManager, boolean isTournament) {
-        ModelGame modelGame = new ModelGame(game, assets, serverManager, isTournament);
+    public static void startAutoChallengeGame(Assets assets, Game game, ServerManager serverManager) {
+        startGame(assets, game, serverManager, false, true);
+    }
+
+    private static void startGame(Assets assets, Game game, ServerManager serverManager, boolean isTournament, boolean autoChallenge) {
+        ModelGame modelGame = new ModelGame(game, assets, serverManager, isTournament, autoChallenge);
         Template template = GameFactory.build(modelGame);
         Scene scene = new Scene(template.getParent(), GAME_SCENE_WIDTH, GAME_SCENE_HEIGHT);
 

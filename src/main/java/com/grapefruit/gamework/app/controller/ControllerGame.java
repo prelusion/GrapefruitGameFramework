@@ -61,6 +61,9 @@ public class ControllerGame implements IController {
     int onlineTurnTimeoutAI = (onlineTurnTimeout * 1000) - 1400;
     int onlineTurnTimeoutAIFirstTurn = onlineTurnTimeoutAI / 2;
 
+    int playAIcounter = 0;
+    boolean firstAI = true;
+
     /**
      * listeners
      */
@@ -181,6 +184,7 @@ public class ControllerGame implements IController {
             game.startTurnTimer();
 
             if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
+                System.out.println("calling play ai ln. 184");
                 playAI();
             }
         } else {
@@ -204,8 +208,15 @@ public class ControllerGame implements IController {
             } else if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
                 game.setCurrentPlayer(onlineGameLocalPlayer);
                 isFirstTurn = true;
-                System.out.println("Starting AI");
-                playAI();
+
+                if (firstAI && !currentlySettingTurn) {
+                    currentlySettingTurn = true;
+                    firstAI = false;
+                    System.out.println("calling play ai ln. 208");
+                    playAI();
+                } else {
+                    System.out.println("ignore play ai ln. 214");
+                }
             } else {
                 System.out.println("Not starting AI");
             }
@@ -246,10 +257,17 @@ public class ControllerGame implements IController {
         });
 
         serverManager.setTurnCallback((boolean success, String[] args) -> {
-            System.out.println("turn callback in controller");
-            if (!currentlySettingTurn) {
-                currentlySettingTurn = true;
-                onTurn();
+            if (firstAI) {
+                firstAI = false;
+                System.out.println("ignore on turn ln. 271");
+            } else {
+                System.out.println("turn callback in controller");
+                if (!currentlySettingTurn) {
+                    currentlySettingTurn = true;
+                    onTurn();
+                } else {
+                    System.out.println("ignore on turn ln. 261");
+                }
             }
         });
 
@@ -533,6 +551,7 @@ public class ControllerGame implements IController {
                     Thread.sleep(1000);
                 } catch (InterruptedException ignored) {
                 }
+                System.out.println("calling play ai ln. 541");
                 playAI();
             });
         }
@@ -572,7 +591,7 @@ public class ControllerGame implements IController {
 
     private void onFinishAI(Tile tile) {
         currentlySettingTurn = false;
-        
+
         if (tile == null) {
             nextPlayer();
             return;
@@ -662,15 +681,28 @@ public class ControllerGame implements IController {
         }
 
         if (serverManager != null) {
+            serverManager.setTurnTooFast(false);
+            serverManager.setMoveTooFast(false);
+
             if (!model.isTournament() && !model.isAutoChallenge()) {
                 System.out.println("removing start game callback");
                 serverManager.removeStartGameCallback();
+
+                serverManager.setTurnCallback((boolean success2, String[] args2) -> {
+                    System.out.println("turn callback too fast in lobby browser");
+                    model.getServerManager().setTurnTooFast(true);
+                });
+
+                serverManager.setMoveCallback((boolean success2, String[] args2) -> {
+                    System.out.println("move callback too fast in lobby browser");
+                    model.getServerManager().setMoveTooFast(true);
+                    model.getServerManager().setMoveTooFastArgs(args2);
+                });
+            } else {
+                serverManager.removeMoveCallback();
+                serverManager.removeTurnCallback();
             }
 
-            serverManager.setTurnTooFast(false);
-            serverManager.setMoveTooFast(false);
-            serverManager.removeMoveCallback();
-            serverManager.removeTurnCallback();
             serverManager.removeTurnTimeoutWinCallback();
             serverManager.removeTurnTimeoutLoseCallback();
             serverManager.removeIllegalmoveWinCallback();
@@ -711,6 +743,7 @@ public class ControllerGame implements IController {
             }
 
             if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
+                System.out.println("calling play ai ln. 720");
                 playAI();
             }
 

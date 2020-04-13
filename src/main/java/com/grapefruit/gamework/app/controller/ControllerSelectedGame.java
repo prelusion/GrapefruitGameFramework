@@ -162,6 +162,7 @@ public class ControllerSelectedGame implements IController {
     }
 
     public void setupTournamentGameStartEventHandler() {
+        System.out.println("Setup tournament callbacks");
         model.getServerManager().setTurnCallback((boolean success2, String[] args2) -> {
             System.out.println("turn callback too fast in lobby browser");
             model.getServerManager().setTurnTooFast(true);
@@ -173,7 +174,6 @@ public class ControllerSelectedGame implements IController {
             model.getServerManager().setMoveTooFastArgs(args2);
         });
 
-        model.getServerManager().removeStartGameCallback();
         model.getServerManager().setStartGameCallback((success, args) -> {
             String firstTurnName = args[0];
             String opponentName = args[1];

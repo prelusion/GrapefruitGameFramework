@@ -14,6 +14,9 @@ public class ServerManager {
     private boolean sending;
     private String connectedName = null;
     public BooleanProperty connected = new SimpleBooleanProperty();
+    private boolean turnTooFast = false;
+    private boolean moveTooFast = false;
+    private String[] moveTooFastArgs;
 
     /**
      * The enum Response type.
@@ -55,6 +58,30 @@ public class ServerManager {
      */
     public boolean isConnected() {
         return connection.isConnected();
+    }
+
+    public void setTurnTooFast(boolean value) {
+        turnTooFast = value;
+    }
+
+    public boolean getTurnTooFast() {
+        return turnTooFast;
+    }
+
+    public void setMoveTooFast(boolean value) {
+        moveTooFast = value;
+    }
+
+    public boolean getMoveTooFast() {
+        return moveTooFast;
+    }
+
+    public void setMoveTooFastArgs(String[] args) {
+        moveTooFastArgs = args;
+    }
+
+    public String[] getMoveTooFastArgs() {
+        return moveTooFastArgs;
     }
 
     /**
@@ -137,10 +164,16 @@ public class ServerManager {
     public synchronized Command getFirstUnsent() {
         Iterator<Command> i = commandQueue.iterator();
         while (i.hasNext()) {
-            Command command = i.next();
-            if (!command.isSent()) {
-                return command;
+            try {
+                Command command = i.next();
+                if (!command.isSent()) {
+                    return command;
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                return null;
             }
+
         }
         return null;
     }
@@ -250,6 +283,14 @@ public class ServerManager {
 
     public void removeIllegalmoveWinCallback() {
         connection.setIllegalmoveWinCallback(null);
+    }
+
+    public void setIllegalmoveLoseCallback(CommandCallback callback) {
+        connection.setIllegalmoveLoseCallback(callback);
+    }
+
+    public void removeIllegalmoveLoseCallback() {
+        connection.setIllegalmoveLoseCallback(null);
     }
 
     public void setOnPlayerForfeitCallback(CommandCallback callback) {

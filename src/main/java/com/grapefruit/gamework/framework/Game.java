@@ -110,9 +110,11 @@ public abstract class Game {
     }
 
     public Player getPlayerByName(String name) {
+        System.out.println("Finding player by name: " + name);
         for (Player player : players) {
             if (player.getName().equals(name)) return player;
         }
+        System.out.println("Unable to find player");
         return null;
     }
 

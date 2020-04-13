@@ -40,7 +40,7 @@ public class ControllerGame implements IController {
     private ModelGame model;
     private Game game;
     private ServerManager serverManager;
-
+    private boolean settingMove = false;
     private HBox[][] boardTiles;
 
     private Player onlineGameLocalPlayer;
@@ -48,15 +48,13 @@ public class ControllerGame implements IController {
     private Player playerA;
     private Player playerB;
     private boolean isFirstTurn = false;
-    private boolean settingMove = false;
-    private Thread minimaxThread;
+    private boolean currentlySettingTurn = false;
+    Thread minimaxThread;
 
     int offlineTurnTimeout = 60;
 
-    /**
-     * Minimax Configuration
-     */
-    MinimaxAlgorithm minimaxAlgorithm = new DelanoAI();
+    /** Minimax Configuration */
+    MinimaxAlgorithm minimaxAlgorithm = new JarnoAI(6, true);
     int onlineTurnTimeout = 5;
 
     int onlineTurnTimeoutAI = (onlineTurnTimeout * 1000) - 1400;
@@ -193,10 +191,17 @@ public class ControllerGame implements IController {
             }
 
             if (serverManager.getTurnTooFast()) {
-//                System.out.println("Executing on turn too fast");
+                game.setCurrentPlayer(onlineGameLocalPlayer);
+                System.out.println("Executing on turn too fast");
                 isFirstTurn = true;
-                onTurn();
+
+                if (!currentlySettingTurn) {
+                    currentlySettingTurn = true;
+                    onTurn();
+                }
+
             } else if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
+                game.setCurrentPlayer(onlineGameLocalPlayer);
                 isFirstTurn = true;
 //                System.out.println("Starting AI");
                 playAI();
@@ -240,8 +245,11 @@ public class ControllerGame implements IController {
         });
 
         serverManager.setTurnCallback((boolean success, String[] args) -> {
-//            System.out.println("turn callback in controller");
-            onTurn();
+            System.out.println("turn callback in controller");
+            if (!currentlySettingTurn) {
+                currentlySettingTurn = true;
+                onTurn();
+            }
         });
 
         serverManager.setTurnTimeoutWinCallback((boolean success, String[] args) -> {
@@ -532,7 +540,7 @@ public class ControllerGame implements IController {
     private void playAI() {
 //        System.out.println("Play AI");
 
-        if (game.hasFinished()) {
+        if (game.hasFinished() || isDestroyed()) {
             return;
         }
 
@@ -562,6 +570,8 @@ public class ControllerGame implements IController {
     }
 
     private void onFinishAI(Tile tile) {
+        currentlySettingTurn = false;
+        
         if (tile == null) {
             nextPlayer();
             return;
@@ -696,8 +706,7 @@ public class ControllerGame implements IController {
             while (settingMove) {
                 try {
                     Thread.sleep(50);
-                } catch (InterruptedException ignored) {
-                }
+                } catch (InterruptedException ignored) {}
             }
 
             if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {

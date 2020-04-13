@@ -7,6 +7,7 @@ import com.grapefruit.gamework.framework.Tile;
 import com.grapefruit.gamework.games.reversi.Reversi;
 import com.grapefruit.gamework.games.reversi.ReversiBoard;
 
+import java.net.http.WebSocket;
 import java.util.*;
 
 import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
@@ -25,6 +26,7 @@ public class DelanoAI implements MinimaxAlgorithm {
     ArrayList<Thread> threads;
     private boolean dynamicDepth = true;
     private int[][] strategicValues = getStrategicValues();
+    private boolean winningCondition = false;
 
     public DelanoAI() {
         this(9, true);
@@ -153,10 +155,11 @@ public class DelanoAI implements MinimaxAlgorithm {
     }
 
 
+    Map<Tile, Integer> tiles;
     private Map<Tile, Integer> threadedMiniMax(Board board, Player player, int depth) {
         threads = new ArrayList<>();
         List<Tile> moves = board.getAvailableMoves(player);
-        Map<Tile, Integer> tiles = new HashMap<>();
+        tiles = new HashMap<>();
         for (Tile tile : moves) {
             ReversiBoard newBoard = new ReversiBoard(board.getBoardSize(), STRATEGIC_VALUES);
             newBoard.copyState(board);
@@ -175,6 +178,13 @@ public class DelanoAI implements MinimaxAlgorithm {
             thread.start();
             threads.add(thread);
         }
+
+        if(winningCondition) {
+            for(Map.Entry entry: tiles.entrySet()) {
+                System.out.println("Strategic Values " + ((Tile) entry.getKey()).getStrategicValue());
+            }
+        }
+
 
         for (Thread thread : threads) {
             try {
@@ -211,10 +221,9 @@ public class DelanoAI implements MinimaxAlgorithm {
 
 
     public int minimax(int depth, ReversiBoard board, Tile currentMove, int score, int alpha, int beta, boolean maximizingPlayer) {
-        if (depth == 0) {
-            if(board.emptyTiles() == 0) {
-                return (board.countPieces(player) > 32) ? score + 9999 : score - 9999;
-            }
+        if(board.emptyTiles() == 0) {
+            winningCondition = true;
+            return (board.countPieces(player) > 32) ? score + 9999 : score - 9999;
         }
 
         if (depth == 0 || timedOut) {

@@ -43,7 +43,6 @@ public class Helpers {
                     }
                 }
             }
-            if (hasEdge) System.out.println("1 Returning combo points");
         }
         return hasEdge ? 35 : 0;
     }
@@ -140,36 +139,41 @@ public class Helpers {
         if(!isCorner(board, move)) {
             switch (side) {
                 case "Top":
-                    if(board.getPlayer(board.top, move.getCol() -1) == opponent && board.getPlayer(board.top, move.getCol() + 1) == opponent) {
+                    if (checkAdjecent(board, move.getRow(), move.getCol(), board.top, -1, opponent) && checkAdjecent(board, move.getRow(), move.getCol(), board.top,  1, opponent)) {
                         isGoodPosition = true;
                     }
                     break;
                 case "Right":
-                    if(board.getPlayer(move.getRow() -1, board.right) == opponent && board.getPlayer(move.getRow() + 1, board.right) == opponent) {
+                    if (checkAdjecent(board, move.getRow(), move.getCol(), -1, board.right, opponent) && checkAdjecent(board, move.getRow(), move.getCol(), 1,  board.right, opponent)) {
                         isGoodPosition = true;
                     }
                     break;
                 case "Down":
-                    if(board.getPlayer(board.bottom, move.getCol() -1) == opponent && board.getPlayer(board.bottom, move.getCol() + 1) == opponent) {
+                    if (checkAdjecent(board, move.getRow(), move.getCol(), board.bottom, -1, opponent) && checkAdjecent(board, move.getRow(), move.getCol(), board.bottom,  1, opponent)) {
                         isGoodPosition = true;
                     }
                     break;
                 case "Left":
-                    if(board.getPlayer(move.getRow() -1, board.left) == opponent && board.getPlayer(move.getRow() + 1, board.left) == opponent) {
+                    if (checkAdjecent(board, move.getRow(), move.getCol(), -1, board.left, opponent) && checkAdjecent(board, move.getRow(), move.getCol(), 1,  board.left, opponent)) {
                         isGoodPosition = true;
                     }
                     break;
             }
         }
         if (isGoodPosition) {
-            System.out.println("GOODPOSITION IS REACHED");
             return 20;
         }
         return 0;
     }
 
-    public boolean checkAdjecent(Tile tile, Boolean bool) {
-
+    public static boolean checkAdjecent(Board board, int row, int col, int dRow, int dCol, Player opponent) {
+        if (board.getPlayer(row, col) != opponent && !isCorner(board, board.getTile(row, col))) {
+            return checkAdjecent(board, row + dRow, col + dCol, dRow, dCol, opponent);
+        } else if (board.getPlayer(row, col) == opponent) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

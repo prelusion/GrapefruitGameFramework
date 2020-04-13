@@ -49,13 +49,14 @@ public class ControllerGame implements IController {
     private Player playerA;
     private Player playerB;
     private boolean isFirstTurn = false;
+    private boolean currentlySettingTurn = false;
     Thread minimaxThread;
 
     int offlineTurnTimeout = 60;
 
     /** Minimax Configuration */
-    MinimaxAlgorithm minimaxAlgorithm = new JarnoAI(3, false);
-    int onlineTurnTimeout = 2;
+    MinimaxAlgorithm minimaxAlgorithm = new JarnoAI(6, true);
+    int onlineTurnTimeout = 5;
 
     int onlineTurnTimeoutAI = (onlineTurnTimeout * 1000) - 1400;
     int onlineTurnTimeoutAIFirstTurn = onlineTurnTimeoutAI / 2;
@@ -191,10 +192,17 @@ public class ControllerGame implements IController {
             }
 
             if (serverManager.getTurnTooFast()) {
+                game.setCurrentPlayer(onlineGameLocalPlayer);
                 System.out.println("Executing on turn too fast");
                 isFirstTurn = true;
-                onTurn();
+
+                if (!currentlySettingTurn) {
+                    currentlySettingTurn = true;
+                    onTurn();
+                }
+
             } else if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
+                game.setCurrentPlayer(onlineGameLocalPlayer);
                 isFirstTurn = true;
                 System.out.println("Starting AI");
                 playAI();
@@ -239,7 +247,10 @@ public class ControllerGame implements IController {
 
         serverManager.setTurnCallback((boolean success, String[] args) -> {
             System.out.println("turn callback in controller");
-            onTurn();
+            if (!currentlySettingTurn) {
+                currentlySettingTurn = true;
+                onTurn();
+            }
         });
 
         serverManager.setTurnTimeoutWinCallback((boolean success, String[] args) -> {
@@ -530,7 +541,7 @@ public class ControllerGame implements IController {
     private void playAI() {
         System.out.println("Play AI");
 
-        if (game.hasFinished()) {
+        if (game.hasFinished() || isDestroyed()) {
             return;
         }
 
@@ -560,6 +571,8 @@ public class ControllerGame implements IController {
     }
 
     private void onFinishAI(Tile tile) {
+        currentlySettingTurn = false;
+        
         if (tile == null) {
             nextPlayer();
             return;

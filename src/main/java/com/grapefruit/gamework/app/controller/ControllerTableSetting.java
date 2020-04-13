@@ -170,7 +170,6 @@ public class ControllerTableSetting implements IController{
             alert.setContentText(errorInfo);
             alert.showAndWait();
         }
-
         updateTable();
     }
 

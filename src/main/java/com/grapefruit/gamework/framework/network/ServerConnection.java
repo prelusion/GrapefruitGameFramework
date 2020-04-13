@@ -45,7 +45,7 @@ public class ServerConnection {
      * @throws IOException the io exception
      */
     public void connect(String serverIp) throws IOException {
-        socket = new Socket(serverIp, 7789);
+        socket = new Socket(serverIp, 7791);
         out = new PrintWriter(socket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         listen();

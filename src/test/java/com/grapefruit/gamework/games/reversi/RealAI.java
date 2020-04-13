@@ -3,11 +3,8 @@ package com.grapefruit.gamework.games.reversi;
 
 import com.grapefruit.gamework.framework.*;
 import com.grapefruit.gamework.framework.Player;
-import com.grapefruit.gamework.games.tictactoe.TicTacToeBoard;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
 
@@ -22,7 +19,7 @@ public class RealAI {
         Player playerWhite = new Player("White", Colors.WHITE, true);
         Player playerBlack = new Player("Black", Colors.BLACK, true);
         Reversi game = new Reversi(board, playerWhite, playerBlack, turnTimeout);
-        MinimaxAlgorithm minimax = new MinimaxAlgorithm(9);
+        MinimaxAlgorithmDeprecated minimax = new MinimaxAlgorithmDeprecated(9);
 
         Player currentPlayer = game.getCurrentPlayer();
         Player opponent = currentPlayer == playerWhite ? playerBlack : playerWhite;

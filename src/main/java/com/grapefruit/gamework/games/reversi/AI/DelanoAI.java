@@ -1,22 +1,20 @@
-package com.grapefruit.gamework.framework;
+package com.grapefruit.gamework.games.reversi.AI;
 
+import com.grapefruit.gamework.framework.Board;
+import com.grapefruit.gamework.framework.MinimaxAlgorithm;
+import com.grapefruit.gamework.framework.Player;
+import com.grapefruit.gamework.framework.Tile;
 import com.grapefruit.gamework.games.reversi.ReversiBoard;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
 import static java.lang.Integer.*;
 
-public class DelanoAI {
+public class DelanoAI implements MinimaxAlgorithm {
     private Player player;
     private Player opponent;
     private int timeout;
-
-    public boolean isTimedOut() {
-        return timedOut;
-    }
-
     private boolean timedOut = false;
     private int currentDepth;
     private Thread timeoutThread;
@@ -25,7 +23,11 @@ public class DelanoAI {
     private int turnCount;
     ArrayList<Thread> threads;
 
-    public DelanoAI(int depth, boolean b) {
+    public DelanoAI() {
+        this(7);
+    }
+
+    public DelanoAI(int depth) {
         currentDepth = depth;
     }
 
@@ -40,6 +42,9 @@ public class DelanoAI {
             }
         }
 
+    }
+    public boolean isTimedOut() {
+        return timedOut;
     }
 
     public Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount) {
@@ -137,7 +142,7 @@ public class DelanoAI {
         List<Tile> moves = board.getAvailableMoves(player);
         Map<Tile, Integer> tiles = new HashMap<>();
         for (Tile tile : moves) {
-            Board newBoard = new ReversiBoard(Board.BOARDSIZE, STRATEGIC_VALUES);
+            Board newBoard = new ReversiBoard(board.getBoardSize(), STRATEGIC_VALUES);
             newBoard.copyState(board);
             newBoard.setMove(tile.getRow(), tile.getCol(), player);
             Thread thread = new Thread(() -> {
@@ -207,7 +212,7 @@ public class DelanoAI {
             for (Tile move : moves) {
                 if (timedOut) break;
 
-                Board newBoard = new ReversiBoard(Board.BOARDSIZE, STRATEGIC_VALUES);
+                Board newBoard = new ReversiBoard(board.getBoardSize(), STRATEGIC_VALUES);
                 newBoard.copyState(board);
                 newBoard.setMove(move.getRow(), move.getCol(), player);
 
@@ -244,7 +249,7 @@ public class DelanoAI {
             for (Tile move : moves) {
                 if (timedOut) break;
 
-                Board newBoard = new ReversiBoard(Board.BOARDSIZE, STRATEGIC_VALUES);
+                Board newBoard = new ReversiBoard(board.getBoardSize(), STRATEGIC_VALUES);
                 newBoard.copyState(board);
                 newBoard.setMove(move.getRow(), move.getCol(), opponent);
 
@@ -308,82 +313,5 @@ public class DelanoAI {
                 return;
             }
         }
-    }
-
-    private static int[][] getStrategicValues() {
-        int[][] strat = new int[8][8];
-
-        strat[0][0] = 99;
-        strat[0][1] = -8;
-        strat[0][2] = 8;
-        strat[0][3] = 6;
-        strat[0][4] = 6;
-        strat[0][5] = 8;
-        strat[0][6] = -8;
-        strat[0][7] = 99;
-
-        strat[1][0] = -8;
-        strat[1][1] = -24;
-        strat[1][2] = -4;
-        strat[1][3] = -3;
-        strat[1][4] = -3;
-        strat[1][5] = -4;
-        strat[1][6] = -24;
-        strat[1][7] = -8;
-
-        strat[2][0] = 8;
-        strat[2][1] = -4;
-        strat[2][2] = 7;
-        strat[2][3] = 4;
-        strat[2][4] = 4;
-        strat[2][5] = 7;
-        strat[2][6] = -4;
-        strat[2][7] = 8;
-
-        strat[3][0] = 6;
-        strat[3][1] = -3;
-        strat[3][2] = 4;
-        strat[3][3] = 0;
-        strat[3][4] = 0;
-        strat[3][5] = 4;
-        strat[3][6] = -3;
-        strat[3][7] = 6;
-
-        strat[4][0] = 6;
-        strat[4][1] = -3;
-        strat[4][2] = 4;
-        strat[4][3] = 0;
-        strat[4][4] = 0;
-        strat[4][5] = 4;
-        strat[4][6] = -3;
-        strat[4][7] = 6;
-
-        strat[5][0] = 8;
-        strat[5][1] = -4;
-        strat[5][2] = 7;
-        strat[5][3] = 4;
-        strat[5][4] = 4;
-        strat[5][5] = 7;
-        strat[5][6] = -4;
-        strat[5][7] = 8;
-
-        strat[6][0] = -8;
-        strat[6][1] = -24;
-        strat[6][2] = -4;
-        strat[6][3] = -3;
-        strat[6][4] = -3;
-        strat[6][5] = -4;
-        strat[6][6] = -24;
-        strat[6][7] = -8;
-
-        strat[7][0] = 99;
-        strat[7][1] = -8;
-        strat[7][2] = 8;
-        strat[7][3] = 6;
-        strat[7][4] = 6;
-        strat[7][5] = 8;
-        strat[7][6] = -8;
-        strat[7][7] = 99;
-        return strat;
     }
 }

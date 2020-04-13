@@ -26,7 +26,7 @@ public class DelanoAI implements MinimaxAlgorithm {
     private int[][] strategicValues = getStrategicValues();
 
     public DelanoAI() {
-        this(10, true);
+        this(9, true);
     }
 
     public DelanoAI(int depth, boolean dynamicDepth) {

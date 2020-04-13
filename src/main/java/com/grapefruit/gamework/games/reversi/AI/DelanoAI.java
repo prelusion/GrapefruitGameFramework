@@ -26,7 +26,7 @@ public class DelanoAI implements MinimaxAlgorithm {
     private int[][] strategicValues = getStrategicValues();
 
     public DelanoAI() {
-        this(11, true);
+        this(10, true);
     }
 
     public DelanoAI(int depth, boolean dynamicDepth) {
@@ -75,9 +75,24 @@ public class DelanoAI implements MinimaxAlgorithm {
         return (startTime + (timeout / 1000)) - getCurrentSeconds();
     }
 
-    public void turnCountDecrease() {
+    public void turnCountDecrease(int depth) {
         if (currentDepth >= 9 && turnCount < 7) {
             currentDepth--;
+        }
+
+        if (turnCount > 41) {
+            System.out.println("increase depth (turn > 44)");
+            currentDepth++;
+        }
+
+        if (turnCount > 20 && turnCount < 31 && depth >= 8) {
+            System.out.println("Condition depth (turn > 20) && (< 31)");
+            currentDepth--;
+        }
+
+        if (turnCount >= 31 && depth < 8) {
+            System.out.println("increase depth (turn >= 31)");
+            currentDepth++;
         }
     }
 
@@ -85,13 +100,8 @@ public class DelanoAI implements MinimaxAlgorithm {
         this.player = player;
         this.opponent = opponent;
 
-        if (turnCount > 44) {
-            System.out.println("increase depth (turn > 44)");
-            currentDepth++;
-        }
-
         if (firstTurn) {
-            turnCountDecrease();
+            turnCountDecrease(depth);
         }
 
         Map<Tile, Integer> tiles = threadedMiniMax(board, player, depth);
@@ -117,7 +127,7 @@ public class DelanoAI implements MinimaxAlgorithm {
             System.out.println("increase depth");
         }
 
-        if(!isTimedOut() && secondsLeft() >= 1 && depth < 25 && dynamicDepth) {
+        if(!isTimedOut() && secondsLeft() >= 1 && depth <= board.emptyTiles() && dynamicDepth) {
             timeoutStack.push(isTimedOut());
 
             System.out.println("depth: " + depth);
@@ -132,7 +142,7 @@ public class DelanoAI implements MinimaxAlgorithm {
                     System.out.println("corrupt tile, ignoring");
                 }
             }
-        } else if (firstTurn && secondsLeft() <= 1) {
+        } else if (firstTurn && secondsLeft() <= 1 && isTimedOut()) {
             System.out.println("decrease depth");
             currentDepth--;
         }
@@ -183,7 +193,6 @@ public class DelanoAI implements MinimaxAlgorithm {
                 Thread.sleep(timeout);
                 triggerTimeout();
                 System.out.println("TIMEOUTPUSHED");
-                System.out.println("TIMEOUTPUSHED");
             } catch (InterruptedException ignored) {
             }
         });
@@ -192,8 +201,9 @@ public class DelanoAI implements MinimaxAlgorithm {
     }
 
     public synchronized void triggerTimeout() {
+        System.out.println("Trigger Timeout!");
         timedOut = true;
-        timeoutStack.push(isTimedOut());
+        timeoutStack.push(true);
     }
 
     public int minimax(int depth, Board board, int score, int alpha, int beta, boolean maximizingPlayer) {

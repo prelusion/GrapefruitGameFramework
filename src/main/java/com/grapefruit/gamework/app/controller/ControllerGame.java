@@ -51,6 +51,7 @@ public class ControllerGame implements IController {
     private boolean isFirstTurn = false;
     private boolean currentlySettingTurn = false;
     Thread minimaxThread;
+    private boolean firstAI = true;
 
     int offlineTurnTimeout = 60;
 
@@ -60,9 +61,6 @@ public class ControllerGame implements IController {
 
     int onlineTurnTimeoutAI = (onlineTurnTimeout * 1000) - 1400;
     int onlineTurnTimeoutAIFirstTurn = onlineTurnTimeoutAI / 2;
-
-    int playAIcounter = 0;
-    boolean firstAI = true;
 
     /**
      * listeners

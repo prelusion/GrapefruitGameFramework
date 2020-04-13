@@ -268,6 +268,17 @@ public abstract class Board {
 
     public abstract void calculateScores(Player[] players);
 
+    public int emptyTiles() {
+        int amount = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid.length; j++) {
+                if (grid[i][j].getPlayer() == null) amount++;
+            }
+        }
+        System.out.println("AMMMOOUUUNNNTTT " + amount);
+        return amount;
+    }
+
     public void changeValuesBetweenTiles(Tile tile1, String side, int value) {
         switch (side) {
             case "Top":

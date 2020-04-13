@@ -196,15 +196,18 @@ public class ControllerGame implements IController {
             if (serverManager.getTurnTooFast()) {
                 game.setCurrentPlayer(onlineGameLocalPlayer);
                 System.out.println("Executing on turn too fast");
+
                 isFirstTurn = true;
 
-                if (!currentlySettingTurn) {
+                if (firstAI && !currentlySettingTurn) {
                     currentlySettingTurn = true;
+                    firstAI = false;
                     onTurn();
                 }
 
             } else if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
                 game.setCurrentPlayer(onlineGameLocalPlayer);
+
                 isFirstTurn = true;
 
                 if (firstAI && !currentlySettingTurn) {
@@ -216,6 +219,7 @@ public class ControllerGame implements IController {
                     System.out.println("ignore play ai ln. 214");
                 }
             } else {
+                firstAI = false;
                 System.out.println("Not starting AI");
             }
         }

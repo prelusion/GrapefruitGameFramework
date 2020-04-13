@@ -49,7 +49,6 @@ public class ControllerGame implements IController {
     private Player playerA;
     private Player playerB;
     private boolean isFirstTurn = false;
-    MinimaxAlgorithm minimaxAlgorithm = new DelanoAI();
     Thread minimaxThread;
 
     int offlineTurnTimeout = 60;

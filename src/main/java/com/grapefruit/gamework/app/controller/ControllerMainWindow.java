@@ -211,23 +211,37 @@ public class ControllerMainWindow implements IController {
                 modelMainWindow.getServerManager().connected.addListener(new ChangeListener<Boolean>() {
                     @Override
                     public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                        if (oldValue != newValue) {
-                            if (newValue) {
-                                onConnected();
-                            } else {
-                                onDisconnected();
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (oldValue != newValue) {
+                                    if (newValue) {
+                                        onConnected();
+                                    } else {
+                                        onDisconnected();
+                                    }
+                                }
                             }
-                        }
+                        });
                     }
                 });
             }
-
-            modelMainWindow.getServerManager().connect(selectedServer.getIp());
-            modelMainWindow.getServerManager().queueCommand(Commands.login(userName.getText(), new CommandCallback() {
+            new Thread(new Runnable() {
                 @Override
-                public void onResponse(boolean success, String[] args) {
+                public void run() {
+                    if (modelMainWindow.getServerManager().connect(selectedServer.getIp())) {
+                        modelMainWindow.getServerManager().queueCommand(Commands.login(userName.getText(), (success, args) -> {
+                        }));
+                    } else {
+                        Platform.runLater(() -> {
+                            onDisconnected();
+                            connectionStatus.setText("Server offline");
+                        });
+                    }
                 }
-            }));
+            }).start();
+
+
         } else {
             connectionStatus.setText("Invalid");
         }
@@ -267,6 +281,7 @@ public class ControllerMainWindow implements IController {
 
     private void onDisconnected(){
         connectButton.setText("Connect");
+        connectButton.setDisable(false);
         connectionStatus.setText("Disconnected");
         connectionStatus.setFill(Color.RED);
         serverSelection.setDisable(false);

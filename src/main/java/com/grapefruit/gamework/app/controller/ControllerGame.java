@@ -385,7 +385,7 @@ public class ControllerGame implements IController {
         } else {
             if (!game.getCurrentPlayer().isAI()) {
                 playerTurnLabel.setText("your turn!");
-            } else if (game.getCurrentPlayer().isAI()) {
+            } else {
                 playerTurnLabel.setText("Waiting for opponent...");
             }
         }

@@ -27,7 +27,8 @@ public class JarnoAI implements MinimaxAlgorithm {
     private static int strategicValueFactor = 1;
 
     public JarnoAI() {
-        this(7, false);
+//        this(7, false);
+        this(6, true); // timeout 5
     }
 
     public JarnoAI(int depth, boolean dynamicDepth) {

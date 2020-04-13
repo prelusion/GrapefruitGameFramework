@@ -57,7 +57,7 @@ public class ControllerGame implements IController {
     int offlineTurnTimeout = 60;
 
     /** Minimax Configuration */
-    MinimaxAlgorithm minimaxAlgorithm = new JarnoAI(6, true);
+    MinimaxAlgorithm minimaxAlgorithm = new JarnoAI();
     int onlineTurnTimeout = 5;
 
     int onlineTurnTimeoutAI = (onlineTurnTimeout * 1000) - 1400;

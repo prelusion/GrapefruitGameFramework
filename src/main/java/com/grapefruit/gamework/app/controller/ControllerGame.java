@@ -49,7 +49,7 @@ public class ControllerGame implements IController {
     private Player playerA;
     private Player playerB;
     private boolean isFirstTurn = false;
-    MinimaxAlgorithm minimaxAlgorithm = new DelanoAI(11, true);  // 7, true
+    MinimaxAlgorithm minimaxAlgorithm = new DelanoAI();
     Thread minimaxThread;
 
     /**

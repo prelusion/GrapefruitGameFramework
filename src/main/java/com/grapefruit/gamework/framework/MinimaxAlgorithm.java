@@ -59,13 +59,13 @@ public class MinimaxAlgorithm {
 //        stableDiscStrategy(board);
 //        board.printStrategicValues();
 
-        List<Tile> moves = board.getAvailableMoves(player);
-        for (Tile move : moves) {
-            if (isCorner(board, move)) {
-                System.out.println("Is corner!");
-                return move;
-            }
-        }
+//        List<Tile> moves = board.getAvailableMoves(player);
+//        for (Tile move : moves) {
+//            if (isCorner(board, move)) {
+//                System.out.println("Is corner!");
+//                return move;
+//            }
+//        }
 
         System.out.println("---------------- TURN " + turnCount + " -----------------");
         Tile tile = realCalculateBestMove(board, player, opponent, true, currentDepth);

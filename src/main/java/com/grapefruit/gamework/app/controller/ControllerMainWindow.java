@@ -23,6 +23,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.apache.commons.validator.routines.InetAddressValidator;
@@ -235,6 +236,7 @@ public class ControllerMainWindow implements IController {
     private void onConnected(){
         if (modelMainWindow.getServerManager() != null) {
             connectionStatus.setText("Connected");
+            connectionStatus.setFill(Color.GREEN);
             connectButton.setText("Disconnect");
             serverSelection.setDisable(true);
             userName.setDisable(true);
@@ -266,6 +268,7 @@ public class ControllerMainWindow implements IController {
     private void onDisconnected(){
         connectButton.setText("Connect");
         connectionStatus.setText("Disconnected");
+        connectionStatus.setFill(Color.RED);
         serverSelection.setDisable(false);
         userName.setDisable(false);
         setAvailableGames(new String[0]);

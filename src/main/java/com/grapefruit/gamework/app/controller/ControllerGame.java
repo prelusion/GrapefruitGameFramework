@@ -58,7 +58,7 @@ public class ControllerGame implements IController {
     int offlineTurnTimeout = 60;
 
     /** Minimax Configuration */
-    MinimaxAlgorithm minimaxAlgorithm = new LeonAI();
+    MinimaxAlgorithm minimaxAlgorithm = new DelanoAI();
     int onlineTurnTimeout = 5;
 
     int onlineTurnTimeoutAI = (onlineTurnTimeout * 1000) - 1400;

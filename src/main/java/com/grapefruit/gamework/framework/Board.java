@@ -1,5 +1,6 @@
 package com.grapefruit.gamework.framework;
 
+import com.grapefruit.gamework.games.reversi.AI.Helpers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 
@@ -145,6 +146,8 @@ public abstract class Board {
         return Arrays.stream(players)
                 .noneMatch(player -> (getAvailableMoves(player).size()) > 0);
     }
+
+
 
     /**
      * Helper function to print the board.

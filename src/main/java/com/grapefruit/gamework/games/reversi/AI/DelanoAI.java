@@ -4,6 +4,7 @@ import com.grapefruit.gamework.framework.Board;
 import com.grapefruit.gamework.framework.MinimaxAlgorithm;
 import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.Tile;
+import com.grapefruit.gamework.games.reversi.Reversi;
 import com.grapefruit.gamework.games.reversi.ReversiBoard;
 
 import java.util.*;
@@ -26,7 +27,7 @@ public class DelanoAI implements MinimaxAlgorithm {
     private int[][] strategicValues = getStrategicValues();
 
     public DelanoAI() {
-        this(10, true);
+        this(9, true);
     }
 
     public DelanoAI(int depth, boolean dynamicDepth) {
@@ -57,6 +58,7 @@ public class DelanoAI implements MinimaxAlgorithm {
         board.setStrategicValues(strategicValues);
         revaluation(board);
 
+        ((ReversiBoard) board).evaluateEdges(player);
         System.out.println("---------------- TURN " + turnCount + " -----------------");
         Tile tile = realCalculateBestMove(board, player, opponent, true, currentDepth);
 
@@ -76,7 +78,7 @@ public class DelanoAI implements MinimaxAlgorithm {
     }
 
     public void turnCountDecrease(int depth) {
-        if (currentDepth >= 9 && turnCount < 7) {
+        if (currentDepth >= 8 && turnCount < 7) {
             currentDepth--;
         }
 
@@ -156,13 +158,14 @@ public class DelanoAI implements MinimaxAlgorithm {
         List<Tile> moves = board.getAvailableMoves(player);
         Map<Tile, Integer> tiles = new HashMap<>();
         for (Tile tile : moves) {
-            Board newBoard = new ReversiBoard(board.getBoardSize(), STRATEGIC_VALUES);
+            ReversiBoard newBoard = new ReversiBoard(board.getBoardSize(), STRATEGIC_VALUES);
             newBoard.copyState(board);
             newBoard.setMove(tile.getRow(), tile.getCol(), player);
             Thread thread = new Thread(() -> {
                 tiles.put(tile, minimax(
                         depth - 1,
                         newBoard,
+                        tile,
                         tile.getStrategicValue(),
                         MIN_VALUE,
                         MAX_VALUE,
@@ -206,13 +209,28 @@ public class DelanoAI implements MinimaxAlgorithm {
         timeoutStack.push(true);
     }
 
-    public int minimax(int depth, Board board, int score, int alpha, int beta, boolean maximizingPlayer) {
+
+    public int minimax(int depth, ReversiBoard board, Tile currentMove, int score, int alpha, int beta, boolean maximizingPlayer) {
         if (depth == 0 || timedOut) {
-            if(turnCount > 44) {
-                return score + (board.countPieces(player) * 3);
+            int combopoints = Helpers.comboPoints(board, currentMove, maximizingPlayer ? player : opponent);
+            int boardpieces = board.countPieces(player);
+
+            if (maximizingPlayer) {
+                score += combopoints;
+                if(turnCount > 44) {
+                    return score - boardpieces * 3;
+                } else {
+                    return score - boardpieces;
+                }
             } else {
-                return score + board.countPieces(player);
+                score -= combopoints;
+                if(turnCount > 44) {
+                    return score + boardpieces * 3;
+                } else {
+                    return score + boardpieces;
+                }
             }
+
         }
 
         if (maximizingPlayer) {
@@ -226,13 +244,14 @@ public class DelanoAI implements MinimaxAlgorithm {
             for (Tile move : moves) {
                 if (timedOut) break;
 
-                Board newBoard = new ReversiBoard(board.getBoardSize(), STRATEGIC_VALUES);
+                ReversiBoard newBoard = new ReversiBoard(board.getBoardSize(), STRATEGIC_VALUES);
                 newBoard.copyState(board);
                 newBoard.setMove(move.getRow(), move.getCol(), player);
 
                 int currentScore = minimax(
                         depth - 1,
                         newBoard,
+                        move,
                         score + move.getStrategicValue(),
                         alpha, beta,
                         false
@@ -263,13 +282,14 @@ public class DelanoAI implements MinimaxAlgorithm {
             for (Tile move : moves) {
                 if (timedOut) break;
 
-                Board newBoard = new ReversiBoard(board.getBoardSize(), STRATEGIC_VALUES);
+                ReversiBoard newBoard = new ReversiBoard(board.getBoardSize(), STRATEGIC_VALUES);
                 newBoard.copyState(board);
                 newBoard.setMove(move.getRow(), move.getCol(), opponent);
 
                 int currentScore = minimax(
                         depth - 1,
                         newBoard,
+                        move,
                         score - move.getStrategicValue(),
                         alpha,
                         beta,

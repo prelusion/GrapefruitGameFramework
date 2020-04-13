@@ -11,6 +11,11 @@ import java.util.List;
 
 public class ReversiBoard extends Board {
 
+    public int left = 0;
+    public int right = getBoardSize() - 1;
+    public int top = 0;
+    public int bottom = getBoardSize() - 1;
+
     public ReversiBoard(int boardSize, int[][] strategicValues) {
         super(boardSize, strategicValues);
     }
@@ -138,8 +143,42 @@ public class ReversiBoard extends Board {
 
     @Override
     public void calculateScores(Player[] players) {
-        for (Player player: players){
+        for (Player player : players) {
             scores.put(player, Helpers.countPiecesForPlayer(this, player));
         }
+    }
+
+    public void evaluateEdges(Player player) {
+        boolean hasEdge = true;
+        for (int i = 0; i < getBoardSize() - 1; i++) {
+            if (getPlayer(top, i) != player) {
+                hasEdge = false;
+            }
+        }
+        if (hasEdge) top++;
+
+        hasEdge = true;
+        for (int i = 0; i < getBoardSize() - 1; i++) {
+            if (getPlayer(bottom, i) != player) {
+                hasEdge = false;
+            }
+        }
+        if (hasEdge) bottom--;
+
+        hasEdge = true;
+        for (int i = 0; i < getBoardSize() - 1; i++) {
+            if (getPlayer(i, left) != player) {
+                hasEdge = false;
+            }
+        }
+        if (hasEdge) left++;
+
+        hasEdge = true;
+        for (int i = 0; i < getBoardSize() - 1; i++) {
+            if (getPlayer(i, right) != player) {
+                hasEdge = false;
+            }
+        }
+        if (hasEdge) right--;
     }
 }

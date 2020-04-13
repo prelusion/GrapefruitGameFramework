@@ -383,17 +383,16 @@ public class ControllerGame implements IController {
                 playerTurnLabel.setText("Waiting for opponent...");
             }
         } else {
-            int aiCount = 0;
+            int nonAiCount = 0;
             for (Player player : game.getPlayers()) {
                 if (!player.isAI()) {
-                    aiCount++;
+                    nonAiCount++;
                 }
             }
-            if (aiCount == 2){
-                playerTurnLabel.setText("It's " + game.getCurrentPlayer().getName() + "'s turn!");
-            }
 
-            else if (!game.getCurrentPlayer().isAI()) {
+            if (nonAiCount == 2){
+                playerTurnLabel.setText("It's " + game.getCurrentPlayer().getName() + "'s turn!");
+            } else if (!game.getCurrentPlayer().isAI()) {
                 playerTurnLabel.setText("your turn!");
             } else {
                 playerTurnLabel.setText("Waiting for opponent...");

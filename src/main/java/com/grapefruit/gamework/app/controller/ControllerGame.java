@@ -52,6 +52,7 @@ public class ControllerGame implements IController {
     private boolean currentlySettingTurn = false;
     Thread minimaxThread;
     private boolean firstAI = true;
+    private boolean alreadySettingAI = false;
 
     int offlineTurnTimeout = 60;
 
@@ -213,6 +214,7 @@ public class ControllerGame implements IController {
                 if (firstAI && !currentlySettingTurn) {
                     currentlySettingTurn = true;
                     firstAI = false;
+                    alreadySettingAI = true;
                     System.out.println("calling play ai ln. 208");
                     playAI();
                 } else {
@@ -262,7 +264,11 @@ public class ControllerGame implements IController {
             if (firstAI) {
                 firstAI = false;
                 System.out.println("ignore on turn ln. 271");
-            } else {
+            }
+
+            if (!firstAI || !alreadySettingAI) {
+                alreadySettingAI = true;
+
                 System.out.println("turn callback in controller");
                 if (!currentlySettingTurn) {
                     currentlySettingTurn = true;

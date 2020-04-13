@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
 import static java.lang.Integer.*;
 
-public class MinimaxAlgorithm {
+public class DelanoAI {
     private Player player;
     private Player opponent;
     private int timeout;
@@ -25,7 +25,7 @@ public class MinimaxAlgorithm {
     private int turnCount;
     ArrayList<Thread> threads;
 
-    public MinimaxAlgorithm(int depth) {
+    public DelanoAI(int depth) {
         currentDepth = depth;
     }
 

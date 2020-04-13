@@ -12,6 +12,7 @@ import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.Helpers;
 import com.grapefruit.gamework.framework.network.ServerManager;
 import com.grapefruit.gamework.games.reversi.AI.DelanoAI;
+import com.grapefruit.gamework.games.reversi.AI.JarnoAI;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.MapChangeListener;
@@ -55,7 +56,7 @@ public class ControllerGame implements IController {
     int offlineTurnTimeout = 60;
 
     /** Minimax Configuration */
-    MinimaxAlgorithm minimaxAlgorithm = new DelanoAI();
+    MinimaxAlgorithm minimaxAlgorithm = new JarnoAI(6, true);
     int onlineTurnTimeout = 5;
 
     int onlineTurnTimeoutAI = (onlineTurnTimeout * 1000) - 1400;
@@ -195,15 +196,18 @@ public class ControllerGame implements IController {
             if (serverManager.getTurnTooFast()) {
                 game.setCurrentPlayer(onlineGameLocalPlayer);
                 System.out.println("Executing on turn too fast");
+
                 isFirstTurn = true;
 
-                if (!currentlySettingTurn) {
+                if (firstAI && !currentlySettingTurn) {
                     currentlySettingTurn = true;
+                    firstAI = false;
                     onTurn();
                 }
 
             } else if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
                 game.setCurrentPlayer(onlineGameLocalPlayer);
+
                 isFirstTurn = true;
 
                 if (firstAI && !currentlySettingTurn) {
@@ -215,6 +219,7 @@ public class ControllerGame implements IController {
                     System.out.println("ignore play ai ln. 214");
                 }
             } else {
+                firstAI = false;
                 System.out.println("Not starting AI");
             }
         }
@@ -246,10 +251,10 @@ public class ControllerGame implements IController {
     }
 
     private void setupServerEventHandlers() {
-//        System.out.println("Initializing server event handlers");
+        System.out.println("Initializing server event handlers");
         serverManager.setMoveCallback((boolean success, String[] args) -> {
-//            System.out.println("move callback in controller");
-//            for (String arg : args) System.out.println(arg);
+            System.out.println("move callback in controller");
+            for (String arg : args) System.out.println(arg);
             onMove(args);
         });
 
@@ -357,7 +362,7 @@ public class ControllerGame implements IController {
             });
         });
 
-//        System.out.println("Initialized server event handlers");
+        System.out.println("Initialized server event handlers");
     }
 
     public void update() {
@@ -564,23 +569,23 @@ public class ControllerGame implements IController {
                     Thread.sleep(1000);
                 } catch (InterruptedException ignored) {
                 }
-                System.out.println("CALLING PLAY AI 536");
+                System.out.println("calling play ai ln. 541");
                 playAI();
             });
         }
     }
 
     private void playAI() {
-//        System.out.println("Play AI");
+        System.out.println("Play AI");
 
         if (game.hasFinished() || isDestroyed()) {
             return;
         }
 
         minimaxThread = new Thread(() -> {
-//            System.out.println("is first turn: " + isFirstTurn);
+            System.out.println("is first turn: " + isFirstTurn);
             int timeout = isFirstTurn ? onlineTurnTimeoutAIFirstTurn : onlineTurnTimeoutAI;
-//            System.out.println("minimax timeout: " + timeout);
+            System.out.println("minimax timeout: " + timeout);
 
             minimaxAlgorithm.startTimeout(timeout);
             Tile tile = minimaxAlgorithm.calculateBestMove(
@@ -592,7 +597,7 @@ public class ControllerGame implements IController {
             isFirstTurn = false;
 
             if (isDestroyed()) {
-//                System.out.println("Game session destroyed, not sending AI generated move to server.");
+                System.out.println("Game session destroyed, not sending AI generated move to server.");
                 return;
             }
 
@@ -604,7 +609,7 @@ public class ControllerGame implements IController {
 
     private void onFinishAI(Tile tile) {
         currentlySettingTurn = false;
-        
+
         if (tile == null) {
             nextPlayer();
             return;
@@ -756,7 +761,7 @@ public class ControllerGame implements IController {
             }
 
             if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
-                System.out.println("CALLING PLAY AI 715");
+                System.out.println("calling play ai ln. 720");
                 playAI();
             }
 

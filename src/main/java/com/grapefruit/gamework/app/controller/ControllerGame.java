@@ -402,12 +402,28 @@ public class ControllerGame implements IController {
         currentColor.setText(game.getCurrentPlayer().getColor().toString());
         currentPlayerName.setText(game.getCurrentPlayer().getName());
 
-        if (game.getCurrentPlayer().getName().equals(playerA.getName())) {
-            playerTurnLabel.setText("your turn!");
+        if (model.isOnlineGame()) {
+            if (game.getCurrentPlayer().isLocal()) {
+                playerTurnLabel.setText("your turn!");
+            } else {
+                playerTurnLabel.setText("Waiting for opponent...");
+            }
         } else {
-            playerTurnLabel.setText("Waiting for opponent...");
-        }
+            int nonAiCount = 0;
+            for (Player player : game.getPlayers()) {
+                if (!player.isAI()) {
+                    nonAiCount++;
+                }
+            }
 
+            if (nonAiCount == 2){
+                playerTurnLabel.setText("It's " + game.getCurrentPlayer().getName() + "'s turn!");
+            } else if (!game.getCurrentPlayer().isAI()) {
+                playerTurnLabel.setText("your turn!");
+            } else {
+                playerTurnLabel.setText("Waiting for opponent...");
+            }
+        }
 
         turnNumber.setText(Integer.toString(game.getTurnCount()));
         timeLeft.setText(String.valueOf(game.getTurnSecondsLeft()));

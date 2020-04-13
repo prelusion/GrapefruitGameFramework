@@ -546,6 +546,12 @@ public class ControllerGame implements IController {
                     game.getTurnCount()
             );
             isFirstTurn = false;
+
+            if (isDestroyed()) {
+                System.out.println("Game session destroyed, not sending AI generated move to server.");
+                return;
+            }
+            
             Platform.runLater(() -> onFinishAI(tile));
         });
 

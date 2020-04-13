@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
@@ -10,16 +11,24 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.control.Label?>
 <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="255.0" prefWidth="542.0" styleClass="secondary-background" stylesheets="@css/mainwindow.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grapefruit.gamework.app.controller.ControllerTableSetting">
    <children>
       <VBox alignment="TOP_RIGHT" prefHeight="255.0" prefWidth="103.0">
          <children>
             <Pane prefHeight="48.0" prefWidth="100.0" />
-            <Text fx:id="keyName" strokeType="OUTSIDE" strokeWidth="0.0" text="key" wrappingWidth="92.53666830062866" />
+            <Text fx:id="keyName" strokeType="OUTSIDE" strokeWidth="0.0" text="key" wrappingWidth="92.53666830062866">
+               <font>
+                  <Font name="Berlin Sans FB" size="14.0" />
+               </font></Text>
             <Pane prefHeight="15.0" prefWidth="100.0" />
-            <Text fx:id="valueName" strokeType="OUTSIDE" strokeWidth="0.0" text="value" wrappingWidth="90.2261290550232" />
+            <Text fx:id="valueName" strokeType="OUTSIDE" strokeWidth="0.0" text="value" wrappingWidth="92.53666830062866" >
+                <font>
+                    <Font name="Berlin Sans FB" size="14.0" />
+                </font></Text>
          </children>
       </VBox>
       <Pane minWidth="-Infinity" prefHeight="400.0" prefWidth="10.0" />
@@ -30,9 +39,17 @@
             <Pane prefHeight="10.0" prefWidth="106.0" />
             <TextField fx:id="valueInput" />
             <Pane prefHeight="10.0" prefWidth="106.0" />
-            <Button fx:id="addServerButton" mnemonicParsing="false" onAction="#onAddServer" text="Add" />
+             <JFXButton fx:id="addServerButton" buttonType="RAISED" onAction="#onAddServer" ripplerFill="#6E4D43" style="-fx-background-color: #dcceb7; -fx-text-fill: black;" text="Add">
+                <font>
+                    <Font name="Berlin Sans FB" size="12.0" />
+                </font>
+            </JFXButton>
             <Pane prefHeight="18.0" prefWidth="78.0" />
-            <Button fx:id="removeButton" mnemonicParsing="false" onAction="#onRemoveSetting" text="Remove" />
+             <JFXButton fx:id="removeButton" buttonType="RAISED" onAction="#onRemoveSetting" ripplerFill="#6E4D43" style="-fx-background-color: #dcceb7; -fx-text-fill: black;" text="Remove">
+                 <font>
+                     <Font name="Berlin Sans FB" size="12.0" />
+                 </font>
+            </JFXButton>
          </children>
       </VBox>
       <Pane minHeight="-Infinity" minWidth="-Infinity" prefHeight="255.0" prefWidth="25.0" />
@@ -41,6 +58,9 @@
           <AnchorPane>
                <children>
                   <TableView fx:id="settingTable" minHeight="-Infinity" minWidth="-Infinity" prefHeight="255.0" prefWidth="235.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-77.0" AnchorPane.topAnchor="0.0">
+                      <placeholder>
+                          <Label text="No saved servers!"/>
+                      </placeholder>
                     <columns>
                       <TableColumn minWidth="30.0" prefWidth="75.0" text="key" />
                       <TableColumn prefWidth="150.0" text="value" />

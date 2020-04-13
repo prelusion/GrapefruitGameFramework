@@ -11,6 +11,8 @@ import com.grapefruit.gamework.framework.*;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.Helpers;
 import com.grapefruit.gamework.framework.network.ServerManager;
+import com.grapefruit.gamework.games.reversi.AI.DelanoAI;
+import com.grapefruit.gamework.games.reversi.AI.JarnoAI;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.MapChangeListener;
@@ -47,8 +49,17 @@ public class ControllerGame implements IController {
     private Player playerA;
     private Player playerB;
     private boolean isFirstTurn = false;
-    MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm(7, true);  // 7, true
+    MinimaxAlgorithm minimaxAlgorithm = new DelanoAI();
     Thread minimaxThread;
+
+    int offlineTurnTimeout = 60;
+
+    /** Minimax Configuration */
+    MinimaxAlgorithm minimaxAlgorithm = new JarnoAI();
+    int onlineTurnTimeout = 10;
+
+    int onlineTurnTimeoutAI = (onlineTurnTimeout * 1000) - 1400;
+    int onlineTurnTimeoutAIFirstTurn = onlineTurnTimeoutAI / 2;
 
     /**
      * listeners
@@ -137,7 +148,7 @@ public class ControllerGame implements IController {
         setupObservableListeners();
 
         if (this.model.isOnlineGame()) {
-            game.setTurnTimeout(10);
+            game.setTurnTimeout(onlineTurnTimeout);
 
             for (Player player : game.getPlayers()) {
                 if (player.isLocal()) onlineGameLocalPlayer = player;
@@ -165,7 +176,7 @@ public class ControllerGame implements IController {
         update();
 
         if (!this.model.isOnlineGame()) {
-            game.setTurnTimeout(10);
+            game.setTurnTimeout(offlineTurnTimeout);
 
             game.startTurnTimer();
 
@@ -482,15 +493,18 @@ public class ControllerGame implements IController {
             return;
         }
 
-        model.getServerManager().queueCommand(Commands.setMove(
-                (success, args) -> {
-                    game.setCurrentPlayer(onlineGameOnlinePlayer);
-                    Platform.runLater(this::update);
-                },
-                row,
-                col,
-                model.getGame().getBoard().getBoardSize()
-        ));
+
+        if (!isDestroyed()) {
+            model.getServerManager().queueCommand(Commands.setMove(
+                    (success, args) -> {
+                        game.setCurrentPlayer(onlineGameOnlinePlayer);
+                        Platform.runLater(this::update);
+                    },
+                    row,
+                    col,
+                    model.getGame().getBoard().getBoardSize()
+            ));
+        }
     }
 
     private void playOfflineMove(int row, int col, Player player) {
@@ -523,8 +537,9 @@ public class ControllerGame implements IController {
 
         minimaxThread = new Thread(() -> {
             System.out.println("is first turn: " + isFirstTurn);
-            int timeout = isFirstTurn ? 5000 : 8400;
+            int timeout = isFirstTurn ? onlineTurnTimeoutAIFirstTurn : onlineTurnTimeoutAI;
             System.out.println("minimax timeout: " + timeout);
+
             minimaxAlgorithm.startTimeout(timeout);
             Tile tile = minimaxAlgorithm.calculateBestMove(
                     game.getBoard(),
@@ -533,6 +548,12 @@ public class ControllerGame implements IController {
                     game.getTurnCount()
             );
             isFirstTurn = false;
+
+            if (isDestroyed()) {
+                System.out.println("Game session destroyed, not sending AI generated move to server.");
+                return;
+            }
+
             Platform.runLater(() -> onFinishAI(tile));
         });
 
@@ -605,7 +626,7 @@ public class ControllerGame implements IController {
     private void quitGame() {
         stopSideEffects();
 
-        if (model.isOnlineGame() && !game.hasFinished()) {
+        if (model.isOnlineGame() && !game.hasFinished() && !isDestroyed()) {
             model.getServerManager().queueCommand(Commands.forfeit(
                     (success, args) -> Platform.runLater(GameApplication::openLauncher)));
         } else {
@@ -618,6 +639,7 @@ public class ControllerGame implements IController {
      */
     private void stopSideEffects() {
         System.out.println("destroying game session");
+        destroyed = true;
 
         if (turnChangeListener != null) {
             game.getTurnTimeProperty().removeListener(turnChangeListener);
@@ -654,8 +676,10 @@ public class ControllerGame implements IController {
         }
 
         game.destroy();
+    }
 
-        destroyed = true;
+    private boolean isDestroyed() {
+        return destroyed;
     }
 
     public void autoChallengeQuit() {

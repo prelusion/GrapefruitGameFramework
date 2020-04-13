@@ -58,6 +58,14 @@ public abstract class Board {
         }
     }
 
+    public void setStrategicValues(int[][] strategic) {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid.length; j++) {
+                grid[i][j].setStrategicValue(strategic[i][j]);
+            }
+        }
+    }
+
     public int getBoardSize() {
         return BOARDSIZE;
     }
@@ -283,9 +291,5 @@ public abstract class Board {
                 }
                 break;
         }
-    }
-
-    public int getScore(Player player){
-        return scores.getOrDefault(player, 0);
     }
 }

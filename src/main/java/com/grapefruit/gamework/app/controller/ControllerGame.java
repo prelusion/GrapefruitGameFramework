@@ -12,7 +12,6 @@ import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.Helpers;
 import com.grapefruit.gamework.framework.network.ServerManager;
 import com.grapefruit.gamework.games.reversi.AI.DelanoAI;
-import com.grapefruit.gamework.games.reversi.AI.JarnoAI;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.MapChangeListener;
@@ -49,14 +48,16 @@ public class ControllerGame implements IController {
     private Player playerA;
     private Player playerB;
     private boolean isFirstTurn = false;
-    MinimaxAlgorithm minimaxAlgorithm = new DelanoAI();
-    Thread minimaxThread;
+    private boolean settingMove = false;
+    private Thread minimaxThread;
 
     int offlineTurnTimeout = 60;
 
-    /** Minimax Configuration */
-    MinimaxAlgorithm minimaxAlgorithm = new JarnoAI();
-    int onlineTurnTimeout = 10;
+    /**
+     * Minimax Configuration
+     */
+    MinimaxAlgorithm minimaxAlgorithm = new DelanoAI();
+    int onlineTurnTimeout = 5;
 
     int onlineTurnTimeoutAI = (onlineTurnTimeout * 1000) - 1400;
     int onlineTurnTimeoutAIFirstTurn = onlineTurnTimeoutAI / 2;
@@ -132,14 +133,14 @@ public class ControllerGame implements IController {
         game = this.model.getGame();
         serverManager = this.model.getServerManager();
 
-        System.out.println("Started game session");
+//        System.out.println("Started game session");
 
         if (this.model.isOnlineGame()) {
             setupServerEventHandlers();
         }
 
         if (this.model.isTournament()) {
-            System.out.println("Playing game in tournament mode");
+//            System.out.println("Playing game in tournament mode");
         }
 
         game.getBoard().printStrategicValues();
@@ -170,7 +171,7 @@ public class ControllerGame implements IController {
         currentPlayerName.setText(game.getCurrentPlayer().getName());
         currentColor.setText(game.getCurrentPlayer().getColor().toString());
 
-        System.out.println("Player with first move: " + currentPlayerName);
+//        System.out.println("Player with first move: " + currentPlayerName);
 
         drawBoard();
         update();
@@ -187,20 +188,20 @@ public class ControllerGame implements IController {
             game.startTurnTimer();
 
             if (serverManager.getMoveTooFast()) {
-                System.out.println("Executing on move too fast");
+//                System.out.println("Executing on move too fast");
                 onMove(serverManager.getMoveTooFastArgs());
             }
 
             if (serverManager.getTurnTooFast()) {
-                System.out.println("Executing on turn too fast");
+//                System.out.println("Executing on turn too fast");
                 isFirstTurn = true;
                 onTurn();
             } else if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
                 isFirstTurn = true;
-                System.out.println("Starting AI");
+//                System.out.println("Starting AI");
                 playAI();
             } else {
-                System.out.println("Not starting AI");
+//                System.out.println("Not starting AI");
             }
         }
     }
@@ -231,15 +232,15 @@ public class ControllerGame implements IController {
     }
 
     private void setupServerEventHandlers() {
-        System.out.println("Initializing server event handlers");
+//        System.out.println("Initializing server event handlers");
         serverManager.setMoveCallback((boolean success, String[] args) -> {
-            System.out.println("move callback in controller");
-            for (String arg : args) System.out.println(arg);
+//            System.out.println("move callback in controller");
+//            for (String arg : args) System.out.println(arg);
             onMove(args);
         });
 
         serverManager.setTurnCallback((boolean success, String[] args) -> {
-            System.out.println("turn callback in controller");
+//            System.out.println("turn callback in controller");
             onTurn();
         });
 
@@ -332,7 +333,7 @@ public class ControllerGame implements IController {
             });
         });
 
-        System.out.println("Initialized server event handlers");
+//        System.out.println("Initialized server event handlers");
     }
 
     public void update() {
@@ -529,16 +530,16 @@ public class ControllerGame implements IController {
     }
 
     private void playAI() {
-        System.out.println("Play AI");
+//        System.out.println("Play AI");
 
         if (game.hasFinished()) {
             return;
         }
 
         minimaxThread = new Thread(() -> {
-            System.out.println("is first turn: " + isFirstTurn);
+//            System.out.println("is first turn: " + isFirstTurn);
             int timeout = isFirstTurn ? onlineTurnTimeoutAIFirstTurn : onlineTurnTimeoutAI;
-            System.out.println("minimax timeout: " + timeout);
+//            System.out.println("minimax timeout: " + timeout);
 
             minimaxAlgorithm.startTimeout(timeout);
             Tile tile = minimaxAlgorithm.calculateBestMove(
@@ -550,7 +551,7 @@ public class ControllerGame implements IController {
             isFirstTurn = false;
 
             if (isDestroyed()) {
-                System.out.println("Game session destroyed, not sending AI generated move to server.");
+//                System.out.println("Game session destroyed, not sending AI generated move to server.");
                 return;
             }
 
@@ -638,7 +639,7 @@ public class ControllerGame implements IController {
      * This method stops all side effects.
      */
     private void stopSideEffects() {
-        System.out.println("destroying game session");
+//        System.out.println("destroying game session");
         destroyed = true;
 
         if (turnChangeListener != null) {
@@ -651,7 +652,7 @@ public class ControllerGame implements IController {
 
         if (serverManager != null) {
             if (!model.isTournament() && !model.isAutoChallenge()) {
-                System.out.println("removing start game callback");
+//                System.out.println("removing start game callback");
                 serverManager.removeStartGameCallback();
             }
 
@@ -688,20 +689,27 @@ public class ControllerGame implements IController {
 
     public void onTurn() {
         game.setCurrentPlayer(onlineGameLocalPlayer);
-        Platform.runLater(this::update);
 
-        if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
-            Platform.runLater(() -> {
+        Platform.runLater(() -> {
+            update();
+
+            while (settingMove) {
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(50);
                 } catch (InterruptedException ignored) {
                 }
+            }
+
+            if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
                 playAI();
-            });
-        }
+            }
+
+        });
     }
 
     public void onMove(String[] args) {
+        settingMove = true;
+
         game.resetTurnTimer();
 
         String playerName = args[0];
@@ -718,6 +726,7 @@ public class ControllerGame implements IController {
             game.playMove(row, col, player);
             update();
             game.startTurnTimer();
+            settingMove = false;
         });
     }
 }

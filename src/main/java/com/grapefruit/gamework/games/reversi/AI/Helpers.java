@@ -43,39 +43,136 @@ public class Helpers {
                     }
                 }
             }
-            if (hasEdge) System.out.println("Returning combo points");
+            if (hasEdge) System.out.println("1 Returning combo points");
         }
-
-        return hasEdge ? 999 : 0;
+        return hasEdge ? 35 : 0;
     }
 
-    public static int betweenCornerPoints(ReversiBoard board, Tile move, Player player) {
-        String side = "Top";
+    public static int betweenCornerPoints(ReversiBoard board, Tile move) {
+        String side = null;
+        if (move.getRow() == board.top) {
+            side = "Top";
+        } else if (move.getRow() == board.bottom) {
+            side = "Down";
+        } else if (move.getCol() == board.left) {
+            side = "Left";
+        } else if (move.getCol() == board.right) {
+            side = "Right";
+        }
 
+        if(side == null) {
+            return 0;
+        }
+
+        boolean hasEdge = true;
         switch (side) {
             case "Top":
-                for (int i = board.top; i < board.getBoardSize(); i++) {
-                    Tile tile = board.getTile(move.getRow() - i, move.getCol());
+                if(board.getPlayer(board.top, board.left) != null && board.getPlayer(board.top, board.right) != null) {
+                    for (int i = board.left; i < board.right; i++) {
+                        if (board.getPlayer(board.top, i) == null) {
+                            hasEdge = false;
+                        }
+                    }
+                } else {
+                    hasEdge = false;
                 }
                 break;
             case "Right":
-                for (int i = 0; i < board.getBoardSize(); i--) {
-                    Tile tile = board.getTile(i, board.right);
+                if(board.getPlayer(board.top, board.right) != null && board.getPlayer(board.bottom, board.right) != null) {
+                    for (int i = board.top; i < board.bottom; i++) {
+                        if (board.getPlayer(i, board.right) == null) {
+                            hasEdge = false;
+                        }
+                    }
+                } else {
+                    hasEdge = false;
                 }
                 break;
             case "Down":
-                for (int i = 0; i < board.getBoardSize(); i++) {
-                    Tile tile = board.getTile(tile1.getRow() + i, tile1.getCol()).setStrategicValue(value);
+                if(board.getPlayer(board.bottom, board.left) != null && board.getPlayer(board.bottom, board.right) != null) {
+                    for (int i = board.left; i < board.right; i++) {
+                        if (board.getPlayer(board.bottom, i) == null) {
+                            hasEdge = false;
+                        }
+                    }
+                } else {
+                    hasEdge = false;
                 }
                 break;
             case "Left":
-                for (int i = 0; i < getBoardSize(); i++) {
-                    getTile(tile1.getRow(), tile1.getCol() - i).setStrategicValue(value);
+                if(board.getPlayer(board.top, board.left) != null && board.getPlayer(board.bottom, board.left) != null) {
+                    for (int i = board.top; i < board.bottom; i++) {
+                        if (board.getPlayer(i, board.left) == null) {
+                            hasEdge = false;
+                        }
+                    }
+                } else {
+                    hasEdge = false;
                 }
                 break;
+
+        }
+
+        if(hasEdge) {
+            return 35;
         }
         return 0;
     }
+
+
+    public static int adjacentValue(ReversiBoard board, Tile move, Player opponent) {
+        String side = null;
+        if (move.getRow() == board.top) {
+            side = "Top";
+        } else if (move.getRow() == board.bottom) {
+            side = "Down";
+        } else if (move.getCol() == board.left) {
+            side = "Left";
+        } else if (move.getCol() == board.right) {
+            side = "Right";
+        }
+
+        if(side == null) {
+            return 0;
+        }
+
+        boolean isGoodPosition = false;
+        if(!isCorner(board, move)) {
+            switch (side) {
+                case "Top":
+                    if(board.getPlayer(board.top, move.getCol() -1) == opponent && board.getPlayer(board.top, move.getCol() + 1) == opponent) {
+                        isGoodPosition = true;
+                    }
+                    break;
+                case "Right":
+                    if(board.getPlayer(move.getRow() -1, board.right) == opponent && board.getPlayer(move.getRow() + 1, board.right) == opponent) {
+                        isGoodPosition = true;
+                    }
+                    break;
+                case "Down":
+                    if(board.getPlayer(board.bottom, move.getCol() -1) == opponent && board.getPlayer(board.bottom, move.getCol() + 1) == opponent) {
+                        isGoodPosition = true;
+                    }
+                    break;
+                case "Left":
+                    if(board.getPlayer(move.getRow() -1, board.left) == opponent && board.getPlayer(move.getRow() + 1, board.left) == opponent) {
+                        isGoodPosition = true;
+                    }
+                    break;
+            }
+        }
+        if (isGoodPosition) {
+            System.out.println("GOODPOSITION IS REACHED");
+            return 20;
+        }
+        return 0;
+    }
+
+    public boolean checkAdjecent(Tile tile, Boolean bool) {
+
+    }
+
+
 
     private static boolean isCorner(Board board, Tile tile) {
         if (tile.getRow() == 0 && tile.getCol() == 0) {

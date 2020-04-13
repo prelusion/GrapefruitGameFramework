@@ -278,7 +278,6 @@ public abstract class Board {
                 if (grid[i][j].getPlayer() == null) amount++;
             }
         }
-        System.out.println("AMMMOOUUUNNNTTT " + amount);
         return amount;
     }
 

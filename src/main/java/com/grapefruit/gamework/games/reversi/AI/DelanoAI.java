@@ -56,7 +56,7 @@ public class DelanoAI implements MinimaxAlgorithm {
         timeoutStack = new Stack<>();
         timedOut = false;
         board.setStrategicValues(strategicValues);
-        revaluation(board);
+        //revaluation(board);
 
         ((ReversiBoard) board).evaluateEdges(player);
         System.out.println("---------------- TURN " + turnCount + " -----------------");
@@ -211,23 +211,31 @@ public class DelanoAI implements MinimaxAlgorithm {
 
 
     public int minimax(int depth, ReversiBoard board, Tile currentMove, int score, int alpha, int beta, boolean maximizingPlayer) {
+        if (depth == 0) {
+            if(board.emptyTiles() == 0) {
+                return (board.countPieces(player) > 32) ? score + 9999 : score - 9999;
+            }
+        }
+
         if (depth == 0 || timedOut) {
             int combopoints = Helpers.comboPoints(board, currentMove, maximizingPlayer ? player : opponent);
+            int edgepoints = Helpers.betweenCornerPoints(board, currentMove);
+            int adjacentpoints = Helpers.adjacentValue(board, currentMove, maximizingPlayer ? opponent : player);
             int boardpieces = board.countPieces(player);
 
             if (maximizingPlayer) {
-                score += combopoints;
-                if(turnCount > 44) {
-                    return score - boardpieces * 3;
-                } else {
-                    return score - boardpieces;
-                }
-            } else {
-                score -= combopoints;
+                score += combopoints + edgepoints + adjacentpoints;
                 if(turnCount > 44) {
                     return score + boardpieces * 3;
                 } else {
                     return score + boardpieces;
+                }
+            } else {
+                score -= (combopoints + edgepoints + adjacentpoints);
+                if(turnCount > 44) {
+                    return score - boardpieces * 3;
+                } else {
+                    return score - boardpieces;
                 }
             }
 
@@ -354,22 +362,22 @@ public class DelanoAI implements MinimaxAlgorithm {
         int[][] strat = new int[8][8];
 
         strat[0][0] = 99;
-        strat[0][1] = -8;
+        strat[0][1] = -18;
         strat[0][2] = 8;
         strat[0][3] = 6;
         strat[0][4] = 6;
         strat[0][5] = 8;
-        strat[0][6] = -8;
+        strat[0][6] = -18;
         strat[0][7] = 99;
 
-        strat[1][0] = -8;
-        strat[1][1] = -24;
+        strat[1][0] = -18;
+        strat[1][1] = -44;
         strat[1][2] = -4;
         strat[1][3] = -3;
         strat[1][4] = -3;
         strat[1][5] = -4;
-        strat[1][6] = -24;
-        strat[1][7] = -8;
+        strat[1][6] = -44;
+        strat[1][7] = -18;
 
         strat[2][0] = 8;
         strat[2][1] = -4;
@@ -407,22 +415,22 @@ public class DelanoAI implements MinimaxAlgorithm {
         strat[5][6] = -4;
         strat[5][7] = 8;
 
-        strat[6][0] = -8;
-        strat[6][1] = -24;
+        strat[6][0] = -18;
+        strat[6][1] = -44;
         strat[6][2] = -4;
         strat[6][3] = -3;
         strat[6][4] = -3;
         strat[6][5] = -4;
-        strat[6][6] = -24;
-        strat[6][7] = -8;
+        strat[6][6] = -44;
+        strat[6][7] = -18;
 
         strat[7][0] = 99;
-        strat[7][1] = -8;
+        strat[7][1] = -18;
         strat[7][2] = 8;
         strat[7][3] = 6;
         strat[7][4] = 6;
         strat[7][5] = 8;
-        strat[7][6] = -8;
+        strat[7][6] = -18;
         strat[7][7] = 99;
         return strat;
     }

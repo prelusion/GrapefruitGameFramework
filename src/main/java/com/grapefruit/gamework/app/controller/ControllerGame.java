@@ -11,6 +11,7 @@ import com.grapefruit.gamework.framework.*;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.Helpers;
 import com.grapefruit.gamework.framework.network.ServerManager;
+import com.grapefruit.gamework.games.reversi.AI.JarnoAI;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.MapChangeListener;
@@ -47,7 +48,7 @@ public class ControllerGame implements IController {
     private Player playerA;
     private Player playerB;
     private boolean isFirstTurn = false;
-    DelanoAI minimaxAlgorithm = new DelanoAI(11, true);  // 7, true
+    MinimaxAlgorithm minimaxAlgorithm = new JarnoAI();  // 7, true
     Thread minimaxThread;
 
     /**

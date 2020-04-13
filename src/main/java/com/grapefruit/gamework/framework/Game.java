@@ -1,15 +1,7 @@
 package com.grapefruit.gamework.framework;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-
-import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableMap;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public abstract class Game {
 
@@ -124,14 +116,6 @@ public abstract class Game {
     public Board getBoard() {
         return board;
     }
-
-    /**
-     * @return int turnTimeout.
-     */
-    public int getTurnTimeout() {
-        return turnTimeout;
-    }
-
 
     public abstract boolean isValidMove(int row, int col, Player player);
 

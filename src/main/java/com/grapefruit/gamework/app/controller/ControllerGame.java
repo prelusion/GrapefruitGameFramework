@@ -47,7 +47,7 @@ public class ControllerGame implements IController {
     private Player playerA;
     private Player playerB;
     private boolean isFirstTurn = false;
-    MinimaxAlgorithm minimaxAlgorithm = new MinimaxAlgorithm(7, true);  // 7, true
+    DelanoAI minimaxAlgorithm = new DelanoAI(11, true);  // 7, true
     Thread minimaxThread;
 
     /**
@@ -523,7 +523,7 @@ public class ControllerGame implements IController {
 
         minimaxThread = new Thread(() -> {
             System.out.println("is first turn: " + isFirstTurn);
-            int timeout = isFirstTurn ? 5000 : 8400;
+            int timeout = isFirstTurn ? 5000 : 8600;
             System.out.println("minimax timeout: " + timeout);
             minimaxAlgorithm.startTimeout(timeout);
             Tile tile = minimaxAlgorithm.calculateBestMove(

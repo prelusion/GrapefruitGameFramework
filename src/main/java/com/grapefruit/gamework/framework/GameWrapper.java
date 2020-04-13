@@ -14,15 +14,7 @@ public class GameWrapper {
         return factory;
     }
 
-    public void setFactory(GameFactory factory) {
-        this.factory = factory;
-    }
-
     public Assets getAssets() {
         return assets;
-    }
-
-    public void setAssets(Assets assets) {
-        this.assets = assets;
     }
 }

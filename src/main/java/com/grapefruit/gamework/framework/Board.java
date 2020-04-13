@@ -284,8 +284,4 @@ public abstract class Board {
                 break;
         }
     }
-
-    public int getScore(Player player){
-        return scores.getOrDefault(player, 0);
-    }
 }

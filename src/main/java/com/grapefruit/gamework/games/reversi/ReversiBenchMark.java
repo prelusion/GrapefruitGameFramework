@@ -77,6 +77,4 @@ public class ReversiBenchMark {
 //        board.grid[7][2].setPlayer(opponent);
 //        board.grid[7][3].setPlayer(player);
     }
-
-
 }

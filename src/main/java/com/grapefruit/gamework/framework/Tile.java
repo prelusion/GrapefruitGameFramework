@@ -23,12 +23,6 @@ public class Tile {
     private int strategicValue;
 
     /**
-     * Can check one to make a condition change its effect
-     */
-    private boolean checked = false;
-
-
-    /**
      * Constructor of making an GameSession
      *
      * @param row, gives the tile grid[x][] position from the board.
@@ -86,15 +80,5 @@ public class Tile {
      */
     public void setStrategicValue(int strategicValue) {
         this.strategicValue = strategicValue;
-    }
-
-
-
-    public boolean isChecked() {
-        return checked;
-    }
-
-    public void setChecked(boolean checked) {
-        this.checked = checked;
     }
 }

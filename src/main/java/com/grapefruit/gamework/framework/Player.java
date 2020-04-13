@@ -4,7 +4,6 @@ public class Player {
 
     private String name;
     private Colors color;
-    private int score = 0;
     private boolean isLocal = false;
     private boolean isAI = false;
 
@@ -37,18 +36,6 @@ public class Player {
      */
     public Colors getColor() {
         return color;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    /**
-     * Get current score of player.
-     * @return score
-     */
-    public int getScore() {
-        return score;
     }
 
     public String toString() {

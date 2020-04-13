@@ -1,21 +1,19 @@
 package com.grapefruit.gamework.games.reversi;
 
-import com.grapefruit.gamework.framework.MinimaxAlgorithm;
+import com.grapefruit.gamework.framework.MinimaxAlgorithmDeprecated;
 
 import com.grapefruit.gamework.framework.*;
-
-import java.util.concurrent.ExecutorService;
 
 import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
 
 public class ReversiBenchMark {
     public int turnTimeout;
-    private MinimaxAlgorithm minimax;
+    private MinimaxAlgorithmDeprecated minimax;
     private Board board;
     private Player player;
     private Player opponent;
 
-    public ReversiBenchMark(int turnTimeout, MinimaxAlgorithm minimax, Player player, Player opponent) {
+    public ReversiBenchMark(int turnTimeout, MinimaxAlgorithmDeprecated minimax, Player player, Player opponent) {
         this.turnTimeout = turnTimeout;
         this.minimax = minimax;
         this.player = player;

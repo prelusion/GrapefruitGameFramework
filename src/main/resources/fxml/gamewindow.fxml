@@ -35,7 +35,7 @@
                <children>
                   <Text fx:id="gameName" strokeType="OUTSIDE" strokeWidth="0.0" text="name">
                      <font>
-                        <Font size="58.0" />
+                        <Font name="Berlin Sans FB" size="58.0" />
                      </font>
                   </Text>
                   <ImageView fx:id="gameIcon" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />

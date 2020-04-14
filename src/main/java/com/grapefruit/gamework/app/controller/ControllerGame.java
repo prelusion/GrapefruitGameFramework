@@ -475,6 +475,11 @@ public class ControllerGame implements IController {
             return;
         }
 
+        if (model.isTournament()) {
+            autoChallengeQuit();
+            return;
+        }
+
         if (game.isTie()) {
             createEndDialog("Tie!");
             return;
@@ -771,7 +776,7 @@ public class ControllerGame implements IController {
     }
 
     public void autoChallengeQuit() {
-        GameApplication.openLauncher();
+        GameApplication.openLauncherBack();
     }
 
     public void onTurn() {

@@ -16,6 +16,8 @@ import javafx.stage.Stage;
 public class GameApplication extends Application {
 
     private static Stage primaryStage;
+    private static ModelMainWindow modelMainWindow;
+    private static Scene mainWindowScene;
     private static final int WINDOW_START_HEIGHT = 600;
     private static final int WINDOW_START_WIDTH = 1000;
     private static final int GAME_SCENE_WIDTH = 1100;
@@ -41,11 +43,21 @@ public class GameApplication extends Application {
     }
 
     public static void openLauncher() {
-        ModelMainWindow modelMainWindow = new ModelMainWindow(SERVER_MANAGER);
+        modelMainWindow = new ModelMainWindow(SERVER_MANAGER);
         Template template = MainWindowFactory.build(modelMainWindow);
-        Scene scene = new Scene(template.getParent(), WINDOW_START_WIDTH, WINDOW_START_HEIGHT);
+        mainWindowScene = new Scene(template.getParent(), WINDOW_START_WIDTH, WINDOW_START_HEIGHT);
 
-        setScene(scene);
+        setScene(mainWindowScene);
+    }
+
+    public static void openLauncherBack() {
+        if (modelMainWindow == null) {
+            modelMainWindow = new ModelMainWindow(SERVER_MANAGER);
+            Template template = MainWindowFactory.build(modelMainWindow);
+            mainWindowScene = new Scene(template.getParent(), WINDOW_START_WIDTH, WINDOW_START_HEIGHT);
+        }
+
+        setScene(mainWindowScene);
     }
 
     public static void startOfflineGame(Assets assets, Game game) {

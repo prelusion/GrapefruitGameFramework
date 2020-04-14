@@ -3,7 +3,6 @@ package com.grapefruit.gamework.games.reversi.AI;
 import com.grapefruit.gamework.framework.Board;
 import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.Tile;
-import com.grapefruit.gamework.games.reversi.Reversi;
 import com.grapefruit.gamework.games.reversi.ReversiBoard;
 
 import java.util.ArrayList;
@@ -224,5 +223,4 @@ public class Helpers {
 
         return map;
     }
-
 }

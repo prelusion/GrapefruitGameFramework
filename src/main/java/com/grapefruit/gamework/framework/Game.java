@@ -12,14 +12,16 @@ public abstract class Game {
     private Thread turnTimeThread;
     private Board board;
     private Player currentPlayer;
+    private MinimaxAlgorithm minimaxAlgorithm;
     public int turnCount = 1;
 
 
-    public Game(Board board, Player[] players, int turnTimeout) {
+    public Game(Board board, Player[] players, MinimaxAlgorithm minimaxAlgorithm, int turnTimeout) {
         this.board = board;
         this.players = players;
         this.turnTimeout = turnTimeout;
         this.currentPlayer = players[0];
+        this.minimaxAlgorithm = minimaxAlgorithm;
     }
 
     public void setTurnTimeout(int seconds) {
@@ -53,6 +55,11 @@ public abstract class Game {
         }
     }
 
+
+    public MinimaxAlgorithm getMinimaxAlgorithm() {
+        return minimaxAlgorithm;
+    }
+
     public int getTurnCount() {
         return turnCount;
     }
@@ -64,6 +71,10 @@ public abstract class Game {
     public void resetTurnTimer() {
         stopTurnTimer();
         turnTime.set(turnTimeout);
+    }
+
+    public int getTurnTimeout() {
+        return turnTimeout;
     }
 
     public SimpleIntegerProperty getTurnTimeProperty() {

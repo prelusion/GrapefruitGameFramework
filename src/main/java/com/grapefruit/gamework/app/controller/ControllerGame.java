@@ -431,9 +431,9 @@ public class ControllerGame implements IController {
 
         if (model.isOnlineGame()) {
             if (game.getCurrentPlayer().isLocal()) {
-                playerTurnLabel.setText("your turn!");
+                playerTurnLabel.setText("Your turn");
             } else {
-                playerTurnLabel.setText("Waiting for opponent...");
+                playerTurnLabel.setText("Waiting for opponent");
             }
         } else {
             int nonAiCount = 0;
@@ -444,11 +444,11 @@ public class ControllerGame implements IController {
             }
 
             if (nonAiCount == 2){
-                playerTurnLabel.setText("It's " + game.getCurrentPlayer().getName() + "'s turn!");
+                playerTurnLabel.setText("Waiting for " + game.getCurrentPlayer().getName());
             } else if (!game.getCurrentPlayer().isAI()) {
-                playerTurnLabel.setText("your turn!");
+                playerTurnLabel.setText("Your turn");
             } else {
-                playerTurnLabel.setText("Waiting for opponent...");
+                playerTurnLabel.setText("Waiting for opponent");
             }
         }
 

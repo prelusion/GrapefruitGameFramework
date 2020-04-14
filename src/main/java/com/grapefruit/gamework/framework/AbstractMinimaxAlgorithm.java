@@ -14,6 +14,7 @@ public abstract class AbstractMinimaxAlgorithm implements MinimaxAlgorithm {
     protected Stack<Boolean> timeoutStack;
     protected int[][] strategicValues;
     protected ArrayList<Thread> threads;
+    private int complexity= 5;
 
     public AbstractMinimaxAlgorithm(int[][] strategicValues, int depth, boolean dynamicDepth) {
         this.currentDepth = depth;
@@ -35,6 +36,7 @@ public abstract class AbstractMinimaxAlgorithm implements MinimaxAlgorithm {
 
     public void setComplexity(int complexity) {
         System.out.println("AI set complexity: " + complexity);
+        this.complexity = complexity;
 
         switch (complexity) {
             case 1:
@@ -58,6 +60,10 @@ public abstract class AbstractMinimaxAlgorithm implements MinimaxAlgorithm {
                 dynamicDepth = true;
                 break;
         }
+    }
+
+    public int getComplexity() {
+        return complexity;
     }
 
     public static long getCurrentSeconds() {

@@ -4,6 +4,7 @@ import com.grapefruit.gamework.app.GameApplication;
 import com.grapefruit.gamework.app.model.IModel;
 import com.grapefruit.gamework.app.model.ModelLobbyBrowser;
 import com.grapefruit.gamework.app.model.ModelSelectedGame;
+import com.grapefruit.gamework.app.util.GlobalRandom;
 import com.grapefruit.gamework.app.view.templates.LobbyBrowser.LobbyBrowserFactory;
 import com.grapefruit.gamework.framework.Colors;
 import com.grapefruit.gamework.framework.Game;
@@ -23,6 +24,7 @@ import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class ControllerSelectedGame implements IController {
 
@@ -153,8 +155,17 @@ public class ControllerSelectedGame implements IController {
                 String difficultyString = cb.getValue();
                 System.out.println("difficulty: " + difficultyString);
                 int difficulty = difficultyStringToInteger(difficultyString);
-                Player playerBlack = new Player("You", Colors.BLACK, true);
-                Player playerWhite = new Player("AI", Colors.WHITE, true, true);
+
+                Player playerBlack;
+                Player playerWhite;
+
+                if (GlobalRandom.getRandomGenerator().nextBoolean()) {
+                    playerBlack = new Player("You", Colors.BLACK, true);
+                    playerWhite = new Player("AI", Colors.WHITE, true, true);
+                } else {
+                    playerWhite = new Player("You", Colors.WHITE, true);
+                    playerBlack = new Player("AI", Colors.BLACK, true, true);
+                }
 
                 Player[] players = new Player[]{playerBlack, playerWhite};
 
@@ -178,8 +189,17 @@ public class ControllerSelectedGame implements IController {
         });
 
         friendButton.setOnAction(event -> {
-            Player playerBlack = new Player("Player 1", Colors.BLACK, true);
-            Player playerWhite = new Player("Player 2", Colors.WHITE, true);
+
+            Player playerBlack;
+            Player playerWhite;
+
+            if (GlobalRandom.getRandomGenerator().nextBoolean()) {
+                playerBlack = new Player("Player 1", Colors.BLACK, true);
+                playerWhite = new Player("Player 2", Colors.WHITE, true);
+            } else {
+                playerWhite = new Player("Player 1", Colors.BLACK, true);
+                playerBlack = new Player("Player 2", Colors.WHITE, true);
+            }
 
             Player[] players = new Player[]{playerBlack, playerWhite};
 

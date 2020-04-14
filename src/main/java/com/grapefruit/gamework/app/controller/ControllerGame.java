@@ -187,7 +187,13 @@ public class ControllerGame implements IController {
 
             if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
                 System.out.println("calling play ai ln. 184");
-                playAI();
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(1500);
+                    } catch (InterruptedException ignored) {};
+
+                    playAI();
+                }).start();
             }
         } else {
             game.startTurnTimer();
@@ -476,7 +482,7 @@ public class ControllerGame implements IController {
 
         if (game.hasWinner()) {
             if (game.getWinner().isLocal()) {
-                createEndDialog(game.getWinner().getName() + " has won the game!");
+                createEndDialog(game.getWinner().getName() + " won the game!");
             } else {
                 createEndDialog("You lose!");
             }
@@ -580,14 +586,16 @@ public class ControllerGame implements IController {
                 update();
             }
 
-            Platform.runLater(() -> {
+            new Thread(() -> {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ignored) {
                 }
-                System.out.println("calling play ai ln. 541");
-                playAI();
-            });
+                Platform.runLater(() -> {
+                    System.out.println("calling play ai ln. 541");
+                    playAI();
+                });
+            }).start();
         }
     }
 

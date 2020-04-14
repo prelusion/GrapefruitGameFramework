@@ -16,6 +16,7 @@ public class newWinningAI extends AbstractMinimaxAlgorithm {
     private Player opponent;
     private boolean timedOut = false;
     private int turnCount;
+    private Random random = new Random();
 
     public newWinningAI(int[][] strategicValues) {
         this(strategicValues, 9, true);
@@ -35,6 +36,18 @@ public class newWinningAI extends AbstractMinimaxAlgorithm {
     }
 
     public Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount) {
+        if (getComplexity() == 1) {
+            System.out.println("Complexity is 1, returning random move");
+            List<Tile> moves = board.getAvailableMoves(player);
+            int idx = random.nextInt(moves.size());
+
+            if (moves.size() > 0) {
+                return moves.get(idx);
+            } else {
+                return null;
+            }
+        }
+
         this.turnCount = turnCount;
         timeoutStack = new Stack<>();
         timedOut = false;

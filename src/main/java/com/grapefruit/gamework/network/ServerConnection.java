@@ -1,4 +1,4 @@
-package com.grapefruit.gamework.framework.network;
+package com.grapefruit.gamework.network;
 
 import com.google.gson.Gson;
 import com.grapefruit.gamework.app.resources.AppSettings;
@@ -76,6 +76,7 @@ public class ServerConnection {
     }
 
     private void handleMessage(String msg) {
+        System.out.println("incoming msg: " + msg);
         if (manager.commandsInQueue()) {
             handleCommandResponses(msg);
         }

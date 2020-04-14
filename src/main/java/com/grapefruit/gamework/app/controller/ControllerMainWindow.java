@@ -1,6 +1,5 @@
 package com.grapefruit.gamework.app.controller;
 
-import com.grapefruit.gamework.app.GameApplication;
 import com.grapefruit.gamework.app.model.*;
 import com.grapefruit.gamework.app.resources.AppSettings;
 import com.grapefruit.gamework.app.view.templates.GameTile.GameTileFactory;
@@ -8,11 +7,8 @@ import com.grapefruit.gamework.app.view.templates.SelectedGame.SelectedGameFacto
 import com.grapefruit.gamework.app.view.templates.SettingsWindow.SettingsWindowFactory;
 import com.grapefruit.gamework.app.view.templates.SettingsWindow.TemplateSettingsWindow;
 import com.grapefruit.gamework.framework.GameWrapper;
-import com.grapefruit.gamework.framework.network.CommandCallback;
-import com.grapefruit.gamework.framework.network.Commands;
-import com.grapefruit.gamework.framework.network.ServerManager;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import com.grapefruit.gamework.network.CommandCallback;
+import com.grapefruit.gamework.network.Commands;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -25,7 +21,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 import org.apache.commons.validator.routines.InetAddressValidator;
 
 import java.net.URL;
@@ -214,9 +209,10 @@ public class ControllerMainWindow implements IController {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
+                                System.out.println("Server manager connected change" + newValue);
                                 if (oldValue != newValue) {
                                     if (newValue) {
-                                        onConnected();
+//                                        onConnected();
                                     } else {
                                         onDisconnected();
                                     }
@@ -231,9 +227,22 @@ public class ControllerMainWindow implements IController {
                 public void run() {
                     System.out.println("Connecting");
                     if (modelMainWindow.getServerManager().connect(selectedServer.getIp())) {
+                        System.out.println("Logging in");
                         modelMainWindow.getServerManager().queueCommand(Commands.login(userName.getText(), (success, args) -> {
+                            System.out.println("login callback");
+                            if (args != null) {
+                                for (String arg : args) System.out.println(arg);
+                            }
+
+                            if (success) {
+                                Platform.runLater(() -> onConnected() );
+                            } else {
+                                System.out.println("Failed to login");
+                            }
+
                         }));
                     } else {
+                        System.out.println("Connection failed");
                         Platform.runLater(() -> {
                             onDisconnected();
                             connectionStatus.setText("Server offline");
@@ -263,12 +272,6 @@ public class ControllerMainWindow implements IController {
                     connectButton.setText("Disconnecting...");
                     connectionStatus.setFill(Color.BLACK);
 
-                    modelMainWindow.getServerManager().queueCommand(Commands.logout(new CommandCallback() {
-                        @Override
-                        public void onResponse(boolean success, String[] args) {
-                            System.out.println("log out response");
-                        }
-                    }));
                     System.out.println("Disconnecting");
                     new Thread(() -> {
                         modelMainWindow.getServerManager().disconnect();

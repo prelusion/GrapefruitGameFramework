@@ -28,12 +28,16 @@ public class GameEndDialogFactory implements TemplateFactory {
     private GameEndDialogFactory() {
     }
 
+    public static void destroyPreviousDialogIfExists() {
+        if (previousDialog != null) previousDialog.close();
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public Template buildTemplate(IModel model) {
-        if (previousDialog != null) previousDialog.close();
+        destroyPreviousDialogIfExists();
 
         FXMLLoader loader = new ResourceLoader().getViewLoader(FXMLRegistry.GAME_END_DIALOG);
         Parent parent = null;

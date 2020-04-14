@@ -8,7 +8,7 @@ import com.grapefruit.gamework.app.view.templates.MainWindow.MainWindowFactory;
 import com.grapefruit.gamework.app.view.templates.Template;
 import com.grapefruit.gamework.framework.Assets;
 import com.grapefruit.gamework.framework.Game;
-import com.grapefruit.gamework.framework.network.ServerManager;
+import com.grapefruit.gamework.network.ServerManager;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

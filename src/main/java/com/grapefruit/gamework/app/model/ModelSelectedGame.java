@@ -1,8 +1,7 @@
 package com.grapefruit.gamework.app.model;
 
-import com.grapefruit.gamework.framework.Game;
 import com.grapefruit.gamework.framework.GameWrapper;
-import com.grapefruit.gamework.framework.network.ServerManager;
+import com.grapefruit.gamework.network.ServerManager;
 
 public class ModelSelectedGame implements IModel {
 

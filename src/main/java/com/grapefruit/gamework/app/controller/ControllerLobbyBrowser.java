@@ -9,8 +9,8 @@ import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDia
 import com.grapefruit.gamework.framework.Colors;
 import com.grapefruit.gamework.framework.Game;
 import com.grapefruit.gamework.framework.Player;
-import com.grapefruit.gamework.framework.network.Commands;
-import com.grapefruit.gamework.framework.network.ServerConnection;
+import com.grapefruit.gamework.network.Commands;
+import com.grapefruit.gamework.network.ServerConnection;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;

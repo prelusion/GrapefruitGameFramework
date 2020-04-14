@@ -9,9 +9,9 @@ import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.app.util.ImageHelper;
 import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDialogFactory;
 import com.grapefruit.gamework.framework.*;
-import com.grapefruit.gamework.framework.network.Commands;
-import com.grapefruit.gamework.framework.network.Helpers;
-import com.grapefruit.gamework.framework.network.ServerManager;
+import com.grapefruit.gamework.network.Commands;
+import com.grapefruit.gamework.network.Helpers;
+import com.grapefruit.gamework.network.ServerManager;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.MapChangeListener;
@@ -136,6 +136,8 @@ public class ControllerGame implements IController {
         serverManager = this.model.getServerManager();
 
         setOnlineTimeout(AppSettings.getSettings().getTimeout());
+
+        GameEndDialogFactory.destroyPreviousDialogIfExists();
 
         System.out.println("Started game session");
 

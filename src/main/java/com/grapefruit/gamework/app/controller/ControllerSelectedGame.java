@@ -9,7 +9,7 @@ import com.grapefruit.gamework.app.view.templates.LobbyBrowser.LobbyBrowserFacto
 import com.grapefruit.gamework.framework.Colors;
 import com.grapefruit.gamework.framework.Game;
 import com.grapefruit.gamework.framework.Player;
-import com.grapefruit.gamework.framework.network.Commands;
+import com.grapefruit.gamework.network.Commands;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -24,7 +24,6 @@ import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class ControllerSelectedGame implements IController {
 

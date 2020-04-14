@@ -1,8 +1,4 @@
-package com.grapefruit.gamework.framework.network;
-
-import javax.security.auth.callback.Callback;
-import java.util.ArrayList;
-import java.util.List;
+package com.grapefruit.gamework.network;
 
 /**
  * The commands class holds static functions that map a command from the client to a server readable format.

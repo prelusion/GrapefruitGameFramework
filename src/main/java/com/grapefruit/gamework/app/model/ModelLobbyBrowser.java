@@ -2,17 +2,14 @@ package com.grapefruit.gamework.app.model;
 
 import com.grapefruit.gamework.app.controller.ControllerSelectedGame;
 import com.grapefruit.gamework.framework.Assets;
-import com.grapefruit.gamework.framework.Game;
 import com.grapefruit.gamework.framework.GameWrapper;
-import com.grapefruit.gamework.framework.network.CommandCallback;
-import com.grapefruit.gamework.framework.network.Commands;
-import com.grapefruit.gamework.framework.network.ServerConnection;
-import com.grapefruit.gamework.framework.network.ServerManager;
+import com.grapefruit.gamework.network.CommandCallback;
+import com.grapefruit.gamework.network.Commands;
+import com.grapefruit.gamework.network.ServerConnection;
+import com.grapefruit.gamework.network.ServerManager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ModelLobbyBrowser implements IModel {
 

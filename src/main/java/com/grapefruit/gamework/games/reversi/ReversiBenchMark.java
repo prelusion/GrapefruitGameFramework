@@ -6,7 +6,7 @@ import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VAL
 
 public class ReversiBenchMark implements BenchMark {
     public int turnTimeout;
-    private IMinimaxAlgoritm minimax;
+    private MinimaxAlgorithm minimax;
     private Board board;
     private Player player;
     private Player opponent;

@@ -1,7 +1,7 @@
 package com.grapefruit.gamework.games.reversi.AI;
 
 import com.grapefruit.gamework.framework.Board;
-import com.grapefruit.gamework.framework.ParentMinimaxAlgoritm;
+import com.grapefruit.gamework.framework.AbstractMinimaxAlgorithm;
 import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.Tile;
 import com.grapefruit.gamework.games.reversi.ReversiBoard;
@@ -10,7 +10,7 @@ import java.util.*;
 import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
 import static java.lang.Integer.*;
 
-public class newWinningAI extends ParentMinimaxAlgoritm {
+public class newWinningAI extends AbstractMinimaxAlgorithm {
     private Player player;
     private Player opponent;
     private boolean timedOut = false;
@@ -95,7 +95,7 @@ public class newWinningAI extends ParentMinimaxAlgoritm {
         }
         if(!isTimedOut() && secondsLeft() >= 1 && depth <= board.emptyTiles() && dynamicDepth) {
             timeoutStack.push(isTimedOut());
-
+            System.out.println(timeoutStack);
             Tile newTile = realCalculateBestMove(board, player, opponent, false, depth + 1);
             if(!timeoutStack.isEmpty()) {
                 if (newTile != null && !timeoutStack.pop()) {
@@ -107,7 +107,7 @@ public class newWinningAI extends ParentMinimaxAlgoritm {
             currentDepth--;
         }
 
-        timedOut = false;
+//        timedOut = false;
         return bestTile;
     }
 

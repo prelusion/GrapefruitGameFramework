@@ -2,7 +2,7 @@ package com.grapefruit.gamework.framework;
 import java.util.ArrayList;
 import java.util.Stack;
 
-public abstract class ParentMinimaxAlgoritm implements IMinimaxAlgoritm {
+public abstract class AbstractMinimaxAlgorithm implements MinimaxAlgorithm {
 
     protected int currentDepth;
     protected boolean dynamicDepth = true;
@@ -14,7 +14,7 @@ public abstract class ParentMinimaxAlgoritm implements IMinimaxAlgoritm {
     protected int[][] strategicValues;
     protected ArrayList<Thread> threads;
 
-    public ParentMinimaxAlgoritm(int[][] strategicValues, int depth, boolean dynamicDepth) {
+    public AbstractMinimaxAlgorithm(int[][] strategicValues, int depth, boolean dynamicDepth) {
         this.currentDepth = depth;
         this.dynamicDepth = dynamicDepth;
         this.strategicValues = strategicValues;
@@ -66,6 +66,7 @@ public abstract class ParentMinimaxAlgoritm implements IMinimaxAlgoritm {
     }
 
     public void startTimeout(int timeout) {
+        System.out.println("start timeout: " + timeout);
         this.timeout = timeout;
         timedOut = false;
         startTime = getCurrentSeconds();
@@ -74,6 +75,7 @@ public abstract class ParentMinimaxAlgoritm implements IMinimaxAlgoritm {
             try {
                 Thread.sleep(timeout);
                 triggerTimeout();
+                System.out.println("seconds left: " + secondsLeft());
             } catch (InterruptedException ignored) {
             }
         });

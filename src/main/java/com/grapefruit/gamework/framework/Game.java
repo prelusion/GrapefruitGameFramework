@@ -12,11 +12,11 @@ public abstract class Game {
     private Thread turnTimeThread;
     private Board board;
     private Player currentPlayer;
-    private IMinimaxAlgoritm minimaxAlgorithm;
+    private MinimaxAlgorithm minimaxAlgorithm;
     public int turnCount = 1;
 
 
-    public Game(Board board, Player[] players, IMinimaxAlgoritm minimaxAlgorithm, int turnTimeout) {
+    public Game(Board board, Player[] players, MinimaxAlgorithm minimaxAlgorithm, int turnTimeout) {
         this.board = board;
         this.players = players;
         this.turnTimeout = turnTimeout;
@@ -56,7 +56,7 @@ public abstract class Game {
     }
 
 
-    public IMinimaxAlgoritm getMinimaxAlgorithm() {
+    public MinimaxAlgorithm getMinimaxAlgorithm() {
         return minimaxAlgorithm;
     }
 

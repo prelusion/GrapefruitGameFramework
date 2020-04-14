@@ -55,10 +55,9 @@ public class ControllerGame implements IController {
 
     int offlineTurnTimeout = 60;
 
-    /** Minimax Configuration */
-    IMinimaxAlgoritm minimaxAlgorithm;
+    /** Minimax Default Configuration */
+    MinimaxAlgorithm minimaxAlgorithm;
     int onlineTurnTimeout = 5;
-
     int onlineTurnTimeoutAI = (onlineTurnTimeout * 1000) - 1400;
     int onlineTurnTimeoutAIFirstTurn = onlineTurnTimeoutAI / 2;
 
@@ -130,13 +129,13 @@ public class ControllerGame implements IController {
     public void setModel(IModel model) {
         this.model = (ModelGame) model;
 
-        onlineTurnTimeout = AppSettings.getSettings().getTimeout();
-        reGenerateAITimeout();
+
 
         game = this.model.getGame();
-        this.minimaxAlgorithm = game.getMinimaxAlgorithm();
-
+        minimaxAlgorithm = game.getMinimaxAlgorithm();
         serverManager = this.model.getServerManager();
+
+        setOnlineTimeout(AppSettings.getSettings().getTimeout());
 
         System.out.println("Started game session");
 
@@ -231,8 +230,10 @@ public class ControllerGame implements IController {
         }
     }
 
-    private void reGenerateAITimeout() {
+    public void setOnlineTimeout(int timeout) {
+        onlineTurnTimeout = timeout;
         onlineTurnTimeoutAI = (onlineTurnTimeout * 1000) - 1400;
+        if (onlineTurnTimeoutAI <= 1) onlineTurnTimeoutAI = 1;
         onlineTurnTimeoutAIFirstTurn = onlineTurnTimeoutAI / 2;
     }
 
@@ -609,6 +610,8 @@ public class ControllerGame implements IController {
                     game.getOpponentPlayer(),
                     game.getTurnCount()
             );
+            System.out.println("Finish AI");
+
             isFirstTurn = false;
 
             if (isDestroyed()) {

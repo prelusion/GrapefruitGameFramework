@@ -7,7 +7,7 @@ import java.util.*;
 
 import static java.lang.Integer.*;
 
-public class oldWinningAI extends ParentMinimaxAlgoritm {
+public class oldWinningAI extends AbstractMinimaxAlgorithm {
     private Player player;
     private Player opponent;
     private boolean timedOut = false;

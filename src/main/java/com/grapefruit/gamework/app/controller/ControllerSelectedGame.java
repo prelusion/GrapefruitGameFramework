@@ -69,9 +69,15 @@ public class ControllerSelectedGame implements IController {
         Button onlineButton = new Button("Play online");
         Button offlineButton = new Button("Play offline");
 
+        tournamentButton.setMinWidth(150);
+        autoChallengeButton.setMinWidth(150);
+        onlineButton.setMinWidth(150);
+        offlineButton.setMinWidth(150);
+
         if (!model.isOnline()) {
             tournamentButton.setDisable(true);
             onlineButton.setDisable(true);
+            autoChallengeButton.setDisable(true);
         }
 
         ControllerSelectedGame controller = this;
@@ -108,10 +114,14 @@ public class ControllerSelectedGame implements IController {
 
         offlineButton.setOnAction(event -> setOfflineOptions());
 
-        buttons.add(tournamentButton);
-        buttons.add(autoChallengeButton);
+        if (model.getSelectedGame().getAssets().getDisplayName().equals("Reversi")) {
+            buttons.add(tournamentButton);
+            buttons.add(autoChallengeButton);
+        }
+
         buttons.add(onlineButton);
         buttons.add(offlineButton);
+
         layoutButtons(buttons);
     }
 
@@ -144,7 +154,10 @@ public class ControllerSelectedGame implements IController {
             );
         });
 
-        buttons.add(aiButton);
+        if (model.getSelectedGame().getAssets().getDisplayName().equals("Reversi")) {
+            buttons.add(aiButton);
+        }
+
         buttons.add(friendButton);
         layoutButtons(buttons);
     }

@@ -148,6 +148,10 @@ public class newWinningAI extends AbstractMinimaxAlgorithm {
     }
 
     public int minimax(int depth, ReversiBoard board, Tile currentMove, int score, int alpha, int beta, boolean maximizingPlayer) {
+        if (isTimedOut()) {
+            return score;
+        }
+
         if(board.emptyTiles() <= 0) {
             if (maximizingPlayer) {
                 int pieces =  board.countPieces(player);
@@ -161,11 +165,13 @@ public class newWinningAI extends AbstractMinimaxAlgorithm {
             }
         }
 
-        if (depth == 0 || timedOut) {
+        if (depth == 0) {
+            System.out.println("minimax");
             int combopoints = Helpers.comboPoints(board, currentMove, maximizingPlayer ? player : opponent);
             int edgepoints = Helpers.betweenCornerPoints(board, currentMove);
             int adjacentpoints = Helpers.adjacentValue(board, currentMove, maximizingPlayer ? opponent : player);
             int boardpieces = board.countPieces(player);
+            System.out.println("after extra points");
 
             if (maximizingPlayer) {
                 score += combopoints + edgepoints + adjacentpoints;
@@ -182,7 +188,6 @@ public class newWinningAI extends AbstractMinimaxAlgorithm {
                     return score - boardpieces;
                 }
             }
-
         }
 
         if (maximizingPlayer) {

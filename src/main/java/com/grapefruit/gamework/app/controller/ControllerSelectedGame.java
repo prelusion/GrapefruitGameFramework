@@ -23,6 +23,7 @@ import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class ControllerSelectedGame implements IController {
 
@@ -153,8 +154,19 @@ public class ControllerSelectedGame implements IController {
                 String difficultyString = cb.getValue();
                 System.out.println("difficulty: " + difficultyString);
                 int difficulty = difficultyStringToInteger(difficultyString);
-                Player playerBlack = new Player("You", Colors.BLACK, true);
-                Player playerWhite = new Player("AI", Colors.WHITE, true, true);
+
+                Random random = new Random();
+
+                Player playerBlack;
+                Player playerWhite;
+
+                if (random.nextBoolean()) {
+                    playerBlack = new Player("You", Colors.BLACK, true);
+                    playerWhite = new Player("AI", Colors.WHITE, true, true);
+                } else {
+                    playerWhite = new Player("You", Colors.WHITE, true);
+                    playerBlack = new Player("AI", Colors.BLACK, true, true);
+                }
 
                 Player[] players = new Player[]{playerBlack, playerWhite};
 

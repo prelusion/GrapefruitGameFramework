@@ -68,6 +68,12 @@ public class ControllerLobbyBrowser implements IController {
     public void setupWidgets() {
         setupTable();
 
+        System.out.println("game display name: " + model.getSelectedGame().getAssets().getDisplayName());
+        if (!model.getSelectedGame().getAssets().getDisplayName().equals("Reversi")) {
+            aiRadioButton.setVisible(false);
+            aiRadioButton.setSelected(false);
+        }
+
         Timeline timeline = new Timeline();
 
         KeyFrame keyFrame = new KeyFrame(

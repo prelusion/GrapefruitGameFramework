@@ -1,10 +1,8 @@
 package com.grapefruit.gamework.app.controller;
 
-import com.grapefruit.gamework.app.model.IModel;
-import com.grapefruit.gamework.app.model.ModelGameTile;
-import com.grapefruit.gamework.app.model.ModelSettingsWindow;
-import com.grapefruit.gamework.app.model.ModelTableSetting;
+import com.grapefruit.gamework.app.model.*;
 import com.grapefruit.gamework.app.resources.AppSettings;
+import com.grapefruit.gamework.app.view.templates.ConfigSetting.ConfigSettingFactory;
 import com.grapefruit.gamework.app.view.templates.GameTile.GameTileFactory;
 import com.grapefruit.gamework.app.view.templates.TableSetting.TableSettingFactory;
 import javafx.application.Platform;
@@ -84,12 +82,16 @@ public class ControllerSettingsWindow implements IController {
      */
     @FXML
     private void onClickServer(){
-
         HashMap<String, String> servers = new HashMap<>();
         for (AppSettings.Server server: localSettings.getServers()){
             servers.put(server.getName(), server.getIp());
         }
         setSelectedSetting(TableSettingFactory.build(new ModelTableSetting(servers, "Server name", "Server address", modelSettingsWindow, ModelTableSetting.TableSettingPreset.SERVERS)).getParent());
+    }
+
+    @FXML
+    private void onClickConfiguration(){
+        setSelectedSetting(ConfigSettingFactory.build(new ModelConfigSetting(modelSettingsWindow)).getParent());
     }
 
     @FXML

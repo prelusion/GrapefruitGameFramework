@@ -23,6 +23,15 @@
                            </font></Text>
                      </children>
                   </HBox>
+                  <HBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onClickConfiguration" prefHeight="50.0" prefWidth="90.0" styleClass="menu-item-normal">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Server configuration" wrappingWidth="66.69494515657425">
+                           <font>
+                              <Font name="Berlin Sans FB" size="12.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </HBox>
                </children>
                <padding>
                   <Insets left="5.0" right="5.0" top="5.0" />

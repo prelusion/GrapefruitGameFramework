@@ -179,13 +179,6 @@ public class DelanoAI implements MinimaxAlgorithm {
             threads.add(thread);
         }
 
-        if(winningCondition) {
-            for(Map.Entry entry: tiles.entrySet()) {
-                System.out.println("Strategic Values " + ((Tile) entry.getKey()).getStrategicValue());
-            }
-        }
-
-
         for (Thread thread : threads) {
             try {
                 thread.join();
@@ -221,9 +214,15 @@ public class DelanoAI implements MinimaxAlgorithm {
 
 
     public int minimax(int depth, ReversiBoard board, Tile currentMove, int score, int alpha, int beta, boolean maximizingPlayer) {
-        if(board.emptyTiles() == 0) {
-            winningCondition = true;
-            return (board.countPieces(player) > 32) ? score + 9999 : score - 9999;
+        if(board.emptyTiles() <= 0) {
+            int pieces =  board.countPieces(player);
+            if (maximizingPlayer) {
+                System.out.println("Player winning conditions");
+                return (pieces > 32) ? score + 9999 + pieces : score - 9999 - pieces;
+            } else {
+                System.out.println("opponent winning conditions");
+                return (pieces > 32) ? score - 9999 - pieces : score + 9999 + pieces;
+            }
         }
 
         if (depth == 0 || timedOut) {

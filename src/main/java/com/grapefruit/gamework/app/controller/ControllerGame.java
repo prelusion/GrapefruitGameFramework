@@ -501,7 +501,7 @@ public class ControllerGame implements IController {
         }
 
         if (game.hasWinner()) {
-            if (game.getWinner().isLocal()) {
+            if (game.getWinner().isLocal() && !game.getWinner().isAI()) {
                 createEndDialog(game.getWinner().getName() + " won the game!");
             } else {
                 createEndDialog("You lose!");

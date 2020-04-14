@@ -301,12 +301,14 @@ public class ControllerGame implements IController {
                 stopSideEffects();
 
                 if (model.isAutoChallenge()) {
-                    autoChallengeQuit();
+                    openLauncherBackQuit();
                     return;
                 }
 
                 createEndDialog("Opponent's turn timed out, you win!");
                 update();
+
+                if (model.isTournament()) openLauncherBackQuit();
             });
         });
 
@@ -316,12 +318,14 @@ public class ControllerGame implements IController {
                 stopSideEffects();
 
                 if (model.isAutoChallenge()) {
-                    autoChallengeQuit();
+                    openLauncherBackQuit();
                     return;
                 }
 
                 createEndDialog("Turn timed out, you lose!");
                 update();
+
+                if (model.isTournament()) openLauncherBackQuit();
             });
         });
 
@@ -331,12 +335,14 @@ public class ControllerGame implements IController {
                 stopSideEffects();
 
                 if (model.isAutoChallenge()) {
-                    autoChallengeQuit();
+                    openLauncherBackQuit();
                     return;
                 }
 
                 createEndDialog("Opponent illegal move, you win!");
                 update();
+
+                if (model.isTournament()) openLauncherBackQuit();
             });
         });
 
@@ -346,12 +352,14 @@ public class ControllerGame implements IController {
                 stopSideEffects();
 
                 if (model.isAutoChallenge()) {
-                    autoChallengeQuit();
+                    openLauncherBackQuit();
                     return;
                 }
 
                 createEndDialog("Illegal move, you lose!");
                 update();
+
+                if (model.isTournament()) openLauncherBackQuit();
             });
         });
 
@@ -361,12 +369,14 @@ public class ControllerGame implements IController {
                 stopSideEffects();
 
                 if (model.isAutoChallenge()) {
-                    autoChallengeQuit();
+                    openLauncherBackQuit();
                     return;
                 }
 
                 createEndDialog("Opponent forfeited, you win!");
                 update();
+
+                if (model.isTournament()) openLauncherBackQuit();
             });
         });
 
@@ -376,11 +386,13 @@ public class ControllerGame implements IController {
                 stopSideEffects();
 
                 if (model.isAutoChallenge()) {
-                    autoChallengeQuit();
+                    openLauncherBackQuit();
                     return;
                 }
                 createEndDialog("Opponent disconnected, you win!");
                 update();
+
+                if (model.isTournament()) openLauncherBackQuit();
             });
         });
 
@@ -471,17 +483,18 @@ public class ControllerGame implements IController {
         stopSideEffects();
 
         if (model.isAutoChallenge()) {
-            autoChallengeQuit();
+            openLauncherBackQuit();
             return;
         }
 
-        if (model.isTournament()) {
-            autoChallengeQuit();
-            return;
-        }
+        if (model.isTournament()) openLauncherBackQuit();
+
 
         if (game.isTie()) {
             createEndDialog("Tie!");
+
+            if (model.isTournament()) openLauncherBackQuit();
+
             return;
         }
 
@@ -492,6 +505,8 @@ public class ControllerGame implements IController {
                 createEndDialog("You lose!");
             }
         }
+
+        if (model.isTournament()) openLauncherBackQuit();
     }
 
     private void drawPieces() {
@@ -775,7 +790,7 @@ public class ControllerGame implements IController {
         return destroyed;
     }
 
-    public void autoChallengeQuit() {
+    public void openLauncherBackQuit() {
         GameApplication.openLauncherBack();
     }
 

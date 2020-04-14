@@ -17,6 +17,8 @@ import java.io.IOException;
 
 public class GameEndDialogFactory implements TemplateFactory {
 
+    private static Stage previousDialog;
+
     private static GameEndDialogFactory factory = new GameEndDialogFactory();
 
     public static Template build(IModel model) {
@@ -31,6 +33,8 @@ public class GameEndDialogFactory implements TemplateFactory {
      */
     @Override
     public Template buildTemplate(IModel model) {
+        if (previousDialog != null) previousDialog.close();
+
         FXMLLoader loader = new ResourceLoader().getViewLoader(FXMLRegistry.GAME_END_DIALOG);
         Parent parent = null;
         Stage stage = new Stage();
@@ -45,6 +49,9 @@ public class GameEndDialogFactory implements TemplateFactory {
         stage.initOwner(GameApplication.getStage());
         stage.initModality(Modality.WINDOW_MODAL);
         stage.show();
+
+        previousDialog = stage;
+
         return new TemplateGameEndDialog(parent);
     }
 

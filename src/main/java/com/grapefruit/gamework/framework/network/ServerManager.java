@@ -106,7 +106,7 @@ public class ServerManager {
      *
      * @param command Command the command
      */
-    public void queueCommand(Command command) {
+    synchronized public void queueCommand(Command command) {
         commandQueue.add(command);
         if (!sending) {
             connection.startSending();
@@ -122,7 +122,7 @@ public class ServerManager {
      * @param isConfirmed  boolean is confirmed.
      * @return Command the command.
      */
-    public Command findFirstFittingCommand(ResponseType responseType, boolean isConfirmed) {
+    synchronized public Command findFirstFittingCommand(ResponseType responseType, boolean isConfirmed) {
         for (Command command : commandQueue) {
             if (command.getResponseType() == responseType && command.isConfirmed() == isConfirmed) {
                 return command;
@@ -131,7 +131,7 @@ public class ServerManager {
         return null;
     }
 
-    public Command findByKeyword(String keyword, boolean isConfirmed) {
+    synchronized public Command findByKeyword(String keyword, boolean isConfirmed) {
         for (Command command : commandQueue) {
             String commandKeyword = command.getCommandString();
 
@@ -147,7 +147,7 @@ public class ServerManager {
      *
      * @return Command the command.
      */
-    public Command getFirstUnconfirmed() {
+    synchronized public Command getFirstUnconfirmed() {
         for (Command command : commandQueue) {
             if (!command.isConfirmed()) {
                 return command;
@@ -162,19 +162,14 @@ public class ServerManager {
      * @return Command the command.
      */
     public synchronized Command getFirstUnsent() {
-        Iterator<Command> i = commandQueue.iterator();
-        while (i.hasNext()) {
-            try {
-                Command command = i.next();
-                if (!command.isSent()) {
-                    return command;
-                }
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-                return null;
-            }
+        for (Command command : commandQueue) {
+            if (command == null) break;
 
+            if (!command.isSent()) {
+                return command;
+            }
         }
+
         return null;
     }
 
@@ -183,7 +178,7 @@ public class ServerManager {
      *
      * @param command Command the command to be removed.
      */
-    public void removeCommandFromQueue(Command command) {
+    synchronized public void removeCommandFromQueue(Command command) {
         commandQueue.remove(command);
     }
 
@@ -192,7 +187,7 @@ public class ServerManager {
      *
      * @return the boolean
      */
-    public boolean commandsInQueue() {
+    synchronized public boolean commandsInQueue() {
         return commandQueue.size() > 0;
     }
 

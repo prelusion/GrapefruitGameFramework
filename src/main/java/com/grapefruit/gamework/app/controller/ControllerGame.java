@@ -187,7 +187,13 @@ public class ControllerGame implements IController {
 
             if (game.getCurrentPlayer().isLocal() && game.getCurrentPlayer().isAI()) {
                 System.out.println("calling play ai ln. 184");
-                playAI();
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(1500);
+                    } catch (InterruptedException ignored) {};
+
+                    playAI();
+                }).start();
             }
         } else {
             game.startTurnTimer();

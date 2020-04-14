@@ -4,6 +4,7 @@ import com.grapefruit.gamework.app.GameApplication;
 import com.grapefruit.gamework.app.model.IModel;
 import com.grapefruit.gamework.app.model.ModelLobbyBrowser;
 import com.grapefruit.gamework.app.model.ModelSelectedGame;
+import com.grapefruit.gamework.app.util.GlobalRandom;
 import com.grapefruit.gamework.app.view.templates.LobbyBrowser.LobbyBrowserFactory;
 import com.grapefruit.gamework.framework.Colors;
 import com.grapefruit.gamework.framework.Game;
@@ -154,13 +155,11 @@ public class ControllerSelectedGame implements IController {
                 String difficultyString = cb.getValue();
                 System.out.println("difficulty: " + difficultyString);
                 int difficulty = difficultyStringToInteger(difficultyString);
-
-                Random random = new Random();
-
+                
                 Player playerBlack;
                 Player playerWhite;
 
-                if (random.nextBoolean()) {
+                if (GlobalRandom.getRandomGenerator().nextBoolean()) {
                     playerBlack = new Player("You", Colors.BLACK, true);
                     playerWhite = new Player("AI", Colors.WHITE, true, true);
                 } else {

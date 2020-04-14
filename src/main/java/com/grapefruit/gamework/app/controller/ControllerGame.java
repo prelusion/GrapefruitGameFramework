@@ -782,6 +782,7 @@ public class ControllerGame implements IController {
                 playAI();
             }
 
+            currentlySettingTurn = false;
         });
     }
 

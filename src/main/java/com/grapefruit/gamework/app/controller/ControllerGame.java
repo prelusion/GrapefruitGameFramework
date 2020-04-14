@@ -684,7 +684,7 @@ public class ControllerGame implements IController {
     }
 
     private void createEndDialog(String message) {
-        ModelGameEndDialog endDialogModel = new ModelGameEndDialog(message, this::stopSideEffects);
+        ModelGameEndDialog endDialogModel = new ModelGameEndDialog(message, this::stopSideEffects, !model.isTournament());
         GameEndDialogFactory.build(endDialogModel);
     }
 

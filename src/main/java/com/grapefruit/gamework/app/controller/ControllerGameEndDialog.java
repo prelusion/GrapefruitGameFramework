@@ -59,6 +59,11 @@ public class ControllerGameEndDialog implements IController {
         this.model = (ModelGameEndDialog) model;
         initialize();
         gameEndMessage.setText(this.model.getGameResult());
+        if (this.model.getShowMenuButton()) {
+            backButton.setVisible(true);
+        } else {
+            backButton.setVisible(false);
+        }
     }
 
     @FXML

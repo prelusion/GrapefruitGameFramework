@@ -9,10 +9,12 @@ public class ModelGameEndDialog implements IModel {
 
     private String resultMessage;
     private Command onCloseGame;
+    private boolean showMenuButton;
 
-    public ModelGameEndDialog(String gameResult, Command onCloseGame){
+    public ModelGameEndDialog(String gameResult, Command onCloseGame, boolean showMenuButton){
         this.resultMessage = gameResult;
         this.onCloseGame = onCloseGame;
+        this.showMenuButton = showMenuButton;
     }
 
     public String getGameResult() {
@@ -22,4 +24,6 @@ public class ModelGameEndDialog implements IModel {
     public Command getOnCloseGameCommand() {
         return onCloseGame;
     }
+
+    public boolean getShowMenuButton() { return showMenuButton; }
 }

@@ -19,7 +19,7 @@
                      <children>
                         <Text fx:id="gameEndMessage" strokeType="OUTSIDE" strokeWidth="0.0" text="game ended">
                            <font>
-                              <Font name="Berlin Sans FB" size="30.0" />
+                              <Font name="Berlin Sans FB" size="36.0" />
                            </font>
                         </Text>
                      </children>

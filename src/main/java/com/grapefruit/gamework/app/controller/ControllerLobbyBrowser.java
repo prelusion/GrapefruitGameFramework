@@ -207,7 +207,7 @@ public class ControllerLobbyBrowser implements IController {
                 if (args != null) {
                     for (String arg : args) System.out.println(arg);
                     Platform.runLater(() -> {
-                        ModelGameEndDialog endDialogModel = new ModelGameEndDialog(args[0], () -> {});
+                        ModelGameEndDialog endDialogModel = new ModelGameEndDialog(args[0], () -> {}, false);
                         GameEndDialogFactory.build(endDialogModel);
                     });
                 }

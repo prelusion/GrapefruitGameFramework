@@ -1,22 +1,20 @@
-package com.grapefruit.gamework.framework;
+package com.grapefruit.gamework.games.reversi.AI;
 
+import com.grapefruit.gamework.framework.Board;
+import com.grapefruit.gamework.framework.MinimaxAlgorithm;
+import com.grapefruit.gamework.framework.Player;
+import com.grapefruit.gamework.framework.Tile;
 import com.grapefruit.gamework.games.reversi.ReversiBoard;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
 import static java.lang.Integer.*;
 
-public class DelanoAI {
+public class DelanoAI implements MinimaxAlgorithm {
     private Player player;
     private Player opponent;
     private int timeout;
-
-    public boolean isTimedOut() {
-        return timedOut;
-    }
-
     private boolean timedOut = false;
     private int currentDepth;
     private Thread timeoutThread;
@@ -24,9 +22,16 @@ public class DelanoAI {
     private Stack<Boolean> timeoutStack;
     private int turnCount;
     ArrayList<Thread> threads;
+    private boolean dynamicDepth = true;
+    private int[][] strategicValues = getStrategicValues();
 
-    public DelanoAI(int depth, boolean b) {
+    public DelanoAI() {
+        this(10, true);
+    }
+
+    public DelanoAI(int depth, boolean dynamicDepth) {
         currentDepth = depth;
+        this.dynamicDepth = dynamicDepth;
     }
 
     public void destroy() {
@@ -41,11 +46,15 @@ public class DelanoAI {
         }
 
     }
+    public boolean isTimedOut() {
+        return timedOut;
+    }
 
     public Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount) {
         this.turnCount = turnCount;
         timeoutStack = new Stack<>();
         timedOut = false;
+        board.setStrategicValues(strategicValues);
         revaluation(board);
 
         System.out.println("---------------- TURN " + turnCount + " -----------------");
@@ -66,9 +75,24 @@ public class DelanoAI {
         return (startTime + (timeout / 1000)) - getCurrentSeconds();
     }
 
-    public void turnCountDecrease() {
+    public void turnCountDecrease(int depth) {
         if (currentDepth >= 9 && turnCount < 7) {
             currentDepth--;
+        }
+
+        if (turnCount > 41) {
+            System.out.println("increase depth (turn > 44)");
+            currentDepth++;
+        }
+
+        if (turnCount > 20 && turnCount < 31 && depth >= 8) {
+            System.out.println("Condition depth (turn > 20) && (< 31)");
+            currentDepth--;
+        }
+
+        if (turnCount >= 31 && depth < 8) {
+            System.out.println("increase depth (turn >= 31)");
+            currentDepth++;
         }
     }
 
@@ -76,13 +100,8 @@ public class DelanoAI {
         this.player = player;
         this.opponent = opponent;
 
-        if (turnCount > 44) {
-            System.out.println("increase depth (turn > 44)");
-            currentDepth++;
-        }
-
         if (firstTurn) {
-            turnCountDecrease();
+            turnCountDecrease(depth);
         }
 
         Map<Tile, Integer> tiles = threadedMiniMax(board, player, depth);
@@ -108,7 +127,7 @@ public class DelanoAI {
             System.out.println("increase depth");
         }
 
-        if(!isTimedOut() && secondsLeft() >= 1 && depth < 30) {
+        if(!isTimedOut() && secondsLeft() >= 1 && depth <= board.emptyTiles() && dynamicDepth) {
             timeoutStack.push(isTimedOut());
 
             System.out.println("depth: " + depth);
@@ -123,7 +142,7 @@ public class DelanoAI {
                     System.out.println("corrupt tile, ignoring");
                 }
             }
-        } else if (firstTurn && secondsLeft() <= 1) {
+        } else if (firstTurn && secondsLeft() <= 1 && isTimedOut()) {
             System.out.println("decrease depth");
             currentDepth--;
         }
@@ -137,7 +156,7 @@ public class DelanoAI {
         List<Tile> moves = board.getAvailableMoves(player);
         Map<Tile, Integer> tiles = new HashMap<>();
         for (Tile tile : moves) {
-            Board newBoard = new ReversiBoard(Board.BOARDSIZE, STRATEGIC_VALUES);
+            Board newBoard = new ReversiBoard(board.getBoardSize(), STRATEGIC_VALUES);
             newBoard.copyState(board);
             newBoard.setMove(tile.getRow(), tile.getCol(), player);
             Thread thread = new Thread(() -> {
@@ -174,7 +193,6 @@ public class DelanoAI {
                 Thread.sleep(timeout);
                 triggerTimeout();
                 System.out.println("TIMEOUTPUSHED");
-                System.out.println("TIMEOUTPUSHED");
             } catch (InterruptedException ignored) {
             }
         });
@@ -183,8 +201,9 @@ public class DelanoAI {
     }
 
     public synchronized void triggerTimeout() {
+        System.out.println("Trigger Timeout!");
         timedOut = true;
-        timeoutStack.push(isTimedOut());
+        timeoutStack.push(true);
     }
 
     public int minimax(int depth, Board board, int score, int alpha, int beta, boolean maximizingPlayer) {
@@ -207,7 +226,7 @@ public class DelanoAI {
             for (Tile move : moves) {
                 if (timedOut) break;
 
-                Board newBoard = new ReversiBoard(Board.BOARDSIZE, STRATEGIC_VALUES);
+                Board newBoard = new ReversiBoard(board.getBoardSize(), STRATEGIC_VALUES);
                 newBoard.copyState(board);
                 newBoard.setMove(move.getRow(), move.getCol(), player);
 
@@ -244,7 +263,7 @@ public class DelanoAI {
             for (Tile move : moves) {
                 if (timedOut) break;
 
-                Board newBoard = new ReversiBoard(Board.BOARDSIZE, STRATEGIC_VALUES);
+                Board newBoard = new ReversiBoard(board.getBoardSize(), STRATEGIC_VALUES);
                 newBoard.copyState(board);
                 newBoard.setMove(move.getRow(), move.getCol(), opponent);
 
@@ -309,6 +328,7 @@ public class DelanoAI {
             }
         }
     }
+
 
     private static int[][] getStrategicValues() {
         int[][] strat = new int[8][8];

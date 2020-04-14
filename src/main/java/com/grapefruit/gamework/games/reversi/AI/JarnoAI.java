@@ -24,6 +24,7 @@ public class JarnoAI implements MinimaxAlgorithm {
     private Stack<Boolean> timeoutStack;
     ArrayList<Thread> minimaxThreads;
     private int[][] strategicValues = getStrategicValues();
+    private static int strategicValueFactor = 1;
 
     public JarnoAI() {
         this(7, false);
@@ -79,10 +80,28 @@ public class JarnoAI implements MinimaxAlgorithm {
         ReversiBoard board = new ReversiBoard(boardIn.getBoardSize(), strategicValues);
         board.copyState(boardIn);
 
-        revaluation(board);
+//        revaluation(board);
+
+        wedgeStrategy(board, board.getAvailableMoves(player));
+
+
+//        List<Tile> topEdge = edges.get("top");
+//        if (topEdge.size() > 0) {
+//            // Even
+//            if (topEdge.size() % 2 == 0) {
+//                for (Tile tile : topEdge) {
+//                    board.setStrategicValue(tile.getRow(), tile.getCol(), 24 * strategicValueFactor);
+//                }
+//            // Odd
+//            } else {
+//                for (Tile tile : topEdge) {
+//                    board.setStrategicValue(tile.getRow(), tile.getCol(), -8 * strategicValueFactor);
+//                }
+//            }
+//        }
 
 //        stableDiscStrategy(board);
-//        board.printStrategicValues();
+        board.printStrategicValues();
 
 //        List<Tile> moves = board.getAvailableMoves(player);
 //        for (Tile move : moves) {
@@ -174,7 +193,7 @@ public class JarnoAI implements MinimaxAlgorithm {
                 int newDepth = depth + 1;
 
                 ReversiBoard newBoard = new ReversiBoard(board.getBoardSize(), strategicValues);
-                newBoard.copyState(boardIn);
+                newBoard.copyState(board);
 
                 Tile newTile = realCalculateBestMove(newBoard, player, opponent, false, newDepth);
                 System.out.println("New tile on depth: " + newDepth + " position: " + newTile.getRow() + ", " + newTile.getCol());
@@ -286,6 +305,8 @@ public class JarnoAI implements MinimaxAlgorithm {
                 return score;
             }
 
+            wedgeStrategy((ReversiBoard) board, moves);
+
             for (Tile move : moves) {
                 if (timedOut) break;
 
@@ -322,6 +343,8 @@ public class JarnoAI implements MinimaxAlgorithm {
             if (moves.size() == 0) {
                 return score;
             }
+
+            wedgeStrategy((ReversiBoard) board, moves);
 
             for (Tile move : moves) {
                 if (timedOut) break;
@@ -360,7 +383,7 @@ public class JarnoAI implements MinimaxAlgorithm {
         Tile bottomleft = board.getTile(board.getBoardSize() - 1, 0);
         Tile bottomright = board.getTile(board.getBoardSize() - 1, board.getBoardSize() - 1);
 
-        int value = 55 * 40;
+        int value = 55 * strategicValueFactor;
 //        int value = 3 * 40;
 
         if (topleft.getPlayer() != null && topright.getPlayer() != null && topleft.getStrategicValue() != value) {
@@ -415,11 +438,37 @@ public class JarnoAI implements MinimaxAlgorithm {
             visited.add(neighbour);
 
             if (neighbour.getPlayer() == null) {
-                board.setStrategicValue(neighbour.getRow(), neighbour.getCol(), 45 * 40);
+                board.setStrategicValue(neighbour.getRow(), neighbour.getCol(), 45 * strategicValueFactor);
             } else if (neighbour.getPlayer() == tile.getPlayer()) {
                 maxStrategicValueOfNeighbours(board, neighbour, visited);
             }
         }
+    }
+
+    private void wedgeStrategy(ReversiBoard board, List<Tile> moves) {
+        /* Wedge strategy */
+        Map<String, List<Tile>> edges = getEdges(board, moves);
+        for (Map.Entry<String, List<Tile>> entry : edges.entrySet()) {
+            List<Tile> edge = entry.getValue();
+            if (edge.size() > 0) {
+//                System.out.println("Performing wedge strategy");
+
+                // Even
+                if (edge.size() % 2 == 0) {
+//                    System.out.println("wedge strategy increase edge: " + entry.getKey());
+                    for (Tile tile : edge) {
+                        board.setStrategicValue(tile.getRow(), tile.getCol(), tile.getStrategicValue() + 5 * strategicValueFactor);
+                    }
+                    // Odd
+                } else {
+//                    System.out.println("wedge strategy decrease edge: " + entry.getKey());
+                    for (Tile tile : edge) {
+                        board.setStrategicValue(tile.getRow(), tile.getCol(), tile.getStrategicValue() - 5 * strategicValueFactor);
+                    }
+                }
+            }
+        }
+        /* End wedge strategy */
     }
 
     private boolean isCorner(Board board, Tile tile) {
@@ -434,6 +483,39 @@ public class JarnoAI implements MinimaxAlgorithm {
         }
         return false;
     }
+
+    private boolean isEdge(Board board, Tile tile) {
+        return tile.getRow() == 0 || tile.getRow() == board.getBoardSize() - 1 ||
+                tile.getCol() == 0 || tile.getCol() == board.getBoardSize() - 1;
+    }
+
+    private Map<String, List<Tile>> getEdges(Board board, List<Tile> tiles) {
+        List<Tile> topEdge = new ArrayList<>();
+        List<Tile> bottomEdge = new ArrayList<>();
+        List<Tile> leftEdge = new ArrayList<>();
+        List<Tile> rightEdge = new ArrayList<>();
+
+        for (Tile tile : tiles) {
+            if (tile.getRow() == 0) {
+                topEdge.add(tile);
+            } else if (tile.getRow() == board.getBoardSize() - 1) {
+                bottomEdge.add(tile);
+            } else if (tile.getCol() == 0) {
+                leftEdge.add(tile);
+            }  else if (tile.getCol() == board.getBoardSize() - 1) {
+                rightEdge.add(tile);
+            }
+        }
+
+        Map<String, List<Tile>> map = new HashMap<String, List<Tile>>();
+        map.put("top", topEdge);
+        map.put("bottom", bottomEdge);
+        map.put("left", leftEdge);
+        map.put("right", rightEdge);
+
+        return map;
+    }
+
 
     private static int[][] getStrategicValues() {
         int[][] strat = new int[8][8];
@@ -512,7 +594,7 @@ public class JarnoAI implements MinimaxAlgorithm {
 
         for (int i = 0; i < strat.length; i++) {
             for (int j = 0; j < strat.length; j++) {
-                strat[i][j] = strat[i][j] * 40;
+                strat[i][j] = strat[i][j] * strategicValueFactor;
             }
         }
         return strat;

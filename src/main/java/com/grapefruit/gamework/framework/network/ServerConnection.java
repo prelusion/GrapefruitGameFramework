@@ -122,7 +122,9 @@ public class ServerConnection {
             String move = parseCommandArg(msg, "MOVE");
             String details = parseCommandArg(msg, "DETAILS");
 
-            System.out.println("SVR GAME MOVE, player: " + playerName + ", move: " + move + ", details: " + details);
+            int[] rowcol = Helpers.convertMoveString(move, 8);
+
+            System.out.println("SVR GAME MOVE, player: " + playerName + ", details: " + details + ", move index: " + move + "move rowcol: " + rowcol[0] + "," + rowcol[1] );
 
             CommandCallback listener = serverCommandListeners.get("onMove");
             if (listener != null) {

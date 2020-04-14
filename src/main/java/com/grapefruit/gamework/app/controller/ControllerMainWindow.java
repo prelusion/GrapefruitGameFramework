@@ -26,6 +26,7 @@ import org.apache.commons.validator.routines.InetAddressValidator;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ControllerMainWindow implements IController {
 
@@ -228,16 +229,35 @@ public class ControllerMainWindow implements IController {
                     System.out.println("Connecting");
                     if (modelMainWindow.getServerManager().connect(selectedServer.getIp())) {
                         System.out.println("Logging in");
+
+                        AtomicBoolean loggedIn = new AtomicBoolean(false);
+
+                        new Thread(() -> {
+                            try {
+                                Thread.sleep(3000);
+
+                                if (!loggedIn.get()) {
+                                    modelMainWindow.getServerManager().disconnect();
+                                    Platform.runLater(() -> {
+                                        System.out.println("login fialed");
+                                        onDisconnected();
+                                        connectionStatus.setText("Failed to login");
+                                    });
+                                }
+
+                            } catch (InterruptedException ignored) {}
+
+                        }).start();
+
                         modelMainWindow.getServerManager().queueCommand(Commands.login(userName.getText(), (success, args) -> {
                             System.out.println("login callback");
                             if (args != null) {
-                                for (String arg : args) System.out.println(arg);
+                                for (String arg : args) System.out.println(arg);;
                             }
 
                             if (success) {
+                                loggedIn.set(true);
                                 Platform.runLater(() -> onConnected() );
-                            } else {
-                                System.out.println("Failed to login");
                             }
 
                         }));

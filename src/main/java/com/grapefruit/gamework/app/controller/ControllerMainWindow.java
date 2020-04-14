@@ -229,6 +229,7 @@ public class ControllerMainWindow implements IController {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    System.out.println("Connecting");
                     if (modelMainWindow.getServerManager().connect(selectedServer.getIp())) {
                         modelMainWindow.getServerManager().queueCommand(Commands.login(userName.getText(), (success, args) -> {
                         }));
@@ -256,15 +257,28 @@ public class ControllerMainWindow implements IController {
             userName.setDisable(true);
             connectButton.setDisable(false);
             connectButton.setOnAction(new EventHandler<ActionEvent>() {
+
                 @Override
                 public void handle(ActionEvent event) {
+                    connectButton.setText("Disconnecting...");
+                    connectionStatus.setFill(Color.BLACK);
+
                     modelMainWindow.getServerManager().queueCommand(Commands.logout(new CommandCallback() {
                         @Override
                         public void onResponse(boolean success, String[] args) {
+                            System.out.println("log out response");
                         }
                     }));
-                    modelMainWindow.getServerManager().disconnect();
-                    onDisconnected();
+                    System.out.println("Disconnecting");
+                    new Thread(() -> {
+                        modelMainWindow.getServerManager().disconnect();
+                        Platform.runLater(() -> {
+                            System.out.println("on disconnected");
+                            onDisconnected();
+                            System.out.println("Disconnected");
+                        });
+                    }).start();
+
                 }
             });
             modelMainWindow.getServerManager().queueCommand(Commands.getGameList(new CommandCallback() {

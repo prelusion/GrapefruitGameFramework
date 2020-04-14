@@ -4,6 +4,7 @@ import com.grapefruit.gamework.app.GameApplication;
 import com.grapefruit.gamework.app.model.IModel;
 import com.grapefruit.gamework.app.model.ModelGame;
 import com.grapefruit.gamework.app.model.ModelGameEndDialog;
+import com.grapefruit.gamework.app.resources.AppSettings;
 import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.app.util.ImageHelper;
 import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDialogFactory;
@@ -132,6 +133,10 @@ public class ControllerGame implements IController {
     public void setModel(IModel model) {
         this.model = (ModelGame) model;
 
+
+        onlineTurnTimeout = AppSettings.getSettings().getTimeout();
+        reGenerateAITimeout();
+
         game = this.model.getGame();
         serverManager = this.model.getServerManager();
 
@@ -226,6 +231,11 @@ public class ControllerGame implements IController {
                 System.out.println("Not starting AI");
             }
         }
+    }
+
+    private void reGenerateAITimeout() {
+        onlineTurnTimeoutAI = (onlineTurnTimeout * 1000) - 1400;
+        onlineTurnTimeoutAIFirstTurn = onlineTurnTimeoutAI / 2;
     }
 
     private void setupAssets() {
@@ -772,6 +782,7 @@ public class ControllerGame implements IController {
                 playAI();
             }
 
+            currentlySettingTurn = false;
         });
     }
 

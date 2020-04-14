@@ -167,7 +167,9 @@ public class Helpers {
     }
 
     public static boolean checkAdjecent(Board board, int row, int col, int dRow, int dCol, Player opponent) {
-        if (board.getPlayer(row, col) != opponent && !isCorner(board, board.getTile(row, col))) {
+        if(board.getPlayer(row, col) == null) {
+            return false;
+        } else if (board.getPlayer(row, col) != opponent && !isCorner(board, board.getTile(row, col))) {
             return checkAdjecent(board, row + dRow, col + dCol, dRow, dCol, opponent);
         } else if (board.getPlayer(row, col) == opponent) {
             return true;

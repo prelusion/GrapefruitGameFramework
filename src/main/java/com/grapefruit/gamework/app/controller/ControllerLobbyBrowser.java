@@ -74,7 +74,7 @@ public class ControllerLobbyBrowser implements IController {
             aiRadioButton.setVisible(false);
             aiRadioButton.setSelected(false);
         } else {
-            aiRadioButton.setSelected(true);
+            aiRadioButton.setSelected(false);
         }
 
         Timeline timeline = new Timeline();

@@ -6,11 +6,15 @@ import com.grapefruit.gamework.app.model.ModelLobbyBrowser;
 import com.grapefruit.gamework.app.model.ModelSelectedGame;
 import com.grapefruit.gamework.app.view.templates.LobbyBrowser.LobbyBrowserFactory;
 import com.grapefruit.gamework.framework.Colors;
+import com.grapefruit.gamework.framework.Game;
 import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.network.Commands;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -62,7 +66,7 @@ public class ControllerSelectedGame implements IController {
     }
 
     public void setMainMenuButtons() {
-        ArrayList<Button> buttons = new ArrayList<>();
+        ArrayList<Control> buttons = new ArrayList<>();
 
         Button tournamentButton = new Button("Tournament");
         Button autoChallengeButton = new Button("Auto challenge");
@@ -126,20 +130,51 @@ public class ControllerSelectedGame implements IController {
     }
 
     private void setOfflineOptions() {
-        ArrayList<Button> buttons = new ArrayList<>();
+        ArrayList<Control> buttons = new ArrayList<>();
         Button aiButton = new Button("Play vs AI");
         Button friendButton = new Button("Play vs friend");
 
         aiButton.setOnAction(event -> {
-            Player playerBlack = new Player("You", Colors.BLACK, true);
-            Player playerWhite = new Player("AI", Colors.WHITE, true, true);
 
-            Player[] players = new Player[]{playerBlack, playerWhite};
-
-            GameApplication.startOfflineGame(
-                    model.getSelectedGame().getAssets(),
-                    model.getSelectedGame().getFactory().create(players)
+            Label label = new Label("Difficulty");
+            label.setStyle("-fx-text-fill: white; -fx-font-size: 20px;");
+            ChoiceBox<String> cb = new ChoiceBox<>(FXCollections.observableArrayList(
+                    "Easy", "Medium", "Hard", "Extreme", "Impossible")
             );
+            cb.getSelectionModel().selectFirst();
+            Button startButton = new Button("Start");
+            ArrayList<Control> control = new ArrayList<Control>();
+            control.add(label);
+            control.add(cb);
+            control.add(startButton);
+            layoutButtons(control);
+
+            startButton.setOnAction(event2 -> {
+                String difficultyString = cb.getValue();
+                System.out.println("difficulty: " + difficultyString);
+                int difficulty = difficultyStringToInteger(difficultyString);
+                Player playerBlack = new Player("You", Colors.BLACK, true);
+                Player playerWhite = new Player("AI", Colors.WHITE, true, true);
+
+                Player[] players = new Player[]{playerBlack, playerWhite};
+
+                Game game = model.getSelectedGame().getFactory().create(players, difficulty);
+
+                GameApplication.startOfflineGame(
+                        model.getSelectedGame().getAssets(),
+                        game
+                );
+            });
+
+//            Player playerBlack = new Player("You", Colors.BLACK, true);
+//            Player playerWhite = new Player("AI", Colors.WHITE, true, true);
+//
+//            Player[] players = new Player[]{playerBlack, playerWhite};
+//
+//            GameApplication.startOfflineGame(
+//                    model.getSelectedGame().getAssets(),
+//                    model.getSelectedGame().getFactory().create(players)
+//            );
         });
 
         friendButton.setOnAction(event -> {
@@ -162,10 +197,10 @@ public class ControllerSelectedGame implements IController {
         layoutButtons(buttons);
     }
 
-    private void layoutButtons(ArrayList<Button> buttons) {
+    private void layoutButtons(ArrayList<Control> buttons) {
         int buttonSpacing = 80;
         buttonBox.getChildren().removeAll(buttonBox.getChildren());
-        for (Button button : buttons) {
+        for (Control button : buttons) {
             Pane pane = new Pane();
             pane.minHeight(buttonSpacing);
             pane.setPrefHeight(buttonSpacing);
@@ -218,7 +253,8 @@ public class ControllerSelectedGame implements IController {
             int challengeNumber = Integer.parseInt(args[0]);
 
             model.getServerManager().queueCommand(
-                    Commands.challengeRespond((success2, args2) -> {}, true, challengeNumber));
+                    Commands.challengeRespond((success2, args2) -> {
+                    }, true, challengeNumber));
         });
 
         model.getServerManager().setStartGameCallback((success, args) -> {
@@ -246,5 +282,21 @@ public class ControllerSelectedGame implements IController {
                 );
             });
         });
+    }
+
+    int difficultyStringToInteger(String difficulty) {
+        switch (difficulty) {
+            case "Easy":
+                return 1;
+            case "Medium":
+                return 2;
+            case "Hard":
+                return 3;
+            case "Extreme":
+                return 4;
+            case "Impossible":
+                return 5;
+        }
+        return -1;
     }
 }

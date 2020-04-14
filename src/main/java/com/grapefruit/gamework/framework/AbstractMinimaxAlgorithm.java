@@ -1,4 +1,5 @@
 package com.grapefruit.gamework.framework;
+
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -33,6 +34,8 @@ public abstract class AbstractMinimaxAlgorithm implements MinimaxAlgorithm {
     }
 
     public void setComplexity(int complexity) {
+        System.out.println("AI set complexity: " + complexity);
+
         switch (complexity) {
             case 1:
                 setDepth(1);
@@ -90,7 +93,7 @@ public abstract class AbstractMinimaxAlgorithm implements MinimaxAlgorithm {
     public synchronized void triggerTimeout() {
         System.out.println("Trigger Timeout!");
         timedOut = true;
-        if(timeoutStack != null) {
+        if (timeoutStack != null) {
             timeoutStack.push(true);
         }
     }

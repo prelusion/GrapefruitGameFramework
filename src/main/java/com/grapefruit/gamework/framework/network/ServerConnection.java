@@ -75,6 +75,11 @@ public class ServerConnection {
         listenerThread.start();
     }
 
+    /**
+     * Processes a message from the server that is not an answer on a client request.
+     *
+     * @param msg String the command.
+     */
     private void handleMessage(String msg) {
         if (manager.commandsInQueue()) {
             handleCommandResponses(msg);
@@ -108,7 +113,6 @@ public class ServerConnection {
             }
 
         } else if (msg.startsWith("SVR GAME YOURTURN")) {
-            // SVR GAME YOURTURN {TURNMESSAGE: ""}
             String message = parseCommandArg(msg, "TURNMESSAGE");
             System.out.println("SVR GAME YOURTURN, message: " + message);
             CommandCallback listener = serverCommandListeners.get("onTurn");
@@ -117,7 +121,6 @@ public class ServerConnection {
             }
 
         } else if (msg.startsWith("SVR GAME MOVE")) {
-            // SVR GAME MOVE {PLAYER: "alice", MOVE: "26", DETAILS: ""}
             String playerName = parseCommandArg(msg, "PLAYER");
             String move = parseCommandArg(msg, "MOVE");
             String details = parseCommandArg(msg, "DETAILS");
@@ -134,15 +137,11 @@ public class ServerConnection {
                 );
             }
         } else if (msg.startsWith("SVR GAME LOSS")) {
-            // SVR GAME LOSS {PLAYERONESCORE: "0", PLAYERTWOSCORE: "0", COMMENT: "Turn timelimit reached"}
             String playerOneScore = parseCommandArg(msg, "PLAYERONESCORE");
             String playerTwoScore = parseCommandArg(msg, "PLAYERTWOSCORE");
             String comment = parseCommandArg(msg, "COMMENT");
 
             System.out.println("SVR GAME LOSS, comment: " + comment);
-
-//            System.out.println("SVR GAME LOSS");
-//            System.out.println("Comment: " + comment);
 
             if (comment.equals("Turn timelimit reached")) {
                 CommandCallback listener = serverCommandListeners.get("onTurnTimeoutLose");
@@ -177,6 +176,11 @@ public class ServerConnection {
 
     }
 
+    /**
+     * Handles a response from the server.
+     *
+     * @param msg String the response.
+     */
     private void handleCommandResponses(String msg) {
         if (msg.equals("OK")) {
             Command command = manager.getFirstUnconfirmed();
@@ -231,13 +235,17 @@ public class ServerConnection {
         }
     }
 
-    private String parseCommandArg(String msg, String fieldname) {
-//        System.out.println(fieldname + ": \"");
-        String a = msg.split(fieldname + ": \"")[1];
-        String b = a.split("\"")[0];
-        return b;
-    }
 
+    /**
+     * Substracts the fieldname from the message
+     *
+     * @param msg String the message
+     * @param fieldname String the fieldname
+     */
+    private String parseCommandArg(String msg, String fieldname) {
+        return msg.split(fieldname + ": \"")[1].split("\"")[0];
+    }
+    
     private ResponseChallenge parseChallenge(String challenge) {
         Gson gson = new Gson();
         String modifiedAnswer = challenge.replace("SVR GAME CHALLENGE", "");

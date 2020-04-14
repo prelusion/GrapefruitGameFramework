@@ -1,17 +1,12 @@
 package com.grapefruit.gamework.games.tictactoe;
 
 import com.grapefruit.gamework.framework.*;
-
-import java.util.HashMap;
-import java.util.List;
-
-import java.util.concurrent.Executors;
-import java.util.Map;
+import com.grapefruit.gamework.games.reversi.AI.oldWinningAI;
 
 public class TicTacToe extends Game {
 
     public TicTacToe(Board board, Player[] players, int turnTimeout) {
-        super(board, players, turnTimeout);
+        super(board, players, new oldWinningAI(board.getStrategicValues()), turnTimeout);
     }
 
     @Override

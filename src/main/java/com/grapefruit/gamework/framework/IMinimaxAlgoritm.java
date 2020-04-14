@@ -1,7 +1,8 @@
 package com.grapefruit.gamework.framework;
 
-public interface MinimaxAlgorithm {
+public interface IMinimaxAlgoritm {
     Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount);
     void startTimeout(int timeout);
     void destroy();
+    void setDepth(int depth);
 }

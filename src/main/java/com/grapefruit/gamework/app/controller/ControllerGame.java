@@ -11,9 +11,6 @@ import com.grapefruit.gamework.framework.*;
 import com.grapefruit.gamework.framework.network.Commands;
 import com.grapefruit.gamework.framework.network.Helpers;
 import com.grapefruit.gamework.framework.network.ServerManager;
-import com.grapefruit.gamework.games.reversi.AI.DelanoAI;
-import com.grapefruit.gamework.games.reversi.AI.JarnoAI;
-import com.grapefruit.gamework.games.reversi.AI.LeonAI;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.MapChangeListener;
@@ -58,7 +55,7 @@ public class ControllerGame implements IController {
     int offlineTurnTimeout = 60;
 
     /** Minimax Configuration */
-    MinimaxAlgorithm minimaxAlgorithm = new DelanoAI();
+    IMinimaxAlgoritm minimaxAlgorithm;
     int onlineTurnTimeout = 5;
 
     int onlineTurnTimeoutAI = (onlineTurnTimeout * 1000) - 1400;
@@ -131,8 +128,10 @@ public class ControllerGame implements IController {
     @Override
     public void setModel(IModel model) {
         this.model = (ModelGame) model;
-
         game = this.model.getGame();
+
+        this.minimaxAlgorithm = game.getMinimaxAlgorithm();
+
         serverManager = this.model.getServerManager();
 
         System.out.println("Started game session");

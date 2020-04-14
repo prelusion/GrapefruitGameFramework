@@ -1,6 +1,5 @@
 package com.grapefruit.gamework.framework;
 
-import com.grapefruit.gamework.games.reversi.AI.Helpers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 
@@ -40,6 +39,10 @@ public abstract class Board {
             Arrays.fill(row, 1);
         }
         initGrid();
+    }
+
+    public int[][] getStrategicValues() {
+        return strategicValues;
     }
 
     private void initGrid() {

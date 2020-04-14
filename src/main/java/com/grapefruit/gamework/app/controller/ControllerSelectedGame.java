@@ -114,10 +114,14 @@ public class ControllerSelectedGame implements IController {
 
         offlineButton.setOnAction(event -> setOfflineOptions());
 
-        buttons.add(tournamentButton);
-        buttons.add(autoChallengeButton);
+        if (model.getSelectedGame().getAssets().getDisplayName().equals("Reversi")) {
+            buttons.add(tournamentButton);
+            buttons.add(autoChallengeButton);
+        }
+
         buttons.add(onlineButton);
         buttons.add(offlineButton);
+
         layoutButtons(buttons);
     }
 
@@ -150,7 +154,10 @@ public class ControllerSelectedGame implements IController {
             );
         });
 
-        buttons.add(aiButton);
+        if (model.getSelectedGame().getAssets().getDisplayName().equals("Reversi")) {
+            buttons.add(aiButton);
+        }
+
         buttons.add(friendButton);
         layoutButtons(buttons);
     }

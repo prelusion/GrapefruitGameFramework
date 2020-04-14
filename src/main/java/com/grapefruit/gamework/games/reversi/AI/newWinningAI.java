@@ -166,12 +166,10 @@ public class newWinningAI extends AbstractMinimaxAlgorithm {
         }
 
         if (depth == 0) {
-            System.out.println("minimax");
             int combopoints = Helpers.comboPoints(board, currentMove, maximizingPlayer ? player : opponent);
             int edgepoints = Helpers.betweenCornerPoints(board, currentMove);
             int adjacentpoints = Helpers.adjacentValue(board, currentMove, maximizingPlayer ? opponent : player);
             int boardpieces = board.countPieces(player);
-            System.out.println("after extra points");
 
             if (maximizingPlayer) {
                 score += combopoints + edgepoints + adjacentpoints;

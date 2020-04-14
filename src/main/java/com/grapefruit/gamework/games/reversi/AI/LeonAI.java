@@ -49,8 +49,50 @@ public class LeonAI implements MinimaxAlgorithm {
         flag = false;
         currentDepth = 7;
         board.setStrategicValues(strategicValues);
+
+        revaluation(board);
+
         return realCalculateBestMove(board, player, opponent, turnCount, true, currentDepth);
     }
+
+    public void revaluation(Board board) {
+        Tile topleft = board.getTile(0, 0);
+        Tile topright = board.getTile(0, board.getBoardSize() - 1);
+        Tile bottomleft = board.getTile(board.getBoardSize() - 1, 0);
+        Tile bottomright = board.getTile(board.getBoardSize() - 1, board.getBoardSize() - 1);
+        if(topright.getPlayer() != null) {
+            if(topleft.getPlayer() != null && topleft.getStrategicValue() != 55) {
+                System.out.println("Its damn time Right");
+                board.changeValuesBetweenTiles(board.getTile(0, 0), "Right", 55);
+                return;
+            }
+        }
+
+        if(topleft.getPlayer() != null) {
+            if(bottomleft.getPlayer() != null && topleft.getStrategicValue() != 55) {
+                System.out.println("Its damn time Down");
+                board.changeValuesBetweenTiles(board.getTile(0, 0), "Down", 55);
+                return;
+            }
+        }
+
+        if(bottomright.getPlayer() != null) {
+            if(topright.getPlayer() != null && bottomright.getStrategicValue() != 55) {
+                System.out.println("Its damn time Top");
+                board.changeValuesBetweenTiles(board.getTile(board.getBoardSize() - 1, board.getBoardSize() - 1), "Top", 55);
+                return;
+            }
+        }
+
+        if(bottomleft.getPlayer() != null) {
+            if (bottomright.getPlayer() != null && bottomright.getStrategicValue() != 55) {
+                System.out.println("Its damn time Left");
+                board.changeValuesBetweenTiles(board.getTile(board.getBoardSize() - 1, board.getBoardSize() - 1), "Left", 55);
+                return;
+            }
+        }
+    }
+
 
     public static long getCurrentSeconds() {
         return System.currentTimeMillis() / 1000;
@@ -138,8 +180,8 @@ public class LeonAI implements MinimaxAlgorithm {
 
         if (depth < 50) {
             if (!timedOut) {
-                if (firstTurn && secondsLeft() >= 5) {
-                    if (secondsLeft() >= 8) {
+                if (firstTurn && secondsLeft() >= 3) {
+                    if (secondsLeft() >= 4) {
 //                        currentDepth++;
                     }
 

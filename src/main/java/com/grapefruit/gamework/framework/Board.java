@@ -1,5 +1,6 @@
 package com.grapefruit.gamework.framework;
 
+import com.grapefruit.gamework.games.reversi.AI.Helpers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 
@@ -146,6 +147,8 @@ public abstract class Board {
                 .noneMatch(player -> (getAvailableMoves(player).size()) > 0);
     }
 
+
+
     /**
      * Helper function to print the board.
      */
@@ -275,7 +278,6 @@ public abstract class Board {
                 if (grid[i][j].getPlayer() == null) amount++;
             }
         }
-        System.out.println("AMMMOOUUUNNNTTT " + amount);
         return amount;
     }
 

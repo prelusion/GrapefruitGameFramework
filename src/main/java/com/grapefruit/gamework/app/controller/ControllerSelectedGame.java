@@ -69,9 +69,15 @@ public class ControllerSelectedGame implements IController {
         Button onlineButton = new Button("Play online");
         Button offlineButton = new Button("Play offline");
 
+        tournamentButton.setMinWidth(150);
+        autoChallengeButton.setMinWidth(150);
+        onlineButton.setMinWidth(150);
+        offlineButton.setMinWidth(150);
+
         if (!model.isOnline()) {
             tournamentButton.setDisable(true);
             onlineButton.setDisable(true);
+            autoChallengeButton.setDisable(true);
         }
 
         ControllerSelectedGame controller = this;

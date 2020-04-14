@@ -155,7 +155,7 @@ public class ControllerSelectedGame implements IController {
                 String difficultyString = cb.getValue();
                 System.out.println("difficulty: " + difficultyString);
                 int difficulty = difficultyStringToInteger(difficultyString);
-                
+
                 Player playerBlack;
                 Player playerWhite;
 
@@ -189,8 +189,17 @@ public class ControllerSelectedGame implements IController {
         });
 
         friendButton.setOnAction(event -> {
-            Player playerBlack = new Player("Player 1", Colors.BLACK, true);
-            Player playerWhite = new Player("Player 2", Colors.WHITE, true);
+
+            Player playerBlack;
+            Player playerWhite;
+
+            if (GlobalRandom.getRandomGenerator().nextBoolean()) {
+                playerBlack = new Player("Player 1", Colors.BLACK, true);
+                playerWhite = new Player("Player 2", Colors.WHITE, true);
+            } else {
+                playerWhite = new Player("Player 1", Colors.BLACK, true);
+                playerBlack = new Player("Player 2", Colors.WHITE, true);
+            }
 
             Player[] players = new Player[]{playerBlack, playerWhite};
 

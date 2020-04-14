@@ -1,9 +1,7 @@
 package com.grapefruit.gamework.games.reversi;
 
-import com.grapefruit.gamework.framework.Board;
-import com.grapefruit.gamework.framework.Game;
-import com.grapefruit.gamework.framework.GameFactory;
-import com.grapefruit.gamework.framework.Player;
+import com.grapefruit.gamework.framework.*;
+import com.grapefruit.gamework.games.reversi.AI.newWinningAI;
 
 public class ReversiFactory extends GameFactory {
     static final int DEFAULT_REVERSI_BOARD_SIZE = 8;
@@ -15,10 +13,24 @@ public class ReversiFactory extends GameFactory {
         return this.create(players[0], players[1]);
     }
 
+    @Override
+    public Game create(Player[] players, int difficulty) {
+        return this.create(players[0], players[1], difficulty);
+    }
+
     public Reversi create(Player playerBlack, Player playerWhite) {
         Board board = new ReversiBoard(DEFAULT_REVERSI_BOARD_SIZE, STRATEGIC_VALUES);
         int turnTimeout = 60;
-        return new Reversi(board, playerBlack, playerWhite, turnTimeout);
+        MinimaxAlgorithm minimaxAlgorithm = new newWinningAI(board.getStrategicValues());
+        return new Reversi(board, playerBlack, playerWhite, turnTimeout, minimaxAlgorithm);
+    }
+
+    public Reversi create(Player playerBlack, Player playerWhite, int difficulty) {
+        Board board = new ReversiBoard(DEFAULT_REVERSI_BOARD_SIZE, STRATEGIC_VALUES);
+        int turnTimeout = 60;
+        MinimaxAlgorithm minimaxAlgorithm = new newWinningAI(board.getStrategicValues());
+        minimaxAlgorithm.setComplexity(difficulty);
+        return new Reversi(board, playerBlack, playerWhite, turnTimeout, minimaxAlgorithm);
     }
 
     private static int[][] getStrategicValues() {

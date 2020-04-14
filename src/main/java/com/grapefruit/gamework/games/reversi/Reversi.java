@@ -7,8 +7,8 @@ import java.util.List;
 
 public class Reversi extends Game {
 
-    public Reversi(Board board, Player playerBlack, Player playerWhite, int turnTimeout) {
-        super(board, new Player[]{playerBlack, playerWhite}, new newWinningAI(board.getStrategicValues()), turnTimeout);
+    public Reversi(Board board, Player playerBlack, Player playerWhite, int turnTimeout, MinimaxAlgorithm minimaxAlgorithm) {
+        super(board, new Player[]{playerBlack, playerWhite}, minimaxAlgorithm, turnTimeout);
         board.setPlayer(3, 3, playerWhite);
         board.setPlayer(4, 4, playerWhite);
         board.setPlayer(3, 4, playerBlack);

@@ -1,10 +1,11 @@
 package com.grapefruit.gamework.games.reversi.AI;
 
-import com.grapefruit.gamework.framework.Board;
 import com.grapefruit.gamework.framework.AbstractMinimaxAlgorithm;
+import com.grapefruit.gamework.framework.Board;
 import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.Tile;
 import com.grapefruit.gamework.games.reversi.ReversiBoard;
+
 import java.util.*;
 
 import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
@@ -83,7 +84,7 @@ public class newWinningAI extends AbstractMinimaxAlgorithm {
             if (entry.getValue() > bestScore) {
                 bestTile = entry.getKey();
                 bestScore = entry.getValue();
-            } else if (bestTile != null &&entry.getKey().getStrategicValue() > bestTile.getStrategicValue() &&
+            } else if (bestTile != null && entry.getKey().getStrategicValue() > bestTile.getStrategicValue() &&
                     entry.getValue() == bestScore) {
                 bestTile = entry.getKey();
                 bestScore = entry.getValue();
@@ -93,11 +94,11 @@ public class newWinningAI extends AbstractMinimaxAlgorithm {
         if (firstTurn && secondsLeft() > 8) {
             currentDepth++;
         }
-        if(!isTimedOut() && secondsLeft() >= 1 && depth <= board.emptyTiles() && dynamicDepth) {
+        if (!isTimedOut() && secondsLeft() >= 1 && depth <= board.emptyTiles() && dynamicDepth) {
             timeoutStack.push(isTimedOut());
             System.out.println(timeoutStack);
             Tile newTile = realCalculateBestMove(board, player, opponent, false, depth + 1);
-            if(!timeoutStack.isEmpty()) {
+            if (!timeoutStack.isEmpty()) {
                 if (newTile != null && !timeoutStack.pop()) {
                     bestTile = newTile;
                     timeoutStack.clear();
@@ -113,6 +114,7 @@ public class newWinningAI extends AbstractMinimaxAlgorithm {
 
 
     Map<Tile, Integer> tiles;
+
     private Map<Tile, Integer> threadedMiniMax(Board board, Player player, int depth) {
         threads = new ArrayList<>();
         List<Tile> moves = board.getAvailableMoves(player);
@@ -152,12 +154,12 @@ public class newWinningAI extends AbstractMinimaxAlgorithm {
             return score;
         }
 
-        if(board.emptyTiles() <= 0) {
+        if (board.emptyTiles() <= 0) {
             if (maximizingPlayer) {
-                int pieces =  board.countPieces(player);
-                if(pieces > 32) {
+                int pieces = board.countPieces(player);
+                if (pieces > 32) {
                     return score + 9999 + pieces;
-                } else if(pieces == 32) {
+                } else if (pieces == 32) {
                     return score + 100 + pieces;
                 } else {
                     return score - 9999 - pieces;
@@ -166,23 +168,21 @@ public class newWinningAI extends AbstractMinimaxAlgorithm {
         }
 
         if (depth == 0) {
-            System.out.println("minimax");
             int combopoints = Helpers.comboPoints(board, currentMove, maximizingPlayer ? player : opponent);
             int edgepoints = Helpers.betweenCornerPoints(board, currentMove);
             int adjacentpoints = Helpers.adjacentValue(board, currentMove, maximizingPlayer ? opponent : player);
             int boardpieces = board.countPieces(player);
-            System.out.println("after extra points");
 
             if (maximizingPlayer) {
                 score += combopoints + edgepoints + adjacentpoints;
-                if(turnCount > 44) {
+                if (turnCount > 44) {
                     return score + boardpieces * 3;
                 } else {
                     return score + boardpieces;
                 }
             } else {
                 score -= (combopoints + edgepoints + adjacentpoints);
-                if(turnCount > 44) {
+                if (turnCount > 44) {
                     return score - boardpieces * 3;
                 } else {
                     return score - boardpieces;

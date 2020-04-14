@@ -5,4 +5,5 @@ public interface MinimaxAlgorithm {
     void startTimeout(int timeout);
     void destroy();
     void setDepth(int depth);
+    void setComplexity(int complexity);
 }

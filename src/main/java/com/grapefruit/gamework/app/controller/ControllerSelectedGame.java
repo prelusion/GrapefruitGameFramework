@@ -136,6 +136,8 @@ public class ControllerSelectedGame implements IController {
         Button friendButton = new Button("Play vs friend");
 
         aiButton.setOnAction(event -> {
+            ArrayList<Control> control = new ArrayList<Control>();
+            Button startButton = new Button("Start");
 
             Label label = new Label("Difficulty");
             label.setStyle("-fx-text-fill: white; -fx-font-size: 20px;");
@@ -143,10 +145,12 @@ public class ControllerSelectedGame implements IController {
                     "Easy", "Medium", "Hard", "Extreme", "Impossible")
             );
             cb.getSelectionModel().selectFirst();
-            Button startButton = new Button("Start");
-            ArrayList<Control> control = new ArrayList<Control>();
-            control.add(label);
-            control.add(cb);
+
+            if (model.getSelectedGame().getAssets().getDisplayName().equals("Reversi")) {
+                control.add(label);
+                control.add(cb);
+            }
+
             control.add(startButton);
             layoutButtons(control);
 
@@ -198,10 +202,11 @@ public class ControllerSelectedGame implements IController {
             );
         });
 
-        if (model.getSelectedGame().getAssets().getDisplayName().equals("Reversi")) {
-            buttons.add(aiButton);
-        }
+//        if (model.getSelectedGame().getAssets().getDisplayName().equals("Reversi")) {
+//
+//        }
 
+        buttons.add(aiButton);
         buttons.add(friendButton);
         layoutButtons(buttons);
     }

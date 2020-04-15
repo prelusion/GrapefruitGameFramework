@@ -68,6 +68,7 @@ public class ServerConnection {
 
                     handleMessage(msg);
                 }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -255,25 +256,6 @@ public class ServerConnection {
         socket.close();
         in.close();
         out.close();
-
-//        stillconnected = false;
-//        boolean stillconnected = true;
-//        int i = 0;
-//        while (stillconnected || i > 5) {
-//            System.out.println("while loop");
-//            if (!listenerThread.isAlive() && !timer.isAlive()) {
-//                socket.close();
-//                in.close();
-//                out.close();
-//                stillconnected = false;
-//            }
-//
-//            try {
-//                Thread.sleep(500);
-//            } catch (InterruptedException ignored) {}
-//
-//            i++;
-//        }
     }
 
     /**

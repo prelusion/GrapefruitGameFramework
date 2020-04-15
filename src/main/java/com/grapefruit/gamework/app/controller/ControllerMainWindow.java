@@ -204,23 +204,7 @@ public class ControllerMainWindow implements IController {
             connectButton.setDisable(true);
             connectionStatus.setText("Connecting...");
             modelMainWindow.getServerManager().setConnectedName(userName.getText());
-            if (modelMainWindow.getServerManager() != null) {
-                modelMainWindow.getServerManager().connected.addListener(new ChangeListener<Boolean>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (oldValue != newValue) {
-                                    if (!newValue) {
-                                        onDisconnected();
-                                    }
-                                }
-                            }
-                        });
-                    }
-                });
-            }
+
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -237,14 +221,30 @@ public class ControllerMainWindow implements IController {
                                         connectionStatus.setText("Failed to login");
                                     });
                                 }
-                            } catch (InterruptedException ignored) {
-                            }
+                            } catch (InterruptedException ignored) {}
                         }).start();
 
                         modelMainWindow.getServerManager().queueCommand(Commands.login(userName.getText(), (success, args) -> {
+                            if (args != null) {
+                                for (String arg : args) System.out.println(arg);
+                            }
+
                             if (success) {
+
                                 loggedIn.set(true);
-                                Platform.runLater(() -> onConnected());
+                                Platform.runLater(() -> {
+                                    onConnected();
+                                    modelMainWindow.getServerManager().connected.setValue(true);
+                                });
+                            } else {
+                                loggedIn.set(true);
+                                Platform.runLater(() -> {
+                                    onDisconnected();
+                                    if (args != null) {
+                                        connectionStatus.setText(args[0]);
+                                    }
+                                });
+
                             }
 
                         }));
@@ -277,6 +277,7 @@ public class ControllerMainWindow implements IController {
                 public void handle(ActionEvent event) {
                     connectButton.setText("Disconnecting...");
                     connectionStatus.setFill(Color.BLACK);
+                    modelMainWindow.getServerManager().connected.setValue(false);
 
                     new Thread(() -> {
                         modelMainWindow.getServerManager().disconnect();

@@ -95,7 +95,7 @@ public class ServerManager {
             connection.connect(address);
             connected.setValue(true);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+//            System.out.println(e.getMessage());
             return false;
         }
         return true;

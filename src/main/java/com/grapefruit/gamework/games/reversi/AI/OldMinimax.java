@@ -106,7 +106,7 @@ public class OldMinimax extends AbstractMinimax {
             try {
                 thread.join();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+//                e.printStackTrace();
             }
         }
 

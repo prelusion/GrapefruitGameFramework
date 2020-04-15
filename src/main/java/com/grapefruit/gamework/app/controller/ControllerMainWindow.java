@@ -241,12 +241,26 @@ public class ControllerMainWindow implements IController {
                         }).start();
 
                         modelMainWindow.getServerManager().queueCommand(Commands.login(userName.getText(), (success, args) -> {
+                            if (args != null) {
+                                for (String arg : args) System.out.println(arg);
+                            }
+
                             if (success) {
+
                                 loggedIn.set(true);
                                 Platform.runLater(() -> {
                                     onConnected();
                                     modelMainWindow.getServerManager().connected.setValue(true);
                                 });
+                            } else {
+                                loggedIn.set(true);
+                                Platform.runLater(() -> {
+                                    onDisconnected();
+                                    if (args != null) {
+                                        connectionStatus.setText(args[0]);
+                                    }
+                                });
+
                             }
 
                         }));

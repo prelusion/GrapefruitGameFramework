@@ -11,18 +11,18 @@ import java.util.*;
 import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
 import static java.lang.Integer.*;
 
-public class newWinningAI extends AbstractMinimax {
+public class NewMinimax extends AbstractMinimax {
     private Player player;
     private Player opponent;
     private boolean timedOut = false;
     private int turnCount;
     private Random random = new Random();
 
-    public newWinningAI(int[][] strategicValues) {
+    public NewMinimax(int[][] strategicValues) {
         this(strategicValues, 9, true);
     }
 
-    public newWinningAI(int[][] strategicValues, int depth, boolean dynamicDepth) {
+    public NewMinimax(int[][] strategicValues, int depth, boolean dynamicDepth) {
         super(strategicValues, depth, dynamicDepth);
     }
 
@@ -84,7 +84,7 @@ public class newWinningAI extends AbstractMinimax {
         this.player = player;
         this.opponent = opponent;
 
-        if (firstTurn) {
+        if (firstTurn && dynamicDepth) {
             turnCountDecrease(depth);
         }
 
@@ -119,7 +119,6 @@ public class newWinningAI extends AbstractMinimax {
             currentDepth--;
         }
 
-//        timedOut = false;
         return bestTile;
     }
 

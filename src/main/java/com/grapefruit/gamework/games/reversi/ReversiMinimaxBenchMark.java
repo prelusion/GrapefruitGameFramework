@@ -4,7 +4,7 @@ import com.grapefruit.gamework.framework.*;
 
 import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
 
-public class ReversiMinimaxBenchMark implements BenchMark {
+public class ReversiMinimaxBenchMark implements Benchmark {
     public int turnTimeout;
     private Minimax minimax;
     private Board board;

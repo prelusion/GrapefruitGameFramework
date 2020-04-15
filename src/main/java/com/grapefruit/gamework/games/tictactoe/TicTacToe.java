@@ -1,12 +1,12 @@
 package com.grapefruit.gamework.games.tictactoe;
 
 import com.grapefruit.gamework.framework.*;
-import com.grapefruit.gamework.games.reversi.AI.oldWinningAI;
+import com.grapefruit.gamework.games.reversi.AI.OldMinimax;
 
 public class TicTacToe extends Game {
 
     public TicTacToe(Board board, Player[] players, int turnTimeout) {
-        super(board, players, new oldWinningAI(board.getStrategicValues()), turnTimeout);
+        super(board, players, new OldMinimax(board.getStrategicValues()), turnTimeout);
     }
 
     @Override

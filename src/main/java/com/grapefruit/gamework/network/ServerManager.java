@@ -231,7 +231,7 @@ public class ServerManager {
             connection.closeConnection();
             connected.setValue(false);
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         } finally {
             commandQueue.clear();
             challenges.clear();

@@ -70,7 +70,7 @@ public class ServerConnection {
                 }
 
             } catch (IOException e) {
-                e.printStackTrace();
+//                e.printStackTrace();
             }
         });
         listenerThread.start();
@@ -216,7 +216,7 @@ public class ServerConnection {
                 try {
                     result[i] = element.substring(1, element.length() - 1);
                 } catch (StringIndexOutOfBoundsException e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
                     Command command = manager.findByKeyword(keyword, true);
                     if (command != null && command.isSent()) {
                         manager.removeCommandFromQueue(command);

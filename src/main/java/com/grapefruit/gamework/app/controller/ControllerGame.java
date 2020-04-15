@@ -6,6 +6,7 @@ import com.grapefruit.gamework.app.model.ModelGame;
 import com.grapefruit.gamework.app.model.ModelGameEndDialog;
 import com.grapefruit.gamework.app.resources.AppSettings;
 import com.grapefruit.gamework.app.resources.ImageRegistry;
+import com.grapefruit.gamework.app.util.GlobalRandom;
 import com.grapefruit.gamework.app.util.ImageHelper;
 import com.grapefruit.gamework.app.view.templates.GameEndDialogWindow.GameEndDialogFactory;
 import com.grapefruit.gamework.framework.*;
@@ -601,27 +602,40 @@ public class ControllerGame implements IController {
             return;
         }
 
-        minimaxThread = new Thread(() -> {
-            int timeout = isFirstTurn ? onlineTurnTimeoutAIFirstTurn : onlineTurnTimeoutAI;
+        if (model.getAssets().getDisplayName().equals("Reversi")) {
+            minimaxThread = new Thread(() -> {
+                int timeout = isFirstTurn ? onlineTurnTimeoutAIFirstTurn : onlineTurnTimeoutAI;
 
-            minimaxAlgorithm.startTimeout(timeout);
-            Tile tile = minimaxAlgorithm.calculateBestMove(
-                    game.getBoard(),
-                    game.getCurrentPlayer(),
-                    game.getOpponentPlayer(),
-                    game.getTurnCount()
-            );
+                minimaxAlgorithm.startTimeout(timeout);
+                Tile tile = minimaxAlgorithm.calculateBestMove(
+                        game.getBoard(),
+                        game.getCurrentPlayer(),
+                        game.getOpponentPlayer(),
+                        game.getTurnCount()
+                );
 
-            isFirstTurn = false;
+                isFirstTurn = false;
 
-            if (isDestroyed()) {
-                return;
-            }
+                if (isDestroyed()) {
+                    return;
+                }
 
-            Platform.runLater(() -> onFinishAI(tile));
-        });
+                Platform.runLater(() -> onFinishAI(tile));
+            });
 
-        minimaxThread.start();
+            minimaxThread.start();
+        } else {
+            List<Tile> moves = game.getBoard().getAvailableMoves(game.getCurrentPlayer());
+            int idx = GlobalRandom.getRandomGenerator().nextInt(moves.size());
+
+            Platform.runLater(() -> {
+                if (moves.size() > 0) {
+                    onFinishAI(moves.get(idx));
+                } else {
+                    onFinishAI(null);
+                }
+            });
+        }
     }
 
     private void onFinishAI(Tile tile) {

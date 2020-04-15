@@ -9,11 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Tic tac toe board.
+ */
 public class TicTacToeBoard extends Board {
     /**
      * Constructor for making a new Board object.
      *
-     * @param boardSize
+     * @param boardSize the board size
      */
     public TicTacToeBoard(int boardSize) {
         super(boardSize);

@@ -10,9 +10,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Helpers.
+ */
 public class Helpers {
 
 
+    /**
+     * Combo points int.
+     *
+     * @param board  the board
+     * @param move   the move
+     * @param player the player
+     * @return the int
+     */
     public static int comboPoints(ReversiBoard board, Tile move, Player player) {
         boolean hasEdge = true;
 
@@ -46,6 +57,13 @@ public class Helpers {
         return hasEdge ? 35 : 0;
     }
 
+    /**
+     * Between corner points int.
+     *
+     * @param board the board
+     * @param move  the move
+     * @return the int
+     */
     public static int betweenCornerPoints(ReversiBoard board, Tile move) {
         String side = null;
         if (move.getRow() == board.top) {
@@ -118,6 +136,14 @@ public class Helpers {
     }
 
 
+    /**
+     * Adjacent value int.
+     *
+     * @param board    the board
+     * @param move     the move
+     * @param opponent the opponent
+     * @return the int
+     */
     public static int adjacentValue(ReversiBoard board, Tile move, Player opponent) {
         String side = null;
         if (move.getRow() == board.top) {
@@ -165,6 +191,17 @@ public class Helpers {
         return 0;
     }
 
+    /**
+     * Check adjecent boolean.
+     *
+     * @param board    the board
+     * @param row      the row
+     * @param col      the col
+     * @param dRow     the d row
+     * @param dCol     the d col
+     * @param opponent the opponent
+     * @return the boolean
+     */
     public static boolean checkAdjecent(Board board, int row, int col, int dRow, int dCol, Player opponent) {
         if (board.getPlayer(row, col) == null) {
             return false;
@@ -191,6 +228,13 @@ public class Helpers {
         return false;
     }
 
+    /**
+     * Is edge boolean.
+     *
+     * @param board the board
+     * @param tile  the tile
+     * @return the boolean
+     */
     public static boolean isEdge(ReversiBoard board, Tile tile) {
         return tile.getRow() == board.top || tile.getRow() == board.bottom ||
                 tile.getCol() == board.left || tile.getCol() == board.right;

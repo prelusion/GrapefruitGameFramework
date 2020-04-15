@@ -9,13 +9,34 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * The type Reversi board.
+ */
 public class ReversiBoard extends Board {
 
+    /**
+     * The Left.
+     */
     public int left = 0;
+    /**
+     * The Right.
+     */
     public int right = getBoardSize() - 1;
+    /**
+     * The Top.
+     */
     public int top = 0;
+    /**
+     * The Bottom.
+     */
     public int bottom = getBoardSize() - 1;
 
+    /**
+     * Instantiates a new Reversi board.
+     *
+     * @param boardSize       the board size
+     * @param strategicValues the strategic values
+     */
     public ReversiBoard(int boardSize, int[][] strategicValues) {
         super(boardSize, strategicValues);
     }
@@ -58,6 +79,12 @@ public class ReversiBoard extends Board {
         return validMoves;
     }
 
+    /**
+     * Gets direct neighbours.
+     *
+     * @param tile the tile
+     * @return the direct neighbours
+     */
     public HashSet<Tile> getDirectNeighbours(Tile tile) {
         HashSet<Tile> neighbours = new HashSet<>();
 
@@ -148,6 +175,11 @@ public class ReversiBoard extends Board {
         }
     }
 
+    /**
+     * Evaluate edges.
+     *
+     * @param player the player
+     */
     public void evaluateEdges(Player player) {
         boolean hasEdge = true;
         for (int i = 0; i < getBoardSize() - 1; i++) {

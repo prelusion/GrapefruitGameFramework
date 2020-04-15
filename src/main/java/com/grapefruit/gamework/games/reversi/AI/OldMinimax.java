@@ -7,19 +7,38 @@ import java.util.*;
 
 import static java.lang.Integer.*;
 
+/**
+ * The type Old minimax.
+ */
 public class OldMinimax extends AbstractMinimax {
     private Player player;
     private Player opponent;
     private boolean timedOut = false;
 
+    /**
+     * Instantiates a new Old minimax.
+     *
+     * @param strategicValues the strategic values
+     */
     public OldMinimax(int[][] strategicValues) {
         super(strategicValues, 7, false);
     }
 
+    /**
+     * Instantiates a new Old minimax.
+     *
+     * @param strategicValues the strategic values
+     * @param depth           the depth
+     */
     public OldMinimax(int[][] strategicValues, int depth) {
         super(strategicValues, depth, false);
     }
 
+    /**
+     * Sets dynamic depth.
+     *
+     * @param dynamicDepth the dynamic depth
+     */
     public void setDynamicDepth(boolean dynamicDepth) {
         this.dynamicDepth = dynamicDepth;
     }
@@ -42,6 +61,11 @@ public class OldMinimax extends AbstractMinimax {
         currentDepth = depth;
     }
 
+    /**
+     * Sets ai complexity.
+     *
+     * @param complexity the complexity
+     */
     public static void setAIComplexity(int complexity) {
     }
 
@@ -119,6 +143,17 @@ public class OldMinimax extends AbstractMinimax {
     }
 
 
+    /**
+     * Minimax int.
+     *
+     * @param depth            the depth
+     * @param board            the board
+     * @param score            the score
+     * @param alpha            the alpha
+     * @param beta             the beta
+     * @param maximizingPlayer the maximizing player
+     * @return the int
+     */
     public int minimax(int depth, Board board, int score, int alpha, int beta, boolean maximizingPlayer) {
         if (depth == 0 || timedOut) {
             return score + board.countPieces(player);

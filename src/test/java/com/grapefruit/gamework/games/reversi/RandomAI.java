@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import com.grapefruit.gamework.framework.Player;
+import com.grapefruit.gamework.games.reversi.AI.NewMinimax;
 
 public class RandomAI {
     /* AI vs AI */
@@ -15,7 +16,7 @@ public class RandomAI {
         Board board = new ReversiBoard(9, ReversiFactory.STRATEGIC_VALUES);
         Player playerWhite = new Player("White", Colors.WHITE, true);
         Player playerBlack = new Player("Black", Colors.BLACK, true);
-        Game game = new Reversi(board, playerWhite, playerBlack, turnTimeout);
+        Game game = new Reversi(board, playerWhite, playerBlack, turnTimeout, new NewMinimax(ReversiFactory.STRATEGIC_VALUES));
 
         board.printBoard();
 

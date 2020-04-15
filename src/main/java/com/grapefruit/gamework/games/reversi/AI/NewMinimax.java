@@ -11,6 +11,9 @@ import java.util.*;
 import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
 import static java.lang.Integer.*;
 
+/**
+ * The type New minimax.
+ */
 public class NewMinimax extends AbstractMinimax {
     private Player player;
     private Player opponent;
@@ -18,10 +21,22 @@ public class NewMinimax extends AbstractMinimax {
     private int turnCount;
     private Random random = new Random();
 
+    /**
+     * Instantiates a new New minimax.
+     *
+     * @param strategicValues the strategic values
+     */
     public NewMinimax(int[][] strategicValues) {
         this(strategicValues, 9, true);
     }
 
+    /**
+     * Instantiates a new New minimax.
+     *
+     * @param strategicValues the strategic values
+     * @param depth           the depth
+     * @param dynamicDepth    the dynamic depth
+     */
     public NewMinimax(int[][] strategicValues, int depth, boolean dynamicDepth) {
         super(strategicValues, depth, dynamicDepth);
     }
@@ -62,6 +77,11 @@ public class NewMinimax extends AbstractMinimax {
         return tile;
     }
 
+    /**
+     * Turn count decrease.
+     *
+     * @param depth the depth
+     */
     public void turnCountDecrease(int depth) {
         if (currentDepth >= 8 && turnCount < 7) {
             currentDepth--;
@@ -123,6 +143,9 @@ public class NewMinimax extends AbstractMinimax {
     }
 
 
+    /**
+     * The Tiles.
+     */
     Map<Tile, Integer> tiles;
 
     private Map<Tile, Integer> threadedMiniMax(Board board, Player player, int depth) {
@@ -159,6 +182,18 @@ public class NewMinimax extends AbstractMinimax {
         return tiles;
     }
 
+    /**
+     * Minimax int.
+     *
+     * @param depth            the depth
+     * @param board            the board
+     * @param currentMove      the current move
+     * @param score            the score
+     * @param alpha            the alpha
+     * @param beta             the beta
+     * @param maximizingPlayer the maximizing player
+     * @return the int
+     */
     public int minimax(int depth, ReversiBoard board, Tile currentMove, int score, int alpha, int beta, boolean maximizingPlayer) {
         if (isTimedOut()) {
             return score;

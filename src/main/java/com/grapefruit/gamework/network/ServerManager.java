@@ -1,4 +1,4 @@
-package com.grapefruit.gamework.framework.network;
+package com.grapefruit.gamework.network;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -161,20 +161,18 @@ public class ServerManager {
      *
      * @return Command the command.
      */
-    public synchronized Command getFirstUnsent() {
+    public Command getFirstUnsent() {
         Iterator<Command> i = commandQueue.iterator();
-        while (i.hasNext()) {
-            try {
-                Command command = i.next();
-                if (!command.isSent()) {
-                    return command;
-                }
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-                return null;
-            }
 
+        while (i.hasNext()) {
+            Command command = i.next();
+            if (command == null) break;
+
+            if (!command.isSent()) {
+                return command;
+            }
         }
+
         return null;
     }
 
@@ -197,11 +195,11 @@ public class ServerManager {
     }
 
     public void addChallenge(ServerConnection.ResponseChallenge challenge) {
-        if (challenge.getStatus() == ServerConnection.ChallengeStatus.CHALLENGE_SENT){
+        if (challenge.getStatus() == ServerConnection.ChallengeStatus.CHALLENGE_SENT) {
             Iterator<ServerConnection.ResponseChallenge> iterator = challenges.iterator();
-            while (iterator.hasNext()){
+            while (iterator.hasNext()) {
                 ServerConnection.ResponseChallenge challenge1 = iterator.next();
-                if (challenge1.getStatus() == ServerConnection.ChallengeStatus.CHALLENGE_SENT){
+                if (challenge1.getStatus() == ServerConnection.ChallengeStatus.CHALLENGE_SENT) {
                     iterator.remove();
                 }
             }
@@ -234,6 +232,9 @@ public class ServerManager {
             connected.setValue(false);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            commandQueue.clear();
+            challenges.clear();
         }
     }
 

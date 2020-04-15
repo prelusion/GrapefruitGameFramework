@@ -2,7 +2,7 @@ package com.grapefruit.gamework.app.model;
 
 import com.grapefruit.gamework.framework.Assets;
 import com.grapefruit.gamework.framework.Game;
-import com.grapefruit.gamework.framework.network.ServerManager;
+import com.grapefruit.gamework.network.ServerManager;
 
 public class ModelGame implements IModel {
 
@@ -13,7 +13,7 @@ public class ModelGame implements IModel {
     private boolean autoChallenge;
 
 
-    public ModelGame(Game game, Assets assets, ServerManager manager, boolean isTournament, boolean autoChallenge){
+    public ModelGame(Game game, Assets assets, ServerManager manager, boolean isTournament, boolean autoChallenge) {
         this.game = game;
         this.assets = assets;
         this.serverManager = manager;
@@ -22,14 +22,13 @@ public class ModelGame implements IModel {
     }
 
     /**
-     *
      * @return returns Game
      */
     public Game getGame() {
         return game;
     }
 
-    public Assets getAssets(){
+    public Assets getAssets() {
         return assets;
     }
 
@@ -41,7 +40,15 @@ public class ModelGame implements IModel {
         return serverManager != null;
     }
 
-    public boolean isTournament() { return isTournament; };
+    public boolean isTournament() {
+        return isTournament;
+    }
 
-    public boolean isAutoChallenge() { return autoChallenge; };
+    ;
+
+    public boolean isAutoChallenge() {
+        return autoChallenge;
+    }
+
+    ;
 }

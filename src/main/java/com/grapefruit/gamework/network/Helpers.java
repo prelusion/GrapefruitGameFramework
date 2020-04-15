@@ -1,4 +1,4 @@
-package com.grapefruit.gamework.framework.network;
+package com.grapefruit.gamework.network;
 
 public class Helpers {
     public static int[] convertMoveString(String move, int boardSize) {

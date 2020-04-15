@@ -2,18 +2,24 @@ package com.grapefruit.gamework.games.reversi;
 
 import com.grapefruit.gamework.framework.*;
 
-import java.util.HashMap;
 import java.util.List;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import java.util.Map;
+/**
+ * The type Reversi.
+ */
 public class Reversi extends Game {
 
-    public Reversi(Board board, Player playerBlack, Player playerWhite, int turnTimeout) {
-        super(board, new Player[]{playerBlack, playerWhite}, turnTimeout);
+    /**
+     * Instantiates a new Reversi.
+     *
+     * @param board            the board
+     * @param playerBlack      the player black
+     * @param playerWhite      the player white
+     * @param turnTimeout      the turn timeout
+     * @param minimaxAlgorithm the minimax algorithm
+     */
+    public Reversi(Board board, Player playerBlack, Player playerWhite, int turnTimeout, Minimax minimaxAlgorithm) {
+        super(board, new Player[]{playerBlack, playerWhite}, minimaxAlgorithm, turnTimeout);
         board.setPlayer(3, 3, playerWhite);
         board.setPlayer(4, 4, playerWhite);
         board.setPlayer(3, 4, playerBlack);

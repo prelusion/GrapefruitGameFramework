@@ -3,7 +3,6 @@ package com.grapefruit.gamework.games.reversi.AI;
 import com.grapefruit.gamework.framework.Board;
 import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.Tile;
-import com.grapefruit.gamework.games.reversi.Reversi;
 import com.grapefruit.gamework.games.reversi.ReversiBoard;
 
 import java.util.ArrayList;
@@ -11,9 +10,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Helpers.
+ */
 public class Helpers {
 
 
+    /**
+     * Combo points int.
+     *
+     * @param board  the board
+     * @param move   the move
+     * @param player the player
+     * @return the int
+     */
     public static int comboPoints(ReversiBoard board, Tile move, Player player) {
         boolean hasEdge = true;
 
@@ -47,6 +57,13 @@ public class Helpers {
         return hasEdge ? 35 : 0;
     }
 
+    /**
+     * Between corner points int.
+     *
+     * @param board the board
+     * @param move  the move
+     * @return the int
+     */
     public static int betweenCornerPoints(ReversiBoard board, Tile move) {
         String side = null;
         if (move.getRow() == board.top) {
@@ -59,14 +76,14 @@ public class Helpers {
             side = "Right";
         }
 
-        if(side == null) {
+        if (side == null) {
             return 0;
         }
 
         boolean hasEdge = true;
         switch (side) {
             case "Top":
-                if(board.getPlayer(board.top, board.left) != null && board.getPlayer(board.top, board.right) != null) {
+                if (board.getPlayer(board.top, board.left) != null && board.getPlayer(board.top, board.right) != null) {
                     for (int i = board.left; i < board.right; i++) {
                         if (board.getPlayer(board.top, i) == null) {
                             hasEdge = false;
@@ -77,7 +94,7 @@ public class Helpers {
                 }
                 break;
             case "Right":
-                if(board.getPlayer(board.top, board.right) != null && board.getPlayer(board.bottom, board.right) != null) {
+                if (board.getPlayer(board.top, board.right) != null && board.getPlayer(board.bottom, board.right) != null) {
                     for (int i = board.top; i < board.bottom; i++) {
                         if (board.getPlayer(i, board.right) == null) {
                             hasEdge = false;
@@ -88,7 +105,7 @@ public class Helpers {
                 }
                 break;
             case "Down":
-                if(board.getPlayer(board.bottom, board.left) != null && board.getPlayer(board.bottom, board.right) != null) {
+                if (board.getPlayer(board.bottom, board.left) != null && board.getPlayer(board.bottom, board.right) != null) {
                     for (int i = board.left; i < board.right; i++) {
                         if (board.getPlayer(board.bottom, i) == null) {
                             hasEdge = false;
@@ -99,7 +116,7 @@ public class Helpers {
                 }
                 break;
             case "Left":
-                if(board.getPlayer(board.top, board.left) != null && board.getPlayer(board.bottom, board.left) != null) {
+                if (board.getPlayer(board.top, board.left) != null && board.getPlayer(board.bottom, board.left) != null) {
                     for (int i = board.top; i < board.bottom; i++) {
                         if (board.getPlayer(i, board.left) == null) {
                             hasEdge = false;
@@ -112,13 +129,21 @@ public class Helpers {
 
         }
 
-        if(hasEdge) {
+        if (hasEdge) {
             return 35;
         }
         return 0;
     }
 
 
+    /**
+     * Adjacent value int.
+     *
+     * @param board    the board
+     * @param move     the move
+     * @param opponent the opponent
+     * @return the int
+     */
     public static int adjacentValue(ReversiBoard board, Tile move, Player opponent) {
         String side = null;
         if (move.getRow() == board.top) {
@@ -131,30 +156,30 @@ public class Helpers {
             side = "Right";
         }
 
-        if(side == null) {
+        if (side == null) {
             return 0;
         }
 
         boolean isGoodPosition = false;
-        if(!isCorner(board, move)) {
+        if (!isCorner(board, move)) {
             switch (side) {
                 case "Top":
-                    if (checkAdjecent(board, move.getRow(), move.getCol(), board.top, -1, opponent) && checkAdjecent(board, move.getRow(), move.getCol(), board.top,  1, opponent)) {
+                    if (checkAdjecent(board, move.getRow(), move.getCol(), board.top, -1, opponent) && checkAdjecent(board, move.getRow(), move.getCol(), board.top, 1, opponent)) {
                         isGoodPosition = true;
                     }
                     break;
                 case "Right":
-                    if (checkAdjecent(board, move.getRow(), move.getCol(), -1, board.right, opponent) && checkAdjecent(board, move.getRow(), move.getCol(), 1,  board.right, opponent)) {
+                    if (checkAdjecent(board, move.getRow(), move.getCol(), -1, board.right, opponent) && checkAdjecent(board, move.getRow(), move.getCol(), 1, board.right, opponent)) {
                         isGoodPosition = true;
                     }
                     break;
                 case "Down":
-                    if (checkAdjecent(board, move.getRow(), move.getCol(), board.bottom, -1, opponent) && checkAdjecent(board, move.getRow(), move.getCol(), board.bottom,  1, opponent)) {
+                    if (checkAdjecent(board, move.getRow(), move.getCol(), board.bottom, -1, opponent) && checkAdjecent(board, move.getRow(), move.getCol(), board.bottom, 1, opponent)) {
                         isGoodPosition = true;
                     }
                     break;
                 case "Left":
-                    if (checkAdjecent(board, move.getRow(), move.getCol(), -1, board.left, opponent) && checkAdjecent(board, move.getRow(), move.getCol(), 1,  board.left, opponent)) {
+                    if (checkAdjecent(board, move.getRow(), move.getCol(), -1, board.left, opponent) && checkAdjecent(board, move.getRow(), move.getCol(), 1, board.left, opponent)) {
                         isGoodPosition = true;
                     }
                     break;
@@ -166,8 +191,19 @@ public class Helpers {
         return 0;
     }
 
+    /**
+     * Check adjecent boolean.
+     *
+     * @param board    the board
+     * @param row      the row
+     * @param col      the col
+     * @param dRow     the d row
+     * @param dCol     the d col
+     * @param opponent the opponent
+     * @return the boolean
+     */
     public static boolean checkAdjecent(Board board, int row, int col, int dRow, int dCol, Player opponent) {
-        if(board.getPlayer(row, col) == null) {
+        if (board.getPlayer(row, col) == null) {
             return false;
         } else if (board.getPlayer(row, col) != opponent && !isCorner(board, board.getTile(row, col))) {
             return checkAdjecent(board, row + dRow, col + dCol, dRow, dCol, opponent);
@@ -177,7 +213,6 @@ public class Helpers {
             return false;
         }
     }
-
 
 
     private static boolean isCorner(Board board, Tile tile) {
@@ -193,6 +228,13 @@ public class Helpers {
         return false;
     }
 
+    /**
+     * Is edge boolean.
+     *
+     * @param board the board
+     * @param tile  the tile
+     * @return the boolean
+     */
     public static boolean isEdge(ReversiBoard board, Tile tile) {
         return tile.getRow() == board.top || tile.getRow() == board.bottom ||
                 tile.getCol() == board.left || tile.getCol() == board.right;
@@ -211,7 +253,7 @@ public class Helpers {
                 bottomEdge.add(tile);
             } else if (tile.getCol() == 0) {
                 leftEdge.add(tile);
-            }  else if (tile.getCol() == board.getBoardSize() - 1) {
+            } else if (tile.getCol() == board.getBoardSize() - 1) {
                 rightEdge.add(tile);
             }
         }
@@ -224,5 +266,4 @@ public class Helpers {
 
         return map;
     }
-
 }

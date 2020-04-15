@@ -1,7 +1,6 @@
 package com.grapefruit.gamework.app.controller;
 
 import com.grapefruit.gamework.app.model.IModel;
-import com.grapefruit.gamework.app.model.ModelSettingsWindow;
 import com.grapefruit.gamework.app.model.ModelTableSetting;
 import com.grapefruit.gamework.app.resources.AppSettings;
 import javafx.beans.property.SimpleStringProperty;
@@ -15,9 +14,9 @@ import javafx.scene.text.Text;
 import org.apache.commons.validator.routines.InetAddressValidator;
 
 import java.net.URL;
-import java.util.*;
+import java.util.ResourceBundle;
 
-public class ControllerTableSetting implements IController{
+public class ControllerTableSetting implements IController {
 
     @FXML
     private Text keyName;
@@ -51,15 +50,13 @@ public class ControllerTableSetting implements IController{
     /**
      * Required for FXML
      */
-    public ControllerTableSetting()
-    {
+    public ControllerTableSetting() {
     }
 
     /**
      * Required for FXML
      */
-    private void initialize()
-    {
+    private void initialize() {
     }
 
     /**
@@ -76,17 +73,17 @@ public class ControllerTableSetting implements IController{
     /**
      * Updates the TableView and fetches (new) values from the model.
      */
-    private void updateTable(){
+    private void updateTable() {
         TableColumn keys = new TableColumn(model.getKeyName());
         TableColumn values = new TableColumn(model.getValueName());
 
         final ObservableList<Setting> settings = FXCollections.observableArrayList();
-        for (AppSettings.Server server: model.getSettings().getServers()){
+        for (AppSettings.Server server : model.getSettings().getServers()) {
             settings.add(new Setting(server.getName(), server.getIp()));
         }
 
-        keys.setCellValueFactory(new PropertyValueFactory<Setting,String>("key"));
-        values.setCellValueFactory(new PropertyValueFactory<Setting,String>("value"));
+        keys.setCellValueFactory(new PropertyValueFactory<Setting, String>("key"));
+        values.setCellValueFactory(new PropertyValueFactory<Setting, String>("value"));
 
         settingTable.getItems().removeAll(settingTable.getItems());
         settingTable.getColumns().removeAll(settingTable.getColumns());
@@ -111,12 +108,12 @@ public class ControllerTableSetting implements IController{
      * Removes currently selected setting.
      */
     @FXML
-    private void onRemoveSetting(){
+    private void onRemoveSetting() {
         Integer selectedIndex = settingTable.getSelectionModel().getSelectedIndex();
 
-        if (selectedIndex != null){
+        if (selectedIndex != null) {
             if (model.getPreset() == ModelTableSetting.TableSettingPreset.SERVERS)
-            model.getSettings().removeServer(model.getSettings().getServers().get(selectedIndex));
+                model.getSettings().removeServer(model.getSettings().getServers().get(selectedIndex));
             updateTable();
         }
     }
@@ -124,8 +121,8 @@ public class ControllerTableSetting implements IController{
     /**
      * Checks if a setting is selected that can be removed in order to disable or enable the remove button.
      */
-    private void checkRemoveButton(){
-        if (settingTable.getSelectionModel().getSelectedCells().size() > 0){
+    private void checkRemoveButton() {
+        if (settingTable.getSelectionModel().getSelectedCells().size() > 0) {
             removeButton.setDisable(false);
         } else {
             removeButton.setDisable(true);
@@ -137,20 +134,20 @@ public class ControllerTableSetting implements IController{
      * Server object is built from input values.
      */
     @FXML
-    private void onAddServer(){
+    private void onAddServer() {
         InetAddressValidator validator = new InetAddressValidator();
         String errorInfo = null;
 
 
-        if (validator.isValid(valueInput.getText())){
+        if (validator.isValid(valueInput.getText())) {
             String name = keyInput.getText();
-            if (name == null){
+            if (name == null) {
                 errorInfo = "Please enter a name.";
             } else {
-                if (name.equals("")){
+                if (name.equals("")) {
                     errorInfo = "Please enter a name.";
                 } else {
-                    if (name.length() > 20){
+                    if (name.length() > 20) {
                         errorInfo = "Please enter a name shorter than 20 characters.";
                     }
                 }
@@ -159,7 +156,7 @@ public class ControllerTableSetting implements IController{
             errorInfo = "Please enter a valid IP adress";
         }
 
-        if (errorInfo == null){
+        if (errorInfo == null) {
             model.getSettings().addServer(new AppSettings.Server(keyInput.getText(), valueInput.getText()));
             valueInput.setText("");
             keyInput.setText("");

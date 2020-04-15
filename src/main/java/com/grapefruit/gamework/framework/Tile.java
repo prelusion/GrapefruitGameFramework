@@ -1,5 +1,8 @@
 package com.grapefruit.gamework.framework;
 
+/**
+ * The type Tile.
+ */
 public class Tile {
 
     /**
@@ -25,9 +28,9 @@ public class Tile {
     /**
      * Constructor of making an GameSession
      *
-     * @param row, gives the tile grid[x][] position from the board.
-     * @param col, gives the tile grid[][y] position from the board.
-     * @param strategicValue, is the given strategicValue of the Tile.
+     * @param row            the row
+     * @param col            the col
+     * @param strategicValue the strategic value
      */
     public Tile(int row, int col, int strategicValue) {
         this.row = row;
@@ -35,12 +38,22 @@ public class Tile {
         this.strategicValue = strategicValue;
     }
 
+    /**
+     * Instantiates a new Tile.
+     *
+     * @param row            the row
+     * @param col            the col
+     * @param strategicValue the strategic value
+     * @param player         the player
+     */
     public Tile(int row, int col, int strategicValue, Player player) {
         this(row, col, strategicValue);
         this.player = player;
     }
 
     /**
+     * Gets player.
+     *
      * @return Player, player of piece.
      */
     public Player getPlayer() {
@@ -48,6 +61,9 @@ public class Tile {
     }
 
     /**
+     * Sets player.
+     *
+     * @param player the player
      * @return Player, player of piece.
      */
     public void setPlayer(Player player) {
@@ -55,6 +71,8 @@ public class Tile {
     }
 
     /**
+     * Gets row.
+     *
      * @return int, grid[x](row) position of tile.
      */
     public int getRow() {
@@ -62,6 +80,8 @@ public class Tile {
     }
 
     /**
+     * Gets col.
+     *
      * @return int, grid[y](column) position of tile.
      */
     public int getCol() {
@@ -69,6 +89,8 @@ public class Tile {
     }
 
     /**
+     * Gets strategic value.
+     *
      * @return int, strategicValue of the tile.
      */
     public int getStrategicValue() {
@@ -76,6 +98,9 @@ public class Tile {
     }
 
     /**
+     * Sets strategic value.
+     *
+     * @param strategicValue the strategic value
      * @return int, strategicValue of the tile.
      */
     public void setStrategicValue(int strategicValue) {

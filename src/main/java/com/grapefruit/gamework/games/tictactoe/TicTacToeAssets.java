@@ -5,9 +5,18 @@ import com.grapefruit.gamework.framework.Assets;
 import com.grapefruit.gamework.framework.Colors;
 import javafx.scene.image.Image;
 
+/**
+ * The type Tic tac toe assets.
+ */
 public class TicTacToeAssets extends Assets {
 
+    /**
+     * The constant PIECE_BLACK.
+     */
     public static Image PIECE_BLACK = ImageRegistry.TICTACTOE_GAME_PIECE_BLACK;
+    /**
+     * The constant PIECE_WHITE.
+     */
     public static Image PIECE_WHITE = ImageRegistry.TICTACTOE_GAME_PIECE_WHITE;
     private static Image ICON = ImageRegistry.GAME_ICON_TICTACTOE;
     private static String DISPLAYNAME = "TicTacToe";

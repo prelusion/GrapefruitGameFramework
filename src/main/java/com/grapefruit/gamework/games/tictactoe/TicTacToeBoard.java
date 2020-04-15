@@ -2,18 +2,21 @@ package com.grapefruit.gamework.games.tictactoe;
 
 import com.grapefruit.gamework.framework.Board;
 import com.grapefruit.gamework.framework.Helpers;
-import com.grapefruit.gamework.framework.Tile;
 import com.grapefruit.gamework.framework.Player;
+import com.grapefruit.gamework.framework.Tile;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Tic tac toe board.
+ */
 public class TicTacToeBoard extends Board {
     /**
      * Constructor for making a new Board object.
      *
-     * @param boardSize
+     * @param boardSize the board size
      */
     public TicTacToeBoard(int boardSize) {
         super(boardSize);
@@ -46,7 +49,7 @@ public class TicTacToeBoard extends Board {
 
     @Override
     public void calculateScores(Player[] players) {
-        for (Player player: players){
+        for (Player player : players) {
             scores.put(player, Helpers.countPiecesForPlayer(this, player));
         }
     }

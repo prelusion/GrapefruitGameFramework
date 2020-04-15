@@ -1,5 +1,8 @@
 package com.grapefruit.gamework.framework;
 
+/**
+ * The type Player.
+ */
 public class Player {
 
     private String name;
@@ -7,16 +10,37 @@ public class Player {
     private boolean isLocal = false;
     private boolean isAI = false;
 
+    /**
+     * Instantiates a new Player.
+     *
+     * @param name  the name
+     * @param color the color
+     */
     public Player(String name, Colors color) {
         this.name = name;
         this.color = color;
     }
 
+    /**
+     * Instantiates a new Player.
+     *
+     * @param name    the name
+     * @param color   the color
+     * @param isLocal the is local
+     */
     public Player(String name, Colors color, boolean isLocal) {
         this(name, color);
         this.isLocal = isLocal;
     }
 
+    /**
+     * Instantiates a new Player.
+     *
+     * @param name    the name
+     * @param color   the color
+     * @param isLocal the is local
+     * @param isAI    the is ai
+     */
     public Player(String name, Colors color, boolean isLocal, boolean isAI) {
         this(name, color, isLocal);
         this.isAI = isAI;
@@ -24,7 +48,8 @@ public class Player {
 
     /**
      * Get name of player.
-     * @return name
+     *
+     * @return name name
      */
     public String getName() {
         return name;
@@ -32,7 +57,8 @@ public class Player {
 
     /**
      * Get color of player.
-     * @return color
+     *
+     * @return color color
      */
     public Colors getColor() {
         return color;
@@ -42,10 +68,20 @@ public class Player {
         return color.toString();
     }
 
+    /**
+     * Is local boolean.
+     *
+     * @return the boolean
+     */
     public boolean isLocal() {
         return isLocal;
     }
 
+    /**
+     * Is ai boolean.
+     *
+     * @return the boolean
+     */
     public boolean isAI() {
         return isAI;
     }

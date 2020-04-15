@@ -204,23 +204,7 @@ public class ControllerMainWindow implements IController {
             connectButton.setDisable(true);
             connectionStatus.setText("Connecting...");
             modelMainWindow.getServerManager().setConnectedName(userName.getText());
-//            if (modelMainWindow.getServerManager() != null) {
-//                modelMainWindow.getServerManager().connected.addListener(new ChangeListener<Boolean>() {
-//                    @Override
-//                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-//                        Platform.runLater(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                if (oldValue != newValue) {
-//                                    if (!newValue) {
-//                                        onDisconnected();
-//                                    }
-//                                }
-//                            }
-//                        });
-//                    }
-//                });
-//            }
+
             new Thread(new Runnable() {
                 @Override
                 public void run() {

@@ -137,7 +137,9 @@ public class ControllerGame implements IController {
         minimaxAlgorithm = game.getMinimaxAlgorithm();
         serverManager = this.model.getServerManager();
 
-        setOnlineTimeout(AppSettings.getSettings().getTimeout());
+        if (this.model.isOnlineGame()) {
+            setOnlineTimeout(AppSettings.getSettings().getTimeout());
+        }
 
         GameEndDialogFactory.destroyPreviousDialogIfExists();
 

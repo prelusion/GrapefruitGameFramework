@@ -106,7 +106,7 @@ public class ServerManager {
      *
      * @param command Command the command
      */
-    synchronized public void queueCommand(Command command) {
+    public void queueCommand(Command command) {
         commandQueue.add(command);
         if (!sending) {
             connection.startSending();
@@ -122,7 +122,7 @@ public class ServerManager {
      * @param isConfirmed  boolean is confirmed.
      * @return Command the command.
      */
-    synchronized public Command findFirstFittingCommand(ResponseType responseType, boolean isConfirmed) {
+    public Command findFirstFittingCommand(ResponseType responseType, boolean isConfirmed) {
         for (Command command : commandQueue) {
             if (command.getResponseType() == responseType && command.isConfirmed() == isConfirmed) {
                 return command;
@@ -131,7 +131,7 @@ public class ServerManager {
         return null;
     }
 
-    synchronized public Command findByKeyword(String keyword, boolean isConfirmed) {
+    public Command findByKeyword(String keyword, boolean isConfirmed) {
         for (Command command : commandQueue) {
             String commandKeyword = command.getCommandString();
 
@@ -147,7 +147,7 @@ public class ServerManager {
      *
      * @return Command the command.
      */
-    synchronized public Command getFirstUnconfirmed() {
+    public Command getFirstUnconfirmed() {
         for (Command command : commandQueue) {
             if (!command.isConfirmed()) {
                 return command;
@@ -161,8 +161,11 @@ public class ServerManager {
      *
      * @return Command the command.
      */
-    public synchronized Command getFirstUnsent() {
-        for (Command command : commandQueue) {
+    public Command getFirstUnsent() {
+        Iterator<Command> i = commandQueue.iterator();
+
+        while (i.hasNext()) {
+            Command command = i.next();
             if (command == null) break;
 
             if (!command.isSent()) {
@@ -178,7 +181,7 @@ public class ServerManager {
      *
      * @param command Command the command to be removed.
      */
-    synchronized public void removeCommandFromQueue(Command command) {
+    public void removeCommandFromQueue(Command command) {
         commandQueue.remove(command);
     }
 
@@ -187,7 +190,7 @@ public class ServerManager {
      *
      * @return the boolean
      */
-    synchronized public boolean commandsInQueue() {
+    public boolean commandsInQueue() {
         return commandQueue.size() > 0;
     }
 

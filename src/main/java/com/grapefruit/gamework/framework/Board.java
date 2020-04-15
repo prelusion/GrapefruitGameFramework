@@ -10,7 +10,7 @@ import java.util.Map;
 
 public abstract class Board {
 
-    protected static final int[][] relativeNeighborGrid = new int[][] {
+    protected static final int[][] relativeNeighborGrid = new int[][]{
             {-1, -1}, {-1, 0}, {-1, 1},
             {0, -1}, {0, 1},
             {1, -1}, {1, 0}, {1, 1},
@@ -151,7 +151,6 @@ public abstract class Board {
     }
 
 
-
     /**
      * Helper function to print the board.
      */
@@ -200,6 +199,7 @@ public abstract class Board {
 
     /**
      * Helper function to print available moves for a player.
+     *
      * @param player
      */
     public void printAvailableMoves(Player player) {

@@ -1,6 +1,6 @@
 package com.grapefruit.gamework.games.reversi.AI;
 
-import com.grapefruit.gamework.framework.AbstractMinimaxAlgorithm;
+import com.grapefruit.gamework.framework.AbstractMinimax;
 import com.grapefruit.gamework.framework.Board;
 import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.Tile;
@@ -11,7 +11,7 @@ import java.util.*;
 import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
 import static java.lang.Integer.*;
 
-public class newWinningAI extends AbstractMinimaxAlgorithm {
+public class newWinningAI extends AbstractMinimax {
     private Player player;
     private Player opponent;
     private boolean timedOut = false;

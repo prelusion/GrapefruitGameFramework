@@ -68,13 +68,8 @@ public class ControllerLobbyBrowser implements IController {
     public void setupWidgets() {
         setupTable();
 
-        System.out.println("game display name: " + model.getSelectedGame().getAssets().getDisplayName());
         if (!model.getSelectedGame().getAssets().getDisplayName().equals("Reversi")) {
-            System.out.println("ai radio button false");
             aiRadioButton.setVisible(false);
-            aiRadioButton.setSelected(false);
-        } else {
-            aiRadioButton.setSelected(false);
         }
 
         Timeline timeline = new Timeline();
@@ -203,11 +198,10 @@ public class ControllerLobbyBrowser implements IController {
     public void sendChallenge(ChallengeablePlayer player) {
         model.getServerManager().queueCommand(Commands.challenge((success, args) -> {
             if (!success) {
-                System.err.println("Error sending challenge...");
                 if (args != null) {
-                    for (String arg : args) System.out.println(arg);
                     Platform.runLater(() -> {
-                        ModelGameEndDialog endDialogModel = new ModelGameEndDialog(args[0], () -> {}, false);
+                        ModelGameEndDialog endDialogModel = new ModelGameEndDialog(args[0], () -> {
+                        }, false);
                         GameEndDialogFactory.build(endDialogModel);
                     });
                 }
@@ -240,12 +234,10 @@ public class ControllerLobbyBrowser implements IController {
 
     public void setupGameStartEventHandler(Command command) {
         model.getServerManager().setTurnCallback((boolean success2, String[] args2) -> {
-            System.out.println("turn callback too fast in lobby browser");
             model.getServerManager().setTurnTooFast(true);
         });
 
         model.getServerManager().setMoveCallback((boolean success2, String[] args2) -> {
-            System.out.println("move callback too fast in lobby browser");
             model.getServerManager().setMoveTooFast(true);
             model.getServerManager().setMoveTooFastArgs(args2);
         });
@@ -256,14 +248,9 @@ public class ControllerLobbyBrowser implements IController {
             String firstTurnName = args[0];
             String opponentName = args[1];
 
-
             String currentPlayerName = model.getOnlineName();
 
             Player[] players = new Player[2];
-
-            System.out.println("Starting game");
-            System.out.println("player 1 name: " + currentPlayerName);
-            System.out.println("player 2 name: " + opponentName);
 
             if (firstTurnName.equals(currentPlayerName)) {
                 players[0] = new Player(currentPlayerName, Colors.BLACK, true, isPlayingAsAI);
@@ -326,7 +313,6 @@ public class ControllerLobbyBrowser implements IController {
                         setupGameStartEventHandler(() -> {
                             model.getChallenges().clear();
                             model.getServerManager().clearChallenges();
-                            System.out.println("Reset lobby");
                             player.setStatus("Unchallenged");
                             btn.setText("Send");
                             btn.setDisable(false);
@@ -344,7 +330,6 @@ public class ControllerLobbyBrowser implements IController {
                     btn.setDisable(false);
                     btn.setOnAction(event -> {
                         setupGameStartEventHandler(() -> {
-                            System.out.println("Clear challenges");
                             model.getChallenges().clear();
                             model.getServerManager().clearChallenges();
                             player.setStatus("Unchallenged");

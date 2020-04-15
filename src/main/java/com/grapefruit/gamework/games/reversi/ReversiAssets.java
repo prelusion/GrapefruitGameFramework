@@ -29,7 +29,7 @@ public class ReversiAssets extends Assets {
         return ICON;
     }
 
-    public Image getPieceImageByColor(Colors color){
+    public Image getPieceImageByColor(Colors color) {
         switch (color) {
             case BLACK:
                 return PIECE_BLACK;

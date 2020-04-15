@@ -1,16 +1,16 @@
 package com.grapefruit.gamework.app.controller;
 
-import com.grapefruit.gamework.app.model.*;
+import com.grapefruit.gamework.app.model.IModel;
+import com.grapefruit.gamework.app.model.ModelConfigSetting;
+import com.grapefruit.gamework.app.model.ModelSettingsWindow;
+import com.grapefruit.gamework.app.model.ModelTableSetting;
 import com.grapefruit.gamework.app.resources.AppSettings;
 import com.grapefruit.gamework.app.view.templates.ConfigSetting.ConfigSettingFactory;
-import com.grapefruit.gamework.app.view.templates.GameTile.GameTileFactory;
 import com.grapefruit.gamework.app.view.templates.TableSetting.TableSettingFactory;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
 
 public class ControllerSettingsWindow implements IController {
 
-    private ModelSettingsWindow modelSettingsWindow= null;
+    private ModelSettingsWindow modelSettingsWindow = null;
 
     private AppSettings.Settings localSettings;
 
@@ -44,15 +44,13 @@ public class ControllerSettingsWindow implements IController {
     /**
      * Required for FXML
      */
-    public ControllerSettingsWindow()
-    {
+    public ControllerSettingsWindow() {
     }
 
     /**
      * Required for FXML
      */
-    private void initialize()
-    {
+    private void initialize() {
     }
 
     /**
@@ -60,7 +58,7 @@ public class ControllerSettingsWindow implements IController {
      *
      * @param parent to be displayed
      */
-    private void setSelectedSetting(Parent parent){
+    private void setSelectedSetting(Parent parent) {
         localSettings = AppSettings.getSettings();
         selectedSetting.getChildren().removeAll(selectedSetting.getChildren());
         selectedSetting.getChildren().add(parent);
@@ -81,35 +79,35 @@ public class ControllerSettingsWindow implements IController {
      *
      */
     @FXML
-    private void onClickServer(){
+    private void onClickServer() {
         HashMap<String, String> servers = new HashMap<>();
-        for (AppSettings.Server server: localSettings.getServers()){
+        for (AppSettings.Server server : localSettings.getServers()) {
             servers.put(server.getName(), server.getIp());
         }
         setSelectedSetting(TableSettingFactory.build(new ModelTableSetting(servers, "Server name", "Server address", modelSettingsWindow, ModelTableSetting.TableSettingPreset.SERVERS)).getParent());
     }
 
     @FXML
-    private void onClickConfiguration(){
+    private void onClickConfiguration() {
         setSelectedSetting(ConfigSettingFactory.build(new ModelConfigSetting(modelSettingsWindow)).getParent());
     }
 
     @FXML
-    private void onCancelButton(){
-        Stage stage = (Stage )cancelButton.getScene().getWindow();
+    private void onCancelButton() {
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
 
     @FXML
-    private void onApplyButton(){
+    private void onApplyButton() {
         modelSettingsWindow.saveSettings();
         onClickServer();
     }
 
     @FXML
-    private void onDoneButton(){
+    private void onDoneButton() {
         modelSettingsWindow.saveSettings();
-        Stage stage = (Stage )doneButton.getScene().getWindow();
+        Stage stage = (Stage) doneButton.getScene().getWindow();
         stage.close();
     }
 }

@@ -3,7 +3,7 @@ package com.grapefruit.gamework.framework;
 import java.util.ArrayList;
 import java.util.Stack;
 
-public abstract class AbstractMinimaxAlgorithm implements MinimaxAlgorithm {
+public abstract class AbstractMinimax implements Minimax {
 
     protected int currentDepth;
     protected boolean dynamicDepth = true;
@@ -14,9 +14,9 @@ public abstract class AbstractMinimaxAlgorithm implements MinimaxAlgorithm {
     protected Stack<Boolean> timeoutStack;
     protected int[][] strategicValues;
     protected ArrayList<Thread> threads;
-    private int complexity= 5;
+    private int complexity = 5;
 
-    public AbstractMinimaxAlgorithm(int[][] strategicValues, int depth, boolean dynamicDepth) {
+    public AbstractMinimax(int[][] strategicValues, int depth, boolean dynamicDepth) {
         this.currentDepth = depth;
         this.dynamicDepth = dynamicDepth;
         this.strategicValues = strategicValues;
@@ -35,7 +35,6 @@ public abstract class AbstractMinimaxAlgorithm implements MinimaxAlgorithm {
     }
 
     public void setComplexity(int complexity) {
-        System.out.println("AI set complexity: " + complexity);
         this.complexity = complexity;
 
         switch (complexity) {
@@ -75,7 +74,6 @@ public abstract class AbstractMinimaxAlgorithm implements MinimaxAlgorithm {
     }
 
     public void startTimeout(int timeout) {
-        System.out.println("start timeout: " + timeout);
         this.timeout = timeout;
         timedOut = false;
         startTime = getCurrentSeconds();
@@ -84,7 +82,6 @@ public abstract class AbstractMinimaxAlgorithm implements MinimaxAlgorithm {
             try {
                 Thread.sleep(timeout);
                 triggerTimeout();
-                System.out.println("seconds left: " + secondsLeft());
             } catch (InterruptedException ignored) {
             }
         });
@@ -97,7 +94,6 @@ public abstract class AbstractMinimaxAlgorithm implements MinimaxAlgorithm {
     }
 
     public synchronized void triggerTimeout() {
-        System.out.println("Trigger Timeout!");
         timedOut = true;
         if (timeoutStack != null) {
             timeoutStack.push(true);

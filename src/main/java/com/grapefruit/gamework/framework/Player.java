@@ -24,6 +24,7 @@ public class Player {
 
     /**
      * Get name of player.
+     *
      * @return name
      */
     public String getName() {
@@ -32,6 +33,7 @@ public class Player {
 
     /**
      * Get color of player.
+     *
      * @return color
      */
     public Colors getColor() {

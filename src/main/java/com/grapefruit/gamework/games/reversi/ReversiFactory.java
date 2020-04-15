@@ -21,14 +21,14 @@ public class ReversiFactory extends GameFactory {
     public Reversi create(Player playerBlack, Player playerWhite) {
         Board board = new ReversiBoard(DEFAULT_REVERSI_BOARD_SIZE, STRATEGIC_VALUES);
         int turnTimeout = 60;
-        MinimaxAlgorithm minimaxAlgorithm = new newWinningAI(board.getStrategicValues());
+        Minimax minimaxAlgorithm = new newWinningAI(board.getStrategicValues());
         return new Reversi(board, playerBlack, playerWhite, turnTimeout, minimaxAlgorithm);
     }
 
     public Reversi create(Player playerBlack, Player playerWhite, int difficulty) {
         Board board = new ReversiBoard(DEFAULT_REVERSI_BOARD_SIZE, STRATEGIC_VALUES);
         int turnTimeout = 60;
-        MinimaxAlgorithm minimaxAlgorithm = new newWinningAI(board.getStrategicValues());
+        Minimax minimaxAlgorithm = new newWinningAI(board.getStrategicValues());
         minimaxAlgorithm.setComplexity(difficulty);
         return new Reversi(board, playerBlack, playerWhite, turnTimeout, minimaxAlgorithm);
     }

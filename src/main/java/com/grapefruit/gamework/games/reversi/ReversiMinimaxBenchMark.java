@@ -4,14 +4,14 @@ import com.grapefruit.gamework.framework.*;
 
 import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
 
-public class ReversiBenchMark implements BenchMark {
+public class ReversiMinimaxBenchMark implements BenchMark {
     public int turnTimeout;
-    private MinimaxAlgorithm minimax;
+    private Minimax minimax;
     private Board board;
     private Player player;
     private Player opponent;
 
-    public ReversiBenchMark(Game game) {
+    public ReversiMinimaxBenchMark(Game game) {
         this.turnTimeout = game.getTurnTimeout();
         this.minimax = game.getMinimaxAlgorithm();
         this.player = game.getCurrentPlayer();
@@ -22,11 +22,11 @@ public class ReversiBenchMark implements BenchMark {
 
     public int calculateDepth(int depth) {
         System.out.println(depth);
-        long startTime = System.currentTimeMillis()/1000;
+        long startTime = System.currentTimeMillis() / 1000;
         Tile tile = minimax.calculateBestMove(board, player, opponent, 5);
-        long endTime = System.currentTimeMillis()/1000;
+        long endTime = System.currentTimeMillis() / 1000;
 
-        if((endTime - startTime) < turnTimeout && tile != null) {
+        if ((endTime - startTime) < turnTimeout && tile != null) {
             return depth;
         }
         return 3;

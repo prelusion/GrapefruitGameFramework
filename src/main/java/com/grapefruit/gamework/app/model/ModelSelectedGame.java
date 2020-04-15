@@ -10,7 +10,7 @@ public class ModelSelectedGame implements IModel {
     private String onlineName;
     private boolean online;
 
-    public ModelSelectedGame(GameWrapper game, ServerManager manager, String onlineName, boolean online){
+    public ModelSelectedGame(GameWrapper game, ServerManager manager, String onlineName, boolean online) {
         selectedGame = game;
         serverManager = manager;
         this.onlineName = onlineName;

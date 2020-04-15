@@ -9,7 +9,7 @@ public class ModelSettingsWindow implements IModel {
     ModelMainWindow mainWindow;
     ControllerMainWindow controllerMainWindow;
 
-    public ModelSettingsWindow(ModelMainWindow mainWindow, ControllerMainWindow controllerMainWindow){
+    public ModelSettingsWindow(ModelMainWindow mainWindow, ControllerMainWindow controllerMainWindow) {
         localSettings = AppSettings.getSettings();
         this.mainWindow = mainWindow;
         this.controllerMainWindow = controllerMainWindow;
@@ -18,14 +18,14 @@ public class ModelSettingsWindow implements IModel {
     /**
      * @return gets locally stored settings
      */
-    public AppSettings.Settings getLocalSettings(){
+    public AppSettings.Settings getLocalSettings() {
         return localSettings;
     }
 
     /**
      * Saves locally stored settings to home folder.
      */
-    public void saveSettings(){
+    public void saveSettings() {
         AppSettings.saveSettings(localSettings);
         controllerMainWindow.updateSelectionBox();
     }

@@ -165,7 +165,8 @@ public class MinimaxAlgorithmDeprecated {
                         } else {
                             System.out.println("corrupt tile, ignoring");
                         }
-                    } catch (EmptyStackException ignored) {}
+                    } catch (EmptyStackException ignored) {
+                    }
                 }
             } else if (firstTurn && secondsLeft() <= 1) {
                 decrementDepth();
@@ -415,11 +416,11 @@ public class MinimaxAlgorithmDeprecated {
     public boolean isCorner(Board board, Tile tile) {
         if (tile.getRow() == 0 && tile.getCol() == 0) {
             return true;
-        } else if (tile.getRow() == 0 && tile.getCol() == board.getBoardSize()-1) {
+        } else if (tile.getRow() == 0 && tile.getCol() == board.getBoardSize() - 1) {
             return true;
-        } else if (tile.getRow() == board.getBoardSize()-1 && tile.getCol() == 0) {
+        } else if (tile.getRow() == board.getBoardSize() - 1 && tile.getCol() == 0) {
             return true;
-        } else if (tile.getRow() == board.getBoardSize()-1 && tile.getCol() == board.getBoardSize()-1) {
+        } else if (tile.getRow() == board.getBoardSize() - 1 && tile.getCol() == board.getBoardSize() - 1) {
             return true;
         }
         return false;

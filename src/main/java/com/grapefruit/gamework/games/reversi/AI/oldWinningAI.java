@@ -7,7 +7,7 @@ import java.util.*;
 
 import static java.lang.Integer.*;
 
-public class oldWinningAI extends AbstractMinimaxAlgorithm {
+public class oldWinningAI extends AbstractMinimax {
     private Player player;
     private Player opponent;
     private boolean timedOut = false;
@@ -44,7 +44,8 @@ public class oldWinningAI extends AbstractMinimaxAlgorithm {
         currentDepth = depth;
     }
 
-    public static void setAIComplexity(int complexity) {    }
+    public static void setAIComplexity(int complexity) {
+    }
 
     private Tile realCalculateBestMove(Board board, Player player, Player opponent, int turnCount, boolean firstTurn, int depth) {
         this.player = player;

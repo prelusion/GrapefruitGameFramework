@@ -125,7 +125,7 @@ public class ServerConnection {
 
             int[] rowcol = Helpers.convertMoveString(move, 8);
 
-            System.out.println("SVR GAME MOVE, player: " + playerName + ", details: " + details + ", move index: " + move + "move rowcol: " + rowcol[0] + "," + rowcol[1] );
+            System.out.println("SVR GAME MOVE, player: " + playerName + ", details: " + details + ", move index: " + move + "move rowcol: " + rowcol[0] + "," + rowcol[1]);
 
             CommandCallback listener = serverCommandListeners.get("onMove");
             if (listener != null) {
@@ -353,7 +353,6 @@ public class ServerConnection {
     public void setIllegalmoveLoseCallback(CommandCallback callback) {
         serverCommandListeners.put("onIllegalMoveLose", callback);
     }
-
 
 
     /**

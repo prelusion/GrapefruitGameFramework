@@ -152,7 +152,7 @@ public class ControllerSelectedGame implements IController {
 
             startButton.setOnAction(event2 -> {
                 String difficultyString = cb.getValue();
-                System.out.println("difficulty: " + difficultyString);
+
                 int difficulty = difficultyStringToInteger(difficultyString);
 
                 Player playerBlack;
@@ -229,14 +229,11 @@ public class ControllerSelectedGame implements IController {
     }
 
     public void setupTournamentGameStartEventHandler() {
-        System.out.println("Setup tournament callbacks");
         model.getServerManager().setTurnCallback((boolean success2, String[] args2) -> {
-            System.out.println("turn callback too fast in lobby browser");
             model.getServerManager().setTurnTooFast(true);
         });
 
         model.getServerManager().setMoveCallback((boolean success2, String[] args2) -> {
-            System.out.println("move callback too fast in lobby browser");
             model.getServerManager().setMoveTooFast(true);
             model.getServerManager().setMoveTooFastArgs(args2);
         });
@@ -277,7 +274,6 @@ public class ControllerSelectedGame implements IController {
         });
 
         model.getServerManager().setStartGameCallback((success, args) -> {
-            System.out.println("setupAutoChallengeGameStartEventHandler start game callback!!");
             String firstTurnName = args[0];
             String opponentName = args[1];
 

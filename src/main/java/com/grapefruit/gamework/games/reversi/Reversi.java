@@ -1,13 +1,12 @@
 package com.grapefruit.gamework.games.reversi;
 
 import com.grapefruit.gamework.framework.*;
-import com.grapefruit.gamework.games.reversi.AI.newWinningAI;
 
 import java.util.List;
 
 public class Reversi extends Game {
 
-    public Reversi(Board board, Player playerBlack, Player playerWhite, int turnTimeout, MinimaxAlgorithm minimaxAlgorithm) {
+    public Reversi(Board board, Player playerBlack, Player playerWhite, int turnTimeout, Minimax minimaxAlgorithm) {
         super(board, new Player[]{playerBlack, playerWhite}, minimaxAlgorithm, turnTimeout);
         board.setPlayer(3, 3, playerWhite);
         board.setPlayer(4, 4, playerWhite);

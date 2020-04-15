@@ -18,10 +18,10 @@ public abstract class Commands {
      * The login function sends a login command from the client to the server.
      *
      * @param callback CommandCallback callback to execute after response has been received.
-     * @param name String the username of the user to login
+     * @param name     String the username of the user to login
      */
-    public static Command login(String name, CommandCallback callback){
-        return new Command(KEYWORD_LOGIN+ name, callback, ServerManager.ResponseType.CONFIRMONLY);
+    public static Command login(String name, CommandCallback callback) {
+        return new Command(KEYWORD_LOGIN + name, callback, ServerManager.ResponseType.CONFIRMONLY);
     }
 
     /**
@@ -29,7 +29,7 @@ public abstract class Commands {
      *
      * @param callback CommandCallback callback to execute after response has been received.
      */
-    public static Command logout(CommandCallback callback){
+    public static Command logout(CommandCallback callback) {
         return new Command(KEYWORD_LOGOUT, callback, ServerManager.ResponseType.CONFIRMONLY);
     }
 
@@ -38,7 +38,7 @@ public abstract class Commands {
      *
      * @param callback CommandCallback callback to execute after response has been received.
      */
-    public static Command getGameList(CommandCallback callback){
+    public static Command getGameList(CommandCallback callback) {
         return new Command(KEYWORD_GAME_LIST, callback, ServerManager.ResponseType.LIST);
     }
 
@@ -69,7 +69,7 @@ public abstract class Commands {
      * @param boardSize int the board size.
      */
     public static Command setMove(CommandCallback callback, int row, int col, int boardSize) {
-        int index = row  * boardSize + col;
+        int index = row * boardSize + col;
         System.out.println("Sending move: " + row + ", " + col + " as " + index);
         return new Command(KEYWORD_MOVE + index, callback, ServerManager.ResponseType.CONFIRMONLY);
     }
@@ -87,7 +87,7 @@ public abstract class Commands {
      * The challenge function is used to indicate if the current logged in player accepts the challenge by passing a boolean value.
      *
      * @param callback CommandCallback callback to execute after response has been received.
-     * @param accept boolean Flag to indicate if the challenge is accepted or not.
+     * @param accept   boolean Flag to indicate if the challenge is accepted or not.
      */
     public static Command challengeRespond(CommandCallback callback, boolean accept, int challengeNumber) {
         if (accept) {

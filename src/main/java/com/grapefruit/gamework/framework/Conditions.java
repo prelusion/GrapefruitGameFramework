@@ -45,7 +45,7 @@ public final class Conditions {
         for (int row = 0; row < board.getBoardSize(); row++) {
             fullRow = true;
             for (int col = 1; col < board.getBoardSize(); col++) {
-                if(board.getTile(row, col).getPlayer() == null) {
+                if (board.getTile(row, col).getPlayer() == null) {
                     fullRow = false;
                 } else {
                     if (!board.getTile(row, col).getPlayer().equals(board.getTile(row, col - 1).getPlayer())) {
@@ -71,7 +71,7 @@ public final class Conditions {
         for (int row = 0; row < board.getBoardSize(); row++) {
             fullRow = true;
             for (int col = 1; col < board.getBoardSize(); col++) {
-                if(board.getTile(row, col).getPlayer() == null) {
+                if (board.getTile(row, col).getPlayer() == null) {
                     fullRow = false;
                 } else {
                     if (!board.getTile(row, col).getPlayer().equals(board.getTile(row, col - 1).getPlayer())) {
@@ -96,7 +96,7 @@ public final class Conditions {
         for (int col = 0; col < board.getBoardSize(); col++) {
             fullColumn = true;
             for (int row = 1; row < board.getBoardSize(); row++) {
-                if(board.getTile(row, col).getPlayer() == null) {
+                if (board.getTile(row, col).getPlayer() == null) {
                     fullColumn = false;
                 } else {
                     if (!board.getTile(row, col).getPlayer().equals(board.getTile(row - 1, col).getPlayer())) {
@@ -121,7 +121,7 @@ public final class Conditions {
         for (int col = 0; col < board.getBoardSize(); col++) {
             fullColumn = true;
             for (int row = 1; row < board.getBoardSize(); row++) {
-                if(board.getTile(row, col).getPlayer() == null) {
+                if (board.getTile(row, col).getPlayer() == null) {
                     fullColumn = false;
                 } else {
                     if (!board.getTile(row, col).getPlayer().equals(board.getTile(row - 1, col).getPlayer())) {
@@ -146,7 +146,7 @@ public final class Conditions {
         int col;
         for (int row = 1; row < board.getBoardSize(); row++) {
             col = row;
-            if(board.getTile(row - 1, col - 1).getPlayer() == null) {
+            if (board.getTile(row - 1, col - 1).getPlayer() == null) {
                 firstFullDiagonal = false;
             } else {
                 if (!board.getTile(row - 1, col - 1).getPlayer().equals(board.getTile(row, col).getPlayer())) {
@@ -161,7 +161,7 @@ public final class Conditions {
         boolean secondFullDiagonal = true;
         for (int row = board.getBoardSize() - 1; row > 0; row--) {
             col = (row % (board.getBoardSize() - 1));
-            if(board.getTile(row, col).getPlayer() == null) {
+            if (board.getTile(row, col).getPlayer() == null) {
                 secondFullDiagonal = false;
             } else {
                 if (!board.getTile(row, col).getPlayer().equals(board.getTile(row - 1, col + 1).getPlayer())) {
@@ -185,7 +185,7 @@ public final class Conditions {
         int col;
         for (int row = 1; row < board.getBoardSize(); row++) {
             col = row;
-            if(board.getTile(row - 1, col - 1).getPlayer() == null) {
+            if (board.getTile(row - 1, col - 1).getPlayer() == null) {
                 firstFullDiagonal = false;
             } else {
                 if (!board.getTile(row - 1, col - 1).getPlayer().equals(board.getTile(row, col).getPlayer())) {
@@ -199,9 +199,9 @@ public final class Conditions {
 
 
         boolean secondFullDiagonal = true;
-        for (int row = board.getBoardSize()- 1; row > 0; row--) {
+        for (int row = board.getBoardSize() - 1; row > 0; row--) {
             col = (row % (board.getBoardSize() - 1));
-            if(board.getTile(row, col).getPlayer() == null) {
+            if (board.getTile(row, col).getPlayer() == null) {
                 secondFullDiagonal = false;
             } else {
                 if (!board.getTile(row, col).getPlayer().equals(board.getTile(row - 1, col + 1).getPlayer())) {

@@ -232,6 +232,9 @@ public class ServerManager {
             connected.setValue(false);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            commandQueue.clear();
+            challenges.clear();
         }
     }
 

@@ -692,12 +692,13 @@ public class ControllerGame implements IController {
 
     @FXML
     private void quitGame() {
-        stopSideEffects();
-
         if (model.isOnlineGame() && !game.hasFinished() && !isDestroyed()) {
+            stopSideEffects();
             model.getServerManager().queueCommand(Commands.forfeit(
-                    (success, args) -> Platform.runLater(GameApplication::openLauncher)));
+                    (success, args) -> Platform.runLater(GameApplication::openLauncher))
+            );
         } else {
+            stopSideEffects();
             GameApplication.openLauncher();
         }
     }

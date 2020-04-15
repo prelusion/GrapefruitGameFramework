@@ -271,7 +271,6 @@ public class ControllerGame implements IController {
 
             alreadySettingAI = true;
 
-            System.out.println("turn callback in controller");
             if (!currentlySettingTurn) {
                 currentlySettingTurn = true;
                 onTurn();

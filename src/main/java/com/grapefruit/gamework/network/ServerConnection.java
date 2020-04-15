@@ -76,7 +76,6 @@ public class ServerConnection {
     }
 
     private void handleMessage(String msg) {
-        System.out.println("incoming msg: " + msg);
         if (manager.commandsInQueue()) {
             handleCommandResponses(msg);
         }
@@ -141,9 +140,6 @@ public class ServerConnection {
             String comment = parseCommandArg(msg, "COMMENT");
 
             System.out.println("SVR GAME LOSS, comment: " + comment);
-
-//            System.out.println("SVR GAME LOSS");
-//            System.out.println("Comment: " + comment);
 
             if (comment.equals("Turn timelimit reached")) {
                 CommandCallback listener = serverCommandListeners.get("onTurnTimeoutLose");
@@ -308,7 +304,6 @@ public class ServerConnection {
                         Thread.currentThread().interrupt();
                     }
                 }
-                System.out.println("Start sending interrupted");
             }
         });
         timer.start();

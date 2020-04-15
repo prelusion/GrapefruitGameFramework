@@ -37,7 +37,6 @@ public class newWinningAI extends AbstractMinimax {
 
     public Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount) {
         if (getComplexity() == 1) {
-            System.out.println("Complexity is 1, returning random move");
             List<Tile> moves = board.getAvailableMoves(player);
             int idx = random.nextInt(moves.size());
 
@@ -109,7 +108,6 @@ public class newWinningAI extends AbstractMinimax {
         }
         if (!isTimedOut() && secondsLeft() >= 1 && depth <= board.emptyTiles() && dynamicDepth) {
             timeoutStack.push(isTimedOut());
-            System.out.println(timeoutStack);
             Tile newTile = realCalculateBestMove(board, player, opponent, false, depth + 1);
             if (!timeoutStack.isEmpty()) {
                 if (newTile != null && !timeoutStack.pop()) {

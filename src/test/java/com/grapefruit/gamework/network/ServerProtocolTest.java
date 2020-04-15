@@ -1,4 +1,4 @@
-package com.grapefruit.gamework.framework.network;
+package com.grapefruit.gamework.network;
 
 import org.junit.Test;
 

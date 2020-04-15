@@ -1,6 +1,6 @@
 package com.grapefruit.gamework.games.reversi.AI;
 
-import com.grapefruit.gamework.framework.AbstractMinimaxAlgorithm;
+import com.grapefruit.gamework.framework.AbstractMinimax;
 import com.grapefruit.gamework.framework.Board;
 import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.Tile;
@@ -11,18 +11,18 @@ import java.util.*;
 import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
 import static java.lang.Integer.*;
 
-public class newWinningAI extends AbstractMinimaxAlgorithm {
+public class NewMinimax extends AbstractMinimax {
     private Player player;
     private Player opponent;
     private boolean timedOut = false;
     private int turnCount;
     private Random random = new Random();
 
-    public newWinningAI(int[][] strategicValues) {
+    public NewMinimax(int[][] strategicValues) {
         this(strategicValues, 9, true);
     }
 
-    public newWinningAI(int[][] strategicValues, int depth, boolean dynamicDepth) {
+    public NewMinimax(int[][] strategicValues, int depth, boolean dynamicDepth) {
         super(strategicValues, depth, dynamicDepth);
     }
 
@@ -37,7 +37,6 @@ public class newWinningAI extends AbstractMinimaxAlgorithm {
 
     public Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount) {
         if (getComplexity() == 1) {
-            System.out.println("Complexity is 1, returning random move");
             List<Tile> moves = board.getAvailableMoves(player);
             int idx = random.nextInt(moves.size());
 
@@ -85,7 +84,7 @@ public class newWinningAI extends AbstractMinimaxAlgorithm {
         this.player = player;
         this.opponent = opponent;
 
-        if (firstTurn) {
+        if (firstTurn && dynamicDepth) {
             turnCountDecrease(depth);
         }
 
@@ -109,7 +108,6 @@ public class newWinningAI extends AbstractMinimaxAlgorithm {
         }
         if (!isTimedOut() && secondsLeft() >= 1 && depth <= board.emptyTiles() && dynamicDepth) {
             timeoutStack.push(isTimedOut());
-            System.out.println(timeoutStack);
             Tile newTile = realCalculateBestMove(board, player, opponent, false, depth + 1);
             if (!timeoutStack.isEmpty()) {
                 if (newTile != null && !timeoutStack.pop()) {
@@ -121,7 +119,6 @@ public class newWinningAI extends AbstractMinimaxAlgorithm {
             currentDepth--;
         }
 
-//        timedOut = false;
         return bestTile;
     }
 

@@ -1,4 +1,4 @@
-package com.grapefruit.gamework.framework.network;
+package com.grapefruit.gamework.network;
 
 /**
  * The type Command.
@@ -18,7 +18,7 @@ public class Command {
      * @param callback      CommandCallback the callback.
      * @param responseType  ResponseType the response type.
      */
-    public Command(String commandString, CommandCallback callback, ServerManager.ResponseType responseType){
+    public Command(String commandString, CommandCallback callback, ServerManager.ResponseType responseType) {
         this.commandString = commandString;
         this.callback = callback;
         this.responseType = responseType;
@@ -30,23 +30,21 @@ public class Command {
      * @param success boolean the success.
      * @param args    String[] the args.
      */
-    public void doCallBack(boolean success, String[] args){
+    public void doCallBack(boolean success, String[] args) {
         callback.onResponse(success, args);
     }
 
     /**
      * Confirm that the client received a response from the server for this command.
-     *
      */
-    public void confirm(){
+    public void confirm() {
         confirmed = true;
     }
 
     /**
      * Sets the sent state to true to indicate that this command has been sent to the server.
-     *
      */
-    public synchronized void send(){
+    public synchronized void send() {
         sent = true;
     }
 
@@ -55,7 +53,7 @@ public class Command {
      *
      * @return boolean is sent or not.
      */
-    public synchronized boolean isSent(){
+    public synchronized boolean isSent() {
         return sent;
     }
 
@@ -82,5 +80,7 @@ public class Command {
      *
      * @return String the command string
      */
-    public String getCommandString() {return commandString;}
+    public String getCommandString() {
+        return commandString;
+    }
 }

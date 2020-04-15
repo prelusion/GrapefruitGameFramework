@@ -5,7 +5,7 @@ public class GameWrapper {
     private GameFactory factory;
     private Assets assets;
 
-    public GameWrapper(GameFactory factory, Assets assets){
+    public GameWrapper(GameFactory factory, Assets assets) {
         this.factory = factory;
         this.assets = assets;
     }

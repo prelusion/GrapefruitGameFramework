@@ -1,7 +1,8 @@
 package com.grapefruit.gamework.framework;
 
-import java.util.List;
 import javafx.beans.property.SimpleIntegerProperty;
+
+import java.util.List;
 
 public abstract class Game {
 
@@ -12,11 +13,11 @@ public abstract class Game {
     private Thread turnTimeThread;
     private Board board;
     private Player currentPlayer;
-    private MinimaxAlgorithm minimaxAlgorithm;
+    private Minimax minimaxAlgorithm;
     public int turnCount = 1;
 
 
-    public Game(Board board, Player[] players, MinimaxAlgorithm minimaxAlgorithm, int turnTimeout) {
+    public Game(Board board, Player[] players, Minimax minimaxAlgorithm, int turnTimeout) {
         this.board = board;
         this.players = players;
         this.turnTimeout = turnTimeout;
@@ -56,7 +57,7 @@ public abstract class Game {
     }
 
 
-    public MinimaxAlgorithm getMinimaxAlgorithm() {
+    public Minimax getMinimaxAlgorithm() {
         return minimaxAlgorithm;
     }
 
@@ -113,11 +114,9 @@ public abstract class Game {
     }
 
     public Player getPlayerByName(String name) {
-        System.out.println("Finding player by name: " + name);
         for (Player player : players) {
             if (player.getName().equals(name)) return player;
         }
-        System.out.println("Unable to find player");
         return null;
     }
 

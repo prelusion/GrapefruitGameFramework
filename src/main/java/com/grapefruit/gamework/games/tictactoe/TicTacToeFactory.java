@@ -1,11 +1,7 @@
 package com.grapefruit.gamework.games.tictactoe;
 
-import com.grapefruit.gamework.framework.Board;
-import com.grapefruit.gamework.framework.Game;
 import com.grapefruit.gamework.framework.GameFactory;
 import com.grapefruit.gamework.framework.Player;
-import com.grapefruit.gamework.games.reversi.Reversi;
-import com.grapefruit.gamework.games.reversi.ReversiBoard;
 
 public class TicTacToeFactory extends GameFactory {
     private static final int TICTACTOE_BOARDSIZE = 3;

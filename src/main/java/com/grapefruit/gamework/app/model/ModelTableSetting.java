@@ -3,12 +3,11 @@ package com.grapefruit.gamework.app.model;
 
 import com.grapefruit.gamework.app.resources.AppSettings;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ModelTableSetting implements IModel {
 
-    public enum TableSettingPreset{
+    public enum TableSettingPreset {
         SERVERS,
         USERS
     }
@@ -19,7 +18,7 @@ public class ModelTableSetting implements IModel {
     private ModelSettingsWindow modelSettingsWindow;
     private TableSettingPreset preset;
 
-    public ModelTableSetting(HashMap<String, String> rows, String keyName, String valueName, ModelSettingsWindow modelSettingsWindow, TableSettingPreset preset){
+    public ModelTableSetting(HashMap<String, String> rows, String keyName, String valueName, ModelSettingsWindow modelSettingsWindow, TableSettingPreset preset) {
         this.rows = rows;
         this.keyName = keyName;
         this.valueName = valueName;
@@ -28,7 +27,6 @@ public class ModelTableSetting implements IModel {
     }
 
     /**
-     *
      * @return current preset
      */
     public TableSettingPreset getPreset() {
@@ -36,10 +34,9 @@ public class ModelTableSetting implements IModel {
     }
 
     /**
-     *
      * @return Settings
      */
-    public AppSettings.Settings getSettings(){
+    public AppSettings.Settings getSettings() {
         return modelSettingsWindow.getLocalSettings();
     }
 
@@ -51,8 +48,7 @@ public class ModelTableSetting implements IModel {
     }
 
     /**
-     * @param keyName
-     * Sets setting's key name
+     * @param keyName Sets setting's key name
      */
     public void setKeyName(String keyName) {
         this.keyName = keyName;
@@ -66,17 +62,14 @@ public class ModelTableSetting implements IModel {
     }
 
     /**
-     *
-     * @param valueName
-     * Returns setting's value name.
+     * @param valueName Returns setting's value name.
      */
     public void setValueName(String valueName) {
         this.valueName = valueName;
     }
 
     /**
-     * @param rows
-     * returns  HashMap of setting's key & value pairs.
+     * @param rows returns  HashMap of setting's key & value pairs.
      */
     public void setRows(HashMap<String, String> rows) {
         this.rows = rows;

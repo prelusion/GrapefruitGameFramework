@@ -2,11 +2,7 @@ package com.grapefruit.gamework.app.controller;
 
 import com.grapefruit.gamework.app.model.IModel;
 import com.grapefruit.gamework.app.model.ModelConfigSetting;
-import com.grapefruit.gamework.app.resources.AppSettings;
 import javafx.application.Platform;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
@@ -40,7 +36,7 @@ public class ControllerConfigSetting implements IController {
                             this.modelConfigSetting.getSettingsWindow().getLocalSettings().setPort(Integer.valueOf(serverPort.getText()));
                         }
                     }
-                } catch (NumberFormatException e){
+                } catch (NumberFormatException e) {
                     serverPort.setText("");
                 }
             });
@@ -65,6 +61,7 @@ public class ControllerConfigSetting implements IController {
     }
 
     @FXML
-    public void initialie(){}
+    public void initialie() {
+    }
 
 }

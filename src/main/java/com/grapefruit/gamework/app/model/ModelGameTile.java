@@ -1,7 +1,6 @@
 package com.grapefruit.gamework.app.model;
 
 
-import com.grapefruit.gamework.framework.Game;
 import com.grapefruit.gamework.framework.GameWrapper;
 
 public class ModelGameTile implements IModel {
@@ -11,31 +10,30 @@ public class ModelGameTile implements IModel {
     private boolean selected;
     private boolean availableOnServer;
 
-    public ModelGameTile(GameWrapper game, ModelMainWindow mainWindow){
+    public ModelGameTile(GameWrapper game, ModelMainWindow mainWindow) {
         this.game = game;
         this.modelMainWindow = mainWindow;
-        if (modelMainWindow.getSelectedGame() != null){
-            if (modelMainWindow.getSelectedGame() == game){
+        if (modelMainWindow.getSelectedGame() != null) {
+            if (modelMainWindow.getSelectedGame() == game) {
                 selected = true;
             }
         }
-        if (mainWindow.getAvailableGames() != null && mainWindow.getAvailableGames().length > 0){
-            for (String availableGame: mainWindow.getAvailableGames()){
-                 if (game.getAssets().getServerId().equals(availableGame)){
-                     availableOnServer = true;
-                 }
+        if (mainWindow.getAvailableGames() != null && mainWindow.getAvailableGames().length > 0) {
+            for (String availableGame : mainWindow.getAvailableGames()) {
+                if (game.getAssets().getServerId().equals(availableGame)) {
+                    availableOnServer = true;
+                }
             }
         } else {
             availableOnServer = false;
         }
     }
 
-    public boolean isAvailableOnServer(){
+    public boolean isAvailableOnServer() {
         return availableOnServer;
     }
 
     /**
-     *
      * @return returns Game
      */
     public GameWrapper getGame() {
@@ -45,22 +43,21 @@ public class ModelGameTile implements IModel {
     /**
      * Sets selected game in main window to model's game.
      */
-    public void gameSelected(){
+    public void gameSelected() {
         modelMainWindow.setSelectedGame(game);
     }
 
     /**
      * Sets select game in main window to null
      */
-    public void gameUnselected(){
+    public void gameUnselected() {
         modelMainWindow.setSelectedGame(null);
     }
 
     /**
-     *
      * @return Whether game is selected;
      */
-    public boolean isSelected(){
+    public boolean isSelected() {
         return selected;
     }
 }

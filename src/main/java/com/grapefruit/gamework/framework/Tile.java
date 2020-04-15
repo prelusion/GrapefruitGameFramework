@@ -25,8 +25,8 @@ public class Tile {
     /**
      * Constructor of making an GameSession
      *
-     * @param row, gives the tile grid[x][] position from the board.
-     * @param col, gives the tile grid[][y] position from the board.
+     * @param row,            gives the tile grid[x][] position from the board.
+     * @param col,            gives the tile grid[][y] position from the board.
      * @param strategicValue, is the given strategicValue of the Tile.
      */
     public Tile(int row, int col, int strategicValue) {

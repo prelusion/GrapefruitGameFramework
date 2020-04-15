@@ -1,7 +1,7 @@
 package com.grapefruit.gamework.games.reversi;
 
 import com.grapefruit.gamework.framework.*;
-import com.grapefruit.gamework.games.reversi.AI.newWinningAI;
+import com.grapefruit.gamework.games.reversi.AI.NewMinimax;
 
 public class ReversiFactory extends GameFactory {
     static final int DEFAULT_REVERSI_BOARD_SIZE = 8;
@@ -21,14 +21,14 @@ public class ReversiFactory extends GameFactory {
     public Reversi create(Player playerBlack, Player playerWhite) {
         Board board = new ReversiBoard(DEFAULT_REVERSI_BOARD_SIZE, STRATEGIC_VALUES);
         int turnTimeout = 60;
-        MinimaxAlgorithm minimaxAlgorithm = new newWinningAI(board.getStrategicValues());
+        Minimax minimaxAlgorithm = new NewMinimax(board.getStrategicValues());
         return new Reversi(board, playerBlack, playerWhite, turnTimeout, minimaxAlgorithm);
     }
 
     public Reversi create(Player playerBlack, Player playerWhite, int difficulty) {
         Board board = new ReversiBoard(DEFAULT_REVERSI_BOARD_SIZE, STRATEGIC_VALUES);
         int turnTimeout = 60;
-        MinimaxAlgorithm minimaxAlgorithm = new newWinningAI(board.getStrategicValues());
+        Minimax minimaxAlgorithm = new NewMinimax(board.getStrategicValues());
         minimaxAlgorithm.setComplexity(difficulty);
         return new Reversi(board, playerBlack, playerWhite, turnTimeout, minimaxAlgorithm);
     }

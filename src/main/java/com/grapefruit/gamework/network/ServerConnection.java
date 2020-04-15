@@ -1,4 +1,4 @@
-package com.grapefruit.gamework.framework.network;
+package com.grapefruit.gamework.network;
 
 import com.google.gson.Gson;
 import com.grapefruit.gamework.app.resources.AppSettings;
@@ -124,7 +124,7 @@ public class ServerConnection {
 
             int[] rowcol = Helpers.convertMoveString(move, 8);
 
-            System.out.println("SVR GAME MOVE, player: " + playerName + ", details: " + details + ", move index: " + move + "move rowcol: " + rowcol[0] + "," + rowcol[1] );
+            System.out.println("SVR GAME MOVE, player: " + playerName + ", details: " + details + ", move index: " + move + "move rowcol: " + rowcol[0] + "," + rowcol[1]);
 
             CommandCallback listener = serverCommandListeners.get("onMove");
             if (listener != null) {
@@ -140,9 +140,6 @@ public class ServerConnection {
             String comment = parseCommandArg(msg, "COMMENT");
 
             System.out.println("SVR GAME LOSS, comment: " + comment);
-
-//            System.out.println("SVR GAME LOSS");
-//            System.out.println("Comment: " + comment);
 
             if (comment.equals("Turn timelimit reached")) {
                 CommandCallback listener = serverCommandListeners.get("onTurnTimeoutLose");
@@ -307,7 +304,6 @@ public class ServerConnection {
                         Thread.currentThread().interrupt();
                     }
                 }
-                System.out.println("Start sending interrupted");
             }
         });
         timer.start();
@@ -352,7 +348,6 @@ public class ServerConnection {
     public void setIllegalmoveLoseCallback(CommandCallback callback) {
         serverCommandListeners.put("onIllegalMoveLose", callback);
     }
-
 
 
     /**

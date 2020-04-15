@@ -3,8 +3,18 @@ package com.grapefruit.gamework.games.tictactoe;
 import com.grapefruit.gamework.framework.*;
 import com.grapefruit.gamework.games.reversi.AI.OldMinimax;
 
+/**
+ * The type Tic tac toe.
+ */
 public class TicTacToe extends Game {
 
+    /**
+     * Instantiates a new Tic tac toe.
+     *
+     * @param board       the board
+     * @param players     the players
+     * @param turnTimeout the turn timeout
+     */
     public TicTacToe(Board board, Player[] players, int turnTimeout) {
         super(board, players, new OldMinimax(board.getStrategicValues()), turnTimeout);
     }

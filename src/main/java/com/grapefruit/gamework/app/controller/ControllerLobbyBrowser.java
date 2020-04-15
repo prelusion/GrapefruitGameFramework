@@ -160,8 +160,6 @@ public class ControllerLobbyBrowser implements IController {
                     }
                 }
 
-
-                //challengeTable.getItems().removeAll(challengeTable.getItems());
                 challengeTable.setItems(challengeablePlayers);
             }
         }

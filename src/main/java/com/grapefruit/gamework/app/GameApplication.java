@@ -13,6 +13,9 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * The type Game application.
+ */
 public class GameApplication extends Application {
 
     private static Stage primaryStage;
@@ -24,6 +27,11 @@ public class GameApplication extends Application {
     private static final int GAME_SCENE_HEIGHT = 800;
     private static final ServerManager SERVER_MANAGER = new ServerManager();
 
+    /**
+     * Start application.
+     *
+     * @param args the args
+     */
     public void startApplication(String[] args) {
         launch(args);
     }
@@ -38,10 +46,18 @@ public class GameApplication extends Application {
         openLauncher();
     }
 
+    /**
+     * Gets stage.
+     *
+     * @return the stage
+     */
     public static Stage getStage() {
         return primaryStage;
     }
 
+    /**
+     * Open launcher.
+     */
     public static void openLauncher() {
         modelMainWindow = new ModelMainWindow(SERVER_MANAGER);
         Template template = MainWindowFactory.build(modelMainWindow);
@@ -50,6 +66,9 @@ public class GameApplication extends Application {
         setScene(mainWindowScene);
     }
 
+    /**
+     * Open launcher back.
+     */
     public static void openLauncherBack() {
         if (modelMainWindow == null) {
             modelMainWindow = new ModelMainWindow(SERVER_MANAGER);
@@ -60,18 +79,45 @@ public class GameApplication extends Application {
         setScene(mainWindowScene);
     }
 
+    /**
+     * Start offline game.
+     *
+     * @param assets the assets
+     * @param game   the game
+     */
     public static void startOfflineGame(Assets assets, Game game) {
         startGame(assets, game, null, false, false);
     }
 
+    /**
+     * Start online game.
+     *
+     * @param assets        the assets
+     * @param game          the game
+     * @param serverManager the server manager
+     */
     public static void startOnlineGame(Assets assets, Game game, ServerManager serverManager) {
         startGame(assets, game, serverManager, false, false);
     }
 
+    /**
+     * Start tournament game.
+     *
+     * @param assets        the assets
+     * @param game          the game
+     * @param serverManager the server manager
+     */
     public static void startTournamentGame(Assets assets, Game game, ServerManager serverManager) {
         startGame(assets, game, serverManager, true, false);
     }
 
+    /**
+     * Start auto challenge game.
+     *
+     * @param assets        the assets
+     * @param game          the game
+     * @param serverManager the server manager
+     */
     public static void startAutoChallengeGame(Assets assets, Game game, ServerManager serverManager) {
         startGame(assets, game, serverManager, false, true);
     }

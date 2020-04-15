@@ -175,16 +175,6 @@ public class ControllerSelectedGame implements IController {
                         game
                 );
             });
-
-//            Player playerBlack = new Player("You", Colors.BLACK, true);
-//            Player playerWhite = new Player("AI", Colors.WHITE, true, true);
-//
-//            Player[] players = new Player[]{playerBlack, playerWhite};
-//
-//            GameApplication.startOfflineGame(
-//                    model.getSelectedGame().getAssets(),
-//                    model.getSelectedGame().getFactory().create(players)
-//            );
         });
 
         friendButton.setOnAction(event -> {

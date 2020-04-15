@@ -4,8 +4,20 @@ import com.grapefruit.gamework.framework.*;
 
 import java.util.List;
 
+/**
+ * The type Reversi.
+ */
 public class Reversi extends Game {
 
+    /**
+     * Instantiates a new Reversi.
+     *
+     * @param board            the board
+     * @param playerBlack      the player black
+     * @param playerWhite      the player white
+     * @param turnTimeout      the turn timeout
+     * @param minimaxAlgorithm the minimax algorithm
+     */
     public Reversi(Board board, Player playerBlack, Player playerWhite, int turnTimeout, Minimax minimaxAlgorithm) {
         super(board, new Player[]{playerBlack, playerWhite}, minimaxAlgorithm, turnTimeout);
         board.setPlayer(3, 3, playerWhite);

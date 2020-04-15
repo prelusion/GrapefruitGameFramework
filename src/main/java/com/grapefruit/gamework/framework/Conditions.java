@@ -1,5 +1,8 @@
 package com.grapefruit.gamework.framework;
 
+/**
+ * The type Conditions.
+ */
 public final class Conditions {
     /**
      * This are global game conditions.
@@ -11,6 +14,7 @@ public final class Conditions {
     /**
      * Checks whether a row, column or diagonal has adjacent pieces which are all the same.
      *
+     * @param board the board
      * @return boolean, true if there is a row, column or diagonal row is full of pieces.
      */
     public static boolean checkAllAdjacentConditions(Board board) {
@@ -20,6 +24,7 @@ public final class Conditions {
     /**
      * Checks whether a row, column or diagonal has adjacent pieces which are all the same.
      *
+     * @param board the board
      * @return Tile, the tile where the functions condition has been met. The tile is the index value of the row.
      */
     public static Tile getTileOfAvailableConditions(Board board) {
@@ -38,6 +43,7 @@ public final class Conditions {
     /**
      * Checks whether a row has adjacent pieces which are all the same.
      *
+     * @param board the board
      * @return boolean, true when a row is full of pieces.
      */
     public static boolean checkFullRow(Board board) {
@@ -63,10 +69,10 @@ public final class Conditions {
     /**
      * Checks whether a row has adjacent pieces which are all the same.
      *
+     * @param board the board
      * @return Tile, true when a row is full of pieces.
      */
     public static Tile getTileFullRow(Board board) {
-//        Tile[][] grid = board.getGrid();
         boolean fullRow;
         for (int row = 0; row < board.getBoardSize(); row++) {
             fullRow = true;
@@ -89,6 +95,7 @@ public final class Conditions {
     /**
      * Checks whether a column has adjacent pieces which are all the same.
      *
+     * @param board the board
      * @return boolean, true when a column is full of pieces.
      */
     public static boolean checkFullColumn(Board board) {
@@ -114,6 +121,7 @@ public final class Conditions {
     /**
      * Checks whether a column has adjacent pieces which are all the same.
      *
+     * @param board the board
      * @return Tile, true when a column is full of pieces.
      */
     public static Tile getTileFullColumn(Board board) {
@@ -139,6 +147,7 @@ public final class Conditions {
     /**
      * Checks whether a diagonal has adjacent pieces which are all the same.
      *
+     * @param board the board
      * @return boolean, true when a diagonal is full of pieces.
      */
     public static boolean checkFullDiagonal(Board board) {
@@ -178,6 +187,7 @@ public final class Conditions {
     /**
      * Checks whether a diagonal has adjacent pieces which are all the same.
      *
+     * @param board the board
      * @return Tile, true when a diagonal is full of pieces.
      */
     public static Tile getTileFullDiagonal(Board board) {

@@ -4,13 +4,24 @@ import com.grapefruit.gamework.framework.*;
 
 import static com.grapefruit.gamework.games.reversi.ReversiFactory.STRATEGIC_VALUES;
 
+/**
+ * The type Reversi minimax bench mark.
+ */
 public class ReversiMinimaxBenchMark implements Benchmark {
+    /**
+     * The Turn timeout.
+     */
     public int turnTimeout;
     private Minimax minimax;
     private Board board;
     private Player player;
     private Player opponent;
 
+    /**
+     * Instantiates a new Reversi minimax bench mark.
+     *
+     * @param game the game
+     */
     public ReversiMinimaxBenchMark(Game game) {
         this.turnTimeout = game.getTurnTimeout();
         this.minimax = game.getMinimaxAlgorithm();

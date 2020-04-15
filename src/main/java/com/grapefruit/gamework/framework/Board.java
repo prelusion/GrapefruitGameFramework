@@ -8,8 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Board.
+ */
 public abstract class Board {
 
+    /**
+     * The constant relativeNeighborGrid.
+     */
     protected static final int[][] relativeNeighborGrid = new int[][]{
             {-1, -1}, {-1, 0}, {-1, 1},
             {0, -1}, {0, 1},
@@ -21,17 +27,34 @@ public abstract class Board {
      */
     public Tile[][] grid;
 
+    /**
+     * The constant BOARDSIZE.
+     */
     protected static int BOARDSIZE;
 
     private int[][] strategicValues;
+    /**
+     * The Scores.
+     */
     public ObservableMap<Player, Integer> scores = FXCollections.observableHashMap();
 
+    /**
+     * Instantiates a new Board.
+     *
+     * @param boardSize       the board size
+     * @param strategicValues the strategic values
+     */
     public Board(int boardSize, int[][] strategicValues) {
         this.BOARDSIZE = boardSize;
         this.strategicValues = strategicValues;
         initGrid();
     }
 
+    /**
+     * Instantiates a new Board.
+     *
+     * @param boardSize the board size
+     */
     public Board(int boardSize) {
         this.BOARDSIZE = boardSize;
         strategicValues = new int[boardSize][boardSize];
@@ -41,6 +64,11 @@ public abstract class Board {
         initGrid();
     }
 
+    /**
+     * Get strategic values int [ ] [ ].
+     *
+     * @return the int [ ] [ ]
+     */
     public int[][] getStrategicValues() {
         return strategicValues;
     }
@@ -54,6 +82,11 @@ public abstract class Board {
         }
     }
 
+    /**
+     * Copy state.
+     *
+     * @param otherBoard the other board
+     */
     public void copyState(Board otherBoard) {
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid.length; j++) {
@@ -62,6 +95,11 @@ public abstract class Board {
         }
     }
 
+    /**
+     * Sets strategic values.
+     *
+     * @param strategic the strategic
+     */
     public void setStrategicValues(int[][] strategic) {
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid.length; j++) {
@@ -70,32 +108,71 @@ public abstract class Board {
         }
     }
 
+    /**
+     * Gets board size.
+     *
+     * @return the board size
+     */
     public int getBoardSize() {
         return BOARDSIZE;
     }
 
+    /**
+     * Sets move.
+     *
+     * @param row    the row
+     * @param col    the col
+     * @param player the player
+     */
     public abstract void setMove(int row, int col, Player player);
 
+    /**
+     * Gets available moves.
+     *
+     * @param player the player
+     * @return the available moves
+     */
     public abstract List<Tile> getAvailableMoves(Player player);
 
+    /**
+     * Sets player.
+     *
+     * @param row    the row
+     * @param col    the col
+     * @param player the player
+     */
     public void setPlayer(int row, int col, Player player) {
         grid[row][col].setPlayer(player);
     }
 
-    public void setStrategicValue(int row, int col, int value) {
-        grid[row][col].setStrategicValue(value);
-    }
-
+    /**
+     * Gets player.
+     *
+     * @param row the row
+     * @param col the col
+     * @return the player
+     */
     public Player getPlayer(int row, int col) {
         return grid[row][col].getPlayer();
     }
 
+    /**
+     * Gets tile.
+     *
+     * @param row the row
+     * @param col the col
+     * @return the tile
+     */
     public Tile getTile(int row, int col) {
         return grid[row][col];
     }
 
 
     /**
+     * Has player boolean.
+     *
+     * @param row the row
+     * @param col the col
      * @return boolean, Checks if the tile chosen has a piece on it.
      */
     public boolean hasPlayer(int row, int col) {
@@ -106,6 +183,8 @@ public abstract class Board {
     }
 
     /**
+     * Is board full boolean.
+     *
      * @return boolean, Checks if the board is full. Return true if it is.
      */
     public boolean isBoardFull() {
@@ -117,10 +196,22 @@ public abstract class Board {
         return true;
     }
 
+    /**
+     * Is valid location boolean.
+     *
+     * @param row the row
+     * @param col the col
+     * @return the boolean
+     */
     public boolean isValidLocation(int row, int col) {
         return row < grid.length && row >= 0 && col < grid.length && col >= 0;
     }
 
+    /**
+     * Count pieces map.
+     *
+     * @return the map
+     */
     public Map<Player, Integer> countPieces() {
         HashMap<Player, Integer> pieces = new HashMap<>();
 
@@ -133,6 +224,12 @@ public abstract class Board {
         return pieces;
     }
 
+    /**
+     * Count pieces int.
+     *
+     * @param player the player
+     * @return the int
+     */
     public int countPieces(Player player) {
         int count = 0;
 
@@ -145,6 +242,12 @@ public abstract class Board {
         return count;
     }
 
+    /**
+     * Any moves left boolean.
+     *
+     * @param players the players
+     * @return the boolean
+     */
     public boolean anyMovesLeft(Player[] players) {
         return Arrays.stream(players)
                 .noneMatch(player -> (getAvailableMoves(player).size()) > 0);
@@ -200,12 +303,17 @@ public abstract class Board {
     /**
      * Helper function to print available moves for a player.
      *
-     * @param player
+     * @param player the player
      */
     public void printAvailableMoves(Player player) {
         printAvailableMoves(getAvailableMoves(player));
     }
 
+    /**
+     * Print available moves.
+     *
+     * @param moves the moves
+     */
     public void printAvailableMoves(List<Tile> moves) {
         for (int m = 0; m < grid.length; m++)
             System.out.print(" " + m + "  ");
@@ -239,6 +347,11 @@ public abstract class Board {
         }
     }
 
+    /**
+     * Print available moves with strategic values.
+     *
+     * @param moves the moves
+     */
     public void printAvailableMovesWithStrategicValues(List<Tile> moves) {
         for (int m = 0; m < grid.length; m++)
             System.out.print("  " + m + "   ");
@@ -272,8 +385,18 @@ public abstract class Board {
         }
     }
 
+    /**
+     * Calculate scores.
+     *
+     * @param players the players
+     */
     public abstract void calculateScores(Player[] players);
 
+    /**
+     * Empty tiles int.
+     *
+     * @return the int
+     */
     public int emptyTiles() {
         int amount = 0;
         for (int i = 0; i < grid.length; i++) {
@@ -282,30 +405,5 @@ public abstract class Board {
             }
         }
         return amount;
-    }
-
-    public void changeValuesBetweenTiles(Tile tile1, String side, int value) {
-        switch (side) {
-            case "Top":
-                for (int i = 0; i < getBoardSize(); i++) {
-                    getTile(tile1.getRow() - i, tile1.getCol()).setStrategicValue(value);
-                }
-                break;
-            case "Right":
-                for (int i = 0; i < getBoardSize(); i++) {
-                    getTile(tile1.getRow(), tile1.getCol() + i).setStrategicValue(value);
-                }
-                break;
-            case "Down":
-                for (int i = 0; i < getBoardSize(); i++) {
-                    getTile(tile1.getRow() + i, tile1.getCol()).setStrategicValue(value);
-                }
-                break;
-            case "Left":
-                for (int i = 0; i < getBoardSize(); i++) {
-                    getTile(tile1.getRow(), tile1.getCol() - i).setStrategicValue(value);
-                }
-                break;
-        }
     }
 }

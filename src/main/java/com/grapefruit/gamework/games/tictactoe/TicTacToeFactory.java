@@ -3,6 +3,9 @@ package com.grapefruit.gamework.games.tictactoe;
 import com.grapefruit.gamework.framework.GameFactory;
 import com.grapefruit.gamework.framework.Player;
 
+/**
+ * The type Tic tac toe factory.
+ */
 public class TicTacToeFactory extends GameFactory {
     private static final int TICTACTOE_BOARDSIZE = 3;
 

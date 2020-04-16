@@ -111,6 +111,9 @@ public class ControllerMainWindow implements IController {
     @Override
     public void setModel(IModel model) {
         modelMainWindow = (ModelMainWindow) model;
+
+q
+
         initialize();
         updateSelectionBox();
         if (this.modelMainWindow.getServerManager() != null) {

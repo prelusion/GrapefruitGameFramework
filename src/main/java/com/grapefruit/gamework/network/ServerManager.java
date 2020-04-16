@@ -325,4 +325,19 @@ public class ServerManager {
     public void clearChallenges() {
         challenges = new ArrayList<>();
     }
+
+    public void clearEventCallbacks() {
+        removeTurnTimeoutWinCallback();
+        removeTurnTimeoutLoseCallback();
+        removeIllegalmoveWinCallback();
+        removeIllegalmoveLoseCallback();
+        removeOnPlayerForfeitCallback();
+        removeOnPlayerDisconnectCallbackCallback();
+        removeMoveCallback();
+        removeTurnCallback();
+        setTurnTooFast(false);
+        setMoveTooFast(false);
+        setMoveTooFastArgs(null);
+        removeStartGameCallback();
+    }
 }

@@ -8,7 +8,7 @@ import java.util.Map;
 public class Helpers {
 
     /**
-     * Gets winning player.
+     * Gets the winning player if the game has one.
      *
      * @param board the board
      * @return the winning player
@@ -32,11 +32,11 @@ public class Helpers {
     }
 
     /**
-     * Count pieces for player int.
+     * Count the amount of pieces the player has on the board.
      *
      * @param board  the board
      * @param player the player
-     * @return the int
+     * @return the amount of pieces int
      */
     public static int countPiecesForPlayer(Board board, Player player) {
         Map<Player, Integer> pieces = board.countPieces();

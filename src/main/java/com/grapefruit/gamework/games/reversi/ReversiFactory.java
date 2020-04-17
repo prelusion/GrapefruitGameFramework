@@ -1,7 +1,7 @@
 package com.grapefruit.gamework.games.reversi;
 
 import com.grapefruit.gamework.framework.*;
-import com.grapefruit.gamework.games.reversi.AI.NewMinimax;
+import com.grapefruit.gamework.games.reversi.AI.NewMoveAlgorithm;
 
 /**
  * The type Reversi factory.
@@ -37,8 +37,8 @@ public class ReversiFactory extends GameFactory {
     public Reversi create(Player playerBlack, Player playerWhite) {
         Board board = new ReversiBoard(DEFAULT_REVERSI_BOARD_SIZE, STRATEGIC_VALUES);
         int turnTimeout = 60;
-        Minimax minimaxAlgorithm = new NewMinimax(board.getStrategicValues());
-        return new Reversi(board, playerBlack, playerWhite, turnTimeout, minimaxAlgorithm);
+        MoveAlgorithm moveAlgorithmAlgorithm = new NewMoveAlgorithm(board.getStrategicValues());
+        return new Reversi(board, playerBlack, playerWhite, turnTimeout, moveAlgorithmAlgorithm);
     }
 
     /**
@@ -52,9 +52,9 @@ public class ReversiFactory extends GameFactory {
     public Reversi create(Player playerBlack, Player playerWhite, int difficulty) {
         Board board = new ReversiBoard(DEFAULT_REVERSI_BOARD_SIZE, STRATEGIC_VALUES);
         int turnTimeout = 60;
-        Minimax minimaxAlgorithm = new NewMinimax(board.getStrategicValues());
-        minimaxAlgorithm.setComplexity(difficulty);
-        return new Reversi(board, playerBlack, playerWhite, turnTimeout, minimaxAlgorithm);
+        MoveAlgorithm moveAlgorithmAlgorithm = new NewMoveAlgorithm(board.getStrategicValues());
+        moveAlgorithmAlgorithm.setComplexity(difficulty);
+        return new Reversi(board, playerBlack, playerWhite, turnTimeout, moveAlgorithmAlgorithm);
     }
 
     private static int[][] getStrategicValues() {

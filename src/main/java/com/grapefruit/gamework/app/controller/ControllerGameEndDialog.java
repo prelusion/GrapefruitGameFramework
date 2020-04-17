@@ -12,6 +12,9 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The type Controller game end dialog.
+ */
 public class ControllerGameEndDialog implements IController {
 
     private ModelGameEndDialog model;

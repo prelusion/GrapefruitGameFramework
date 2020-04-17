@@ -16,6 +16,9 @@ import org.apache.commons.validator.routines.InetAddressValidator;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The type Controller table setting.
+ */
 public class ControllerTableSetting implements IController {
 
     @FXML
@@ -171,6 +174,9 @@ public class ControllerTableSetting implements IController {
         updateTable();
     }
 
+    /**
+     * The type Setting.
+     */
     public static class Setting {
 
         private final SimpleStringProperty key;
@@ -181,18 +187,38 @@ public class ControllerTableSetting implements IController {
             this.value = new SimpleStringProperty(value);
         }
 
+        /**
+         * Gets key.
+         *
+         * @return the key
+         */
         public String getKey() {
             return key.get();
         }
 
+        /**
+         * Sets key.
+         *
+         * @param key the key
+         */
         public void setKey(String key) {
             this.key.set(key);
         }
 
+        /**
+         * Gets value.
+         *
+         * @return the value
+         */
         public String getValue() {
             return value.get();
         }
 
+        /**
+         * Sets value.
+         *
+         * @param value the value
+         */
         public void setValue(String value) {
             this.value.set(value);
         }

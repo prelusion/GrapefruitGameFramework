@@ -4,7 +4,7 @@ import com.grapefruit.gamework.framework.Board;
 import com.grapefruit.gamework.framework.Game;
 import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.Colors;
-import com.grapefruit.gamework.games.reversi.AI.NewMinimax;
+import com.grapefruit.gamework.games.reversi.AI.NewMoveAlgorithm;
 
 import java.util.Scanner;
 
@@ -15,7 +15,7 @@ public class CLI {
         Board board = new ReversiBoard(8, ReversiFactory.STRATEGIC_VALUES);
         Player playerWhite = new Player("White", Colors.WHITE, true);
         Player playerBlack = new Player("Black", Colors.BLACK, true);
-        Game game = new Reversi(board, playerWhite, playerBlack, turnTimeout, new NewMinimax(ReversiFactory.STRATEGIC_VALUES));
+        Game game = new Reversi(board, playerWhite, playerBlack, turnTimeout, new NewMoveAlgorithm(ReversiFactory.STRATEGIC_VALUES));
 
         board.printBoard();
 

@@ -31,6 +31,9 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * The type Controller main window.
+ */
 public class ControllerMainWindow implements IController {
 
     private ModelMainWindow modelMainWindow = null;
@@ -318,10 +321,20 @@ public class ControllerMainWindow implements IController {
     }
 
 
+    /**
+     * Get available games string [ ].
+     *
+     * @return the string [ ]
+     */
     public String[] getAvailableGames() {
         return availableGames;
     }
 
+    /**
+     * Sets available games.
+     *
+     * @param games the games
+     */
     public synchronized void setAvailableGames(String[] games) {
         availableGames = games;
         modelMainWindow.setAvailableGames(games);
@@ -333,6 +346,9 @@ public class ControllerMainWindow implements IController {
         });
     }
 
+    /**
+     * Sets default settings.
+     */
     public void setDefaultSettings() {
         AppSettings.Settings settings = AppSettings.getSettings();
         settings.setDefaultServer(selectedServer);

@@ -11,10 +11,19 @@ import javafx.scene.Parent;
 
 import java.io.IOException;
 
+/**
+ * The type Table setting factory.
+ */
 public class TableSettingFactory implements TemplateFactory {
 
     private static TableSettingFactory factory = new TableSettingFactory();
 
+    /**
+     * Build template.
+     *
+     * @param model the model
+     * @return the template
+     */
     public static Template build(IModel model){
         return factory.buildTemplate(model);
     }

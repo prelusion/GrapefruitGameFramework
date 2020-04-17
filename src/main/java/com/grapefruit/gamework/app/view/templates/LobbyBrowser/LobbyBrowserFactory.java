@@ -11,10 +11,19 @@ import javafx.scene.Parent;
 
 import java.io.IOException;
 
+/**
+ * The type Lobby browser factory.
+ */
 public class LobbyBrowserFactory implements TemplateFactory {
 
     private static LobbyBrowserFactory factory = new LobbyBrowserFactory();
 
+    /**
+     * Build template.
+     *
+     * @param model the model
+     * @return the template
+     */
     public static Template build(IModel model){
         return factory.buildTemplate(model);
     }

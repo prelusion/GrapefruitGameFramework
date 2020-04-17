@@ -11,10 +11,19 @@ import javafx.scene.Parent;
 
 import java.io.IOException;
 
+/**
+ * The type Game tile factory.
+ */
 public class GameTileFactory implements TemplateFactory {
 
     private static GameTileFactory factory = new  GameTileFactory();
 
+    /**
+     * Build template.
+     *
+     * @param model the model
+     * @return the template
+     */
     public static Template build(IModel model){
         return factory.buildTemplate(model);
     }

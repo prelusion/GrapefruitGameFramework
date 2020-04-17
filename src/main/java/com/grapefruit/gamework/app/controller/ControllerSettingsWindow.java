@@ -17,6 +17,9 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
+/**
+ * The type Controller settings window.
+ */
 public class ControllerSettingsWindow implements IController {
 
     private ModelSettingsWindow modelSettingsWindow = null;

@@ -10,6 +10,7 @@ public class GameWrapper {
 
     /**
      * Instantiates a new Game wrapper.
+     * This is a wrapper to contain and manager the factory and assets in a easy way.
      *
      * @param factory the factory
      * @param assets  the assets

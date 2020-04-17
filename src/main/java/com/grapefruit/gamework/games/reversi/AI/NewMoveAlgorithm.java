@@ -1,6 +1,6 @@
 package com.grapefruit.gamework.games.reversi.AI;
 
-import com.grapefruit.gamework.framework.AbstractMinimax;
+import com.grapefruit.gamework.framework.Minimax;
 import com.grapefruit.gamework.framework.Board;
 import com.grapefruit.gamework.framework.Player;
 import com.grapefruit.gamework.framework.Tile;
@@ -14,7 +14,7 @@ import static java.lang.Integer.*;
 /**
  * The type New minimax.
  */
-public class NewMinimax extends AbstractMinimax {
+public class NewMoveAlgorithm extends Minimax {
     private Player player;
     private Player opponent;
     private boolean timedOut = false;
@@ -26,7 +26,7 @@ public class NewMinimax extends AbstractMinimax {
      *
      * @param strategicValues the strategic values
      */
-    public NewMinimax(int[][] strategicValues) {
+    public NewMoveAlgorithm(int[][] strategicValues) {
         this(strategicValues, 9, true);
     }
 
@@ -37,7 +37,7 @@ public class NewMinimax extends AbstractMinimax {
      * @param depth           the depth
      * @param dynamicDepth    the dynamic depth
      */
-    public NewMinimax(int[][] strategicValues, int depth, boolean dynamicDepth) {
+    public NewMoveAlgorithm(int[][] strategicValues, int depth, boolean dynamicDepth) {
         super(strategicValues, depth, dynamicDepth);
     }
 

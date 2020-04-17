@@ -17,10 +17,19 @@ import javafx.stage.Window;
 
 import java.io.IOException;
 
+/**
+ * The type Settings window factory.
+ */
 public class SettingsWindowFactory implements TemplateFactory {
 
     private static SettingsWindowFactory factory = new SettingsWindowFactory();
 
+    /**
+     * Build template.
+     *
+     * @param model the model
+     * @return the template
+     */
     public static Template build(IModel model){
         return factory.buildTemplate(model);
     }

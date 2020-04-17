@@ -17,7 +17,7 @@ public abstract class GameRegistry {
     private static GameWrapper TICTACTOE = new GameWrapper(new TicTacToeFactory(), new TicTacToeAssets());
 
     /**
-     * The constant GAMES.
+     * The constant GAMES which has all game types implemented.
      */
     public static final ArrayList<GameWrapper> GAMES = new ArrayList<GameWrapper>() {{
         add(REVERSI);

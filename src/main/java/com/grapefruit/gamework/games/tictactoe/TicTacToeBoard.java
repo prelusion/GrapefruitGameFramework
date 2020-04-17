@@ -22,12 +22,17 @@ public class TicTacToeBoard extends Board {
         super(boardSize);
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setMove(int row, int col, Player player) {
         setPlayer(row, col, player);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Tile> getAvailableMoves(Player player) {
         ArrayList<Tile> tiles = new ArrayList<>();
@@ -41,12 +46,17 @@ public class TicTacToeBoard extends Board {
         return tiles;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Map<Player, Integer> countPieces() {
         return null;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void calculateScores(Player[] players) {
         for (Player player : players) {

@@ -16,7 +16,8 @@ public abstract class Game {
     private Thread turnTimeThread;
     private Board board;
     private Player currentPlayer;
-    private Minimax minimaxAlgorithm;
+    private MoveAlgorithm moveAlgorithm;
+
     /**
      * The Turn count.
      */
@@ -28,15 +29,15 @@ public abstract class Game {
      *
      * @param board            the board
      * @param players          the players
-     * @param minimaxAlgorithm the minimax algorithm
+     * @param moveAlgorithm    the minimax algorithm
      * @param turnTimeout      the turn timeout
      */
-    public Game(Board board, Player[] players, Minimax minimaxAlgorithm, int turnTimeout) {
+    public Game(Board board, Player[] players, MoveAlgorithm moveAlgorithm, int turnTimeout) {
         this.board = board;
         this.players = players;
         this.turnTimeout = turnTimeout;
         this.currentPlayer = players[0];
-        this.minimaxAlgorithm = minimaxAlgorithm;
+        this.moveAlgorithm = moveAlgorithm;
     }
 
     /**
@@ -86,8 +87,8 @@ public abstract class Game {
      *
      * @return the minimax algorithm
      */
-    public Minimax getMinimaxAlgorithm() {
-        return minimaxAlgorithm;
+    public MoveAlgorithm getMoveAlgorithm() {
+        return moveAlgorithm;
     }
 
     /**

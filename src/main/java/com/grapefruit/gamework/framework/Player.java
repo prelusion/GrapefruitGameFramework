@@ -64,10 +64,6 @@ public class Player {
         return color;
     }
 
-    public String toString() {
-        return color.toString();
-    }
-
     /**
      * Is local boolean.
      *
@@ -84,5 +80,9 @@ public class Player {
      */
     public boolean isAI() {
         return isAI;
+    }
+
+    public String toString() {
+        return color.toString();
     }
 }

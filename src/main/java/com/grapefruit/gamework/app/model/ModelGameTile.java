@@ -3,6 +3,9 @@ package com.grapefruit.gamework.app.model;
 
 import com.grapefruit.gamework.framework.GameWrapper;
 
+/**
+ * The type Model game tile.
+ */
 public class ModelGameTile implements IModel {
 
     private GameWrapper game;
@@ -10,6 +13,12 @@ public class ModelGameTile implements IModel {
     private boolean selected;
     private boolean availableOnServer;
 
+    /**
+     * Instantiates a new Model game tile.
+     *
+     * @param game       the game
+     * @param mainWindow the main window
+     */
     public ModelGameTile(GameWrapper game, ModelMainWindow mainWindow) {
         this.game = game;
         this.modelMainWindow = mainWindow;
@@ -29,11 +38,18 @@ public class ModelGameTile implements IModel {
         }
     }
 
+    /**
+     * Is available on server boolean.
+     *
+     * @return the boolean
+     */
     public boolean isAvailableOnServer() {
         return availableOnServer;
     }
 
     /**
+     * Gets game.
+     *
      * @return returns Game
      */
     public GameWrapper getGame() {
@@ -55,6 +71,8 @@ public class ModelGameTile implements IModel {
     }
 
     /**
+     * Is selected boolean.
+     *
      * @return Whether game is selected;
      */
     public boolean isSelected() {

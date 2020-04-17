@@ -10,7 +10,7 @@ import static java.lang.Integer.*;
 /**
  * The type Old minimax.
  */
-public class OldMinimax extends AbstractMinimax {
+public class OldMoveAlgorithm extends Minimax {
     private Player player;
     private Player opponent;
     private boolean timedOut = false;
@@ -20,7 +20,7 @@ public class OldMinimax extends AbstractMinimax {
      *
      * @param strategicValues the strategic values
      */
-    public OldMinimax(int[][] strategicValues) {
+    public OldMoveAlgorithm(int[][] strategicValues) {
         super(strategicValues, 7, false);
     }
 
@@ -30,7 +30,7 @@ public class OldMinimax extends AbstractMinimax {
      * @param strategicValues the strategic values
      * @param depth           the depth
      */
-    public OldMinimax(int[][] strategicValues, int depth) {
+    public OldMoveAlgorithm(int[][] strategicValues, int depth) {
         super(strategicValues, depth, false);
     }
 

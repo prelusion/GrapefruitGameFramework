@@ -12,7 +12,7 @@ public class ReversiMinimaxBenchMark implements Benchmark {
      * The Turn timeout.
      */
     public int turnTimeout;
-    private Minimax minimax;
+    private MoveAlgorithm moveAlgorithm;
     private Board board;
     private Player player;
     private Player opponent;
@@ -24,7 +24,7 @@ public class ReversiMinimaxBenchMark implements Benchmark {
      */
     public ReversiMinimaxBenchMark(Game game) {
         this.turnTimeout = game.getTurnTimeout();
-        this.minimax = game.getMinimaxAlgorithm();
+        this.moveAlgorithm = game.getMoveAlgorithm();
         this.player = game.getCurrentPlayer();
         this.opponent = game.getOpponentPlayer();
         board = new ReversiBoard(8, STRATEGIC_VALUES);
@@ -38,7 +38,7 @@ public class ReversiMinimaxBenchMark implements Benchmark {
      */
     public int calculateDepth(int depth) {
         long startTime = System.currentTimeMillis() / 1000;
-        Tile tile = minimax.calculateBestMove(board, player, opponent, 5);
+        Tile tile = moveAlgorithm.calculateBestMove(board, player, opponent, 5);
         long endTime = System.currentTimeMillis() / 1000;
 
         if ((endTime - startTime) < turnTimeout && tile != null) {

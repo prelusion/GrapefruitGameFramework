@@ -6,6 +6,9 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
+/**
+ * The type Controller config setting.
+ */
 public class ControllerConfigSetting implements IController {
 
     private ModelConfigSetting modelConfigSetting;
@@ -60,6 +63,9 @@ public class ControllerConfigSetting implements IController {
         });
     }
 
+    /**
+     * Initialie.
+     */
     @FXML
     public void initialie() {
     }

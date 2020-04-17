@@ -11,10 +11,19 @@ import javafx.scene.Parent;
 
 import java.io.IOException;
 
+/**
+ * The type Config setting factory.
+ */
 public class ConfigSettingFactory implements TemplateFactory {
 
     private static ConfigSettingFactory factory = new ConfigSettingFactory();
 
+    /**
+     * Build template.
+     *
+     * @param model the model
+     * @return the template
+     */
     public static Template build(IModel model){
         return factory.buildTemplate(model);
     }

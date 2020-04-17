@@ -12,10 +12,19 @@ import javafx.scene.Parent;
 
 import java.io.IOException;
 
+/**
+ * The type Main window factory.
+ */
 public class MainWindowFactory implements TemplateFactory {
 
     private static MainWindowFactory factory = new  MainWindowFactory();
 
+    /**
+     * Build template.
+     *
+     * @param model the model
+     * @return the template
+     */
     public static Template build(IModel model){
         return factory.buildTemplate(model);
     }

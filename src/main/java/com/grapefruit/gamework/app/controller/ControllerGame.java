@@ -34,6 +34,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * The type Controller game.
+ */
 public class ControllerGame implements IController {
 
     private boolean destroyed = false;
@@ -50,24 +53,42 @@ public class ControllerGame implements IController {
     private Player playerB;
     private boolean isFirstTurn = false;
     private boolean currentlySettingTurn = false;
+    /**
+     * The Minimax thread.
+     */
     Thread minimaxThread;
     private boolean firstAI = true;
     private boolean alreadySettingAI = false;
 
+    /**
+     * The Offline turn timeout.
+     */
     int offlineTurnTimeout = 60;
 
     /**
      * Minimax Default Configuration
      */
-    Minimax minimaxAlgorithm;
+    MoveAlgorithm moveAlgorithmAlgorithm;
+    /**
+     * The Online turn timeout.
+     */
     int onlineTurnTimeout = 5;
+    /**
+     * The Online turn timeout ai.
+     */
     int onlineTurnTimeoutAI = (onlineTurnTimeout * 1000) - 1400;
+    /**
+     * The Online turn timeout ai first turn.
+     */
     int onlineTurnTimeoutAIFirstTurn = onlineTurnTimeoutAI / 2;
 
     /**
      * listeners
      */
     ChangeListener<Number> turnChangeListener;
+    /**
+     * The Score change listener.
+     */
     MapChangeListener<Player, Integer> scoreChangeListener;
 
     @FXML
@@ -109,6 +130,9 @@ public class ControllerGame implements IController {
     @FXML
     private ResourceBundle resources;
 
+    /**
+     * The Player turn label.
+     */
     @FXML
     public Text playerTurnLabel;
 
@@ -134,7 +158,7 @@ public class ControllerGame implements IController {
 
 
         game = this.model.getGame();
-        minimaxAlgorithm = game.getMinimaxAlgorithm();
+        moveAlgorithmAlgorithm = game.getMoveAlgorithm();
         serverManager = this.model.getServerManager();
 
         if (this.model.isOnlineGame()) {
@@ -230,6 +254,11 @@ public class ControllerGame implements IController {
         }
     }
 
+    /**
+     * Sets online timeout.
+     *
+     * @param timeout the timeout
+     */
     public void setOnlineTimeout(int timeout) {
         onlineTurnTimeout = timeout;
         onlineTurnTimeoutAI = (onlineTurnTimeout * 1000) - 1400;
@@ -382,6 +411,9 @@ public class ControllerGame implements IController {
         });
     }
 
+    /**
+     * Update.
+     */
     public void update() {
         updateBoard();
         updateInfo();
@@ -454,6 +486,9 @@ public class ControllerGame implements IController {
         playerScoreB.setText(Integer.toString(game.getBoard().countPieces(playerB)));
     }
 
+    /**
+     * Check finished.
+     */
     public void checkFinished() {
         if (destroyed) {
             return;
@@ -610,8 +645,8 @@ public class ControllerGame implements IController {
             minimaxThread = new Thread(() -> {
                 int timeout = isFirstTurn ? onlineTurnTimeoutAIFirstTurn : onlineTurnTimeoutAI;
 
-                minimaxAlgorithm.startTimeout(timeout);
-                Tile tile = minimaxAlgorithm.calculateBestMove(
+                moveAlgorithmAlgorithm.startTimeout(timeout);
+                Tile tile = moveAlgorithmAlgorithm.calculateBestMove(
                         game.getBoard(),
                         game.getCurrentPlayer(),
                         game.getOpponentPlayer(),
@@ -761,8 +796,8 @@ public class ControllerGame implements IController {
             serverManager.removeOnPlayerDisconnectCallbackCallback();
         }
 
-        if (minimaxAlgorithm != null) {
-            minimaxAlgorithm.destroy();
+        if (moveAlgorithmAlgorithm != null) {
+            moveAlgorithmAlgorithm.destroy();
         }
 
         if (minimaxThread != null) {
@@ -776,10 +811,16 @@ public class ControllerGame implements IController {
         return destroyed;
     }
 
+    /**
+     * Open launcher back quit.
+     */
     public void openLauncherBackQuit() {
         GameApplication.openLauncherBack();
     }
 
+    /**
+     * On turn.
+     */
     public void onTurn() {
         game.setCurrentPlayer(onlineGameLocalPlayer);
 
@@ -801,6 +842,11 @@ public class ControllerGame implements IController {
         });
     }
 
+    /**
+     * On move.
+     *
+     * @param args the args
+     */
     public void onMove(String[] args) {
         settingMove = true;
 

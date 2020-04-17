@@ -18,25 +18,38 @@ public class TicTacToeAssets extends Assets {
      * The constant PIECE_WHITE.
      */
     public static Image PIECE_WHITE = ImageRegistry.TICTACTOE_GAME_PIECE_WHITE;
+
     private static Image ICON = ImageRegistry.GAME_ICON_TICTACTOE;
     private static String DISPLAYNAME = "TicTacToe";
     private static String SERVER_ID = "Tic-tac-toe";
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getDisplayName() {
         return DISPLAYNAME;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getServerId() {
         return SERVER_ID;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Image getIcon() {
         return ICON;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Image getPieceImageByColor(Colors color) {
         switch (color) {

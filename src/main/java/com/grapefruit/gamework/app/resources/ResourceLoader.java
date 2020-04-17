@@ -3,19 +3,33 @@ package com.grapefruit.gamework.app.resources;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 
+/**
+ * The type Resource loader.
+ */
 public class ResourceLoader {
 
     private static String FXML_LOCATION = "/fxml/";
     private static String IMAGE_LOCATION = "/images/";
     private static String CSS_LOCATION = FXML_LOCATION + "css/";
 
+    /**
+     * The enum Image type.
+     */
     public enum ImageType{
+        /**
+         * Game icon image type.
+         */
         GAME_ICON,
+        /**
+         * Asset image type.
+         */
         ASSET
     }
 
 
     /**
+     * Get view loader fxml loader.
+     *
      * @param fxmlName of relevant FXML to build loader from
      * @return FXMLLoader for specified FXML file
      */
@@ -26,10 +40,11 @@ public class ResourceLoader {
     }
 
     /**
+     * Load image image.
      *
      * @param imageName file name
      * @param imageType image type used to find directory
-     * @return Image
+     * @return Image image
      */
     public static Image loadImage(String imageName, ImageType imageType){
         Image image;
@@ -49,6 +64,12 @@ public class ResourceLoader {
         return image;
     }
 
+    /**
+     * Load style sheet string.
+     *
+     * @param styleSheetName the style sheet name
+     * @return the string
+     */
     public String loadStyleSheet(String styleSheetName){
         return getClass().getResource(CSS_LOCATION + styleSheetName + ".css").toExternalForm();
     }

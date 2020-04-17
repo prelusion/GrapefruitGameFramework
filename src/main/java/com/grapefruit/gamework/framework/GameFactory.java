@@ -5,20 +5,21 @@ package com.grapefruit.gamework.framework;
  */
 public abstract class GameFactory {
 
+
     /**
-     * Create game.
+     * Instantiates a new board and create a game object.
      *
-     * @param players the players
-     * @return the game
+     * @param players
+     * @return game
      */
     public abstract Game create(Player[] players);
 
     /**
-     * Create game.
+     * Instantiates a new board and create a game object.
      *
-     * @param players    the players
-     * @param difficulty the difficulty
-     * @return the game
+     * @param players
+     * @param difficulty
+     * @return game
      */
     public abstract Game create(Player[] players, int difficulty);
 }

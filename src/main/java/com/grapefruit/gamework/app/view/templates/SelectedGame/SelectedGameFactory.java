@@ -15,10 +15,19 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * The type Selected game factory.
+ */
 public class SelectedGameFactory implements TemplateFactory {
 
     private static SelectedGameFactory factory = new SelectedGameFactory();
 
+    /**
+     * Build template.
+     *
+     * @param model the model
+     * @return the template
+     */
     public static Template build(IModel model){
         return factory.buildTemplate(model);
     }

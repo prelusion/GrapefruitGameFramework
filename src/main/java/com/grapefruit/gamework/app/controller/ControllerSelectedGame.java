@@ -25,10 +25,16 @@ import javafx.scene.text.Text;
 import java.net.URL;
 import java.util.ArrayList;
 
+/**
+ * The type Controller selected game.
+ */
 public class ControllerSelectedGame implements IController {
 
     private ModelSelectedGame model;
 
+    /**
+     * The Button box.
+     */
     @FXML
     VBox buttonBox;
 
@@ -60,12 +66,18 @@ public class ControllerSelectedGame implements IController {
         setupWidgets();
     }
 
+    /**
+     * Sets widgets.
+     */
     public void setupWidgets() {
         gameName.setText(this.model.getSelectedGame().getAssets().getDisplayName());
         gameIcon.setImage(this.model.getSelectedGame().getAssets().getIcon());
         setMainMenuButtons();
     }
 
+    /**
+     * Sets main menu buttons.
+     */
     public void setMainMenuButtons() {
         ArrayList<Control> buttons = new ArrayList<>();
 
@@ -223,6 +235,9 @@ public class ControllerSelectedGame implements IController {
         }
     }
 
+    /**
+     * Sets tournament game start event handler.
+     */
     public void setupTournamentGameStartEventHandler() {
         model.getServerManager().setTurnCallback((boolean success2, String[] args2) -> {
             model.getServerManager().setTurnTooFast(true);
@@ -259,6 +274,9 @@ public class ControllerSelectedGame implements IController {
         });
     }
 
+    /**
+     * Sets auto challenge game start event handler.
+     */
     public void setupAutoChallengeGameStartEventHandler() {
         model.getServerManager().setOnNewChallengetCallback((success, args) -> {
             int challengeNumber = Integer.parseInt(args[0]);
@@ -294,6 +312,12 @@ public class ControllerSelectedGame implements IController {
         });
     }
 
+    /**
+     * Difficulty string to integer int.
+     *
+     * @param difficulty the difficulty
+     * @return the int
+     */
     int difficultyStringToInteger(String difficulty) {
         switch (difficulty) {
             case "Easy":

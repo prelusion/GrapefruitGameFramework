@@ -16,10 +16,10 @@ public class Reversi extends Game {
      * @param playerBlack      the player black
      * @param playerWhite      the player white
      * @param turnTimeout      the turn timeout
-     * @param minimaxAlgorithm the minimax algorithm
+     * @param moveAlgorithmAlgorithm the minimax algorithm
      */
-    public Reversi(Board board, Player playerBlack, Player playerWhite, int turnTimeout, Minimax minimaxAlgorithm) {
-        super(board, new Player[]{playerBlack, playerWhite}, minimaxAlgorithm, turnTimeout);
+    public Reversi(Board board, Player playerBlack, Player playerWhite, int turnTimeout, MoveAlgorithm moveAlgorithmAlgorithm) {
+        super(board, new Player[]{playerBlack, playerWhite}, moveAlgorithmAlgorithm, turnTimeout);
         board.setPlayer(3, 3, playerWhite);
         board.setPlayer(4, 4, playerWhite);
         board.setPlayer(3, 4, playerBlack);

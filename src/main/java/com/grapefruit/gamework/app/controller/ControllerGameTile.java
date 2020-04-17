@@ -13,6 +13,9 @@ import javafx.scene.text.Text;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The type Controller game tile.
+ */
 public class ControllerGameTile implements IController {
 
 

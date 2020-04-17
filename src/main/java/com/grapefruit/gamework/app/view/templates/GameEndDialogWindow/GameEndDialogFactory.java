@@ -16,12 +16,21 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * The type Game end dialog factory.
+ */
 public class GameEndDialogFactory implements TemplateFactory {
 
     private static Stage previousDialog;
 
     private static GameEndDialogFactory factory = new GameEndDialogFactory();
 
+    /**
+     * Build template.
+     *
+     * @param model the model
+     * @return the template
+     */
     public static Template build(IModel model) {
         return factory.buildTemplate(model);
     }
@@ -29,6 +38,9 @@ public class GameEndDialogFactory implements TemplateFactory {
     private GameEndDialogFactory() {
     }
 
+    /**
+     * Destroy previous dialog if exists.
+     */
     public static void destroyPreviousDialogIfExists() {
         if (previousDialog != null) previousDialog.close();
     }

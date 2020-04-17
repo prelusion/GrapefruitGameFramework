@@ -26,6 +26,9 @@ import javafx.util.Duration;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * The type Controller lobby browser.
+ */
 public class ControllerLobbyBrowser implements IController {
 
     private ModelLobbyBrowser model;
@@ -65,6 +68,9 @@ public class ControllerLobbyBrowser implements IController {
         setupWidgets();
     }
 
+    /**
+     * Sets widgets.
+     */
     public void setupWidgets() {
         setupTable();
 
@@ -170,6 +176,9 @@ public class ControllerLobbyBrowser implements IController {
         model.getControllerSelectedGame().setMainMenuButtons();
     }
 
+    /**
+     * The type Challengeable player.
+     */
     public static class ChallengeablePlayer {
 
         private final SimpleStringProperty playerName;
@@ -180,19 +189,39 @@ public class ControllerLobbyBrowser implements IController {
             this.status = new SimpleStringProperty(value);
         }
 
+        /**
+         * Gets player name.
+         *
+         * @return the player name
+         */
         public String getPlayerName() {
             return playerName.get();
         }
 
+        /**
+         * Gets status.
+         *
+         * @return the status
+         */
         public String getStatus() {
             return status.get();
         }
 
+        /**
+         * Sets status.
+         *
+         * @param value the value
+         */
         public void setStatus(String value) {
             this.status.set(value);
         }
     }
 
+    /**
+     * Send challenge.
+     *
+     * @param player the player
+     */
     public void sendChallenge(ChallengeablePlayer player) {
         model.getServerManager().queueCommand(Commands.challenge((success, args) -> {
             if (!success) {
@@ -224,12 +253,22 @@ public class ControllerLobbyBrowser implements IController {
         }, player.getPlayerName(), model.getGameAssets().getServerId()));
     }
 
+    /**
+     * Accept challenge.
+     *
+     * @param challengeNumber the challenge number
+     */
     public void acceptChallenge(int challengeNumber) {
         model.getServerManager().queueCommand(
                 Commands.challengeRespond((success, args) -> {
                 }, true, challengeNumber));
     }
 
+    /**
+     * Sets game start event handler.
+     *
+     * @param command the command
+     */
     public void setupGameStartEventHandler(Command command) {
         model.getServerManager().setTurnCallback((boolean success2, String[] args2) -> {
             model.getServerManager().setTurnTooFast(true);
@@ -273,6 +312,9 @@ public class ControllerLobbyBrowser implements IController {
     }
 
     private class PlayerTableCell extends TableCell<ChallengeablePlayer, String> {
+        /**
+         * The Btn.
+         */
         final Button btn = new Button("");
 
         @Override

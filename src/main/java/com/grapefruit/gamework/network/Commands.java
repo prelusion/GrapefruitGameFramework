@@ -96,6 +96,13 @@ public abstract class Commands {
         }
     }
 
+    /**
+     * Send a challenge to a specific player.
+     * @param callback
+     * @param playerName
+     * @param gameName
+     * @return Command
+     */
     public static Command challenge(CommandCallback callback, String playerName, String gameName) {
         return new Command(KEYWORD_CHALLENGE + "\"" + playerName + "\" \"" + gameName + "\"", callback, ServerManager.ResponseType.CONFIRMONLY);
     }

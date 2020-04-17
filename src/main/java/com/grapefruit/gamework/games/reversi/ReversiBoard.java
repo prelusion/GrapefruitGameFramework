@@ -41,6 +41,9 @@ public class ReversiBoard extends Board {
         super(boardSize, strategicValues);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Tile> getAvailableMoves(Player player) {
         HashSet<Tile> playerOwnedTiles = new HashSet<>();
@@ -116,6 +119,12 @@ public class ReversiBoard extends Board {
         return getEmptyTileInDirection(player, row + dRow, col + dCol, dRow, dCol);
     }
 
+    /**
+     * Sets a move on the board
+     * @param row    the row
+     * @param col    the col
+     * @param player the player
+     */
     public void setMove(int row, int col, Player player) {
         Tile tile = grid[row][col];
         tile.setPlayer(player);
@@ -168,6 +177,9 @@ public class ReversiBoard extends Board {
         return getTilesToTurn(player, row + dRow, col + dCol, dRow, dCol, searchOrder);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void calculateScores(Player[] players) {
         for (Player player : players) {

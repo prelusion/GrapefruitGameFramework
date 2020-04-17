@@ -31,6 +31,11 @@ public class ReversiMinimaxBenchMark implements Benchmark {
         initWorstCaseBoard();
     }
 
+    /**
+     * Calculate the optimal depth for the Reversi Minimax algorithm.
+     * @param depth the depth
+     * @return best depth
+     */
     public int calculateDepth(int depth) {
         long startTime = System.currentTimeMillis() / 1000;
         Tile tile = minimax.calculateBestMove(board, player, opponent, 5);
@@ -42,6 +47,9 @@ public class ReversiMinimaxBenchMark implements Benchmark {
         return 3;
     }
 
+    /**
+     * Set worst case scenario on the board.
+     */
     public void initWorstCaseBoard() {
         board.grid[1][1].setPlayer(opponent);
         board.grid[1][4].setPlayer(opponent);

@@ -17,11 +17,17 @@ public class ReversiFactory extends GameFactory {
      */
     public static final int[][] STRATEGIC_VALUES = getStrategicValues();
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Game create(Player[] players) {
         return this.create(players[0], players[1]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Game create(Player[] players, int difficulty) {
         return this.create(players[0], players[1], difficulty);

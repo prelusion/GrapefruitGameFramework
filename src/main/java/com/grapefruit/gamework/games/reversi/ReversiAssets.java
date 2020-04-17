@@ -23,21 +23,35 @@ public class ReversiAssets extends Assets {
     private static String DISPLAYNAME = "Reversi";
     private static String SERVER_ID = "Reversi";
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getDisplayName() {
         return DISPLAYNAME;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getServerId() {
         return SERVER_ID;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Image getIcon() {
         return ICON;
     }
 
+    /**
+     * Returns the image corresponding to the color. This image is shown in GUI on the board.
+     * @param color the color
+     * @return Image
+     */
     public Image getPieceImageByColor(Colors color) {
         switch (color) {
             case BLACK:

@@ -302,42 +302,82 @@ public class ServerConnection {
         timer.start();
     }
 
+    /**
+     * Sets a callback to be notified when the game starts.
+     * @param callback
+     */
     public void setStartGameCallback(CommandCallback callback) {
         serverCommandListeners.put("onStartGame", callback);
     }
 
+    /**
+     * Sets a callback to be notified when a new move has been played.
+     * @param callback
+     */
     public void setMoveCallback(CommandCallback callback) {
         serverCommandListeners.put("onMove", callback);
     }
 
+    /**
+     * Sets a callback to be notified when this client is given turn.
+     * @param callback
+     */
     public void setTurnCallback(CommandCallback callback) {
         serverCommandListeners.put("onTurn", callback);
     }
 
+    /**
+     * Sets a callback to be notified when the other player timed out.
+     * @param callback
+     */
     public void setTurnTimeoutWinCallback(CommandCallback callback) {
         serverCommandListeners.put("onTurnTimeoutWin", callback);
     }
 
+    /**
+     * Sets a callback to be notified when the other player timed out.
+     * @param callback
+     */
     public void setTurnTimeoutLoseCallback(CommandCallback callback) {
         serverCommandListeners.put("onTurnTimeoutLose", callback);
     }
 
+    /**
+     * Sets a callback to be notified the other player had an illegal move.
+     * @param callback
+     */
     public void setIllegalmoveWinCallback(CommandCallback callback) {
         serverCommandListeners.put("onIllegalmoveWin", callback);
     }
 
+    /**
+     * Sets a callback to be notified when the other player forfeited.
+     * @param callback
+     */
     public void setOnPlayerForfeitCallback(CommandCallback callback) {
         serverCommandListeners.put("onPlayerForfeit", callback);
     }
 
+    /**
+     * Sets a callback to be notified when the other player disconnected.
+     * @param callback
+     */
     public void setOnPlayerDisconnectCallback(CommandCallback callback) {
         serverCommandListeners.put("onPlayerDisconnect", callback);
     }
 
+    /**
+     * Sets a callback to be notified when this client received a new challenge.
+     * @param callback
+     */
     public void setOnNewChallengetCallback(CommandCallback callback) {
         serverCommandListeners.put("onNewChallenge", callback);
     }
 
+    /**
+     * Sets a callback when this client did an illegal move.
+     * @param callback
+     */
     public void setIllegalmoveLoseCallback(CommandCallback callback) {
         serverCommandListeners.put("onIllegalMoveLose", callback);
     }

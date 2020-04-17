@@ -26,6 +26,9 @@ public class Reversi extends Game {
         board.setPlayer(4, 3, playerBlack);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isValidMove(int row, int col, Player player) {
         List<Tile> validMoves = getBoard().getAvailableMoves(player);
@@ -37,16 +40,25 @@ public class Reversi extends Game {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean hasFinished() {
         return getBoard().anyMovesLeft(getPlayers());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Player getWinner() {
         return Helpers.getWinningPlayer(getBoard());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean playMove(int row, int col, Player player) {
         if (!isValidMove(row, col, player)) {

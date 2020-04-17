@@ -41,15 +41,31 @@ public class NewMoveAlgorithm extends Minimax {
         super(strategicValues, depth, dynamicDepth);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setDepth(int depth) {
         currentDepth = depth;
     }
 
+    /**
+     * Set the difficulty of the AI
+     * @param complexity    The given complexity
+     */
     public void setComplexity(int complexity) {
         super.setComplexity(complexity);
     }
 
+    /**
+     * Calculate the best move for a given player.
+     *
+     * @param board     the board
+     * @param player    the player
+     * @param opponent  the opponent
+     * @param turnCount the turn count
+     * @return Tile of the best move
+     */
     public Tile calculateBestMove(Board board, Player player, Player opponent, int turnCount) {
         if (getComplexity() == 1) {
             List<Tile> moves = board.getAvailableMoves(player);

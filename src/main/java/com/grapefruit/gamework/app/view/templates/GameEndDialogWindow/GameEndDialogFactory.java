@@ -4,6 +4,7 @@ import com.grapefruit.gamework.app.GameApplication;
 import com.grapefruit.gamework.app.controller.IController;
 import com.grapefruit.gamework.app.model.IModel;
 import com.grapefruit.gamework.app.resources.FXMLRegistry;
+import com.grapefruit.gamework.app.resources.ImageRegistry;
 import com.grapefruit.gamework.app.resources.ResourceLoader;
 import com.grapefruit.gamework.app.view.templates.Template;
 import com.grapefruit.gamework.app.view.templates.TemplateFactory;
@@ -52,8 +53,8 @@ public class GameEndDialogFactory implements TemplateFactory {
         stage.setScene(new Scene(parent, 700, 300));
         stage.initOwner(GameApplication.getStage());
         stage.initModality(Modality.WINDOW_MODAL);
+        stage.getIcons().add(ImageRegistry.GAMEWORK_ICON);
         stage.show();
-
         previousDialog = stage;
 
         return new TemplateGameEndDialog(parent);

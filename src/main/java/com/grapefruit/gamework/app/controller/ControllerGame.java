@@ -147,6 +147,8 @@ public class ControllerGame implements IController {
             setupServerEventHandlers();
         }
 
+        game.getBoard().printStrategicValues();
+
         setupAssets();
         setupObservableListeners();
 

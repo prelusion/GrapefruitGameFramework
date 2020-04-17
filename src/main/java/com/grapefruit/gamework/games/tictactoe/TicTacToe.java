@@ -44,6 +44,8 @@ public class TicTacToe extends Game {
             return false;
         }
 
+        turnCount++;
+
         getBoard().setMove(row, col, player);
         return true;
     }
